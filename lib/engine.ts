@@ -43,7 +43,7 @@ export const toModelScore=(z:number)=>clamp(50+15*z,0,100);
 export type Scored={metric:Metric;value:number;z:number;modelScore:number;defect:number};
 export function evaluate(values:Values,d:Demographics,details:MeasurementMetadata={}){
   validateProfile(d);
-  const measured=metrics.filter(m=>valid(m,values[m.id]));
+  const measured=metrics.filter(m=>!m.archived&&valid(m,values[m.id]));
   const submitted:Scored[]=measured.filter(m=>eligible(m,d,details)).map(metric=>{const value=values[metric.id]!;const z=score(metric,value,d,details);return {metric,value,z,modelScore:toModelScore(z),defect:0};});
   const domains:Partial<Record<PillarId,number>>={};
   for(const p of pillars){
@@ -67,7 +67,8 @@ export function simulate(values:Values,d:Demographics,target:number,strategy:Str
   let selected=result.submitted.filter(s=>s.metric.scenarioChangePerStep>0);
   if(strategy==='Easiest first')selected=selected.filter(s=>s.metric.easiestPathPriority<=2);
   else if(strategy==='Balanced')selected=[...result.submitted].sort((a,b)=>a.z-b.z).slice(0,3);
-  else selected=selected.filter(s=>s.metric.pillar===(strategy==='Cardio focus'?'cardiovascular':'strength_mobility'));
+  else if(strategy==='Cardio focus')selected=selected.filter(s=>['vo2_max','zone2_power','hrr_1min'].includes(s.metric.id));
+  else selected=selected.filter(s=>s.metric.pillar==='strength'&&!['vo2_max','zone2_power','hrr_1min'].includes(s.metric.id));
   const targets=(step:number):Values=>{
     const next={...values};if(step===0)return next;
     for(const s of selected){

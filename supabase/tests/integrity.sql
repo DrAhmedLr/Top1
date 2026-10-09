@@ -19,5 +19,15 @@ do $$ declare r bigint; begin
  insert into public.metric_logs(user_id,metric_id,metric_value)values(auth.uid(),'rhr',55);
  if (select revision from public.profiles where id=auth.uid())<=r then raise exception 'Direct writer missed revision';end if;
 end $$;
+do $$ begin
+ insert into public.metric_logs(user_id,metric_id,metric_value)values
+ (auth.uid(),'waist_height_ratio',.48),(auth.uid(),'fasting_glucose',90),(auth.uid(),'pushups',28),
+ (auth.uid(),'sauna_minutes',0),(auth.uid(),'cold_plunge_minutes',0),(auth.uid(),'thermal_hrv_rebound',1.1);
+ if public.read_current_metrics()->>'sauna_minutes'<>'0.000' then raise exception 'Zero exposure not retained';end if;
+ begin
+  insert into public.metric_logs(user_id,metric_id,metric_value)values(auth.uid(),'cold_plunge_minutes',121);
+  raise exception 'Out-of-range thermal value accepted';
+ exception when check_violation then null;end;
+end $$;
 reset role;
 rollback;

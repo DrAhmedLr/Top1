@@ -12,7 +12,7 @@ export default function ProfileEdit({ profile, onChange, privacyControls }: {
 }) {
   function updateNumber(field: 'age' | 'weight' | 'height', raw: string, min: number, max: number) {
     const value = Number(raw);
-    if (raw.trim() && Number.isFinite(value)) onChange({ ...profile, [field]: clamp(value, min, max) });
+    if (raw.trim() && Number.isFinite(value)) onChange({ ...profile, [field]: field==='age'?Math.round(clamp(value,min,max)):clamp(value,min,max) });
   }
   return <>
     {privacyControls}
@@ -24,6 +24,6 @@ export default function ProfileEdit({ profile, onChange, privacyControls }: {
       <label>Weight (kg)<input type="number" min="25" max="350" value={profile.weight} onChange={event => updateNumber('weight', event.target.value, 25, 350)}/></label>
       <label>Height (cm)<input type="number" min="100" max="240" value={profile.height} onChange={event => updateNumber('height', event.target.value, 100, 240)}/></label>
     </div>
-    <p className="drawer-description" role="status">Reference cohort: {getAgeBracket(profile.age)} · {profile.sex}. Percentiles recalculate as you edit.</p>
+    <p className="drawer-description" role="status">Reference cohort: {getAgeBracket(profile.age)} · {profile.sex}. Experimental references recalculate as you edit.</p>
   </>;
 }

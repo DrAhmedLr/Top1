@@ -4,7 +4,7 @@ import {buildPublicSummary,parsePublicSummary} from './profile';
 import {signSummary,verifySummary} from './summarySignature';
 const key='a-test-only-signing-key-of-more-than-thirty-two-characters';
 const d={age:32,sex:'female' as const,weight:60,height:165};
-const summary=buildPublicSummary({demographics:d,values:{sit_to_stand:25,total_sleep:480,reaction_time:250}});
+const summary=buildPublicSummary({demographics:d,values:{sit_to_stand:25,total_sleep:480,pushups:25}});
 test('signed snapshots survive JSON/database roundtrips and bind identity and demographics',async()=>{
  const signed=JSON.parse(JSON.stringify(await signSummary(summary,'owner',d,key)));
  assert.ok(await verifySummary(summary,signed,'owner',d,key));

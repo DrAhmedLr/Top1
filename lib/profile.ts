@@ -1,6 +1,6 @@
 import { MODEL_VERSION } from './model';
 import { normalizeMeasurementMetadata, type MeasurementMetadata } from './measurementMetadata';
-import { metrics, pillars, type Demographics, type Values, type PillarId } from './registry';
+import { metrics, activeMetrics, pillars, type Demographics, type Values, type PillarId } from './registry';
 import { evaluate, valid } from './engine';
 export const LOCAL_PROFILE_KEYS = ['top1-profile-v2','top1_profile_v2','top1-profile-v1'] as const;
 export interface ProfileState { demographics: Demographics; values: Values; username: string; isPublic: boolean; measurementDetails?:MeasurementMetadata; revision?:number }
@@ -42,9 +42,10 @@ export function buildPublicSummary(profile: Pick<ProfileState,'values'|'demograp
 export function parsePublicSummary(input: unknown): PublicSummary | null {
   if(!input||typeof input!=='object') return null;
   const s=input as PublicSummary;
-  if(s.modelVersion!==MODEL_VERSION||!Number.isInteger(s.scoredCount)||s.scoredCount<0||s.scoredCount>s.measured||typeof s.ready!=='boolean'||!Number.isFinite(s.modelScore)||s.modelScore<0||s.modelScore>100||!Number.isFinite(s.completeness)||s.completeness<0||s.completeness>100.001||!Number.isFinite(s.z)||s.z<-3||s.z>3||!Number.isInteger(s.measured)||s.measured<0||s.measured>32||!s.domains||typeof s.domains!=='object')return null;
+  if(s.modelVersion!==MODEL_VERSION||!Number.isInteger(s.scoredCount)||s.scoredCount<0||s.scoredCount>s.measured||typeof s.ready!=='boolean'||!Number.isFinite(s.modelScore)||s.modelScore<0||s.modelScore>100||!Number.isFinite(s.completeness)||s.completeness<0||s.completeness>100.001||!Number.isFinite(s.z)||s.z<-3||s.z>3||!Number.isInteger(s.measured)||s.measured<0||s.measured>activeMetrics.length||!s.domains||typeof s.domains!=='object')return null;
+  if(Object.keys(s.domains).some(id=>!pillars.some(p=>p.id===id)))return null;
   const domains: PublicSummary['domains']={};
-  for(const p of pillars) if(s.domains[p.id]!==undefined){if(!Number.isFinite(s.domains[p.id]))return null;domains[p.id]=s.domains[p.id];}
+  for(const p of pillars) if(s.domains[p.id]!==undefined){if(!Number.isFinite(s.domains[p.id])||s.domains[p.id]! < -3||s.domains[p.id]! > 3)return null;domains[p.id]=s.domains[p.id];}
   if(s.ready&&(s.scoredCount<3||Object.keys(domains).length<2))return null;
   return {modelVersion:s.modelVersion,scoredCount:s.scoredCount,ready:s.ready,modelScore:s.modelScore,completeness:s.completeness,z:s.z,domains,measured:s.measured};
 }

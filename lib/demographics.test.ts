@@ -1,14 +1,14 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {ageBrackets,demographicLookup,getAgeBracket,getMetricCohortNorm,getMetricBenchmark} from './demographics';
-import {metrics,type Demographics,type Values} from './registry';
+import {metrics,activeMetrics,type Demographics,type Values} from './registry';
 import {evaluate,reference,score,eligible} from './engine';
 import {getPairwiseCorrelation,getScoredCorrelation} from './correlations';
 const d:Demographics={age:25,sex:'male',weight:80,height:180};
 const near=(a:number,b:number)=>assert.ok(Math.abs(a-b)<1e-6);
 const details={vo2_max:{method:'direct_cpet' as const,ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 test('all model cells are finite, but only VO2 parameters are source-grounded',()=>{
- assert.equal(Object.keys(demographicLookup).length,32);
+ assert.equal(Object.keys(demographicLookup).length,38);
  for(const m of metrics)for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){
   const norm=demographicLookup[m.id][sex][bracket];assert.ok(Number.isFinite(norm.mean)&&norm.stdDev>0);
   assert.equal(norm.provenance,m.id==='vo2_max'?'published':'provisional');
@@ -38,5 +38,5 @@ test('legacy correlations retain directional semantics but are not used by aggre
 });
 test('full raw-data coverage is independent of scoring eligibility and does not establish confidence',()=>{
  const values:Values=Object.fromEntries(metrics.map(m=>[m.id,m.mean]));
- for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,32);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<32);assert.ok(Number.isFinite(result.z));}
+ for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,36);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<36);assert.ok(Number.isFinite(result.z));}
 });

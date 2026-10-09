@@ -50,7 +50,7 @@ export function getAgeBracket(age: number): AgeBracket {
   return ageBrackets[1 + Math.floor((age - 25) / 5)];
 }
 
-// Materialize all 704 metric/sex/age cells. Unspecified cohorts retain V1
+// Materialize metric/sex/age cells, including preserved legacy inputs. Unspecified cohorts retain V1
 // parameters without inventing age or sex effects. VO2 uses published decade cohorts; other effects remain assumptions.
 export const demographicLookup: DemographicLookup = Object.fromEntries(metrics.map(metric => {
   const cohorts = Object.fromEntries((['male', 'female'] as const).map(sex => [sex,
