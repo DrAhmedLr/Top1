@@ -37,4 +37,4 @@ Private is the default. Raw measurements and import receipts are owner-only unde
 
 Google OAuth is currently disabled. Configure Google credentials in Supabase and allow the deployed `/auth/callback` URL before enabling account sign-in. Full hosted signed-in verification remains pending. No credential-bearing disposable test account was created.
 
-The audited beta is live at https://top1.fit and https://top1body-beta.vercel.app. The Fire & Ice triad update is prepared for release after applying the additive metric-range migration and completing verification. See [triad release notes](docs/TRIAD_RELEASE.md).
+The audited beta is live at https://top1.fit and https://top1body-beta.vercel.app. The Fire & Ice triad release is READY on Vercel, deployment `dpl_3WLzCA5kiMcM1hH8jmkzk7Pa3JoZ`, serving application commit `ee481de0f8ab3450d0224f160388724a0b321a05`. All six database migrations are applied. See [triad release notes](docs/TRIAD_RELEASE.md).
