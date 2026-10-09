@@ -20,4 +20,4 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Cache-Control','private, no-store');
   return response;
 }
-export const config = { matcher: ['/', '/api/profile', '/auth/:path*', '/share/:path*'] };
+export const config = { matcher: ['/', '/api/profile', '/auth/:path*', '/sign-in', '/reset-password', '/account/:path*', '/share/:path*'] };

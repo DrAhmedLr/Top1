@@ -37,7 +37,7 @@ export async function POST(request:NextRequest){
     const profile={demographics,values,username,isPublic:input.isPublic,measurementDetails,revision:input.revision};
     const summary=await signSummary(buildPublicSummary(profile),user.id,demographics);
     const {data:revision,error}=await client.rpc('save_profile',{p_demographics:demographics,p_metrics:values,p_username:username||null,p_is_public:input.isPublic,p_summary:summary,p_details:measurementDetails,p_expected_revision:input.revision});
-    if(error)return reply({error:error.code==='23505'?'That username is already taken.':error.code==='40001'?'This profile changed on another device. Reload before saving.':'Unable to save your profile. Please retry.',conflict:error.code==='40001'},['23505','40001'].includes(error.code)?409:500);
+    if(error)return reply({error:error.code==='23505'?'That username is already taken.':['40001','PT409'].includes(error.code)?'This profile changed on another device. Reload before saving.':'Unable to save your profile. Please retry.',conflict:['40001','PT409'].includes(error.code)},['23505','40001','PT409'].includes(error.code)?409:500);
     return reply({profile:{...profile,revision:Number(revision)}});
   }catch(error){return reply({error:error instanceof Error?error.message:'Invalid profile.'},400);}
 }

@@ -8,7 +8,7 @@ do $$ declare r bigint; begin
  begin
   perform public.save_profile('{"age":32,"sex":"male","weight":78,"height":180}','{}',null,false,'{}','{}',0);
   raise exception 'Stale write accepted';
- exception when serialization_failure then null;end;
+ exception when sqlstate 'PT409' then null;end;
  if (public.read_current_measurements()->'details'->'vo2_max'->>'ageAtMeasurement')::integer<>32 then raise exception 'Metadata lost';end if;
  perform public.save_profile('{"age":32,"sex":"male","weight":78,"height":180}','{}',null,false,'{}','{}',r);
  if (select count(*) from public.metric_logs)<>2 then raise exception 'History removed instead of tombstoned';end if;

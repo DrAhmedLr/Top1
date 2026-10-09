@@ -1,4 +1,4 @@
-# TOP1 · Fire & Ice triad beta
+# TOP1 · Fire & Ice triad
 
 Next.js / TypeScript measurement dashboard with local persistence, Supabase accounts, optional public snapshots, and hypothetical performance scenarios.
 
@@ -31,10 +31,10 @@ Copy `.env.example` to `.env.local`. Set public Supabase connection variables an
 
 Confirmed database: **drahmedlr**, project `uyivfmmiwehfkcemjvmh`. Vercel project: **top1body-beta**. Repository: https://github.com/DrAhmedLr/Top1.
 
-Apply all six migrations in order. The audited migration adds measured date, method, source, test age, revision protection, and append-only clearing via tombstones. It replaces the save/import RPC signatures; deploy the corresponding code together. A clearing action preserves history. Owners retain table permissions to manage their own records; this is not an immutable medical record.
+Apply all seven migrations in order. The audited migration adds measured date, method, source, test age, revision protection, and append-only clearing via tombstones. It replaces the save/import RPC signatures; deploy the corresponding code together. A clearing action preserves history. Owners retain table permissions to manage their own records; this is not an immutable medical record.
 
 Private is the default. Raw measurements and import receipts are owner-only under RLS. Public snapshots expose demographics and aggregate index information. Server signatures bind those snapshots to the account, demographics, model version, and signing date. Signatures attest calculation by the app, not independently verified measurements. Legacy unsigned snapshots are hidden until resaved. Previously cached third-party images cannot be revoked remotely.
 
-Google OAuth is currently disabled. Configure Google credentials in Supabase and allow the deployed `/auth/callback` URL before enabling account sign-in. Full hosted signed-in verification remains pending. No credential-bearing disposable test account was created.
+Email-and-password access is implemented with sign-up, confirmation resend, sign-in, recovery and signed-in password changes. Google is not offered in the interface. New-password forms require 12 characters; signed-in changes explicitly verify current credentials. A user-authorized account was confirmed and used for real save/load, sharing and privacy checks. Production SMTP is intentionally deferred by the owner, so confirmation and recovery delivery to arbitrary public addresses remains pending. See [launch status](docs/LAUNCH_STATUS.md).
 
-The audited beta is live at https://top1.fit and https://top1body-beta.vercel.app. The Fire & Ice triad release is READY on Vercel, deployment `dpl_3WLzCA5kiMcM1hH8jmkzk7Pa3JoZ`, serving application commit `ee481de0f8ab3450d0224f160388724a0b321a05`. All six database migrations are applied. See [triad release notes](docs/TRIAD_RELEASE.md).
+TOP1 is live at https://top1.fit and https://top1body-beta.vercel.app. The Fire & Ice triad release is READY on Vercel, deployment `dpl_3WLzCA5kiMcM1hH8jmkzk7Pa3JoZ`, serving application commit `ee481de0f8ab3450d0224f160388724a0b321a05`. All seven database migrations are applied. See [triad release notes](docs/TRIAD_RELEASE.md).
