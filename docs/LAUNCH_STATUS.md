@@ -21,9 +21,9 @@ The full authenticated launch test exposed a stale-save HTTP 500. The previous `
 
 The owner explicitly authorized an email/password test account and confirmed its email. Generated credentials are in a permission-restricted fixture outside this repository and never appear in source or public logs.
 
-Real checks passed against Supabase for sign-in, current-password verification, incorrect-password rejection, password replacement, old-password rejection and new-password acceptance. The release candidate also passed authenticated save/load, metadata retention, account/origin checks, invalid-input rejection, revision conflicts, signed public page/card rendering, visibility revocation, sign-out and API denial. Synthetic observations were tagged and removed; the test profile was restored private with no measurements.
+Real checks passed against Supabase for sign-in, current-password verification, incorrect-password rejection, password replacement, old-password rejection and new-password acceptance. The deployed release also passed authenticated save/load, metadata retention, account/origin checks, invalid-input rejection, revision conflicts, signed public page/card rendering, visibility revocation, sign-out and API denial. Synthetic observations were tagged and removed; the test profile was restored private with no measurements.
 
-Automated application and PostgreSQL migration tests, TypeScript, production build, account-page browser checks and production smoke checks are recorded for the release. Build/runtime log access through the connector remains restricted; CLI request-log reads work with the authorized scope.
+All 58 automated application tests and the full seven-migration PostgreSQL checks passed, along with TypeScript and the production build. Account forms were inspected in the browser. Production deployment `dpl_CGfb8jfAMs3SKVGUmkaxVjGUq6mF` is READY at https://top1.fit, serving application commit `70e8815bc8488a4dafe258092b01cef1e3a78333`. Live email account pages, private API denial, social cards, non-beta labeling and response security headers passed smoke checks. Build/runtime log access through the connector remains restricted; CLI request-log reads work with the authorized scope.
 
 ## Explicitly deferred by the owner
 
