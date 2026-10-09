@@ -37,4 +37,4 @@ Private is the default. Raw measurements and import receipts are owner-only unde
 
 Google OAuth is currently disabled. Configure Google credentials in Supabase and allow the deployed `/auth/callback` URL before enabling account sign-in. Full hosted signed-in verification remains pending. No credential-bearing disposable test account was created.
 
-The prior beta URL is https://top1body-beta.vercel.app. The audited release remains pending the production database migration; the existing URL must not be treated as proof that these audited changes are deployed.
+The audited beta is live at https://top1.fit and https://top1body-beta.vercel.app. Deployment `dpl_3zXqwwxoQmhJsBNza2WZoXKeFsc5` serves application commit `96da8483da1b309a9a0d7f86bd6c134770754640`. The audited migration is applied; live transactional RLS and integrity checks passed. Both Supabase security and performance advisors returned no notices.
