@@ -1,0 +1,35 @@
+// Live API integration test against a disposable test account prepared by the
+// operator. Credentials come from an external fixture; never commit them.
+import {readFile,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {createServerClient} from '@supabase/ssr';
+import {buildPublicSummary} from '../lib/profile';
+const fixture=JSON.parse(await readFile(process.env.TOP1_TEST_FIXTURE!,'utf8'));
+const site=process.env.TOP1_TEST_BASE_URL||'http://127.0.0.1:3011';
+const jar=new Map<string,string>();
+const client=createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,{cookies:{getAll:()=>Array.from(jar,([name,value])=>({name,value})),setAll:items=>{for(const item of items)jar.set(item.name,item.value);}}});
+const {error}=await client.auth.signInWithPassword({email:fixture.email,password:fixture.password});
+assert.equal(error,null,'Disposable account could not sign in');
+const headers=()=>({cookie:Array.from(jar,([name,value])=>`${name}=${value}`).join('; '),origin:site,'content-type':'application/json','x-profile-user':fixture.id});
+const profile={demographics:{age:32,sex:'female' as const,weight:60,height:165},values:{rhr:55,vo2_max:42,body_fat:19},username:fixture.username,isPublic:false};
+const call=async(path:string,options:RequestInit={})=>fetch(site+path,options);
+let response=await call('/api/profile',{method:'POST',headers:headers(),body:JSON.stringify(profile)});
+assert.equal(response.status,200,await response.text());
+response=await call('/api/profile',{headers:headers()});assert.equal(response.status,200);
+let body=await response.json();assert.deepEqual(body.profile,profile);
+response=await call('/api/profile',{method:'POST',headers:{...headers(),'x-profile-user':'00000000-0000-0000-0000-000000000000'},body:JSON.stringify(profile)});assert.equal(response.status,409);
+response=await call('/api/profile',{method:'POST',headers:{...headers(),origin:'https://wrong-origin.invalid'},body:JSON.stringify(profile)});assert.equal(response.status,403);
+response=await call('/api/profile',{method:'POST',headers:headers(),body:JSON.stringify({...profile,values:{rhr:500}})});assert.equal(response.status,400);
+response=await call('/share/'+fixture.username);assert.equal(response.status,404);
+response=await call('/api/og?username='+fixture.username);assert.equal(response.status,404);
+response=await call('/api/profile',{method:'POST',headers:headers(),body:JSON.stringify({...profile,isPublic:true})});assert.equal(response.status,200,await response.text());
+response=await call('/share/'+fixture.username);assert.equal(response.status,200);
+const html=await response.text();assert.ok(html.includes('og:image'));assert.ok(html.includes(fixture.username));assert.ok(html.includes('Self-reported measurements'));
+response=await call('/api/og?username='+fixture.username+'&percentile=99.99');assert.equal(response.status,200);assert.equal(response.headers.get('content-type'),'image/png');
+await writeFile('/tmp/top1-v3-public-card.png',Buffer.from(await response.arrayBuffer()));
+const summary=buildPublicSummary(profile);const {data}=await client.from('profiles').select('public_summary').eq('id',fixture.id).single();assert.deepEqual(data!.public_summary,summary);
+response=await call('/api/profile',{method:'POST',headers:headers(),body:JSON.stringify(profile)});assert.equal(response.status,200);
+response=await call('/share/'+fixture.username);assert.equal(response.status,404);
+response=await call('/api/og?username='+fixture.username);assert.equal(response.status,404);
+await client.auth.signOut();
+console.log('PASS: authenticated save/load, account scope, origin check, validation, public metadata/card, aggregate summary, and privacy revocation');

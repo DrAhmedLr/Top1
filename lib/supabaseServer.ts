@@ -1,0 +1,17 @@
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { getSupabaseConfig } from './supabaseConfig';
+export async function getSupabaseServer() {
+  const config = getSupabaseConfig();
+  if (!config) return null;
+  const store = await cookies();
+  return createServerClient(config.url, config.key, {
+    cookies: {
+      getAll: () => store.getAll(),
+      setAll(items) {
+        try { items.forEach(({name,value,options}) => store.set(name,value,options)); }
+        catch { /* Server Components are read-only; middleware refreshes cookies. */ }
+      },
+    },
+  });
+}
