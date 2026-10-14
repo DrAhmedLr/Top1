@@ -1,42 +1,14 @@
 'use client';
-
 import {recordedCoverage} from '@/lib/coverage';
-import { ArrowRight, ArrowUpRight, CircleHelp, Dumbbell, FlaskConical, Moon, Plus, ShieldCheck, Sparkles, Zap } from 'lucide-react';
-import { evaluate, toModelScore } from '@/lib/engine';
-import { activeMetrics, pillars, type Values, type PillarId } from '@/lib/registry';
-import BalanceChart from './BalanceChart';
-import BenchmarkPanel from './BenchmarkPanel';
-import CheckIn from './CheckIn';
-import type {MeasurementMetadata} from '@/lib/measurementMetadata';
-
-const icons = { bodymarkers: FlaskConical, strength: Dumbbell, recovery: Moon };
-export const pillarNames = { bodymarkers: 'Body markers', strength: 'Strength & fitness', recovery: 'Recovery' };
-const display = (n: number) => n.toFixed(1).replace(/\.0$/, '');
-
-export default function Overview({ result, values, details, needsSetup, onMeasurements, onStart, onScenarios, onScience, onCalculationReport,onFirstCheckIn }: {
-  result: ReturnType<typeof evaluate>; values: Values; details:MeasurementMetadata; needsSetup: boolean; onMeasurements: (pillar?: PillarId) => void;
-  onStart: () => void; onScenarios: () => void; onScience: () => void;onCalculationReport:()=>void;
-  onFirstCheckIn:(id:string)=>void;
-}) {
-  const focus = result.bottlenecks.slice(0, 2);
-  const published=result.submitted.filter(s=>s.reference.provenance==='published').length;
-  const needsContext=result.assessments.filter(a=>!['eligible','context-only'].includes(a.status)).length;
-  return <>
-    <section className="protocol-hero">
-
-      {result.measured.length ? <><span className="eyebrow">YOUR RECORDED DATA</span><h2 aria-live="polite">{display(recordedCoverage(result.measured.length))}%<small>Recording coverage · {result.measured.length} of {activeMetrics.length} measurements</small></h2><p className="hero-rank-status">Peer percentile: pending calibration. Recording coverage is not your performance rank.</p></> : <h2>BUILD YOUR <span>BASELINE</span><small>Record what you know</small></h2>}
-      <div className="spectrum-line"/>
-
-      <div className="hero-actions"><button className="primary-button" onClick={needsSetup ? onStart : result.measured.length?onScenarios:()=>onFirstCheckIn('sit_to_stand')}><Sparkles size={17}/>{needsSetup ? 'Set up my profile' : result.measured.length?'Open my program':'Record my first measurement'}</button>{!needsSetup&&result.measured.length>0 && <button className="secondary-button" onClick={() => onMeasurements()}><Zap size={17}/>Log a measurement</button>}</div>
-      <button className="hero-disclosure" onClick={onScience}><CircleHelp size={14}/>Measurement methods & model limits</button>
-    </section>
-    {!needsSetup&&<BenchmarkPanel values={values} details={details} onMeasurements={()=>onMeasurements()}/>}
-    {!needsSetup&&<CheckIn values={values} details={details} onRecord={onFirstCheckIn}/>}
-    <div className="protocol-matrix">
-      <section className="card balance-card"><div className="card-heading"><h2>Your measured performance</h2><button className="icon-button" aria-label="How performance is assessed" onClick={onScience}><CircleHelp size={17}/></button></div><p>Compare repeated measurements in My metrics. Adding a new metric changes the assessment, not your past performance.</p><details className="experimental-preview"><summary>Explore the experimental capacity index</summary>{result.ready?<><strong>{display(result.modelScore)} /100 model points</strong><p>Experimental 5–95 scale · {published} published reference {published===1?'input':'inputs'} · {result.scoredCount-published} provisional. The composite is not population calibrated.</p>{pillars.filter(p=>p.id==='strength').map(p=><div className="recorded-pillar" key={p.id}><strong>{pillarNames[p.id]}</strong><span>{result.domains[p.id]===undefined?'No scored data':`${display(toModelScore(result.domains[p.id]!))} model points · ${Math.round((result.domainWeights[p.id]??0)*100)}% of this calculation`}</span></div>)}{!result.comparable&&<p>Record methods and dates before comparing model assessments. Test conditions still need to match.</p>}</>:<p>{result.readinessReason} All fields remain optional.</p>}{needsContext>0&&<button className="text-link" onClick={()=>onMeasurements()}>{needsContext} {needsContext===1?'observation needs':'observations need'} protocol details or corrections</button>}<button className="text-link" onClick={onScience}>Review reference provenance</button><button className="text-link" disabled={needsSetup} onClick={onCalculationReport}>Download calculation report</button></details><div className="science-note">Body markers and recovery habits provide context and are tracked without scoring.</div></section>
-      <section className="card snapshot-card"><div className="card-heading"><div><span className="eyebrow">YOUR RECORDED DATA</span><h2>Your three measurement areas</h2></div><ShieldCheck size={20}/></div><div className="coverage-snapshot"><div className="coverage-number">{display(recordedCoverage(result.measured.length))}<small>%</small></div><div><h3>Recorded measurements</h3><p>{result.measured.length} of {activeMetrics.length} measurements recorded.</p></div></div><p className="coverage-explanation">{result.scoredCount} enter the experimental model · {result.trackingOnly.length} tracking only. Recording coverage is availability, not confidence.</p><div className="recorded-pillars">{pillars.map(p => { const Icon=icons[p.id], z=result.ready?result.domains[p.id]:undefined, count=result.measured.filter(m=>m.pillar===p.id).length, total=activeMetrics.filter(m=>m.pillar===p.id).length; return <button className={`recorded-pillar ${p.id}`} key={p.id} onClick={()=>onMeasurements(p.id)}><span className="pillar-icon"><Icon size={18}/></span><span className="recorded-pillar-copy"><strong>{pillarNames[p.id]}</strong><small>{count} of {total} recorded</small></span><span className="recorded-pillar-score">{z===undefined?'—':display(toModelScore(z))}<small>{p.id!=='strength'?'Context only':z===undefined?result.ready?'No scored data':'More model inputs needed':'provisional model'}</small></span><ArrowUpRight size={14}/></button>; })}</div><button className="text-link" onClick={() => onMeasurements()}>Record a measurement <ArrowRight size={15}/></button></section>
-    </div>
-
-    {focus.length > 0 && <section className="card next-actions"><div className="card-heading"><h2>Explore a change</h2></div><div className="next-action-grid">{focus.map(({metric}) => <div key={metric.id}><h3><span className={`category-dot ${metric.pillar}`}/>{metric.name}</h3><button className="secondary-button" onClick={onScenarios}>Try a scenario <ArrowRight size={15}/></button></div>)}</div></section>}
-  </>;
+import {evaluate} from '@/lib/engine';
+import {activeMetrics,type PillarId} from '@/lib/registry';
+import RecordedDataChart from './RecordedDataChart';
+export const pillarNames={bodymarkers:'Body markers',strength:'Strength & fitness',recovery:'Recovery'};
+const display=(n:number)=>n.toFixed(1).replace(/\.0$/,'');
+export default function Overview({result,needsSetup,onStart,onMeasurements,onScience,onCalculationReport}:{result:ReturnType<typeof evaluate>;needsSetup:boolean;onStart:()=>void;onMeasurements:(pillar?:PillarId)=>void;onScience:()=>void;onCalculationReport:()=>void}){
+ const counts=Object.fromEntries(Object.keys(pillarNames).map(id=>[id,result.measured.filter(m=>m.pillar===id).length]));
+ return <div className="dashboard-summary">
+ <section className="protocol-hero baseline-card"><h2>YOUR PERSONAL BASELINE</h2><div className="baseline-value">{result.ready?display(result.modelScore):'—'}<small>{result.ready?'/100 experimental index':'No model assessment yet'}</small></div><p className="baseline-status">Peer percentile: pending calibration.</p>{needsSetup&&<button className="primary-button" onClick={onStart}>Set up my profile</button>}<details className="baseline-details"><summary>Calculation details</summary><p>{result.ready?'This provisional index is not your population percentile.':result.readinessReason}</p><button className="text-link" onClick={onScience}>Methods & evidence</button><button className="text-link" disabled={needsSetup} onClick={onCalculationReport}>Download calculation report</button></details></section>
+ <section className="card recorded-data-card"><div className="card-heading"><h2>YOUR RECORDED DATA</h2><div className="recorded-total"><strong aria-live="polite">{display(recordedCoverage(result.measured.length))}%</strong><small>{result.measured.length} of {activeMetrics.length} recorded</small></div></div><RecordedDataChart counts={counts} onSelect={onMeasurements}/><small className="recorded-caption">Recording coverage · not a performance rank</small></section>
+ </div>;
 }
