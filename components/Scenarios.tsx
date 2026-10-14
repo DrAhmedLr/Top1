@@ -18,7 +18,7 @@ export default function Scenarios({ values, demographics, details, onMeasurement
   const metric = result.submitted.find(s => s.metric.id === selected)?.metric ?? result.submitted[0]?.metric;
   const previewResult = useMemo(() => metric && preview !== null ? evaluate({ ...values, [metric.id]: preview }, demographics, details) : result, [metric, preview, values, demographics, details, result]);
   const projection = useMemo(() => simulate(values, demographics, Math.max(target, result.modelScore), strategy, details), [values, demographics, target, result.modelScore, strategy, details]);
-  if (!result.ready || !metric) return <section className="card large-empty"><Sparkles size={35}/><h2>Start with your measurements.</h2><p>Record three eligible measurements across two pillars to explore scenarios with your own data.</p><button className="primary-button" onClick={onMeasurements}>Add measurements <ArrowRight size={16}/></button></section>;
+  if (!result.ready || !metric) return <section className="card large-empty"><Sparkles size={35}/><h2>Start with your measurements.</h2><p>Record three eligible capacity measurements to explore scenarios with your own data.</p><button className="primary-button" onClick={onMeasurements}>Add measurements <ArrowRight size={16}/></button></section>;
   const current = values[metric.id]!;
   const shown = (value: number) => metric.id === 'total_sleep' ? value / 60 : value;
   const shownUnit = metric.id === 'total_sleep' ? 'h/night' : metric.unit;

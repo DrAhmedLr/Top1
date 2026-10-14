@@ -53,7 +53,7 @@ export function getAgeBracket(age: number): AgeBracket {
 
 // Materialize metric/sex/age cells, including preserved legacy inputs. Unspecified cohorts retain V1
 // parameters without inventing age or sex effects. VO2 uses published decade cohorts; other effects remain assumptions.
-export const demographicLookup: DemographicLookup = Object.fromEntries(metrics.map(metric => {
+export const demographicLookup: DemographicLookup = Object.fromEntries(metrics.filter(m=>!['grip_combined','sprint_10m'].includes(m.id)).map(metric => {
   const cohorts = Object.fromEntries((['male', 'female'] as const).map(sex => [sex,
     Object.fromEntries(ageBrackets.map(bracket => {
       const norm: MetricCohortNorm = { mean: metric.mean, stdDev: metric.sd, provenance: 'provisional' };

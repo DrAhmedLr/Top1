@@ -17,4 +17,4 @@ export function normalizePlan(raw:unknown,editing=false):WeeklyPlan{
  });return {version:1,focus:p.focus,tasks};
 }
 export function weekDays(today=new Date()){const monday=new Date(today.getFullYear(),today.getMonth(),today.getDate());monday.setDate(monday.getDate()-((monday.getDay()+6)%7));return Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(d.getDate()+i);return dayKey(d);});}
-export function planProgress(plan:WeeklyPlan,today=new Date()){const dates=weekDays(today);let total=0,done=0;for(const t of plan.tasks)for(const d of t.days){total++;if(t.completed.includes(dates[d-1]))done++;}return {done,total};}
+export function planProgress(plan:WeeklyPlan,today=new Date()){const dates=weekDays(today),current=dayKey(today);let total=0,done=0,due=0;for(const t of plan.tasks)for(const d of t.days){total++;if(dates[d-1]<=current){due++;if(t.completed.includes(dates[d-1]))done++;}}return {done,total,due};}

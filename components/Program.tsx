@@ -4,46 +4,50 @@ import {captureEvent} from '@/lib/analytics';
 import {discardAcknowledgedDraft} from '@/lib/drafts';
 import {useAuth} from './providers/AuthProvider';
 import Scenarios from './Scenarios';
-import {dayKey,emptyPlan,normalizePlan,planProgress,type WeeklyPlan,type PlanFocus} from '@/lib/program';
+import {emptyPlan,normalizePlan,type WeeklyPlan,type PlanFocus} from '@/lib/program';
+import {completedOn,dayInZone,emptyTimeline,normalizeTimeline,recordRoutine,routineProgress,scheduledTasks,type RoutineTimeline} from '@/lib/routineHistory';
 import type {Values,Demographics} from '@/lib/registry';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-export default function Program({values,demographics,details,onMeasurements}:{values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onScience:()=>void}){
+export default function Program({values,demographics,details,onMeasurements,onNavigationRisk}:{values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onScience:()=>void;onNavigationRisk?:(risk:boolean)=>void}){
  const auth=useAuth(),owner=auth.user?.id??'guest',ownerRef=useRef(owner);ownerRef.current=owner;
- const mounted=useRef(true);useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[]);
- const [attempt,setAttempt]=useState(0);
- const [plan,setPlan]=useState<WeeklyPlan>(emptyPlan),[revision,setRevision]=useState(0),[readyOwner,setReadyOwner]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[label,setLabel]=useState('');
- const ready=readyOwner===owner;
- const saved=useRef(''),today=dayKey(),weekday=((new Date().getDay()+6)%7)+1;
+ const mounted=useRef(true);useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;onNavigationRisk?.(false);};},[onNavigationRisk]);
+ const [,setClock]=useState(0);useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),60000);return()=>clearInterval(timer);},[]);
+ const [attempt,setAttempt]=useState(0),[plan,setPlan]=useState<WeeklyPlan>(emptyPlan),[timeline,setTimeline]=useState<RoutineTimeline>(emptyTimeline),[zone,setZone]=useState('UTC');
+ const [revision,setRevision]=useState(0),[readyOwner,setReadyOwner]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[label,setLabel]=useState('');
+ const ready=readyOwner===owner,saved=useRef(''),savedPlan=useRef<WeeklyPlan|null>(null),today=dayInZone(zone),weekday=((new Date(`${today}T12:00:00`).getDay()+6)%7)+1;
  useEffect(()=>{if(!auth.ready)return;let active=true;setReadyOwner(null);setBusy(false);setError('');setNotice('');setPlan(emptyPlan());setLabel('');
   async function load(){try{
-   let next=emptyPlan(),rev=0;
-   if(owner==='guest'){const raw=localStorage.getItem('top1-program-guest');if(raw)next=normalizePlan(JSON.parse(raw));}
-   else{const r=await fetch('/api/program',{cache:'no-store'}),b=await r.json();if(!r.ok)throw new Error(b.error);if(b.plan)next=normalizePlan(b.plan);rev=b.revision;}
-   if(!active)return;saved.current=JSON.stringify(next);const draft=localStorage.getItem(`top1-program-draft-${owner}`);
-   if(draft&&draft!==saved.current){next=normalizePlan(JSON.parse(draft),true);setNotice('Unsaved program draft restored. Review it before saving.');}
-   setPlan(next);setRevision(rev);setReadyOwner(owner);
+   let next=emptyPlan(),history=emptyTimeline(),rev=0,timeZone=Intl.DateTimeFormat().resolvedOptions().timeZone;
+   if(owner==='guest'){const raw=localStorage.getItem('top1-program-guest');if(raw){const b=JSON.parse(raw);next=normalizePlan(b.plan??b);if(b.timeline)history=normalizeTimeline(b.timeline);timeZone=b.timeZone??timeZone;}}
+   else{const r=await fetch('/api/program',{cache:'no-store'}),b=await r.json();if(!r.ok)throw new Error(b.error);if(b.plan)next=normalizePlan(b.plan);history=normalizeTimeline(b.timeline??emptyTimeline());rev=b.revision;timeZone=b.timeZone??timeZone;}
+   if(!active)return;saved.current=JSON.stringify(next);savedPlan.current=next;let composer='';
+   try{const draft=localStorage.getItem(`top1-program-draft-${owner}`);composer=localStorage.getItem(`top1-program-composer-${owner}`)??'';if(draft&&draft!==saved.current){next=normalizePlan(JSON.parse(draft),true);setNotice('Unsaved program draft restored. Review before saving.');}}catch{setError('Draft storage is unavailable. Keep this page open.');onNavigationRisk?.(true);}
+   dayInZone(timeZone);setPlan(next);setTimeline(history);setZone(timeZone);setLabel(composer);setRevision(rev);setReadyOwner(owner);
   }catch(e){if(active)setError(e instanceof Error?e.message:'Unable to load your plan.');}}
   void load();return()=>{active=false;};
- },[owner,auth.ready,attempt]);
+ },[owner,auth.ready,attempt,onNavigationRisk]);
  const dirty=JSON.stringify(plan)!==saved.current;
+ const needsDatedTracking=ready&&plan.tasks.length>0&&timeline.schedules.length===0;
  useEffect(()=>{if(!dirty&&!label.trim()&&!busy)return;const warn=(event:BeforeUnloadEvent)=>{event.preventDefault();event.returnValue='';};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[dirty,label,busy]);
- useEffect(()=>{if(!ready||!dirty)return;try{localStorage.setItem(`top1-program-draft-${owner}`,JSON.stringify(plan));}catch{setError('Draft storage is unavailable. Keep this page open.');}},[plan,owner,ready,dirty]);
- async function save(next=plan){if(!ready||busy)return;const account=owner;setBusy(true);setError('');setNotice('');try{
-  const valid=normalizePlan(next);let rev=revision;
-  if(account==='guest')localStorage.setItem('top1-program-guest',JSON.stringify(valid));
-  else{const r=await fetch('/api/program',{method:'POST',headers:{'Content-Type':'application/json','X-Profile-User':account},body:JSON.stringify({plan:valid,revision})}),b=await r.json();if(!r.ok)throw new Error(b.error);rev=b.revision;}
-  if(!mounted.current||ownerRef.current!==account)return;saved.current=JSON.stringify(valid);setPlan(valid);setRevision(rev);captureEvent('program_saved',{focus:valid.focus});setNotice(account==='guest'?'Program saved in this browser.':'Program saved.');
-  try{discardAcknowledgedDraft(localStorage,`top1-program-draft-${account}`,JSON.stringify(next));}catch{setNotice('Program saved. Local draft cleanup is unavailable.');}return true;
+ useEffect(()=>{if(!ready)return;try{if(dirty)localStorage.setItem(`top1-program-draft-${owner}`,JSON.stringify(plan));localStorage.setItem(`top1-program-composer-${owner}`,label);onNavigationRisk?.(false);}catch{setError('Draft storage is unavailable. Keep this page open.');onNavigationRisk?.(true);}},[plan,label,owner,ready,dirty,onNavigationRisk]);
+ async function save(next=plan,completion?:{taskId:string;completed:boolean}){if(!ready||busy)return;const account=owner;setBusy(true);setError('');setNotice('');try{
+  const valid=normalizePlan(next);let actual=valid,history=timeline,rev=revision;
+  if(account==='guest'){const recorded=recordRoutine(savedPlan.current,valid,timeline,today,zone,completion);actual=recorded.plan;history=recorded.timeline;localStorage.setItem('top1-program-guest',JSON.stringify({version:2,plan:actual,timeline:history,timeZone:zone}));}
+  else{const r=await fetch('/api/program',{method:'POST',headers:{'Content-Type':'application/json','X-Profile-User':account},body:JSON.stringify({plan:valid,revision,timeZone:zone,completion})}),b=await r.json();if(!r.ok)throw new Error(b.error);rev=b.revision;actual=normalizePlan(b.plan);history=normalizeTimeline(b.timeline);}
+  if(!mounted.current||ownerRef.current!==account)return;saved.current=JSON.stringify(actual);savedPlan.current=actual;setPlan(actual);setTimeline(history);setRevision(rev);captureEvent(completion?'program_task_completed':'program_saved',{focus:actual.focus});setNotice(completion?'Check-in saved.':'Routine saved. Schedule edits start tomorrow; earlier days keep their original schedule.');
+  try{discardAcknowledgedDraft(localStorage,`top1-program-draft-${account}`,JSON.stringify(next));}catch{setNotice('Saved. Local draft cleanup is unavailable.');}return true;
  }catch(e){if(mounted.current&&ownerRef.current===account)setError(e instanceof Error?e.message:'Save failed; your draft is retained.');}finally{if(mounted.current&&ownerRef.current===account)setBusy(false);}}
- function complete(id:string){const next={...plan,tasks:plan.tasks.map(t=>t.id===id?{...t,completed:t.completed.includes(today)?t.completed.filter(d=>d!==today):[...t.completed,today]}:t)};setPlan(next);void save(next).then(ok=>{if(ok&&next.tasks.find(t=>t.id===id)?.completed.includes(today))captureEvent('program_task_completed',{focus:plan.focus});});}
- const progress=planProgress(plan),todays=plan.tasks.filter(t=>t.days.includes(weekday));
- return <><section className="card weekly-program"><div className="card-heading"><div><h2>Your weekly plan</h2><p>Choose your actions and check them off. This is your routine; the model does not prescribe a training dose.</p></div><strong>{progress.done}/{progress.total} this week</strong></div>
+ const progress=routineProgress(timeline,today),todays=scheduledTasks(timeline,today).filter(t=>t.days.includes(weekday));
+ return <><section className="card weekly-program"><div className="card-heading"><div><h2>Your weekly plan</h2><p>Your chosen routine. Schedule changes start tomorrow.</p></div><strong>{progress.done}/{progress.due} due so far<small> · {progress.target} planned this week</small></strong></div>
  {!ready?<p role="status">{error||'Loading your plan…'}</p>:<>
  <label>Focus<select aria-label="Program focus" value={plan.focus} disabled={busy} onChange={e=>setPlan({...plan,focus:e.target.value as PlanFocus})}><option value="consistency">Consistency</option><option value="strength">Strength & fitness</option><option value="recovery">Recovery</option></select></label>
- <h3>Today</h3>{todays.length?todays.map(t=><label className="program-task" key={t.id}><input type="checkbox" checked={t.completed.includes(today)} disabled={busy||dirty} onChange={()=>complete(t.id)}/><span>{t.label}</span></label>):<p>No actions scheduled today.</p>}{dirty&&<p>Save your plan before recording completions.</p>}
- <details className="program-edit" open={!plan.tasks.length}><summary>Edit your routine</summary>{plan.tasks.map(t=><div className="program-action" key={t.id}><label>Action<input value={t.label} maxLength={160} disabled={busy} onChange={e=>setPlan({...plan,tasks:plan.tasks.map(x=>x.id===t.id?{...x,label:e.target.value}:x)})}/></label><div role="group" aria-label={`Days for ${t.label}`}>{names.map((n,i)=><button key={n} aria-label={`${n} for ${t.label}`} aria-pressed={t.days.includes(i+1)} disabled={busy} onClick={()=>setPlan({...plan,tasks:plan.tasks.map(x=>x.id===t.id?{...x,days:x.days.includes(i+1)?x.days.filter(d=>d!==i+1):[...x.days,i+1]}:x)})}>{n}</button>)}</div><button className="text-link" disabled={busy} onClick={()=>setPlan({...plan,tasks:plan.tasks.filter(x=>x.id!==t.id)})}>Remove action</button></div>)}
+ <h3>Today</h3>{todays.length?todays.map(t=><label className="program-task" key={t.id}><input type="checkbox" checked={completedOn(timeline,t.id,today)} disabled={busy||dirty} onChange={()=>void save(plan,{taskId:t.id,completed:!completedOn(timeline,t.id,today)})}/><span>{t.label}</span></label>):<p>No actions scheduled today.</p>}{dirty&&<p>Save your routine before recording completions.</p>}
+ <details className="program-edit" open={!plan.tasks.length}><summary>Edit your routine</summary>{plan.tasks.map(t=><div className="program-action" key={t.id}><label>Action<input value={t.label} maxLength={160} disabled={busy} onChange={e=>setPlan({...plan,tasks:plan.tasks.map(x=>x.id===t.id?{...x,label:e.target.value}:x)})}/></label><div role="group" aria-label={`Days for ${t.label}`}>{names.map((n,i)=><button key={n} aria-label={`${n} for ${t.label}`} aria-pressed={t.days.includes(i+1)} disabled={busy} onClick={()=>setPlan({...plan,tasks:plan.tasks.map(x=>x.id===t.id?{...x,days:x.days.includes(i+1)?x.days.filter(d=>d!==i+1):[...x.days,i+1]}:x)})}>{n}</button>)}</div><button className="text-link" disabled={busy} onClick={()=>setPlan({...plan,tasks:plan.tasks.filter(x=>x.id!==t.id)})}>Archive action</button></div>)}
  <form onSubmit={e=>{e.preventDefault();if(label.trim()&&plan.tasks.length<8){setPlan({...plan,tasks:[...plan.tasks,{id:crypto.randomUUID(),label:label.trim(),days:[weekday],completed:[]}]});setLabel('');}}}><label>New action<input placeholder="An action you want to repeat" value={label} maxLength={160} disabled={busy||plan.tasks.length>=8} onChange={e=>setLabel(e.target.value)}/></label><button className="secondary-button" disabled={busy||!label.trim()||plan.tasks.length>=8}>Add action</button></form></details>
- <div className="modal-actions"><button className="primary-button" disabled={busy||!dirty} onClick={()=>void save()}>{busy?'Saving…':'Save program'}</button><button className="secondary-button" onClick={onMeasurements}>Record a check-in</button></div>
+ <div className="modal-actions"><button className="primary-button" disabled={busy||(!dirty&&!needsDatedTracking)} onClick={()=>void save()}>{busy?'Saving…':needsDatedTracking&&!dirty?'Start dated tracking':'Save program'}</button><button className="secondary-button" onClick={onMeasurements}>Record a measurement</button></div>
+ {needsDatedTracking&&<p>Start tracking from today. Earlier check-ins are retained; earlier schedules are unknown.</p>}
+ {progress.unknownDays>0&&timeline.schedules.length>0&&<p>Earlier schedule details were not recorded. Those days are excluded from adherence totals.</p>}
+ <details><summary>Routine history</summary>{timeline.completions.length?<ul>{timeline.completions.slice(-50).reverse().map(e=><li key={e.id}>{e.date} · {e.label} · {e.completed?'Completed':'Unchecked'}{e.legacy?' · retained legacy check-in':''}</li>)}</ul>:<p>No recorded check-ins yet.</p>}<p>Archived actions keep their history. The account export includes the complete timeline.</p></details>
  </>}{error&&!ready&&<button className="secondary-button" onClick={()=>setAttempt(n=>n+1)}>Retry loading</button>}{error&&ready&&<p role="alert" className="field-error">{error}</p>}{notice&&<p role="status">{notice}</p>}</section><details className="card program-scenarios"><summary>Explore hypothetical scenarios</summary><Scenarios values={values} demographics={demographics} details={details} onMeasurements={onMeasurements}/></details></>;
 }

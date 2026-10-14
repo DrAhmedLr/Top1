@@ -31,8 +31,8 @@ export default function ProfileEdit({ profile, onChange, privacyControls, onVali
   useEffect(() => { onValidityChange?.(isValid); }, [isValid, onValidityChange]);
   return <>{privacyControls}<div className="profile-fields">
     <ProfileNumber label="Age" value={profile.age} min={18} max={120} integer onChange={age => {if(age!==undefined)onChange({ ...profile, age });}} onValid={age => setValidity(current => ({ ...current, age }))}/>
-    <label>Biological sex<select value={profile.sex} onChange={e => onChange({ ...profile, sex: e.target.value as Demographics['sex'] })}><option value="male">Male</option><option value="female">Female</option></select></label>
+    <label>Reference cohort · optional<select value={profile.sex} onChange={e => onChange({ ...profile, sex: e.target.value as Demographics['sex'] })}><option value="unselected">Tracking without a reference</option><option value="male">Male</option><option value="female">Female</option></select></label>
     <ProfileNumber label="Weight (kg) · optional" optional value={profile.weight} min={25} max={350} onChange={weight => onChange({ ...profile, weight })} onValid={weight => setValidity(current => ({ ...current, weight }))}/>
     <ProfileNumber label="Height (cm) · optional" optional value={profile.height} min={100} max={240} onChange={height => onChange({ ...profile, height })} onValid={height => setValidity(current => ({ ...current, height }))}/>
-  </div><p className="drawer-description" role="status">Reference cohort: {getAgeBracket(profile.age)} · {profile.sex}. These details update your experimental references.</p></>;
+  </div><p className="drawer-description" role="status">Reference cohort: {profile.sex==='unselected'?'Not selected · raw tracking':`${getAgeBracket(profile.age)} · ${profile.sex}`}. These details update your experimental references.</p></>;
 }

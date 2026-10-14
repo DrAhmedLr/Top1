@@ -1,3 +1,4 @@
+import {currentAccount} from '@/lib/accountSession';
 import { signSummary } from '@/lib/summarySignature';
 import {saveVisibility} from '@/lib/profileSaveQueue';
 import { normalizeMeasurementMetadata,authoritativeMeasurementDetails } from '@/lib/measurementMetadata';
@@ -9,26 +10,26 @@ const reply=(body:unknown,status=200)=>NextResponse.json(body,{status,headers:{'
 export async function GET(){
   const client=await getSupabaseServer();
   if(!client)return reply({error:'Cloud storage is not configured.'},503);
-  const {data:{user}}=await client.auth.getUser();
+  const user=await currentAccount(client);
   if(!user||user.is_anonymous)return reply({error:'Sign in to access your profile.'},401);
   const {data,error}=await client.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(error)return reply({error:'Unable to load profile.'},500);
   if(!data)return reply({profile:emptyProfile});
   const {data:measurements,error:logError}=await client.rpc('read_current_measurements');
   if(logError)return reply({error:'Unable to load measurements.'},500);
-  return reply({profile:{demographics:{age:data.age,sex:data.sex,...(data.weight_kg==null?{}:{weight:Number(data.weight_kg)}),...(data.height_cm==null?{}:{height:Number(data.height_cm)})},values:normalizeValues(measurements.values),measurementDetails:normalizeMeasurementMetadata(measurements.details,{legacy:true}),username:data.username??'',isPublic:data.is_public,revision:Number(data.revision)}});
+  return reply({profile:{demographics:{age:data.age,sex:data.sex,...(data.weight_kg==null?{}:{weight:Number(data.weight_kg)}),...(data.height_cm==null?{}:{height:Number(data.height_cm)})},values:normalizeValues(measurements.values),measurementDetails:normalizeMeasurementMetadata(measurements.details,{legacy:true}),username:data.username??'',isPublic:data.is_public,revision:Number(data.revision),ageRecordedAt:data.age_recorded_at??undefined}});
 }
 export async function POST(request:NextRequest){
   // Cookie-authenticated writes only accept same-origin browser requests.
   if(request.headers.get('origin')!==request.nextUrl.origin)return reply({error:'Invalid request origin.'},403);
-  if(Number(request.headers.get('content-length')??0)>16384)return reply({error:'Profile payload too large.'},413);
+  if(Number(request.headers.get('content-length')??0)>65536)return reply({error:'Profile payload too large.'},413);
   const client=await getSupabaseServer();
   if(!client)return reply({error:'Cloud storage is not configured.'},503);
-  const {data:{user}}=await client.auth.getUser();
+  const user=await currentAccount(client);
   if(!user||user.is_anonymous)return reply({error:'Sign in to save your profile.'},401);
   if(request.headers.get('x-profile-user')!==user.id)return reply({error:'Your session changed. Reload before saving.'},409);
   try{
-    const text=await request.text();if(text.length>16384)return reply({error:'Profile payload too large.'},413);
+    const text=await request.text();if(text.length>65536)return reply({error:'Profile payload too large.'},413);
     const input=JSON.parse(text);
     const demographics=normalizeDemographics(input.demographics),values=normalizeValues(input.values,true),username=normalizeUsername(input.username);
     const measurementDetails=authoritativeMeasurementDetails(values,input.measurementDetails);
@@ -42,6 +43,7 @@ export async function POST(request:NextRequest){
     const summary=await signSummary(buildPublicSummary(profile),username||user.id,demographics);
     const {data:revision,error}=await client.rpc('save_profile',{p_demographics:demographics,p_metrics:values,p_username:username||null,p_is_public:isPublic,p_summary:summary,p_details:measurementDetails,p_expected_revision:input.revision});
     if(error)return reply({error:error.code==='23505'?'That username is already taken.':['40001','PT409'].includes(error.code)?'This profile changed on another device. Reload before saving.':'Unable to save your profile. Please retry.',conflict:['40001','PT409'].includes(error.code)},['23505','40001','PT409'].includes(error.code)?409:500);
-    return reply({profile:{...profile,revision:Number(revision)}});
+    const {data:ageStamp}=await client.from('profiles').select('age_recorded_at').eq('id',user.id).maybeSingle();
+    return reply({profile:{...profile,revision:Number(revision),ageRecordedAt:ageStamp?.age_recorded_at??undefined}});
   }catch(error){return reply({error:error instanceof Error?error.message:'Invalid profile.'},400);}
 }

@@ -3,15 +3,15 @@ import { normalizeMeasurementMetadata, type MeasurementMetadata } from './measur
 import { metrics, activeMetrics, pillars, type Demographics, type Values, type PillarId } from './registry';
 import { evaluate, valid, toModelScore } from './engine';
 export const LOCAL_PROFILE_KEYS = ['top1-profile-v2','top1_profile_v2','top1-profile-v1'] as const;
-export interface ProfileState { demographics: Demographics; values: Values; username: string; isPublic: boolean; measurementDetails?:MeasurementMetadata; revision?:number }
+export interface ProfileState { demographics: Demographics; values: Values; username: string; isPublic: boolean; measurementDetails?:MeasurementMetadata; revision?:number;ageRecordedAt?:string }
 export interface PublicSummary { modelVersion:string; scoredCount:number; ready: boolean; modelScore: number; completeness: number; z: number; domains: Partial<Record<PillarId,number>>; measured: number }
 export const emptyProfile: ProfileState = { demographics:{age:23,sex:'male'},values:{},username:'',isPublic:false,revision:0 };
 export function normalizeDemographics(input: unknown): Demographics {
   if (!input || typeof input !== 'object') throw new Error('Profile demographics are missing.');
   const d=input as Record<string,unknown>;
-  const age=d.age,sex=d.sex,weight=d.weight??d.weightKg,height=d.height??d.heightCm;
-  if (typeof age!=='number'||!Number.isInteger(age)||age<18||age>120||(sex!=='male'&&sex!=='female')||weight!==undefined&&(typeof weight!=='number'||!Number.isFinite(weight)||weight<25||weight>350)||height!==undefined&&(typeof height!=='number'||!Number.isFinite(height)||height<100||height>240)) throw new Error('Check age, biological sex, weight, and height.');
-  return {age,sex,...(typeof weight==='number'?{weight:Number(weight.toFixed(2))}:{}),...(typeof height==='number'?{height:Number(height.toFixed(2))}:{})};
+  const age=d.age,sex=d.sex??'unselected',weight=d.weight??d.weightKg,height=d.height??d.heightCm;
+  if (typeof age!=='number'||!Number.isInteger(age)||age<18||age>120||(typeof sex!=='string'||!['male','female','unselected'].includes(sex))||weight!==undefined&&(typeof weight!=='number'||!Number.isFinite(weight)||weight<25||weight>350)||height!==undefined&&(typeof height!=='number'||!Number.isFinite(height)||height<100||height>240)) throw new Error('Check age, biological sex, weight, and height.');
+  return {age,sex:sex as Demographics['sex'],...(typeof weight==='number'?{weight:Number(weight.toFixed(2))}:{}),...(typeof height==='number'?{height:Number(height.toFixed(2))}:{})};
 }
 export function normalizeValues(input: unknown, strict=false): Values {
   if (!input || typeof input!=='object'||Array.isArray(input)) throw new Error('Measurements must be an object.');
@@ -42,14 +42,14 @@ export function buildPublicSummary(profile: Pick<ProfileState,'values'|'demograp
 export function parsePublicSummary(input: unknown): PublicSummary | null {
   if(!input||typeof input!=='object') return null;
   const s=input as PublicSummary;
-  if(!SUPPORTED_SUMMARY_VERSIONS.has(s.modelVersion)||!Number.isInteger(s.scoredCount)||s.scoredCount<0||s.scoredCount>s.measured||s.scoredCount>activeMetrics.filter(m=>m.scoringEligible).length||typeof s.ready!=='boolean'||!Number.isFinite(s.modelScore)||s.modelScore<0||s.modelScore>100||!Number.isFinite(s.completeness)||s.completeness<0||s.completeness>100.001||!Number.isFinite(s.z)||s.z<-3||s.z>3||!Number.isInteger(s.measured)||s.measured<0||s.measured>activeMetrics.length||!s.domains||typeof s.domains!=='object'||Array.isArray(s.domains))return null;
+  if(!SUPPORTED_SUMMARY_VERSIONS.has(s.modelVersion)||!Number.isInteger(s.scoredCount)||s.scoredCount<0||s.scoredCount>s.measured||s.scoredCount>(s.modelVersion===MODEL_VERSION?activeMetrics.filter(m=>m.scoringEligible).length:17)||typeof s.ready!=='boolean'||!Number.isFinite(s.modelScore)||s.modelScore<0||s.modelScore>100||!Number.isFinite(s.completeness)||s.completeness<0||s.completeness>100.001||!Number.isFinite(s.z)||s.z<-3||s.z>3||!Number.isInteger(s.measured)||s.measured<0||s.measured>(s.modelVersion===MODEL_VERSION?activeMetrics.length:36)||!s.domains||typeof s.domains!=='object'||Array.isArray(s.domains))return null;
   if(Object.keys(s.domains).some(id=>!pillars.some(p=>p.id===id)))return null;
   const domains: PublicSummary['domains']={};
   for(const p of pillars) if(s.domains[p.id]!==undefined){if(!Number.isFinite(s.domains[p.id])||s.domains[p.id]! < -3||s.domains[p.id]! > 3)return null;domains[p.id]=s.domains[p.id];}
-  if(domains.bodymarkers!==undefined)return null;
+  if(domains.bodymarkers!==undefined||s.modelVersion===MODEL_VERSION&&domains.recovery!==undefined)return null;
   const active=pillars.filter(p=>domains[p.id]!==undefined),weight=active.reduce((sum,p)=>sum+p.weight,0);
   const expectedZ=weight?active.reduce((sum,p)=>sum+p.weight*domains[p.id]!,0)/weight:0;
-  if(active.length>s.scoredCount||(s.scoredCount>0&&!active.length)||Math.abs(s.z-expectedZ)>1e-9||Math.abs(s.modelScore-toModelScore(s.z))>1e-9||s.ready!==(s.scoredCount>=3&&active.length>=2))return null;
+  if(active.length>s.scoredCount||(s.scoredCount>0&&!active.length)||Math.abs(s.z-expectedZ)>1e-9||Math.abs(s.modelScore-toModelScore(s.z))>1e-9||s.ready!==(s.scoredCount>=3&&active.length>=(s.modelVersion===MODEL_VERSION?1:2)))return null;
   return {modelVersion:s.modelVersion,scoredCount:s.scoredCount,ready:s.ready,modelScore:s.modelScore,completeness:s.completeness,z:s.z,domains,measured:s.measured};
 }
 export function safeNextPath(next: string | null): string {

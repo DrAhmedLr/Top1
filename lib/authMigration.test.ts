@@ -45,7 +45,7 @@ test('OAuth callback redirect stays on the same site',()=>{
  for(const next of ['https://evil.test','//evil.test','/\\evil.test','/\r\nevil.test',null])assert.equal(safeNextPath(next),'/');
 });
 test('public score summaries contain aggregates without raw metrics',()=>{
- const profile=parseLocalProfile(raw)!;profile.values={sit_to_stand:25,total_sleep:480,pushups:25};const summary=buildPublicSummary(profile);
+ const profile=parseLocalProfile(raw)!;profile.values={sit_to_stand:25,grip_strength:45,pushups:25};const summary=buildPublicSummary(profile);
  assert.equal(summary.measured,3);assert.equal(summary.ready,true);
  assert.ok(!('values' in summary)&&!('submitted' in summary));assert.deepEqual(parsePublicSummary(summary),summary);
  assert.equal(parsePublicSummary({...summary,modelScore:1000}),null);assert.equal(parsePublicSummary({...summary,domains:{strength:NaN}}),null);

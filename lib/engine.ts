@@ -1,4 +1,5 @@
 import {countMetrics} from './measurementRules';
+import {protocolKey,protocolComplete,protocolOptions} from './protocols';
 import { normalizeMeasurementMetadata, type MeasurementMetadata, type MeasurementDetails } from './measurementMetadata';
 import { metrics, pillars, type Metric, type Values, type Demographics, type PillarId } from './registry';
 import { getMetricCohortNorm } from './demographics';
@@ -20,8 +21,10 @@ export function reference(m:Metric,d:Demographics,details:MeasurementMetadata={}
 export function valid(m:Metric,x:number|undefined):x is number{return typeof x==='number'&&Number.isFinite(x)&&x>=m.min&&x<=m.max&&(!countMetrics.has(m.id)||Number.isInteger(x));}
 export type EligibilityStatus='eligible'|'archived'|'context-only'|'invalid-context'|'protocol-required'|'unsupported-cohort';
 export function scoringEligibility(m:Metric,d:Demographics,details:MeasurementMetadata={},now=Date.now()):{status:EligibilityStatus;reason:string}{
+  if(details[m.id]?.invalidContext)return {status:'invalid-context',reason:'Stored details need review. The raw observation is retained but does not enter the model.'};
   if(m.archived)return {status:'archived',reason:'Preserved legacy observation; outside the active model.'};
   if(!m.scoringEligible)return {status:'context-only',reason:'Context and tracking only; no model score.'};
+  if(d.sex==='unselected')return {status:'unsupported-cohort',reason:'Raw tracking is available. Choose a supported reference cohort only if you want experimental comparisons.'};
   const context=details[m.id]??{};
   try{normalizeMeasurementMetadata({[m.id]:context},{now});}catch{return {status:'invalid-context',reason:'The method or date needs correction before this observation can enter the model.'};}
   if(m.id==='vo2_max'){
@@ -35,7 +38,7 @@ export function scoringEligibility(m:Metric,d:Demographics,details:MeasurementMe
 }
 export function eligible(m:Metric,d:Demographics,details:MeasurementMetadata={},now=Date.now()){return scoringEligibility(m,d,details,now).status==='eligible';}
 function validateProfile(d:Demographics){
-  if(!Number.isInteger(d.age)||d.age<18||d.age>120||!['male','female'].includes(d.sex)||d.weight!==undefined&&(!Number.isFinite(d.weight)||d.weight<25||d.weight>350)||d.height!==undefined&&(!Number.isFinite(d.height)||d.height<100||d.height>240))throw new RangeError('Invalid demographic profile.');
+  if(!Number.isInteger(d.age)||d.age<18||d.age>120||!['male','female','unselected'].includes(d.sex)||d.weight!==undefined&&(!Number.isFinite(d.weight)||d.weight<25||d.weight>350)||d.height!==undefined&&(!Number.isFinite(d.height)||d.height<100||d.height>240))throw new RangeError('Invalid demographic profile.');
 }
 export function calculateBoundedZScore(val:number,minOpt:number,maxOpt:number,stdDev:number){
   if(![val,minOpt,maxOpt,stdDev].every(Number.isFinite)||stdDev<=0||minOpt>maxOpt)throw new RangeError('Invalid bounded parameters.');
@@ -90,9 +93,9 @@ export function evaluate(values:Values,d:Demographics,details:MeasurementMetadat
   for(const s of submitted){const groupWeight=submitted.filter(x=>x.metric.pillar===s.metric.pillar).reduce((sum,x)=>sum+x.metric.weight,0);s.effectiveWeight=domainWeights[s.metric.pillar]!*s.metric.weight/groupWeight;s.contribution=s.effectiveWeight*s.z;s.defect=domains[s.metric.pillar]!-s.z;}
   // Values and dates do not define a protocol/reference set. Changing either
   // may be compared only when the known methods and reference cells still match.
-  const comparisonKey=JSON.stringify([MODEL_VERSION,d.sex,submitted.map(s=>[s.metric.id,s.context.method??null,s.context.exerciseMode??null,s.reference.cohortLabel??null,s.reference.provenance,s.reference.mean,s.reference.sd,s.reference.L,s.reference.M,s.reference.S,s.reference.boundedOptimal??null,s.effectiveWeight]).sort((a,b)=>String(a[0])<String(b[0])?-1:String(a[0])>String(b[0])?1:0)]);
-  const ready=submitted.length>=3&&active.length>=2;
-  return {modelVersion:MODEL_VERSION,assessedAt:new Date(now).toISOString(),ready,readinessReason:ready?'Experimental model available; this is not statistical confidence.':submitted.length<3?'Record three eligible observations.':'Record eligible observations in both strength and recovery.',z,modelScore:toModelScore(z),completeness,coverageTier:completeness<40?'Low':completeness<75?'Moderate':'High',domains,domainWeights,comparisonKey,comparable:ready&&submitted.every(s=>!!s.context.method&&!!s.context.measuredAt),assessments,invalidValues,submitted,measured,scoredCount:submitted.length,activeDomainCount:active.length,trackingOnly:measured.filter(m=>!accepted.has(m.id)),bottlenecks:submitted.filter(s=>s.defect>=.75).sort((a,b)=>b.defect-a.defect),strengths:[...submitted].sort((a,b)=>b.z-a.z).slice(0,3)};
+  const comparisonKey=JSON.stringify([MODEL_VERSION,d.sex,submitted.map(s=>[s.metric.id,s.context.method??null,s.context.exerciseMode??null,protocolKey(s.context.protocol),s.reference.cohortLabel??null,s.reference.provenance,s.reference.mean,s.reference.sd,s.reference.L,s.reference.M,s.reference.S,s.reference.boundedOptimal??null,s.effectiveWeight]).sort((a,b)=>String(a[0])<String(b[0])?-1:String(a[0])>String(b[0])?1:0)]);
+  const ready=submitted.length>=3&&active.length>=1;
+  return {modelVersion:MODEL_VERSION,assessedAt:new Date(now).toISOString(),ready,readinessReason:ready?'Experimental model available; this is not statistical confidence.':submitted.length<3?'Record three eligible observations.':'Record three eligible capacity observations.',z,modelScore:toModelScore(z),completeness,coverageTier:completeness<40?'Low':completeness<75?'Moderate':'High',domains,domainWeights,comparisonKey,comparable:ready&&submitted.every(s=>!!s.context.method&&!!s.context.measuredAt&&(!protocolOptions[s.metric.id]||protocolComplete(s.metric.id,s.context.protocol))),assessments,invalidValues,submitted,measured,scoredCount:submitted.length,activeDomainCount:active.length,trackingOnly:measured.filter(m=>!accepted.has(m.id)),bottlenecks:submitted.filter(s=>s.defect>=.75).sort((a,b)=>b.defect-a.defect),strengths:[...submitted].sort((a,b)=>b.z-a.z).slice(0,3)};
 }
 export function comparableAssessments(a:ReturnType<typeof evaluate>,b:ReturnType<typeof evaluate>){return a.comparable&&b.comparable&&a.comparisonKey===b.comparisonKey&&b.submitted.every(s=>Date.parse(s.context.measuredAt!)>Date.parse(a.submitted.find(previous=>previous.metric.id===s.metric.id)!.context.measuredAt!));}
 export type Strategy='Easiest first'|'Cardio focus'|'Strength focus'|'Balanced';
@@ -135,11 +138,4 @@ export function simulate(values:Values,d:Demographics,target:number,strategy:Str
   const final=result.ready?targets(horizon):{...values};
   return {steps,selected:result.ready?selected:[],targets:final,ceiling:result.ready?at(260).modelScore:null,reason:!result.ready?'insufficient-data':steps===null?'unreachable':'reached',points:result.ready?Array.from(new Set(Array.from({length:7},(_,i)=>Math.round(i*horizon/6)))).map(step=>({step,modelScore:at(step).modelScore,target})):[]};
 }
-export function cooper(meters:number){if(!Number.isFinite(meters)||meters<=504.9)throw new RangeError('Unsupported Cooper distance.');return (meters-504.9)/44.73;}
-export function epley(weight:number,reps:number){if(!Number.isFinite(weight)||weight<=0||!Number.isInteger(reps)||reps<1||reps>10)throw new RangeError('Use positive load and 1–10 whole repetitions.');const estimate=reps===1?weight:weight*(1+reps/30);if(!Number.isFinite(estimate))throw new RangeError('Estimated load exceeds the supported numerical range.');return estimate;}
-export function weightedPullupRatio(addedKg:number,reps:number,weightKg:number){if(!Number.isFinite(addedKg)||addedKg<0||!Number.isFinite(weightKg)||weightKg<=0)throw new RangeError('Invalid pull-up load.');return (epley(weightKg+addedKg,reps)-weightKg)/weightKg;}
-export function skinfold(chest:number,abdomen:number,thigh:number,age:number){
-  if(![chest,abdomen,thigh].every(n=>Number.isFinite(n)&&n>0&&n<=80)||!Number.isInteger(age)||age<18||age>61)throw new RangeError('Male Jackson–Pollock estimate supports age 18–61 and plausible site measurements.');
-  const sum=chest+abdomen+thigh,density=1.10938-.0008267*sum+.0000016*sum*sum-.0002574*age;
-  const result=495/density-450;if(!Number.isFinite(result)||result<3||result>60)throw new RangeError('Skinfold estimate outside supported range.');return result;
-}
+export {cooper,epley,weightedPullupRatio,skinfold} from './derivations';
