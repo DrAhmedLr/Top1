@@ -24,7 +24,7 @@ export default function Overview({ result, values, details, needsSetup, onMeasur
   return <>
     <section className="protocol-hero">
 
-      <h2 aria-live="polite">{result.measured.length ? <>YOUR PERSONAL <span>BASELINE</span><small>{result.measured.length} {result.measured.length===1?'measurement':'measurements'} recorded</small></> : <>BUILD YOUR <span>BASELINE</span><small>Record what you know</small></>}</h2>
+      {result.measured.length ? <><span className="eyebrow">YOUR RECORDED DATA</span><h2 aria-live="polite">{display(recordedCoverage(result.measured.length))}%<small>Recording coverage · {result.measured.length} of {activeMetrics.length} measurements</small></h2><p className="hero-rank-status">Peer percentile: pending calibration. Recording coverage is not your performance rank.</p></> : <h2>BUILD YOUR <span>BASELINE</span><small>Record what you know</small></h2>}
       <div className="spectrum-line"/>
 
       <div className="hero-actions"><button className="primary-button" onClick={needsSetup ? onStart : result.measured.length?onScenarios:()=>onFirstCheckIn('sit_to_stand')}><Sparkles size={17}/>{needsSetup ? 'Set up my profile' : result.measured.length?'Open my program':'Record my first measurement'}</button>{!needsSetup&&result.measured.length>0 && <button className="secondary-button" onClick={() => onMeasurements()}><Zap size={17}/>Log a measurement</button>}</div>
