@@ -1,3 +1,4 @@
+import {normalizePublicFields,disclosedDemographics,readPublicFields} from '@/lib/sharing';
 import {currentAccount} from '@/lib/accountSession';
 import { signSummary } from '@/lib/summarySignature';
 import {saveVisibility} from '@/lib/profileSaveQueue';
@@ -17,7 +18,7 @@ export async function GET(){
   if(!data)return reply({profile:emptyProfile});
   const {data:measurements,error:logError}=await client.rpc('read_current_measurements');
   if(logError)return reply({error:'Unable to load measurements.'},500);
-  return reply({profile:{demographics:{age:data.age,sex:data.sex,...(data.weight_kg==null?{}:{weight:Number(data.weight_kg)}),...(data.height_cm==null?{}:{height:Number(data.height_cm)})},values:normalizeValues(measurements.values),measurementDetails:normalizeMeasurementMetadata(measurements.details,{legacy:true}),username:data.username??'',isPublic:data.is_public,revision:Number(data.revision),ageRecordedAt:data.age_recorded_at??undefined}});
+  return reply({profile:{demographics:{age:data.age,sex:data.sex,...(data.weight_kg==null?{}:{weight:Number(data.weight_kg)}),...(data.height_cm==null?{}:{height:Number(data.height_cm)})},values:normalizeValues(measurements.values),measurementDetails:normalizeMeasurementMetadata(measurements.details,{legacy:true}),publicFields:readPublicFields(data.public_summary?.publicFields,data.is_public),username:data.username??'',isPublic:data.is_public,revision:Number(data.revision),ageRecordedAt:data.age_recorded_at??undefined}});
 }
 export async function POST(request:NextRequest){
   // Cookie-authenticated writes only accept same-origin browser requests.
@@ -39,8 +40,9 @@ export async function POST(request:NextRequest){
     if(Number(current?.revision??0)!==input.revision)return reply({error:'This profile changed on another device. Reload before saving.',conflict:true},409);
     const isPublic=saveVisibility(current?.is_public??false,input.isPublic,input.visibilityIntent);
     if(isPublic&&!username)throw new Error('Choose a username before publishing.');
-    const profile={demographics,values,username,isPublic,measurementDetails,revision:input.revision};
-    const summary=await signSummary(buildPublicSummary(profile),username||user.id,demographics);
+    const publicFields=normalizePublicFields(input.publicFields);
+    const profile={publicFields,demographics,values,username,isPublic,measurementDetails,revision:input.revision};
+    const summary=await signSummary({...buildPublicSummary(profile),publicFields},username||user.id,disclosedDemographics(demographics,publicFields));
     const {data:revision,error}=await client.rpc('save_profile',{p_demographics:demographics,p_metrics:values,p_username:username||null,p_is_public:isPublic,p_summary:summary,p_details:measurementDetails,p_expected_revision:input.revision});
     if(error)return reply({error:error.code==='23505'?'That username is already taken.':['40001','PT409'].includes(error.code)?'This profile changed on another device. Reload before saving.':'Unable to save your profile. Please retry.',conflict:['40001','PT409'].includes(error.code)},['23505','40001','PT409'].includes(error.code)?409:500);
     const {data:ageStamp}=await client.from('profiles').select('age_recorded_at').eq('id',user.id).maybeSingle();

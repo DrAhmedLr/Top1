@@ -1,3 +1,4 @@
+export const metadata={robots:{index:false,follow:false},alternates:{canonical:null}};
 import SignInForm from '@/components/SignInForm';
 import { authModeFromQuery } from '@/lib/emailAuth';
 import { safeNextPath } from '@/lib/profile';

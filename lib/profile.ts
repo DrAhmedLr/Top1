@@ -1,10 +1,11 @@
+import type {PublicFields} from './sharing';
 import { MODEL_VERSION, SUPPORTED_SUMMARY_VERSIONS } from './model';
 import { normalizeMeasurementMetadata, type MeasurementMetadata } from './measurementMetadata';
 import { metrics, activeMetrics, pillars, type Demographics, type Values, type PillarId } from './registry';
 import { evaluate, valid, toModelScore } from './engine';
 export const LOCAL_PROFILE_KEYS = ['top1-profile-v2','top1_profile_v2','top1-profile-v1'] as const;
-export interface ProfileState { demographics: Demographics; values: Values; username: string; isPublic: boolean; measurementDetails?:MeasurementMetadata; revision?:number;ageRecordedAt?:string }
-export interface PublicSummary { modelVersion:string; scoredCount:number; ready: boolean; modelScore: number; completeness: number; z: number; domains: Partial<Record<PillarId,number>>; measured: number }
+export interface ProfileState { publicFields?:PublicFields; demographics: Demographics; values: Values; username: string; isPublic: boolean; measurementDetails?:MeasurementMetadata; revision?:number;ageRecordedAt?:string }
+export interface PublicSummary { publicFields?:PublicFields; modelVersion:string; scoredCount:number; ready: boolean; modelScore: number; completeness: number; z: number; domains: Partial<Record<PillarId,number>>; measured: number }
 export const emptyProfile: ProfileState = { demographics:{age:23,sex:'male'},values:{},username:'',isPublic:false,revision:0 };
 export function normalizeDemographics(input: unknown): Demographics {
   if (!input || typeof input !== 'object') throw new Error('Profile demographics are missing.');

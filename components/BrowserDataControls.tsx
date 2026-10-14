@@ -2,7 +2,7 @@
 import {useRef,useState} from 'react';
 import {LOCAL_PROFILE_KEYS} from '@/lib/profile';
 import Modal from './Modal';
-const keys=[...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest'];
+const keys=[...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest','top1-favorites-guest'];
 export default function BrowserDataControls({onCleared}:{onCleared:()=>void}){
  const [open,setOpen]=useState(false),[confirmation,setConfirmation]=useState(''),[error,setError]=useState('');const trigger=useRef<HTMLElement|null>(null);
  function exportData(){try{const data=Object.fromEntries(keys.flatMap(key=>{const raw=localStorage.getItem(key);return raw===null?[]:[[key,raw]];})),url=URL.createObjectURL(new Blob([JSON.stringify({schemaVersion:2,exportedAt:new Date().toISOString(),scope:'guest-browser',records:data},null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='TOP1-browser-export.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setError('');}catch{setError('Browser data could not be exported.');}}

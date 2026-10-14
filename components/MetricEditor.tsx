@@ -1,8 +1,9 @@
 'use client';
+import LabUnitHelper from './LabUnitHelper';
 import {protocolOptions,type MeasurementProtocol} from '@/lib/protocols';
 
 import { useEffect, useId, useRef, useState } from 'react';
-import { Calculator, Check, ChevronDown, CircleHelp } from 'lucide-react';
+import { Star, Calculator, Check, ChevronDown, CircleHelp } from 'lucide-react';
 import { parseMeasurementInput } from '@/lib/measurementInput';
 import { eligible, scoringEligibility, valid,score } from '@/lib/engine';
 import {normalizeMeasurementMetadata, type MeasurementDetails, type MeasurementMethod, type ExerciseMode } from '@/lib/measurementMetadata';
@@ -18,8 +19,8 @@ const methodLabels: Record<MeasurementMethod, string> = {
 };
 const calculators = new Set(['vo2_max', 'body_fat', 'squat_1rm', 'deadlift_1rm', 'bench_1rm', 'pullup_1rm']);
 
-export default function MetricEditor({ metric: m, value, details = {}, demographics, onValue, onDetails, onEvidence, onCalculate, compact = false, readOnly = false, onEditingChange,onContextError }: {
-  metric: Metric; value: number | undefined; details?: MeasurementDetails; demographics: Demographics;
+export default function MetricEditor({ favorite,onFavorite,metric: m, value, details = {}, demographics, onValue, onDetails, onEvidence, onCalculate, compact = false, readOnly = false, onEditingChange,onContextError }: {
+  favorite?:boolean;onFavorite?:()=>void;metric: Metric; value: number | undefined; details?: MeasurementDetails; demographics: Demographics;
   onValue: (id: string, raw: string) => void;
   onDetails: (id: string, details: MeasurementDetails) => void;
   onEvidence: (metric: Metric) => void; onCalculate: (metric: Metric) => void;
@@ -57,7 +58,7 @@ export default function MetricEditor({ metric: m, value, details = {}, demograph
       <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{compact ? starterInstructions[m.id] ?? m.proofData.instructions : `Optional. Enter ${shownUnit} or leave blank if unmeasured.`}</span>
       {!compact && <span className={`metric-kind ${scored ? 'scored' : ''}`}>{scored ? m.id==='vo2_max'?'Published CPET reference':'Provisional model' : 'Tracking only'}</span>}
     </div>
-    <div className="metric-controls">
+    <div className="metric-controls">{onFavorite&&<button className="icon-button" aria-label={`${favorite?"Remove":"Add"} ${m.name} ${favorite?"from":"to"} favorites`} aria-pressed={!!favorite} onClick={onFavorite}><Star size={18} fill={favorite?"currentColor":"none"}/></button>}
       {valid(m, value) && <Check size={15} className="measured-check" aria-label="Recorded"/>}
       <div className={`input-unit ${bad ? 'invalid' : ''}`}>
         <input id={inputId} type="text" inputMode={countMetrics.has(m.id)?"numeric":"decimal"} value={raw} placeholder="—" disabled={readOnly} aria-invalid={bad} aria-describedby={bad ? `${inputId}-error` : `${inputId}-hint`} onFocus={() => { focused.current = true; }} onBlur={() => { focused.current = false; }} onChange={e => { setRaw(e.target.value); onValue(m.id, parseMeasurementInput(e.target.value, sleep ? 60 : 1)); }}/>
@@ -94,6 +95,7 @@ export default function MetricEditor({ metric: m, value, details = {}, demograph
       <p>{m.id === 'vo2_max' ? 'Only direct CPET with explicit treadmill modality and a recorded test age of 20–79 enters this reference. Estimates and cycle tests remain available for tracking.' : m.proofData.instructions}</p>
       {!scored&&m.scoringEligible&&<p className="field-error" role="status">{eligibility.reason}</p>}
     </details>}
+    {!compact&&<LabUnitHelper metricId={m.id}/>}
     {!compact&&value!==undefined&&<small className="observation-age">{observationAge(m.id,details).label}{observationAge(m.id,details).older?' · review for your next check-in':''}</small>}
     {!compact&&value!==undefined&&!bad&&scored&&Math.abs(score(m,value,demographics,{[m.id]:details}))>=3&&<small className="observation-age">At the experimental index limit. Further raw progress may not change these points.</small>}
     {contextError&&<p id={`${inputId}-context-error`} className="field-error" role="alert">{contextError} This detail change has not been saved.</p>}

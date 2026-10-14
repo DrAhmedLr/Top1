@@ -2,3 +2,6 @@ allowBuilds:
   core-js: false
   esbuild: true
 verifyDepsBeforeRun: false
+overrides:
+  'postcss@<8.5.23': '8.5.23'
+  'fflate@>=0.7.0 <0.7.5': '0.7.5'

@@ -24,5 +24,6 @@ try {
  await db.exec(await readFile('supabase/tests/algorithm.sql','utf8'));
  await db.exec(await readFile('supabase/tests/privileges.sql','utf8'));
  await db.exec(await readFile('supabase/tests/remediation.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/withdrawal.sql','utf8'));
  console.log('PostgreSQL migrations, RLS, history, metadata, and revision conflict checks passed.');
 } finally {await db.close();}

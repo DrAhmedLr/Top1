@@ -1,18 +1,24 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { getSupabaseConfig } from './lib/supabaseConfig';
+import {contentSecurityPolicy} from './lib/securityHeaders';
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  const headers=new Headers(request.headers),nonce=crypto.randomUUID();
+  const policy=contentSecurityPolicy(nonce,process.env.NODE_ENV==='development');
+  headers.set('x-nonce',nonce);headers.set('Content-Security-Policy',policy);
+  const fresh=()=>{const r=NextResponse.next({request:{headers}});r.headers.set('Content-Security-Policy',policy);return r;};
+  let response = fresh();
   const config = getSupabaseConfig();
   if (!config) return response;
   const supabase = createServerClient(config.url, config.key, {
     cookies: {
       getAll: () => request.cookies.getAll(),
-      setAll(items, headers) {
+      setAll(items, sdkHeaders) {
         items.forEach(({name,value}) => request.cookies.set(name,value));
-        response = NextResponse.next({ request });
+        headers.set('cookie',request.headers.get('cookie')??'');
+        response = fresh();
         items.forEach(({name,value,options}) => response.cookies.set(name,value,options));
-        Object.entries(headers).forEach(([name,value]) => response.headers.set(name,value));
+        Object.entries(sdkHeaders).forEach(([name,value]) => response.headers.set(name,value));
       },
     },
   });
@@ -20,4 +26,4 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Cache-Control','private, no-store');
   return response;
 }
-export const config = { matcher: ['/', '/api/profile', '/api/history', '/api/program', '/api/account/:path*', '/auth/:path*', '/sign-in', '/reset-password', '/account/:path*', '/share/:path*'] };
+export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)'] };

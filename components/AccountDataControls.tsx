@@ -20,7 +20,7 @@ export default function AccountDataControls({revision,canChange,onPurged}:{revis
   const r=await fetch(mode==='account'?'/api/account/delete':'/api/account/purge-history',{method:'POST',headers:{'Content-Type':'application/json','X-Profile-User':owner},body:JSON.stringify({confirmation,...(mode==='history'?{metricId:metricId==='all'?null:metricId,revision}:{})})}),b=await r.json();if(!r.ok)throw new Error(b.error);
   if(currentOwner.current!==owner)return;
   if(mode==='history'){const loaded=await fetch('/api/profile',{cache:'no-store'}),body=await loaded.json();if(!loaded.ok)throw new Error('History deleted. Reload to view the current profile.');onPurged(body.profile);setNotice('Selected history deleted. Sharing disabled and derived assessment history removed.');}
-  else{try{[draftKey(owner),`top1-program-draft-${owner}`,`top1-program-composer-${owner}`].forEach(key=>localStorage.removeItem(key));}catch{}await auth.signOut();setNotice('Your account and associated live records were deleted.');}
+  else{try{[draftKey(owner),`top1-program-draft-${owner}`,`top1-program-composer-${owner}`,`top1-favorites-${owner}`].forEach(key=>localStorage.removeItem(key));}catch{}await auth.signOut();setNotice('Your account and associated live records were deleted.');}
   setMode(null);setConfirmation('');
  }catch(e){setError(e instanceof Error?e.message:'Unable to delete data.');}finally{setPassword('');setBusy(false);}}
  if(!auth.user)return null;

@@ -1,0 +1,3 @@
+const base=process.env.TOP1_SMOKE_URL||'https://top1.fit';
+const checks=[['/',200],['/about',200],['/privacy',200],['/robots.txt',200],['/sitemap.xml',200],['/api/profile',401],['/api/history?metric=pushups',401],['/api/program',401],['/api/account/export',401]];
+let failed=false;for(const [path,status]of checks){try{const response=await fetch(new URL(path,base),{redirect:'manual',signal:AbortSignal.timeout(15000)});if(response.status!==status)throw new Error(`Expected ${status}, got ${response.status}`);if(path==='/'&&!response.headers.has('Content-Security-Policy'))throw new Error('CSP absent');console.log(`${path}: ${response.status}`);}catch(error){failed=true;console.error(`${path}: ${error.message}`);}}if(failed)process.exitCode=1;
