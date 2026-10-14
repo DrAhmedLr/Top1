@@ -11,7 +11,7 @@ export const accessibilityTiers = [
   {id:'tier2_standard',name:'Standard',label:'Tier 2 · Gym & Wearable',description:'Common laboratory, gym and wearable measurements.'},
   {id:'tier3_precision',name:'Precision',label:'Tier 3 · Precision / Advanced',description:'Specialist labs, equipment and advanced protocols.'},
 ] as const;
-export type Demographics = { age: number; sex: 'male' | 'female'; weight: number; height: number };
+export type Demographics = { age: number; sex: 'male' | 'female' | 'unselected'; weight?: number; height?: number };
 export type Values = Record<string, number | undefined>;
 export type Metric = { id: string; name: string; pillar: PillarId; tier: AccessibilityTier; archived?:boolean; unit: string; target: string; polarity: 1 | -1; scoringType: 'linear' | 'skewed' | 'bounded'; mean: number; sd: number; min: number; max: number; optimal?: [number,number]; lms?: { L:number; M:number; S:number }; weight: number; easiestPathPriority: number; scenarioChangePerStep: number; scoringEligible: boolean; proofData: { study: string; sampleSize: string; rationale: string; instructions: string; url: string }; protocol: string };
 type Row = [string,string,string,string,1|-1,Metric['scoringType'],number,number,number,number,string,string];
@@ -48,7 +48,7 @@ const data: Record<string, Row[]> = {
     ['bench_1rm','Bench press','× BW','≥ 1.65',1,'linear',.8,.3,.1,3,'NSCA pressing standards','Upper-body pressing strength'],
     ['pullup_1rm','Weighted pull-up','× BW added','≥ 1.05',1,'linear',.2,.25,0,2,'Street lifting datasets','Vertical pulling force'],
     ['farmers_carry',"Farmer’s carry (total load 1× BW)",'s','≥ 120',1,'linear',45,25,1,300,'Functional work capacity norms','Loaded grip and trunk endurance'],
-    ['sit_to_stand','30-second sit-to-stand','reps','≥ 36',1,'linear',20,6,1,60,'Rikli & Jones','Functional lower-body endurance'],
+    ['sit_to_stand','30-second sit-to-stand','reps','≥ 36',1,'linear',20,6,0,60,'Rikli & Jones','Functional lower-body endurance'],
     ['ankle_dorsiflexion','Ankle dorsiflexion','°','≥ 48',1,'linear',32,8,1,70,'Weight-bearing lunge test datasets','Ankle range of motion'],
   ],
   recovery_somnology: [
@@ -80,10 +80,12 @@ const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map
 
 const assignments: Record<PillarId, readonly (readonly string[])[]> = {
   bodymarkers: [ ['body_fat','waist_height_ratio'], ['fasting_glucose','hba1c','ggt'], ['apob','fasting_insulin','hscrp','lpa','homocysteine','cystatin_c','visceral_fat'] ],
-  strength: [ ['rhr','sit_to_stand','pushups'], ['bench_1rm','grip_strength','vo2_max','hrr_1min'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','zone2_power','pefr','farmers_carry'] ],
-  recovery: [ ['total_sleep','sleep_efficiency','sauna_minutes','cold_plunge_minutes'], ['hrv','circadian_regularity','single_leg_balance'], ['thermal_hrv_rebound','reaction_time'] ],
+  strength: [ ['rhr','sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','grip_combined','vo2_max','hrr_1min'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','zone2_power','pefr','farmers_carry','sprint_10m'] ],
+  recovery: [ ['total_sleep','sleep_efficiency','sauna_minutes','cold_plunge_minutes'], ['hrv','circadian_regularity'], ['thermal_hrv_rebound','reaction_time'] ],
 };
 const additions: Row[] = [
+ ['grip_combined','Combined handgrip strength','kg','Reference pending',1,'linear',0,1,0,240,'NHANES muscle strength protocol','Sum the best of three trials from each hand. This is distinct from single-hand grip.'],
+ ['sprint_10m','10-metre sprint','s','Reference pending',-1,'linear',0,1,1,30,'Electronic-gate sprint protocol','Acceleration over ten metres; electronic and hand-timed measurements are not interchangeable.'],
  ['waist_height_ratio','Waist-to-height ratio','ratio','Context required',-1,'linear',.5,.08,.2,1.5,'No calibrated cohort loaded','Waist circumference divided by height in the same units'],
  ['fasting_glucose','Fasting glucose','mg/dL','Context required',-1,'linear',95,15,20,600,'Laboratory glucose','Fasting plasma glucose; clinical interpretation requires individual context'],
  ['pushups','Strict push-up repetitions','reps','Illustrative anchor ≥ 40',1,'linear',20,10,0,150,'No calibrated cohort loaded','Upper-body muscular endurance under a standardized strict technique'],
@@ -93,13 +95,17 @@ const additions: Row[] = [
 ];
 const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:r[0]==='pushups'?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
 const specialProof: Record<string, Partial<Metric['proofData']>> = {
+ grip_combined:{study:'NHANES 2011–2012 muscle strength protocol',url:'https://wwwn.cdc.gov/nchs/data/nhanes/public/2011/manuals/Muscle_Strength_Proc_Manual.pdf',instructions:'Use a calibrated dynamometer with a consistent adjusted handle and standing position. Alternate hands for three trials per hand with 60 seconds between trials. Add the highest left-hand result to the highest right-hand result. A US reference is not a worldwide benchmark.'},
+ sprint_10m:{study:'Candidate test · calibration pending',instructions:'Use electronic timing gates over a measured ten-metre distance, with the same standing-start position, gate setup and surface. Record seconds and equipment. Hand timing is a different protocol. No population distribution is loaded.'},
+ total_sleep:{instructions:'Use a representative seven-day average of time asleep per night, measured consistently with the same device or sleep diary. Enter hours per night in TOP1; the stored value uses minutes.'},
+ sit_to_stand:{instructions:'Count full stands completed in 30 seconds using the same chair and technique each time. Record repetitions and keep the protocol consistent.'},
  sauna_minutes:{study:'Finnish KIHD observational cohort (2015)',sampleSize:'2,315 Finnish men, ages 42–60. Observational associations; not a validated weekly optimal window.',url:'https://pubmed.ncbi.nlm.nih.gov/25705824/',instructions:'Sum actual sauna exposure over the same seven-day window. Record temperature and session pattern separately in your own notes. The requested 60–90 min/week band is an unvalidated product assumption, not a prescribed dose.'},
  cold_plunge_minutes:{study:'Winter-swimming thermogenesis study (2021)',url:'https://pubmed.ncbi.nlm.nih.gov/34755128/',sampleSize:'Small study in experienced male winter swimmers; no validated universal 11–15 min/week optimum.',instructions:'Sum actual immersion duration over seven days. Temperature, acclimatization and session pattern affect exposure. Do not convert a weekly total into a required dose; avoid solo immersion.'},
  thermal_hrv_rebound:{instructions:'Divide post-exposure RMSSD by pre-exposure RMSSD measured with the same device, posture, recording length and timing. Do not mix SDNN and RMSSD. No validated recovery or optimal ratio is established.'},
  waist_height_ratio:{instructions:'Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is tracking-only.'},
  fasting_glucose:{instructions:'Enter a fasting laboratory plasma glucose result in mg/dL. Do not enter mmol/L; multiply mmol/L by 18.0182 first. Follow laboratory fasting instructions and review results clinically.'},
  pushups:{instructions:'Count consecutive strict repetitions with a straight trunk, consistent depth and full elbow extension. Stop at form failure. Knee, incline and strict variants are not interchangeable.'},
- reaction_time:{instructions:'Use a consistent choice-reaction test with multiple stimulus-response alternatives. Log milliseconds and the protocol/device. Legacy simple-reaction measurements are not choice-reaction results; leave the method unknown unless retested.'},
+ reaction_time:{instructions:'Choose the actual simple or choice-reaction protocol, use the same task and device, and record multiple trials. These protocols are not interchangeable. Browser/device latency is not independently calibrated; results remain tracking-only.'},
 };
 export const metrics: Metric[] = [...originalMetrics,...added].map(m=>{
  const assignment=Object.entries(assignments).flatMap(([pillar,tiers])=>tiers.flatMap((ids,i)=>ids.includes(m.id)?[{pillar:pillar as PillarId,tier:accessibilityTiers[i].id}]:[]))[0];
@@ -107,7 +113,7 @@ export const metrics: Metric[] = [...originalMetrics,...added].map(m=>{
  const pillar=assignment?.pillar ?? (m.id==='bp_systolic'?'bodymarkers':'strength');
  const count=assignments[pillar].flat().length;
  return {...m,pillar,tier:assignment?.tier??'tier2_standard',archived,weight:archived?0:1/count,scoringEligible:!archived&&m.scoringEligible,
-   name:m.id==='reaction_time'?'Choice reaction time':m.name,
+   name:m.id==='reaction_time'?'Reaction time':m.name,
    optimal:m.id==='sauna_minutes'?[60,90]:m.id==='cold_plunge_minutes'?[11,15]:m.optimal,
    proofData:{...m.proofData,...specialProof[m.id]},
  } as Metric;

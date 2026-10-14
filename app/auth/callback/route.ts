@@ -6,7 +6,7 @@ export async function GET(request:NextRequest){
   const client=await getSupabaseServer();
   if(code&&client){
     const {error}=await client.auth.exchangeCodeForSession(code);
-    if(!error){const response=NextResponse.redirect(new URL(safeNextPath(request.nextUrl.searchParams.get('next')),request.url));response.headers.set('Cache-Control','private, no-store');return response;}
+    if(!error){const response=NextResponse.redirect(new URL(safeNextPath(request.nextUrl.searchParams.get('next')),request.url));response.headers.set('Cache-Control','private, no-store');response.headers.set('Referrer-Policy','no-referrer');return response;}
   }
-  return NextResponse.redirect(new URL('/sign-in?error=oauth',request.url));
+ const response=NextResponse.redirect(new URL('/sign-in?error=oauth',request.url));response.headers.set('Cache-Control','private, no-store');response.headers.set('Referrer-Policy','no-referrer');return response;
 }

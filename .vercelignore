@@ -1,0 +1,11 @@
+# Local-only reference exports and verification artifacts are not runtime assets.
+design/
+previews/
+docs/
+.next-dev/
+*.tsbuildinfo
+.env*
+!.env.example
+supabase/.temp/
+.pnpm-store/
+.git/

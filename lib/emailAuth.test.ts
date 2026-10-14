@@ -1,7 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import type {SupabaseClient} from '@supabase/supabase-js';
-import {authCallbackUrl,authErrorMessage,normalizeEmail,validatePassword,submitEmailAuth,resendConfirmation,replacePassword} from './emailAuth';
-const fake=(methods:Record<string,unknown>)=>methods as unknown as SupabaseClient['auth'];
+import {authCallbackUrl,authErrorMessage,normalizeEmail,validatePassword,submitEmailAuth,resendConfirmation,replacePassword,hasRecentRecovery} from './emailAuth';
+const fake=(methods:Record<string,unknown>)=>({getClaims:async()=>({data:{claims:{amr:[{method:'recovery',timestamp:Math.floor(Date.now()/1000)}]}},error:null}),...methods}) as unknown as SupabaseClient['auth'];
 const secret='test-password-only-with-enough-characters';
 test('email validation trims whitespace, rejects malformed addresses and retains case',()=>{assert.equal(normalizeEmail(' Name@example.com '),'Name@example.com');for(const email of ['','a@','a@b','a b@host.com','a@host\n.com'])assert.throws(()=>normalizeEmail(email));});
 test('new passwords match, retain whitespace, and have sensible length limits',()=>{validatePassword(secret,secret);assert.throws(()=>validatePassword('short','short'),/12/);assert.throws(()=>validatePassword(secret,'different'),/match/);assert.throws(()=>validatePassword('a'.repeat(129),'a'.repeat(129)),/128/);});
@@ -16,3 +16,23 @@ test('auth errors avoid dumping provider internals or credential strings',()=>{a
 test('signed-in password changes verify the current password with the provider',async()=>{let payload:any;await replacePassword(fake({getUser:async()=>({data:{user:{id:'owner',email:'owner@example.com'}},error:null}),signInWithPassword:async()=>({data:{user:{id:'owner'}},error:null}),updateUser:async(args:unknown)=>{payload=args;return {error:null};},signOut:async()=>({error:null})}),secret,secret,'existing-password');assert.equal(payload.current_password,'existing-password');await assert.rejects(replacePassword(fake({}),secret,secret,''),/current password/);});
 
 test('incorrect current credentials stop a password update even if provider enforcement is disabled',async()=>{let updated=false;await assert.rejects(replacePassword(fake({getUser:async()=>({data:{user:{id:'owner',email:'owner@example.com'}},error:null}),signInWithPassword:async()=>({data:{user:null},error:{code:'invalid_credentials'}}),updateUser:async()=>{updated=true;return {error:null};}}),secret,secret,'incorrect'),/current password is incorrect/);assert.equal(updated,false);});
+
+test('auth entry links preserve mode and reject unsafe return destinations', async()=>{
+ const {authEntryPath,authModeFromQuery}=await import('./emailAuth');
+ assert.equal(authModeFromQuery('sign-up'),'sign-up');
+ assert.equal(authModeFromQuery('unknown'),'sign-in');
+ const url=new URL(authEntryPath('sign-up','/?view=measurements'),'https://top1.fit');
+ assert.equal(url.searchParams.get('mode'),'sign-up');assert.equal(url.searchParams.get('next'),'/?view=measurements');
+ assert.equal(new URL(authEntryPath('sign-in','//evil.test'),'https://top1.fit').searchParams.get('next'),'/');
+});
+test('auth redirects reject browser-normalized control-character open redirects', async()=>{
+ const {safeNextPath}=await import('./profile');
+ for(const path of ['/\t/evil.test','/\n/evil.test','/\r/evil.test','/\\evil.test','///evil.test'])assert.equal(safeNextPath(path),'/');
+ assert.equal(safeNextPath('/?view=profile'),'/?view=profile');
+});
+
+test('normal sessions and expired recovery claims cannot replace a password without current credentials',async()=>{
+ let updated=false;for(const amr of [[{method:"password",timestamp:Math.floor(Date.now()/1000)}],[{method:"recovery",timestamp:1}]]){
+ await assert.rejects(replacePassword(fake({getClaims:async()=>({data:{claims:{amr}},error:null}),updateUser:async()=>{updated=true;return {error:null};}}),secret,secret),/recovery link/);
+ }assert.equal(updated,false);assert.equal(hasRecentRecovery({amr:[{method:"recovery",timestamp:Infinity}]}),false);
+});

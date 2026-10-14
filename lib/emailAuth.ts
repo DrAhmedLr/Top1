@@ -2,6 +2,13 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { safeNextPath } from './profile';
 export type EmailAuthMode='sign-in'|'sign-up'|'forgot-password';
 export const MIN_PASSWORD_LENGTH=12;
+export function authEntryPath(mode: EmailAuthMode, next='/') {
+ const params = new URLSearchParams({mode,next:safeNextPath(next)});
+ return `/sign-in?${params}`;
+}
+export function authModeFromQuery(mode: string | null): EmailAuthMode {
+ return mode === 'sign-up' || mode === 'forgot-password' ? mode : 'sign-in';
+}
 export function normalizeEmail(input:string){
  const email=input.trim();
  if(email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('Enter a valid email address.');
@@ -46,8 +53,16 @@ export async function resendConfirmation(auth:SupabaseClient['auth'],emailInput:
  const {error}=await auth.resend({type:'signup',email:normalizeEmail(emailInput),options:{emailRedirectTo:authCallbackUrl(origin,next)}});if(error)throw error;
  return 'If confirmation is needed, a new email has been sent. Check your inbox and spam folder.';
 }
+export function hasRecentRecovery(claims:unknown,now=Date.now()){
+ if(!claims||typeof claims!=='object'||!('amr' in claims)||!Array.isArray(claims.amr))return false;
+ return claims.amr.some(entry=>entry&&entry.method==='recovery'&&typeof entry.timestamp==='number'&&entry.timestamp<=now/1000&&entry.timestamp>=now/1000-3600);
+}
 export async function replacePassword(auth:SupabaseClient['auth'],password:string,confirmation:string,currentPassword?:string){
  validatePassword(password,confirmation);
+ if(currentPassword===undefined){
+  const {data,error}=await auth.getClaims();
+  if(error||!hasRecentRecovery(data?.claims))throw new Error('This recovery link is missing or expired. Request a new reset email.');
+ }
  if(currentPassword!==undefined){
   if(!currentPassword)throw new Error('Enter your current password.');
   const {data:current,error:userError}=await auth.getUser();

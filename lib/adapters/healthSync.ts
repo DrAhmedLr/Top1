@@ -1,3 +1,4 @@
+import {labMetrics} from '../measurementRules';
 import { normalizeTimestamp, type MeasurementMetadata } from '../measurementMetadata';
 import { metrics } from '../registry';
 
@@ -29,7 +30,7 @@ export function transformHealthPayloadToProfile(payload: ExternalHealthPayload, 
 export function transformHealthPayloadToProfile(
   payload: ExternalHealthPayload, existingInputs: Record<string, number | undefined>,
 ): Record<string, number | undefined> {
-  normalizeTimestamp(payload.timestamp);
+  if(Date.parse(normalizeTimestamp(payload.timestamp))>Date.now()+300000)throw new RangeError('Future observations cannot be imported.');
   if(payload.metrics.hrvMs!==undefined&&payload.hrvStatistic!=='rmssd')throw new RangeError('HRV imports require an explicit RMSSD definition. SDNN cannot be converted to RMSSD.');
   const updated = { ...existingInputs };
   for (const field of Object.keys(mapping) as (keyof typeof mapping)[]) {
@@ -53,7 +54,7 @@ export function transformHealthPayload(payload:ExternalHealthPayload,existingInp
   const prior=existingDetails[id]?.measuredAt;
   if(prior&&Date.parse(normalizeTimestamp(prior))>Date.parse(measuredAt))continue;
   values[id]=value;
-  measurementDetails[id]={measuredAt,source:payload.source,method:id==='vo2_max'?'wearable_estimate':payload.source==='quest_diagnostics'?'lab':'device'};
+  measurementDetails[id]={measuredAt,source:payload.source,method:id==='vo2_max'?'wearable_estimate':labMetrics.has(id)?'lab':'device'};
  }
  return {values,measurementDetails};
 }
