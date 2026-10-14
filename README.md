@@ -1,40 +1,26 @@
-# TOP1 · Fire & Ice triad
+# TOP1.Fit
 
-Next.js / TypeScript measurement dashboard with local persistence, Supabase accounts, optional public snapshots, and hypothetical performance scenarios.
+Source for https://top1.fit — a Next.js/TypeScript measurement tracker with optional experimental capacity comparisons.
 
-## Scientific status
+## Scientific interpretation
 
-The index is experimental. It is not a population percentile, health score, diagnosis, or validated composite. The audit withdrew the previous TOP-percent claims and unverified correlation adjustment. See [the audit](docs/ALGORITHMIC_AUDIT.md) and [metric inventory](docs/METRIC_INVENTORY.md).
+All measurements are optional. Missing entries never count as zero. Clinical markers and recovery habits remain tracking-only. Other capacity model parameters remain product assumptions; the composite has not been independently calibrated as a population rank.
 
-The current triad has 36 active inputs sorted into three accessibility tiers: BodyMarkers (38%), Strength (38%), and Recovery (24%). Nineteen inputs are tracking-only because interpretation requires clinical or protocol context. Blood pressure and ankle mobility remain preserved legacy observations outside active scores and coverage. Direct treadmill CPET VO₂ comparisons use FRIEND 2015 decade means and SDs only with an explicitly recorded test age of 20–79. Wearable and Cooper estimates remain tracking-only. All other scored references are disclosed product assumptions.
+The individual VO2 comparison uses a frozen FRIEND 2015 direct-treadmill CPET reference for supported sex/age cohorts, requiring documented test age/date, peak RER and a self-reported match to its inclusion criteria. Published threshold intervals are displayed without inventing exact percentiles or extrapolated top-one-percent claims. See [scientific references](docs/SCIENTIFIC_REFERENCES.md).
 
-Scores are capped at ±3 model units, averaged within measured pillars, then averaged across active pillars using normalized weights. The displayed index is `50 + 15 × composite`, bounded to 0–100 (the current ±3 caps yield 5–95). At least three eligible inputs across two pillars are needed. Coverage reports available data, not confidence. Scores from different measured subsets should not be compared.
+## Development and checks
 
-Scenarios use arbitrary model steps, without a weeks or clinical adaptation claim. Biomarkers and contextual vital signs are not optimized. Sleep uses a continuous plateau starting at seven hours; additional sleep gives no gain.
-
-## Development
+Use Node.js 24 and the pnpm version pinned in package.json. Copy .env.example to .env.local and configure your own services. Keep credentials and environment files outside Git.
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm test
-pnpm test:database
-pnpm build
-pnpm typecheck
 pnpm dev
+pnpm check:release
+node scripts/smoke-live.mjs
 ```
 
-Run build and typecheck sequentially because Next regenerates route types. The database test applies every migration to isolated PGlite PostgreSQL with minimal Supabase role/auth fixtures, then checks RLS, transaction rollback, history, metadata, and stale-write rejection. It substitutes a UUID function for the unavailable uuid-ossp extension; it does not emulate hosted OAuth or network concurrency.
+The release gate runs application tests, isolated PostgreSQL ownership/migration checks, TypeScript and a production build. It does not modify production data or establish clinical validity. GitHub Actions runs release checks on pushes and pull requests. Public health checks run on a schedule after the workflow reaches the default branch.
 
-## Configuration
+Profiles are private by default. Public summaries require explicit owner publication. Current-session and recent-session checks protect sensitive actions. Account acceptance needs an owner-authorized disposable account; credentials, session material, health data and private test fixtures must not enter logs or GitHub artifacts.
 
-Copy `.env.example` to `.env.local`. Set public Supabase connection variables and canonical `NEXT_PUBLIC_SITE_URL`. Set a random server-only `PUBLIC_SUMMARY_SIGNING_KEY` of at least 32 characters, shared across production instances. Never prefix that secret with `NEXT_PUBLIC_` or commit it. PostHog is optional and remains inactive without a key.
-
-Confirmed database: **drahmedlr**, project `uyivfmmiwehfkcemjvmh`. Vercel project: **top1body-beta**. Repository: https://github.com/DrAhmedLr/Top1.
-
-Apply all seven migrations in order. The audited migration adds measured date, method, source, test age, revision protection, and append-only clearing via tombstones. It replaces the save/import RPC signatures; deploy the corresponding code together. A clearing action preserves history. Owners retain table permissions to manage their own records; this is not an immutable medical record.
-
-Private is the default. Raw measurements and import receipts are owner-only under RLS. Public snapshots expose demographics and aggregate index information. Server signatures bind those snapshots to the account, demographics, model version, and signing date. Signatures attest calculation by the app, not independently verified measurements. Legacy unsigned snapshots are hidden until resaved. Previously cached third-party images cannot be revoked remotely.
-
-Email-and-password access is implemented with sign-up, confirmation resend, sign-in, recovery and signed-in password changes. Google is not offered in the interface. New-password forms require 12 characters; signed-in changes explicitly verify current credentials. A user-authorized account was confirmed and used for real save/load, sharing and privacy checks. Production SMTP is intentionally deferred by the owner, so confirmation and recovery delivery to arbitrary public addresses remains pending. See [launch status](docs/LAUNCH_STATUS.md).
-
-TOP1 release 5.1.0 is live at https://top1.fit and https://top1body-beta.vercel.app. Deployment `dpl_CGfb8jfAMs3SKVGUmkaxVjGUq6mF` serves application commit `70e8815bc8488a4dafe258092b01cef1e3a78333`. All seven database migrations are applied. See [launch status](docs/LAUNCH_STATUS.md).
+Support: drahmedlr@gmail.com. Do not email passwords or laboratory reports.
