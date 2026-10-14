@@ -45,6 +45,13 @@ test('unresolved reference tails cannot produce precise high percentiles',()=>{
  const r=empiricalBenchmark(calibration(),{a:1000,b:-1000},{a:'a_v1',b:'b_v1'});
  assert.equal(r.available,false);if(!r.available)assert.match(r.reason,/validated resolution/);
 });
+test('age and sex peer benchmarks reject missing or mismatched comparison context',()=>{
+ const a:CalibrationArtifact={...calibration(),scope:'age-sex-peers',cohort:{ageMin:30,ageMax:39,sex:'female'}};
+ const values={a:49,b:51},protocols={a:'a_v1',b:'b_v1'};
+ assert.equal(empiricalBenchmark(a,values,protocols,{age:32,sex:'female'}).available,true);
+ for(const context of [undefined,{age:32,sex:'male'},{age:29,sex:'female'},{age:32,sex:'unselected'}])assert.equal(empiricalBenchmark(a,values,protocols,context).available,false);
+ assert.throws(()=>empiricalBenchmark({...a,cohort:{ageMin:30,ageMax:39}},values,protocols,{age:32,sex:'female'}),/reference sex/);
+});
 test('routine edits and archived actions preserve prior schedules and independent check-in events',()=>{
  const monday='2026-10-12',plan:WeeklyPlan={version:1,focus:'consistency',tasks:[{id:'walk',label:'Walk',days:[1,2,3,4,5,6,7],completed:[]}]};
  const initial=recordRoutine(null,plan,emptyTimeline(),monday,'UTC',{taskId:'walk',completed:true});
