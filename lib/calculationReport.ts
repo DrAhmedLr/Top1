@@ -1,3 +1,4 @@
+import {calibrationInventory,vo2CohortComparison} from './scientificCalibration';
 import {evaluate} from './engine';
 import {recordedCoverage} from './coverage';
 import type {ProfileState} from './profile';
@@ -7,7 +8,7 @@ export function calculationReport(profile:Pick<ProfileState,'values'|'demographi
  const result=evaluate(profile.values,profile.demographics,profile.measurementDetails,{now});
  const dates=result.submitted.flatMap(s=>s.context.measuredAt?[s.context.measuredAt]:[]).sort();
  return {
-  schemaVersion:1,modelVersion:result.modelVersion,assessedAt:result.assessedAt,
+  schemaVersion:2,calibration:{compositeValidated:false,publishedReferenceInputs:result.publishedReferenceCount,provisionalInputs:result.provisionalReferenceCount,inventory:calibrationInventory(),vo2:vo2CohortComparison(profile.values,profile.demographics,profile.measurementDetails??{},now)},modelVersion:result.modelVersion,assessedAt:result.assessedAt,
   interpretation:'Experimental product model, not a population rank, health score or diagnosis. Self-reported measurements and methods are not independently verified.',
   observationSpan:{first:dates[0]??null,last:dates.at(-1)??null,undated:result.scoredCount-dates.length,limit:'A mixed-date assessment is not a simultaneous current-performance test.'},
   profile:profile.demographics,

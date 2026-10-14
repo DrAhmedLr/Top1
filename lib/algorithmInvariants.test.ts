@@ -11,7 +11,7 @@ import {observationAge} from './measurementRules';
 const now=Date.parse('2026-10-13T12:00:00Z'),d:Demographics={age:35,sex:'male'},base={pushups:25,sit_to_stand:25,grip_strength:45};
 const metric=(id:string)=>activeMetrics.find(m=>m.id===id)!;
 const near=(a:number,b:number,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} != ${b}`);
-const protocols=(age:number):MeasurementMetadata=>Object.fromEntries(activeMetrics.filter(m=>m.scoringEligible).map(m=>[m.id,m.id==='vo2_max'?{method:'direct_cpet',exerciseMode:'treadmill',ageAtMeasurement:age}:{method:'manual'}]));
+const protocols=(age:number):MeasurementMetadata=>Object.fromEntries(activeMetrics.filter(m=>m.scoringEligible).map(m=>[m.id,m.id==='vo2_max'?{method:'direct_cpet',exerciseMode:'treadmill',protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches'},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:age}:{method:'manual'}]));
 
 test('every active metric and cohort remains finite, bounded and a convex aggregation',()=>{
  let checks=0;
@@ -55,7 +55,7 @@ test('future and incompatible legacy metadata are retained as recorded data but 
 
 test('treadmill and cycle CPET cannot share a reference; impossible ages and dates are excluded',()=>{
  for(const exerciseMode of [undefined,'cycle','other'] as const)assert.equal(evaluate({vo2_max:50},d,{vo2_max:{method:'direct_cpet',exerciseMode,ageAtMeasurement:35}},{now}).scoredCount,0);
- const context={method:'direct_cpet' as const,exerciseMode:'treadmill' as const,ageAtMeasurement:35,measuredAt:'2026-10-12T12:00:00Z'};
+ const context={method:'direct_cpet' as const,exerciseMode:'treadmill' as const,protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches' as const},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:35};
  const result=evaluate({vo2_max:50},d,{vo2_max:context},{now});assert.equal(result.scoredCount,1);assert.equal(result.submitted[0].reference.cohortLabel,'30–39');
  assert.equal(scoringEligibility(metric('vo2_max'),d,{vo2_max:{...context,ageAtMeasurement:70}},now).status,'invalid-context');
  assert.equal(scoringEligibility(metric('vo2_max'),d,{vo2_max:{...context,measuredAt:'2000-01-01T00:00:00Z'}},now).status,'invalid-context');

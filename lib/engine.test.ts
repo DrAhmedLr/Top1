@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {metrics,activeMetrics,accessibilityTiers,pillars,demoValues,type Demographics} from './registry';
 import {evaluate,score,reference,calculateBoundedZScore,calculateSkewedZScore,cdf,inverseCdf,simulate,cooper,epley,weightedPullupRatio,skinfold} from './engine';
 const d:Demographics={age:35,sex:'male',weight:80,height:180};
-const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
+const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches' as const},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 const m=(id:string)=>metrics.find(m=>m.id===id)!;
 const near=(a:number,b:number,t=1e-6)=>assert.ok(Math.abs(a-b)<t,`${a} ≠ ${b}`);
 test('38 active measurements, normalized weights and preserved legacy inputs',()=>{

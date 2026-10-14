@@ -1,3 +1,4 @@
+import {friend2015,FRIEND_SOURCE,FRIEND_REFERENCE_VERSION} from './friend2015';
 import { metrics, type Demographics } from './registry';
 
 export const ageBrackets = ['18-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+'] as const;
@@ -10,6 +11,8 @@ export interface MetricCohortNorm {
   benchmark?: number;
   provenance: 'published' | 'provisional';
   source?: string;
+  referenceVersion?:string;
+  sampleSize?:number;
   sourceAgeRange?: [number,number];
   method?: string;
   cohortLabel?: string;
@@ -39,10 +42,7 @@ const strength = {
 };
 // FRIEND 2015 Table 4: directly measured treadmill CPET, US adults without CVD.
 // These are cohort means/SDs, not global norms or a wearable-estimate calibration.
-const friend2015 = {
-  male: [[47.6,11.3],[43,9.9],[38.8,9.6],[33.8,9.1],[29.4,7.9],[25.8,7.1]],
-  female: [[37.6,10.2],[30.9,8],[27.9,7.7],[24.2,6.1],[20.7,5],[18.3,3.6]],
-};
+
 
 export function getAgeBracket(age: number): AgeBracket {
   if (!Number.isFinite(age) || age < 18) throw new RangeError('Reference cohorts require age 18 or older.');
@@ -62,9 +62,9 @@ export const demographicLookup: DemographicLookup = Object.fromEntries(metrics.f
       if (metric.id === 'vo2_max') {
         const age = Number.parseInt(bracket, 10);
         const decade = Math.min(5, Math.max(0, Math.floor((age - 20) / 10)));
-        [norm.mean,norm.stdDev] = friend2015[sex][decade];
+        const cell=friend2015[sex][decade];norm.mean=cell.mean;norm.stdDev=cell.sd;norm.sampleSize=cell.n;norm.referenceVersion=FRIEND_REFERENCE_VERSION;
         norm.provenance = 'published';
-        norm.source = 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4919021/';
+        norm.source = FRIEND_SOURCE;
         norm.sourceAgeRange = [20,79];
         norm.method = 'Direct treadmill CPET; FRIEND 2015, no cardiovascular disease';
       }

@@ -18,7 +18,7 @@ export function observationSeries(entries:Observation[]){
 
 /** A repeat is a new observation. Task-specific inputs must be entered again. */
 export function repeatDetails(details:MeasurementDetails,measuredAt:string):MeasurementDetails{
- return {...details,measuredAt,window:undefined,derivation:undefined,ageAtMeasurement:undefined,invalidContext:undefined};
+ return {...details,protocol:details.protocol?{...details.protocol,peakRer:undefined,referencePopulation:undefined}:undefined,measuredAt,window:undefined,derivation:undefined,ageAtMeasurement:undefined,invalidContext:undefined};
 }
 
 export function assessmentContext(details:MeasurementDetails[],now=Date.now()){

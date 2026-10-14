@@ -23,6 +23,10 @@ do $$begin
 end$$;
 select set_config('request.jwt.claims','{"sub":"60000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 do $$begin if public.withdraw_public_profile()<>0 then raise exception 'Missing owner profile was modified';end if;end$$;
+select public.save_profile('{"age":35,"sex":"male"}','{"vo2_max":45}','cpet-roundtrip',false,'{}','{"vo2_max":{"method":"direct_cpet","exerciseMode":"treadmill","ageAtMeasurement":35,"measuredAt":"2026-10-12T12:00:00Z","protocol":{"id":"cpet_treadmill_v1","peakRer":1.1,"referencePopulation":"matches"}}}',0);
+do $$begin
+ if public.read_current_measurements()->'details'->'vo2_max'->'protocol' is distinct from '{"id":"cpet_treadmill_v1","peakRer":1.1,"referencePopulation":"matches"}'::jsonb then raise exception 'CPET source criteria did not round-trip through cloud persistence';end if;
+end$$;
 reset role;
 set local role anon;
 do $$begin begin perform public.withdraw_public_profile();raise exception 'Anonymous withdrawal allowed';exception when insufficient_privilege then null;end;end$$;

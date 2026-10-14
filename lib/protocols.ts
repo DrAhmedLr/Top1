@@ -15,7 +15,7 @@ export const protocolOptions:Record<string,readonly {id:string;label:string}[]>=
  sleep_efficiency:[{id:'sleep_efficiency_7d_v1',label:'Seven-day sleep efficiency average'}],
  circadian_regularity:[{id:'regularity_7d_v1',label:'Seven-day regularity · same algorithm/device'}],
 };
-export interface MeasurementProtocol{id:string;equipment?:string;hand?:'left'|'right'|'both';trials?:number;chairHeightCm?:number;hrvStatistic?:'rmssd'|'sdnn'}
+export interface MeasurementProtocol{id:string;equipment?:string;hand?:'left'|'right'|'both';trials?:number;chairHeightCm?:number;hrvStatistic?:'rmssd'|'sdnn';peakRer?:number;referencePopulation?:'matches'|'outside'}
 export interface ObservationWindow{start:string;end:string;statistic:'mean'|'median'|'total';sampleCount:number}
 export function normalizeProtocol(metricId:string,raw:unknown):MeasurementProtocol{
  if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('Invalid measurement protocol.');
@@ -27,6 +27,8 @@ export function normalizeProtocol(metricId:string,raw:unknown):MeasurementProtoc
  if(p.trials!==undefined){if(!Number.isInteger(p.trials)||p.trials<1||p.trials>10)throw new Error('Record 1–10 trials.');out.trials=p.trials;}
  if(p.chairHeightCm!==undefined){if(metricId!=='sit_to_stand'||!Number.isFinite(p.chairHeightCm)||p.chairHeightCm<25||p.chairHeightCm>70)throw new Error('Record the chair height in centimetres (25–70).');out.chairHeightCm=p.chairHeightCm;}
  if(p.hrvStatistic!==undefined){if(metricId!=='hrv'||!['rmssd','sdnn'].includes(p.hrvStatistic))throw new Error('Invalid HRV statistic.');out.hrvStatistic=p.hrvStatistic;}
+ if(p.peakRer!==undefined){if(p.id!=='cpet_treadmill_v1'||typeof p.peakRer!=='number'||!Number.isFinite(p.peakRer)||p.peakRer<=0||p.peakRer>3)throw new Error('Enter the peak RER from a direct treadmill CPET report (greater than 0, up to 3).');out.peakRer=p.peakRer;}
+ if(p.referencePopulation!==undefined){if(p.id!=='cpet_treadmill_v1'||!['matches','outside'].includes(p.referencePopulation))throw new Error('Review the CPET reference population.');out.referencePopulation=p.referencePopulation;}
  if(p.id==='nhanes_grip_combined_v1'&&(p.hand!==undefined&&p.hand!=='both'||p.trials!==undefined&&p.trials!==3))throw new Error('NHANES requires both hands and three trials per hand.');
  if(p.id==='grip_single_v1'&&p.hand==='both')throw new Error('Choose the hand measured for single-hand grip.');
  if(p.id==='hrv_rmssd_supine_v1'&&p.hrvStatistic!==undefined&&p.hrvStatistic!=='rmssd')throw new Error('This protocol requires RMSSD, not SDNN.');
@@ -38,8 +40,8 @@ export function protocolComplete(metricId:string,p?:MeasurementProtocol){
  if(['grip_strength','grip_combined'].includes(metricId))return !!p.equipment&&!!p.hand&&p.trials!==undefined&&(metricId!=='grip_combined'||p.hand==='both'&&p.trials===3);
  if(metricId==='sit_to_stand')return p.chairHeightCm!==undefined;
  if(['cmj','sprint_10m','reaction_time','hrv','total_sleep','sleep_efficiency','circadian_regularity'].includes(metricId))return !!p.equipment&&(metricId!=='hrv'||p.hrvStatistic==='rmssd');
- if(metricId==='vo2_max'&&p.id!=='cpet_treadmill_v1')return !!p.equipment;
+ if(metricId==='vo2_max')return p.id==='cpet_treadmill_v1'?p.peakRer!==undefined&&p.peakRer>=1&&p.referencePopulation==='matches':!!p.equipment;
  if(metricId==='single_leg_balance')return !!p.hand&&p.hand!=='both';
  return true;
 }
-export function protocolKey(p?:MeasurementProtocol){return p?JSON.stringify([p.id,p.equipment??null,p.hand??null,p.trials??null,p.chairHeightCm??null,p.hrvStatistic??null]):null;}
+export function protocolKey(p?:MeasurementProtocol){return p?JSON.stringify([p.id,p.equipment??null,p.hand??null,p.trials??null,p.chairHeightCm??null,p.hrvStatistic??null,p.peakRer??null,p.referencePopulation??null]):null;}
