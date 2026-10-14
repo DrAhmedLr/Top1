@@ -36,7 +36,9 @@ update public.profiles set is_public=true where id=auth.uid();
 set local role anon;
 select set_config('request.jwt.claims','{"role":"anon"}',true);
 do $$ begin
- if (select count(*) from public.profiles where username='top1-rls-test')<>1 then raise exception 'Public profile inaccessible'; end if;
+ if public.read_public_profile('top1-rls-test')->>'username'<>'top1-rls-test' then raise exception 'Public projection inaccessible'; end if;
+ if public.read_public_profile('top1-rls-test') ?| array['age','id','revision','created_at','updated_at'] then raise exception 'Private fields leaked'; end if;
+ begin perform * from public.profiles; raise exception 'Direct anonymous profile access succeeded'; exception when insufficient_privilege then null; end;
  begin
   perform * from public.metric_logs;
   raise exception 'Anonymous metric access succeeded';
@@ -63,7 +65,7 @@ end $$;
 set local role anon;
 select set_config('request.jwt.claims','{"role":"anon"}',true);
 do $$ begin
- if exists(select 1 from public.profiles where username='top1-rls-test') then raise exception 'Revoked profile still public'; end if;
+ if public.read_public_profile('top1-rls-test') is not null then raise exception 'Revoked profile still public'; end if;
 end $$;
 reset role;
 rollback;

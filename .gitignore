@@ -6,3 +6,6 @@ node_modules/
 .env*
 !.env.example
 .vercel/
+previews/
+.pnpm-store/
+supabase/.temp/

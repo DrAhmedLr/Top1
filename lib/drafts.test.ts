@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {parseDraft,serializeDraft,profileFingerprint} from './drafts';
+const p={demographics:{age:32,sex:'male' as const,weight:78,height:180},values:{pushups:20},username:'',isPublic:false,revision:4};
+test('drafts survive reload with original revision and never load for another account',()=>{const raw=serializeDraft(p,'owner');assert.deepEqual(parseDraft(raw,'owner')?.values,p.values);assert.equal(parseDraft(raw,'owner')?.revision,4);assert.equal(parseDraft(raw,'other'),null);assert.equal(parseDraft('broken','owner'),null);});
+test('measurement and metadata changes make a draft dirty without revision-only noise',()=>{assert.equal(profileFingerprint(p),profileFingerprint({...p,revision:5}));assert.notEqual(profileFingerprint(p),profileFingerprint({...p,values:{pushups:21}}));assert.notEqual(profileFingerprint(p),profileFingerprint({...p,measurementDetails:{pushups:{method:'manual'}}}));});

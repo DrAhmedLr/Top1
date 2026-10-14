@@ -2,7 +2,7 @@
 import { createContext,useEffect,useState,type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import type { PostHog } from 'posthog-js';
-import { setAnalyticsClient } from '@/lib/analytics';
+import { setAnalyticsClient,recordView } from '@/lib/analytics';
 export const AnalyticsContext=createContext<PostHog|null>(null);
 export default function PostHogProvider({children}:{children:ReactNode}) {
   const path=usePathname();const [client,setClient]=useState<PostHog|null>(null);
@@ -28,6 +28,6 @@ export default function PostHogProvider({children}:{children:ReactNode}) {
     }).catch(()=>{/* Analytics must never block the health dashboard. */});
     return()=>{active=false;setAnalyticsClient(null);instance?.reset();};
   },[]);
-  useEffect(()=>{client?.capture('$pageview',{route:path.startsWith('/share/')?'/share/[username]':path});},[path,client]);
+  useEffect(()=>{if(path==='/'||path==='/sign-in')return;if(path.startsWith('/share/'))recordView('share');else if(path==='/privacy')recordView('privacy');else if(path==='/reset-password')recordView('reset-password');else if(path==='/account/password')recordView('account-password');},[path]);
   return <AnalyticsContext.Provider value={client}>{children}</AnalyticsContext.Provider>;
 }

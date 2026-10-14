@@ -11,7 +11,7 @@ export const accessibilityTiers = [
   {id:'tier2_standard',name:'Standard',label:'Tier 2 · Gym & Wearable',description:'Common laboratory, gym and wearable measurements.'},
   {id:'tier3_precision',name:'Precision',label:'Tier 3 · Precision / Advanced',description:'Specialist labs, equipment and advanced protocols.'},
 ] as const;
-export type Demographics = { age: number; sex: 'male' | 'female'; weight: number; height: number };
+export type Demographics = { age: number; sex: 'male' | 'female'; weight?: number; height?: number };
 export type Values = Record<string, number | undefined>;
 export type Metric = { id: string; name: string; pillar: PillarId; tier: AccessibilityTier; archived?:boolean; unit: string; target: string; polarity: 1 | -1; scoringType: 'linear' | 'skewed' | 'bounded'; mean: number; sd: number; min: number; max: number; optimal?: [number,number]; lms?: { L:number; M:number; S:number }; weight: number; easiestPathPriority: number; scenarioChangePerStep: number; scoringEligible: boolean; proofData: { study: string; sampleSize: string; rationale: string; instructions: string; url: string }; protocol: string };
 type Row = [string,string,string,string,1|-1,Metric['scoringType'],number,number,number,number,string,string];
@@ -48,7 +48,7 @@ const data: Record<string, Row[]> = {
     ['bench_1rm','Bench press','× BW','≥ 1.65',1,'linear',.8,.3,.1,3,'NSCA pressing standards','Upper-body pressing strength'],
     ['pullup_1rm','Weighted pull-up','× BW added','≥ 1.05',1,'linear',.2,.25,0,2,'Street lifting datasets','Vertical pulling force'],
     ['farmers_carry',"Farmer’s carry (total load 1× BW)",'s','≥ 120',1,'linear',45,25,1,300,'Functional work capacity norms','Loaded grip and trunk endurance'],
-    ['sit_to_stand','30-second sit-to-stand','reps','≥ 36',1,'linear',20,6,1,60,'Rikli & Jones','Functional lower-body endurance'],
+    ['sit_to_stand','30-second sit-to-stand','reps','≥ 36',1,'linear',20,6,0,60,'Rikli & Jones','Functional lower-body endurance'],
     ['ankle_dorsiflexion','Ankle dorsiflexion','°','≥ 48',1,'linear',32,8,1,70,'Weight-bearing lunge test datasets','Ankle range of motion'],
   ],
   recovery_somnology: [
@@ -93,6 +93,8 @@ const additions: Row[] = [
 ];
 const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:r[0]==='pushups'?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
 const specialProof: Record<string, Partial<Metric['proofData']>> = {
+ total_sleep:{instructions:'Use a representative seven-day average of time asleep per night, measured consistently with the same device or sleep diary. Enter hours per night in TOP1; the stored value uses minutes.'},
+ sit_to_stand:{instructions:'Count full stands completed in 30 seconds using the same chair and technique each time. Record repetitions and keep the protocol consistent.'},
  sauna_minutes:{study:'Finnish KIHD observational cohort (2015)',sampleSize:'2,315 Finnish men, ages 42–60. Observational associations; not a validated weekly optimal window.',url:'https://pubmed.ncbi.nlm.nih.gov/25705824/',instructions:'Sum actual sauna exposure over the same seven-day window. Record temperature and session pattern separately in your own notes. The requested 60–90 min/week band is an unvalidated product assumption, not a prescribed dose.'},
  cold_plunge_minutes:{study:'Winter-swimming thermogenesis study (2021)',url:'https://pubmed.ncbi.nlm.nih.gov/34755128/',sampleSize:'Small study in experienced male winter swimmers; no validated universal 11–15 min/week optimum.',instructions:'Sum actual immersion duration over seven days. Temperature, acclimatization and session pattern affect exposure. Do not convert a weekly total into a required dose; avoid solo immersion.'},
  thermal_hrv_rebound:{instructions:'Divide post-exposure RMSSD by pre-exposure RMSSD measured with the same device, posture, recording length and timing. Do not mix SDNN and RMSSD. No validated recovery or optimal ratio is established.'},

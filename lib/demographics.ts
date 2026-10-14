@@ -12,6 +12,7 @@ export interface MetricCohortNorm {
   source?: string;
   sourceAgeRange?: [number,number];
   method?: string;
+  cohortLabel?: string;
 }
 export interface DemographicLookup {
   [metricId: string]: {
@@ -92,7 +93,8 @@ export function getMetricCohortNorm(metricId: string, profile: Pick<Demographics
   if (profile.sex !== 'male' && profile.sex !== 'female') throw new RangeError('Unsupported biological sex cohort.');
   const norm=cohorts[profile.sex][getAgeBracket(profile.age)];
   if(norm.sourceAgeRange&&(profile.age<norm.sourceAgeRange[0]||profile.age>norm.sourceAgeRange[1]))return {...norm,provenance:'provisional',source:undefined,method:'Outside published cohort age range'};
-  return norm;
+  const decade=Math.floor(profile.age/10)*10;
+  return {...norm,cohortLabel:norm.provenance==='published'?`${decade}–${decade+9}`:getAgeBracket(profile.age)};
 }
 
 export function getMetricBenchmark(metricId: string, profile: Pick<Demographics, 'age' | 'sex'>): string {

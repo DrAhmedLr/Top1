@@ -6,7 +6,7 @@ import {evaluate,reference,score,eligible} from './engine';
 import {getPairwiseCorrelation,getScoredCorrelation} from './correlations';
 const d:Demographics={age:25,sex:'male',weight:80,height:180};
 const near=(a:number,b:number)=>assert.ok(Math.abs(a-b)<1e-6);
-const details={vo2_max:{method:'direct_cpet' as const,ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
+const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 test('all model cells are finite, but only VO2 parameters are source-grounded',()=>{
  assert.equal(Object.keys(demographicLookup).length,38);
  for(const m of metrics)for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){

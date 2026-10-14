@@ -6,7 +6,7 @@ export async function GET(request:NextRequest){
  const client=await getSupabaseServer();
  if(hash&&client&&(type==='email'||type==='signup'||type==='recovery')){
   const {error}=await client.auth.verifyOtp({token_hash:hash,type});
-  if(!error){const destination=type==='recovery'?'/reset-password':safeNextPath(request.nextUrl.searchParams.get('next'));const response=NextResponse.redirect(new URL(destination,request.url));response.headers.set('Cache-Control','private, no-store');response.headers.set('Referrer-Policy','no-referrer');return response;}
+  if(!error){const destination=type==='recovery'?'/reset-password':safeNextPath(request.nextUrl.searchParams.get('next'));const target=new URL(destination,request.url);if(type!=='recovery')target.searchParams.set('confirmed','1');const response=NextResponse.redirect(target);response.headers.set('Cache-Control','private, no-store');response.headers.set('Referrer-Policy','no-referrer');return response;}
  }
- return NextResponse.redirect(new URL('/sign-in?error=confirmation',request.url));
+ const response=NextResponse.redirect(new URL('/sign-in?error=confirmation',request.url));response.headers.set('Cache-Control','private, no-store');response.headers.set('Referrer-Policy','no-referrer');return response;
 }

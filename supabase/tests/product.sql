@@ -1,0 +1,20 @@
+begin;
+insert into auth.users(id,email) values('30000000-0000-4000-8000-000000000001','product-owner@example.invalid'),('30000000-0000-4000-8000-000000000002','product-other@example.invalid');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"30000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select public.save_profile('{"age":32,"sex":"male"}','{}',null,false,'{}','{}',0);
+select public.save_program('{"version":1,"focus":"consistency","tasks":[]}',0);
+do $$begin
+ if exists(select 1 from public.profiles where weight_kg is not null or height_cm is not null) then raise exception 'Optional basics invented';end if;
+ begin perform public.save_program('{}',0);raise exception 'Stale program accepted';exception when sqlstate 'PT409' then null;end;
+ begin insert into public.metric_logs(user_id,metric_id,metric_value)values(auth.uid(),'pushups',30.5);raise exception 'Fractional counts accepted';exception when check_violation then null;end;
+ begin insert into public.metric_logs(user_id,metric_id,metric_value,measured_at)values(auth.uid(),'pushups',30,'2099-01-01');raise exception 'Future date accepted';exception when check_violation then null;end;
+ begin insert into public.metric_logs(user_id,metric_id,metric_value,method)values(auth.uid(),'pushups',30,'lab');raise exception 'Incompatible method accepted';exception when check_violation then null;end;
+ begin perform public.import_guest_profile('30000000-0000-4000-8000-000000000002','wrong-owner','{}','{}','{}');raise exception 'Wrong owner import accepted';exception when insufficient_privilege then null;end;
+end $$;
+select set_config('request.jwt.claims','{"sub":"30000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+do $$begin if exists(select 1 from public.programs)then raise exception 'Other account program leaked';end if;end $$;
+set local role anon;
+do $$begin begin perform * from public.programs;raise exception 'Public program leaked';exception when insufficient_privilege then null;end;end $$;
+reset role;rollback;
+select 'Program isolation, optional basics, typed observations and import ownership passed' as result;

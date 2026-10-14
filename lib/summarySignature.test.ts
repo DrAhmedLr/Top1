@@ -9,7 +9,7 @@ test('signed snapshots survive JSON/database roundtrips and bind identity and de
  const signed=JSON.parse(JSON.stringify(await signSummary(summary,'owner',d,key)));
  assert.ok(await verifySummary(summary,signed,'owner',d,key));
  assert.equal(await verifySummary(summary,signed,'someone-else',d,key),null);
- assert.equal(await verifySummary(summary,signed,'owner',{...d,age:33},key),null);
+ assert.equal(await verifySummary(summary,signed,'owner',{...d,age:35},key),null);
 });
 test('forged summary values, unsigned and legacy-percentile snapshots fail closed',async()=>{
  const signed=await signSummary(summary,'owner',d,key);
@@ -20,3 +20,5 @@ test('forged summary values, unsigned and legacy-percentile snapshots fail close
 test('missing signing configuration never creates an unsigned public snapshot',async()=>{
  await assert.rejects(signSummary(summary,'owner',d,'short'),/not configured/);
 });
+
+test("public signature verifies using disclosed cohort without account ID or exact age",async()=>{const {publicDemographics}=await import("./summarySignature");const signed=await signSummary(summary,"public-name",d,key);assert.ok(await verifySummary(summary,signed,"public-name",publicDemographics(d),key));assert.ok(!("age" in publicDemographics(d)));});
