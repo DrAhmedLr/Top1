@@ -3882,5 +3882,473 @@
   "Make room in your plan before adding scenario steps.": {
     "fr": "Libérez de la place dans le programme avant d’ajouter des étapes.",
     "ar": "أفسح مجالًا في خطتك قبل إضافة خطوات السيناريو."
+  },
+  "Ranking pyramid": {
+    "fr": "Pyramide de classement",
+    "ar": "هرم الترتيب"
+  },
+  "Your current tier is highlighted": {
+    "fr": "Votre palier actuel est mis en évidence",
+    "ar": "مستواك الحالي مضاء"
+  },
+  "Record a measurement to light up your tier": {
+    "fr": "Ajoutez une mesure pour illuminer votre palier",
+    "ar": "سجّل قياسًا لإضاءة مستواك"
+  },
+  "Add a measurement": {
+    "fr": "Ajouter une mesure",
+    "ar": "إضافة قياس"
+  },
+  "Add a measurement to begin.": {
+    "fr": "Ajoutez une mesure pour commencer.",
+    "ar": "سجّل قياسًا للبدء."
+  },
+  "Illustrative benchmark": {
+    "fr": "Repère illustratif",
+    "ar": "معيار توضيحي"
+  },
+  "Illustrative benchmark · product assumptions": {
+    "fr": "Repère illustratif · hypothèses du produit",
+    "ar": "معيار توضيحي · افتراضات المنصة"
+  },
+  "Published test comparison": {
+    "fr": "Comparaison publiée du test",
+    "ar": "مقارنة اختبار منشورة"
+  },
+  "Choose your target tier": {
+    "fr": "Choisissez votre palier cible",
+    "ar": "اختر المستوى المستهدف"
+  },
+  "1 · Find your tier": {
+    "fr": "1 · Trouvez votre palier",
+    "ar": "١ · اكتشف مستواك"
+  },
+  "2 · Choose your climb": {
+    "fr": "2 · Choisissez votre progression",
+    "ar": "٢ · اختر مسار تقدمك"
+  },
+  "3 · Build your week": {
+    "fr": "3 · Organisez votre semaine",
+    "ar": "٣ · أنشئ برنامج أسبوعك"
+  },
+  "YOUR STARTING POINT": {
+    "fr": "VOTRE POINT DE DÉPART",
+    "ar": "نقطة انطلاقك"
+  },
+  "Your first measurement starts here": {
+    "fr": "Votre première mesure commence ici",
+    "ar": "ابدأ بقياسك الأول هنا"
+  },
+  "Choose a higher tier, then compare ways to get there. The pyramid has finer steps near the top.": {
+    "fr": "Choisissez un palier supérieur, puis comparez les parcours. Les paliers se resserrent près du sommet.",
+    "ar": "اختر مستوى أعلى ثم قارن المسارات للوصول إليه. تصبح درجات الهرم أدق قرب القمة."
+  },
+  "Your target": {
+    "fr": "Votre objectif",
+    "ar": "هدفك"
+  },
+  "Only recorded physical performance measurements can be changed in these routes. Other results stay fixed.": {
+    "fr": "Ces parcours modifient uniquement vos performances physiques mesurées. Les autres résultats restent fixes.",
+    "ar": "تغيّر هذه المسارات قياسات الأداء البدني المسجلة فقط. تبقى النتائج الأخرى ثابتة."
+  },
+  "Record a physical performance test to build an exercise route. Other measurements still contribute to your game standing.": {
+    "fr": "Enregistrez un test physique pour créer un parcours. Les autres mesures comptent toujours dans votre classement ludique.",
+    "ar": "سجّل اختبار أداء بدني لبناء مسار تدريبي. تبقى القياسات الأخرى ضمن ترتيبك التوضيحي."
+  },
+  "Choose your route": {
+    "fr": "Choisissez votre parcours",
+    "ar": "اختر مسارك"
+  },
+  "Different effort, no promised timeline": {
+    "fr": "Des efforts différents, sans délai promis",
+    "ar": "جهد مختلف دون موعد مضمون"
+  },
+  "FOCUSED": {
+    "fr": "CIBLÉ",
+    "ar": "مركّز"
+  },
+  "BALANCED": {
+    "fr": "ÉQUILIBRÉ",
+    "ar": "متوازن"
+  },
+  "HIGHER EFFORT": {
+    "fr": "EFFORT PLUS ÉLEVÉ",
+    "ar": "جهد أكبر"
+  },
+  "One thing at a time": {
+    "fr": "Une chose à la fois",
+    "ar": "خطوة واحدة في كل مرة"
+  },
+  "Share the effort": {
+    "fr": "Répartir les efforts",
+    "ar": "وزّع الجهد"
+  },
+  "A broader challenge": {
+    "fr": "Un défi plus complet",
+    "ar": "تحدٍّ أوسع"
+  },
+  "Change one recorded test with the strongest model impact.": {
+    "fr": "Faites évoluer un seul test ayant le plus d’impact dans le modèle.",
+    "ar": "حسّن اختبارًا واحدًا بأكبر تأثير في النموذج."
+  },
+  "Spread changes across up to two tests.": {
+    "fr": "Répartissez les changements sur deux tests au maximum.",
+    "ar": "وزّع التحسينات على اختبارين كحد أقصى."
+  },
+  "Explore changes across up to three tests.": {
+    "fr": "Explorez des changements sur trois tests au maximum.",
+    "ar": "استكشف تحسينات في ثلاثة اختبارات كحد أقصى."
+  },
+  "measurements to improve": {
+    "fr": "mesures à améliorer",
+    "ar": "قياسات للتحسين"
+  },
+  "Reaches your chosen tier in this model": {
+    "fr": "Atteint votre palier dans ce modèle",
+    "ar": "يصل إلى مستواك المختار في هذا النموذج"
+  },
+  "Closest available route within the change limits": {
+    "fr": "Parcours le plus proche dans les limites du modèle",
+    "ar": "أقرب مسار متاح ضمن حدود التغيير"
+  },
+  "What would need to change": {
+    "fr": "Ce qui devrait changer",
+    "ar": "ما الذي يحتاج إلى التحسين"
+  },
+  "Changes are capped at 50% of the starting value, or five small steps for very low starting values. These are hypothetical measurements, not this week’s workload.": {
+    "fr": "Les changements sont limités à 50 % du départ, ou cinq petits pas pour les valeurs très basses. Ce sont des mesures hypothétiques, pas la charge de cette semaine.",
+    "ar": "تُحد التحسينات بنسبة ٥٠٪ من البداية أو خمس خطوات صغيرة للقيم المنخفضة جدًا. هذه قياسات افتراضية وليست عبء تدريب هذا الأسبوع."
+  },
+  "Easier means fewer changed tests in this model, not a guarantee of easy or fast biological improvement. Actual training time depends on you.": {
+    "fr": "Plus simple signifie moins de tests modifiés dans ce modèle, sans garantir une amélioration facile ou rapide. La durée réelle dépend de vous.",
+    "ar": "الأسهل يعني تغيير اختبارات أقل في هذا النموذج، ولا يضمن تحسنًا بدنيًا سهلًا أو سريعًا. مدة التدريب الفعلية تعتمد عليك."
+  },
+  "Generate my weekly program": {
+    "fr": "Générer mon programme hebdomadaire",
+    "ar": "أنشئ برنامجي الأسبوعي"
+  },
+  "This route does not reach the selected tier. Choose a closer tier or use these intermediate goals.": {
+    "fr": "Ce parcours n’atteint pas le palier choisi. Choisissez un palier plus proche ou ces objectifs intermédiaires.",
+    "ar": "لا يصل هذا المسار إلى المستوى المختار. اختر مستوى أقرب أو استخدم هذه الأهداف المرحلية."
+  },
+  "Published references and game assumptions are different. No route optimizes lab results or thermal exposure. Weekly suggestions remain editable.": {
+    "fr": "Les références publiées diffèrent des hypothèses ludiques. Aucun parcours n’optimise les analyses ou l’exposition thermique. Les suggestions restent modifiables.",
+    "ar": "تختلف المراجع المنشورة عن افتراضات اللعبة. لا يحسّن أي مسار التحاليل الطبية أو التعرض للحرارة والبرد. تبقى الاقتراحات قابلة للتعديل."
+  },
+  "Find your tier, choose where to stand, compare routes and generate your weekly program.": {
+    "fr": "Trouvez votre palier, choisissez votre objectif, comparez les parcours et créez votre programme.",
+    "ar": "اكتشف مستواك، واختر هدفك، وقارن المسارات، ثم أنشئ برنامجك الأسبوعي."
+  },
+  "My available days · choose up to three": {
+    "fr": "Mes jours disponibles · trois au maximum",
+    "ar": "أيامي المتاحة · اختر ثلاثة كحد أقصى"
+  },
+  "Session time": {
+    "fr": "Durée de séance",
+    "ar": "مدة الحصة"
+  },
+  "Training experience": {
+    "fr": "Expérience d’entraînement",
+    "ar": "الخبرة التدريبية"
+  },
+  "Starting or returning": {
+    "fr": "Début ou reprise",
+    "ar": "مبتدئ أو عائد للتدريب"
+  },
+  "Training regularly": {
+    "fr": "Entraînement régulier",
+    "ar": "أتدرب بانتظام"
+  },
+  "How this week feels": {
+    "fr": "Mon ressenti cette semaine",
+    "ar": "كيف أشعر هذا الأسبوع"
+  },
+  "Ready for my usual practice": {
+    "fr": "Prêt pour ma pratique habituelle",
+    "ar": "مستعد لتدريبي المعتاد"
+  },
+  "Keep this week lighter": {
+    "fr": "Alléger cette semaine",
+    "ar": "أريد أسبوعًا أخف"
+  },
+  "A lighter week: shorter practice, no added workload.": {
+    "fr": "Une semaine allégée : séances plus courtes, sans charge supplémentaire.",
+    "ar": "أسبوع أخف: حصص أقصر دون زيادة العبء."
+  },
+  "Build consistency on separated practice days. Increase workload only when technique and recovery allow.": {
+    "fr": "Pratiquez régulièrement sur des jours espacés. Augmentez la charge lorsque la technique et la récupération le permettent.",
+    "ar": "ابنِ الاستمرارية بأيام تدريب متباعدة. زد العبء فقط عندما تسمح التقنية والتعافي بذلك."
+  },
+  "Start with one comfortable set and learn the movement; avoid maximum attempts.": {
+    "fr": "Commencez par une série confortable et apprenez le mouvement ; évitez les efforts maximaux.",
+    "ar": "ابدأ بمجموعة مريحة وتعلّم الحركة؛ تجنّب المحاولات القصوى."
+  },
+  "Use familiar submaximal practice; finish with repetitions in reserve and full rests.": {
+    "fr": "Utilisez des exercices familiers sous-maximaux ; gardez des répétitions en réserve et récupérez pleinement.",
+    "ar": "استخدم تدريبًا مألوفًا دون الحد الأقصى مع تكرارات احتياطية وراحة كافية."
+  },
+  "scheduled actions completed in the previous 14 days": {
+    "fr": "actions prévues terminées sur les 14 derniers jours",
+    "ar": "مهام مجدولة أُنجزت خلال آخر ١٤ يومًا"
+  },
+  "No recent schedule history yet. Start with a manageable week.": {
+    "fr": "Pas encore d’historique récent. Commencez par une semaine réaliste.",
+    "ar": "لا يوجد سجل حديث بعد. ابدأ بأسبوع قابل للتنفيذ."
+  },
+  "Adjacent days were left as rest days to separate demanding sessions.": {
+    "fr": "Les jours consécutifs restent du repos pour espacer les séances exigeantes.",
+    "ar": "تُترك الأيام المتتالية للراحة للفصل بين الحصص المجهدة."
+  },
+  "Progress uses your latest recorded measurement, not checked boxes. Targets are hypothetical, with no promised completion date.": {
+    "fr": "La progression utilise votre dernière mesure, pas les cases cochées. Les objectifs sont hypothétiques, sans date promise.",
+    "ar": "يُحسب التقدم من أحدث قياس مسجل وليس من المهام المكتملة. الأهداف افتراضية دون موعد مضمون."
+  },
+  "Warm up first. Stop for pain or unusual symptoms. Repeat demanding tests only when recovered; a weekly review does not require a maximum test.": {
+    "fr": "Échauffez-vous. Arrêtez en cas de douleur ou symptôme inhabituel. Répétez les tests exigeants après récupération ; le bilan hebdomadaire n’exige pas de test maximal.",
+    "ar": "ابدأ بالإحماء. توقف عند الألم أو الأعراض غير المعتادة. أعد الاختبارات المجهدة بعد التعافي؛ لا تتطلب المراجعة الأسبوعية اختبارًا أقصى."
+  },
+  "Practice guidance & source": {
+    "fr": "Conseils de pratique et source",
+    "ar": "إرشادات التدريب والمصدر"
+  },
+  "Update my generated program": {
+    "fr": "Actualiser mon programme généré",
+    "ar": "حدّث برنامجي المقترح"
+  },
+  "Scenario reached · choose your next goal": {
+    "fr": "Objectif atteint · choisissez le suivant",
+    "ar": "تحقق الهدف · اختر هدفك التالي"
+  },
+  "Your program is ready. Review the days and save it.": {
+    "fr": "Votre programme est prêt. Vérifiez les jours et enregistrez-le.",
+    "ar": "برنامجك جاهز. راجع الأيام ثم احفظه."
+  },
+  "Review measurements and recovery; repeat a test only when ready": {
+    "fr": "Faire le bilan des mesures et de la récupération ; refaire un test quand prêt",
+    "ar": "راجع القياسات والتعافي؛ أعد الاختبار عندما تكون مستعدًا"
+  },
+  "Push-up practice · {sets} × {reps} comfortable reps · {minutes} min": {
+    "fr": "Pompes · {sets} × {reps} répétitions confortables · {minutes} min",
+    "ar": "تمرين الضغط · {sets} × {reps} تكرارات مريحة · {minutes} دقيقة"
+  },
+  "Comfortable walk or cycle · conversation pace · {minutes} min": {
+    "fr": "Marche ou vélo confortable · pouvoir parler · {minutes} min",
+    "ar": "مشي أو دراجة بوتيرة تسمح بالكلام · {minutes} دقيقة"
+  },
+  "Jump technique · 3 controlled jumps with full rests · {minutes} min": {
+    "fr": "Technique de saut · 3 sauts contrôlés avec repos complet · {minutes} min",
+    "ar": "تقنية القفز · ٣ قفزات متحكم بها وراحة كافية · {minutes} دقيقة"
+  },
+  "Light grip holds or carries · full rests · {minutes} min": {
+    "fr": "Prises légères ou portés · repos complet · {minutes} min",
+    "ar": "إمساك أو حمل خفيف مع راحة كافية · {minutes} دقيقة"
+  },
+  "Submaximal {name} · {sets} comfortable sets · {minutes} min": {
+    "fr": "{name} sous-maximal · {sets} séries confortables · {minutes} min",
+    "ar": "{name} دون الحد الأقصى · {sets} مجموعات مريحة · {minutes} دقيقة"
+  },
+  "Controlled chair rises · {sets} comfortable sets · {minutes} min": {
+    "fr": "Levers de chaise contrôlés · {sets} séries confortables · {minutes} min",
+    "ar": "نهوض متحكم به من الكرسي · {sets} مجموعات مريحة · {minutes} دقيقة"
+  },
+  "Supported balance or gentle mobility · {minutes} min": {
+    "fr": "Équilibre avec appui ou mobilité douce · {minutes} min",
+    "ar": "توازن مع دعم أو حركة لطيفة · {minutes} دقيقة"
+  },
+  "Game estimate only": {
+    "fr": "Estimation ludique uniquement",
+    "ar": "تقدير توضيحي فقط"
+  },
+  "Canadian grip · standing Smedley III, best of 2 per hand, summed": {
+    "fr": "Prise canadienne · debout, Smedley III, meilleur de 2 par main, somme",
+    "ar": "قبضة كندية · وقوفًا بجهاز Smedley III، مجموع أفضل محاولتين لكل يد"
+  },
+  "Canadian jump · Leonardo force plate, arm swing, best of 3": {
+    "fr": "Saut canadien · plateforme Leonardo, bras libres, meilleur de 3",
+    "ar": "قفز كندي · منصة Leonardo مع تأرجح الذراعين، أفضل ٣ محاولات"
+  },
+  "Canadian population reference · 2016–2017": {
+    "fr": "Référence canadienne · 2016–2017",
+    "ar": "مرجع سكاني كندي · ٢٠١٦–٢٠١٧"
+  },
+  "Canadian age/sex comparison; not a world rank. Broad bands use the published P10, P50 and P90 thresholds.": {
+    "fr": "Comparaison canadienne selon l’âge et le sexe ; pas un rang mondial. Les intervalles utilisent P10, P50 et P90 publiés.",
+    "ar": "مقارنة كندية حسب العمر والجنس وليست ترتيبًا عالميًا. تستخدم النطاقات حدود P10 وP50 وP90 المنشورة."
+  },
+  "Confirm the Canadian reference protocol in measurement details.": {
+    "fr": "Confirmez le protocole canadien dans les détails de mesure.",
+    "ar": "أكد البروتوكول الكندي في تفاصيل القياس."
+  },
+  "Record the test date and an age within this reference range.": {
+    "fr": "Indiquez la date du test et un âge couvert par cette référence.",
+    "ar": "سجّل تاريخ الاختبار وعمرًا ضمن نطاق هذا المرجع."
+  },
+  "Record a valid measurement to compare this test.": {
+    "fr": "Enregistrez une mesure valide pour comparer ce test.",
+    "ar": "سجّل قياسًا صالحًا لمقارنة هذا الاختبار."
+  },
+  "Excluded from the stricter scientific report; the game estimate remains illustrative.": {
+    "fr": "Exclu du rapport scientifique strict ; l’estimation ludique reste illustrative.",
+    "ar": "مستبعد من التقرير العلمي الأكثر صرامة؛ يبقى تقدير اللعبة توضيحيًا."
+  },
+  "Illustrative benchmark · ": {
+    "fr": "Repère illustratif · ",
+    "ar": "معيار توضيحي · "
+  },
+  "Record a measurement to export.": {
+    "fr": "Enregistrez une mesure pour exporter.",
+    "ar": "سجّل قياسًا للتصدير."
+  },
+  "No measurements": {
+    "fr": "Aucune mesure",
+    "ar": "لا توجد قياسات"
+  },
+  "Recorded subset": {
+    "fr": "Mesures renseignées",
+    "ar": "القياسات المسجلة"
+  },
+  "Add any measurement in this category to see its estimate.": {
+    "fr": "Ajoutez une mesure dans cette catégorie pour voir son estimation.",
+    "ar": "أضف أي قياس في هذه الفئة لعرض تقديرها."
+  },
+  "Every recorded metric receives a game estimate from disclosed product assumptions. Categories average their recorded metric scores; the global estimate gives each populated category equal weight. Missing measurements are excluded.": {
+    "fr": "Chaque mesure reçoit une estimation selon les hypothèses explicites du produit. Les catégories font la moyenne de leurs mesures ; chaque catégorie renseignée a le même poids global. Les valeurs manquantes sont exclues.",
+    "ar": "تحصل كل قيمة مسجلة على تقدير وفق افتراضات معلنة للمنصة. تُحسب الفئات بمتوسط قياساتها، ولكل فئة مسجلة وزن متساوٍ في التقدير العام. تُستبعد القيم غير المسجلة."
+  },
+  "Published test bands appear where compatible references exist. Other rankings are illustrative benchmarks, not measured world ranks, health assessments or universal consensus. The downloadable scientific report uses a separate, stricter model.": {
+    "fr": "Les intervalles publiés apparaissent si les références sont compatibles. Les autres classements sont illustratifs, sans rang mondial mesuré, évaluation de santé ou consensus universel. Le rapport scientifique utilise un modèle distinct plus strict.",
+    "ar": "تظهر نطاقات الاختبارات المنشورة عند توافق المراجع. أما بقية الترتيبات فمعايير توضيحية، وليست ترتيبًا عالميًا مقاسًا أو تقييمًا صحيًا أو إجماعًا عالميًا. يستخدم التقرير العلمي نموذجًا منفصلًا أكثر صرامة."
+  },
+  "Published evidence. Transparent game assumptions.": {
+    "fr": "Des preuves publiées. Des hypothèses ludiques transparentes.",
+    "ar": "أدلة منشورة وافتراضات توضيحية واضحة."
+  },
+  "TOP1 mixes published test comparisons with illustrative benchmark estimates. A Top X% game label is not a measured world rank, diagnosis or claim of universal agreement.": {
+    "fr": "TOP1 associe comparaisons publiées et estimations illustratives. Un Top X % ludique n’est ni un rang mondial mesuré, ni un diagnostic, ni un consensus universel.",
+    "ar": "يجمع TOP1 بين مقارنات منشورة وتقديرات توضيحية. لا يمثل ترتيب Top X% ترتيبًا عالميًا مقاسًا أو تشخيصًا أو إجماعًا عالميًا."
+  },
+  "Every measurement counts": {
+    "fr": "Chaque mesure compte",
+    "ar": "كل قياس له قيمة"
+  },
+  "Each valid recorded measurement gets an illustrative game estimate. Blank fields are excluded. Each category averages its recorded scores, and populated categories receive equal weight in the global estimate.": {
+    "fr": "Chaque mesure valide reçoit une estimation ludique. Les champs vides sont exclus. Chaque catégorie fait sa moyenne ; les catégories renseignées ont le même poids global.",
+    "ar": "كل قياس صالح ومسجل يحصل على تقدير توضيحي. تُستبعد الحقول الفارغة. لكل فئة متوسط قياساتها، وتتساوى أوزان الفئات المسجلة في التقدير العام."
+  },
+  "Published comparisons": {
+    "fr": "Comparaisons publiées",
+    "ar": "مقارنات منشورة"
+  },
+  "Four tests have independent published references: eligible treadmill VO₂, international grip, Canadian combined grip and Canadian jump height. Protocol, equipment, age and sex determine compatibility. Published bands remain separate from game estimates.": {
+    "fr": "Quatre tests ont des références publiées : VO₂ admissible sur tapis, prise internationale, prise combinée canadienne et hauteur de saut canadienne. Protocole, matériel, âge et sexe déterminent la compatibilité. Ces intervalles restent distincts des estimations ludiques.",
+    "ar": "لأربعة اختبارات مراجع منشورة مستقلة: VO₂ المؤهل على السير، والقبضة الدولية، والقبضة الكندية المجمعة، وارتفاع القفز الكندي. يحدد البروتوكول والجهاز والعمر والجنس التوافق. تبقى النطاقات المنشورة منفصلة عن تقديرات اللعبة."
+  },
+  "Game assumptions": {
+    "fr": "Hypothèses du jeu",
+    "ar": "افتراضات اللعبة"
+  },
+  "Game scores use provisional anchors and a normal-distribution display, capped at three model units in either direction. Some health-related readings use a plateau rather than rewarding extremes. Thermal exposure gets a neutral game estimate. These choices are product rules, not validated health targets.": {
+    "fr": "Les scores utilisent des repères provisoires et une distribution normale, limités à trois unités dans chaque sens. Certaines mesures ont un plateau plutôt qu’une prime aux extrêmes. L’exposition thermique reste neutre. Ce sont des règles du produit, pas des objectifs de santé validés.",
+    "ar": "تستخدم النقاط مرتكزات افتراضية وتوزيعًا طبيعيًا بحد ثلاث وحدات في الاتجاهين. لبعض القياسات نطاق ثابت بدل مكافأة القيم المتطرفة. التعرض الحراري محايد. هذه قواعد للمنصة وليست أهدافًا صحية مثبتة."
+  },
+  "Your program": {
+    "fr": "Votre programme",
+    "ar": "برنامجك"
+  },
+  "Routes change recorded physical performance measurements only. Programs use available days, session time, experience, recovery preference and dated completion history. Completing actions does not prove physical improvement. No duration to a target is predicted.": {
+    "fr": "Les parcours modifient uniquement les performances physiques. Les programmes utilisent vos jours, votre temps, votre expérience, votre récupération et l’historique daté. Cocher une action ne prouve pas un progrès physique. Aucun délai n’est prédit.",
+    "ar": "تغيّر المسارات الأداء البدني المسجل فقط. تعتمد البرامج على الأيام والوقت والخبرة والتعافي وسجل الإنجاز المؤرخ. إنجاز المهام لا يثبت التحسن البدني. لا يُتوقع موعد للوصول."
+  },
+  "About the stricter calculation report": {
+    "fr": "À propos du rapport scientifique strict",
+    "ar": "حول تقرير الحساب الأكثر صرامة"
+  },
+  "The downloadable scientific report retains a separate capacity-only model with protocol gates and three-observation readiness. It intentionally differs from the entertainment dashboard. Medical markers and thermal exposure are never optimized by the training planner.": {
+    "fr": "Le rapport scientifique conserve un modèle distinct limité aux capacités physiques, avec protocoles requis et trois observations. Il diffère du tableau ludique. Le programme n’optimise jamais les marqueurs médicaux ou l’exposition thermique.",
+    "ar": "يحتفظ التقرير العلمي بنموذج منفصل للقدرات البدنية مع شروط بروتوكول وثلاثة قياسات. يختلف عن لوحة اللعبة. لا يحسّن المخطط المؤشرات الطبية أو التعرض الحراري."
+  },
+  "Read the game rules and benchmark assumptions": {
+    "fr": "Lire les règles et hypothèses des repères",
+    "ar": "اقرأ قواعد اللعبة وافتراضات المعايير"
+  },
+  "VO₂, grip strength, combined-hand grip and jump height have separate published test references. Protocol and age limits apply. The composite remains unvalidated.": {
+    "fr": "VO₂, prise, prise combinée et hauteur de saut ont des références distinctes. Des limites de protocole et d’âge s’appliquent. Le score global reste non validé.",
+    "ar": "لـ VO₂ والقبضة والقبضة المجمعة وارتفاع القفز مراجع مستقلة بشروط بروتوكول وعمر. التقدير العام غير مُثبت."
+  },
+  "This week focuses on up to two unfinished goals. Update your program after recording new measurements.": {
+    "fr": "Cette semaine cible jusqu’à deux objectifs en cours. Actualisez le programme après de nouvelles mesures.",
+    "ar": "يركز هذا الأسبوع على هدفين غير مكتملين كحد أقصى. حدّث برنامجك بعد تسجيل قياسات جديدة."
+  },
+  "Choose one to three days and a session length.": {
+    "fr": "Choisissez un à trois jours et une durée de séance.",
+    "ar": "اختر من يوم إلى ثلاثة أيام ومدة الحصة."
+  },
+  "Update your measurements or choose a new scenario first.": {
+    "fr": "Actualisez vos mesures ou choisissez un nouveau scénario.",
+    "ar": "حدّث قياساتك أو اختر سيناريو جديدًا أولًا."
+  },
+  "Use a Leonardo Mechanograph force plate, with arm swing allowed. After 1–2 practice jumps, record the highest of three valid two-leg countermovement jumps (up to five attempts). Both feet leave and land together. Other force plates, phone apps, wall marks and hands-on-hips jumps are different protocols.": {
+    "fr": "Utilisez une plateforme Leonardo Mechanograph, bras libres. Après 1–2 sauts d’essai, retenez le meilleur de trois sauts valides (cinq tentatives au maximum). Les deux pieds quittent et retrouvent la plateforme ensemble. Les autres plateformes, applications, marques au mur et sauts mains aux hanches diffèrent.",
+    "ar": "استخدم منصة Leonardo Mechanograph مع السماح بتأرجح الذراعين. بعد قفزة أو اثنتين للتجربة، سجّل أعلى ثلاث قفزات صحيحة بالقدمين معًا، بخمس محاولات كحد أقصى. يجب أن تغادر القدمان المنصة وتعودا معًا. تختلف الأجهزة الأخرى والتطبيقات وعلامات الحائط والقفز واليدان على الخصر."
+  },
+  "Use a Smedley III analogue dynamometer standing, arm about 45 degrees away from the body. Alternate hands for two trials per hand. Add the best left and best right result in kg. Do not use a single-hand maximum or the seated hydraulic protocol.": {
+    "fr": "Utilisez un dynamomètre analogique Smedley III debout, bras écarté à environ 45 degrés. Alternez les mains, deux essais par main. Additionnez les meilleurs résultats gauche et droit en kg. N’utilisez pas un maximum d’une main ou le protocole hydraulique assis.",
+    "ar": "استخدم جهاز Smedley III التناظري واقفًا والذراع بزاوية نحو ٤٥ درجة عن الجسم. بدّل بين اليدين لمحاولتين لكل يد. اجمع أفضل نتيجة لليسرى واليمنى بالكيلوغرام. لا تستخدم أقصى يد واحدة أو البروتوكول الهيدروليكي أثناء الجلوس."
+  },
+  "Hoffmann et al. 2019 · CHMS jump-height Table 4": {
+    "fr": "Hoffmann et al. 2019 · hauteur de saut CHMS, tableau 4",
+    "ar": "Hoffmann وزملاؤه ٢٠١٩ · جدول ارتفاع القفز CHMS رقم ٤"
+  },
+  "CHMS cycle 5; age/sex-specific Canadian population norms, ages 18–69 in TOP1. Exact Leonardo protocol required.": {
+    "fr": "CHMS cycle 5 ; normes canadiennes selon âge et sexe, 18–69 ans dans TOP1. Protocole Leonardo exact requis.",
+    "ar": "دورة CHMS الخامسة؛ معايير كندية حسب العمر والجنس للأعمار ١٨–٦٩ في TOP1. يلزم بروتوكول Leonardo المطابق."
+  },
+  "Select the measurement protocol. Canadian comparison requires a Leonardo Mechanograph, arm swing and the highest of three valid jumps. Wall, app and hands-on-hips results receive only an illustrative game estimate.": {
+    "fr": "Choisissez le protocole. La comparaison canadienne exige Leonardo Mechanograph, bras libres et le meilleur de trois sauts valides. Mur, application ou mains aux hanches : estimation ludique uniquement.",
+    "ar": "اختر بروتوكول القياس. تتطلب المقارنة الكندية جهاز Leonardo Mechanograph وتأرجح الذراعين وأفضل ثلاث قفزات صحيحة. قياسات الحائط والتطبيق واليدين على الخصر تحصل على تقدير توضيحي فقط."
+  },
+  "Hoffmann et al. 2019 · CHMS combined grip Table 1": {
+    "fr": "Hoffmann et al. 2019 · prise combinée CHMS, tableau 1",
+    "ar": "Hoffmann وزملاؤه ٢٠١٩ · جدول القبضة المجمعة CHMS رقم ١"
+  },
+  "Canadian age/sex reference, ages 18–79 in TOP1. Protocol match required.": {
+    "fr": "Référence canadienne selon âge et sexe, 18–79 ans dans TOP1. Protocole compatible requis.",
+    "ar": "مرجع كندي حسب العمر والجنس للأعمار ١٨–٧٩ في TOP1. يلزم توافق البروتوكول."
+  },
+  "Select the protocol before comparing. Canadian norms require standing Smedley III, two trials per hand, best results summed. The NHANES option uses three trials per hand and is not ranked against the Canadian table.": {
+    "fr": "Choisissez le protocole avant de comparer. Les normes canadiennes exigent Smedley III debout, deux essais par main, meilleurs résultats additionnés. NHANES utilise trois essais et ne se compare pas au tableau canadien.",
+    "ar": "اختر البروتوكول قبل المقارنة. تتطلب المعايير الكندية الوقوف بجهاز Smedley III ومحاولتين لكل يد ومجموع أفضل النتائج. يستخدم NHANES ثلاث محاولات ولا يُقارن بالجدول الكندي."
+  },
+  "Game estimates are illustrative; the calculation report uses stricter rules.": {
+    "fr": "Les estimations ludiques sont illustratives ; le rapport utilise des règles plus strictes.",
+    "ar": "تقديرات اللعبة توضيحية؛ يستخدم تقرير الحساب قواعد أكثر صرامة."
+  },
+  "Chosen tier": {
+    "fr": "Palier choisi",
+    "ar": "المستوى المختار"
+  },
+  "This stage": {
+    "fr": "Cette étape",
+    "ar": "هذه المرحلة"
+  },
+  "How this was estimated": {
+    "fr": "Comment cette estimation est calculée",
+    "ar": "كيف حُسب هذا التقدير"
+  },
+  "Thermal habits receive a neutral game estimate. Longer exposure does not earn a higher rank.": {
+    "fr": "Les habitudes thermiques reçoivent une estimation neutre. Une exposition plus longue ne donne pas un meilleur rang.",
+    "ar": "تحصل العادات الحرارية على تقدير محايد. التعرض الأطول لا يمنح ترتيبًا أعلى."
+  },
+  "This metric uses a provisional game benchmark, not an observed population percentile.": {
+    "fr": "Cette mesure utilise un repère ludique provisoire, pas un percentile observé dans la population.",
+    "ar": "يستخدم هذا القياس معيارًا توضيحيًا افتراضيًا وليس مئينًا سكانيًا مقاسًا."
+  },
+  "Relaxed acceleration drills · full walking rests · {minutes} min": {
+    "fr": "Accélérations détendues · récupération complète en marchant · {minutes} min",
+    "ar": "تدريبات تسارع هادئة مع راحة كافية بالمشي · {minutes} دقيقة"
+  },
+  "Published Canadian age/sex norms require the exact documented protocol; broad test bands, not a global rank.": {
+    "fr": "Les normes canadiennes exigent le protocole exact documenté ; des intervalles larges, pas un rang mondial.",
+    "ar": "تتطلب المعايير الكندية البروتوكول المطابق الموثق؛ نطاقات اختبار واسعة وليست ترتيبًا عالميًا."
   }
 }

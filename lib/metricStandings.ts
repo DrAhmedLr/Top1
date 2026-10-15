@@ -1,4 +1,5 @@
 import {activeMetrics,type Values,type Demographics} from './registry';
+import {canadianComparison} from './canadianReference';
 import {valid} from './engine';
 import type {MeasurementMetadata} from './measurementMetadata';
 import {vo2CohortComparison} from './scientificCalibration';
@@ -8,6 +9,10 @@ export function bandLabel(band:TopBand){return band.kind==='best'?'1%':band.kind
 /** Each result depends on that test alone. No completeness threshold or averaging of percentiles. */
 export function metricStandings(values:Values,d:Demographics,details:MeasurementMetadata,now=Date.now()){
  return activeMetrics.filter(m=>valid(m,values[m.id])).map(metric=>{
+  if(metric.id==='cmj'||metric.id==='grip_combined'){
+   const r=canadianComparison(metric.id,values,d,details,now);
+   return {metric,value:values[metric.id]!,band:r.available?r.band:null,reason:r.available?'Canadian age/sex comparison; not a world rank. Broad bands use the published P10, P50 and P90 thresholds.':r.reason,source:r.available?r.source:null,cohort:r.available?`${r.ageMin}–${r.ageMax} · ${r.sex}`:null,reference:r.available?'Canadian population reference · 2016–2017':null};
+  }
   if(metric.id==='grip_strength'){
    const r=gripComparison(values,d,details,now);
    return {metric,value:values[metric.id]!,band:r.available?r.band:null,reason:r.available?'Grip comparison only; not an overall strength rank.':r.reason,source:r.available?r.source:null,cohort:r.available?`${r.ageMin}${r.ageMax===null?'+':`–${r.ageMax}`} · ${r.sex}`:null,reference:r.available?'International grip reference · 2025':null};
