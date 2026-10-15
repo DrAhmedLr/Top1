@@ -4350,5 +4350,437 @@
   "Published Canadian age/sex norms require the exact documented protocol; broad test bands, not a global rank.": {
     "fr": "Les normes canadiennes exigent le protocole exact documenté ; des intervalles larges, pas un rang mondial.",
     "ar": "تتطلب المعايير الكندية البروتوكول المطابق الموثق؛ نطاقات اختبار واسعة وليست ترتيبًا عالميًا."
+  },
+  "Each recorded test stands on its own. Unmeasured tests are optional.": {
+    "fr": "Chaque test est indépendant. Les tests non mesurés sont facultatifs.",
+    "ar": "كل اختبار مسجل مستقل. الاختبارات غير المقاسة اختيارية."
+  },
+  "or better": {
+    "fr": "ou mieux",
+    "ar": "أو أفضل"
+  },
+  "The published source may only resolve a broad band. This does not cap your normalized game score.": {
+    "fr": "La source publiée peut ne fournir qu’un intervalle large. Cela ne limite pas votre score ludique normalisé.",
+    "ar": "قد لا يحدد المصدر المنشور إلا نطاقًا واسعًا. وهذا لا يحد تقديرك التوضيحي المُطبّع."
+  },
+  "Each metric is normalized against its attainable game ceiling before averaging. Best-range sleep and resting heart rate receive full game credit. Categories have equal weight globally; missing measurements are excluded.": {
+    "fr": "Chaque mesure est normalisée selon son plafond atteignable avant la moyenne. Le sommeil et le pouls de repos dans la plage cible obtiennent le maximum ludique. Les catégories ont un poids égal ; les données absentes sont exclues.",
+    "ar": "يُطبّع كل قياس وفق سقفه الممكن قبل حساب المتوسط. يمنح النوم والنبض أثناء الراحة ضمن النطاق المستهدف كامل نقاط اللعبة. تتساوى أوزان الفئات وتُستبعد القياسات الناقصة."
+  },
+  "Available equipment": {
+    "fr": "Matériel disponible",
+    "ar": "المعدات المتاحة"
+  },
+  "Home · no specialist equipment": {
+    "fr": "À domicile · sans matériel spécialisé",
+    "ar": "في المنزل · دون معدات متخصصة"
+  },
+  "Gym · weights and suitable equipment": {
+    "fr": "Salle · charges et matériel adapté",
+    "ar": "قاعة رياضية · أوزان ومعدات مناسبة"
+  },
+  "Movement preference": {
+    "fr": "Préférence de mouvement",
+    "ar": "تفضيل الحركة"
+  },
+  "Standard practice": {
+    "fr": "Pratique standard",
+    "ar": "تدريب عادي"
+  },
+  "Avoid jumping and running": {
+    "fr": "Éviter sauts et course",
+    "ar": "تجنّب القفز والجري"
+  },
+  "Your comfortable working load (kg)": {
+    "fr": "Votre charge de travail confortable (kg)",
+    "ar": "وزن التدريب المريح لك (كغ)"
+  },
+  "Optional · chosen by you, not your maximum": {
+    "fr": "Facultatif · choisi par vous, pas votre maximum",
+    "ar": "اختياري · تختاره أنت وليس أقصى وزن لك"
+  },
+  "Detailed session preview": {
+    "fr": "Aperçu détaillé de la séance",
+    "ar": "معاينة الحصة بالتفصيل"
+  },
+  "Update the generated program, then save to apply this preview.": {
+    "fr": "Actualisez le programme généré, puis enregistrez pour appliquer cet aperçu.",
+    "ar": "حدّث البرنامج المقترح ثم احفظ لتطبيق هذه المعاينة."
+  },
+  "Warm-up": {
+    "fr": "Échauffement",
+    "ar": "الإحماء"
+  },
+  "Cool-down": {
+    "fr": "Retour au calme",
+    "ar": "التهدئة"
+  },
+  "Begin with easy walking or cycling, then rehearse each movement slowly without a challenging load.": {
+    "fr": "Commencez par de la marche ou du vélo facile, puis répétez chaque mouvement lentement sans charge exigeante.",
+    "ar": "ابدأ بمشي أو دراجة خفيفة ثم جرّب كل حركة ببطء دون وزن مُجهد."
+  },
+  "each side": {
+    "fr": "de chaque côté",
+    "ar": "لكل جهة"
+  },
+  "your chosen working load": {
+    "fr": "votre charge de travail choisie",
+    "ar": "وزن التدريب الذي اخترته"
+  },
+  "Rest": {
+    "fr": "Repos",
+    "ar": "الراحة"
+  },
+  "seconds between sets": {
+    "fr": "secondes entre les séries",
+    "ar": "ثانية بين المجموعات"
+  },
+  "Preparation alternative · not equivalent to the recorded test.": {
+    "fr": "Exercice préparatoire · non équivalent au test enregistré.",
+    "ar": "بديل تحضيري · لا يعادل الاختبار المسجل."
+  },
+  "Make it easier": {
+    "fr": "Simplifier l’exercice",
+    "ar": "اجعله أسهل"
+  },
+  "When to progress": {
+    "fr": "Quand progresser",
+    "ar": "متى تزيد التحدي"
+  },
+  "When to reassess": {
+    "fr": "Quand réévaluer",
+    "ar": "متى تعيد التقييم"
+  },
+  "If a session is unusually hard or recovery is poor, repeat or reduce the workload instead of progressing.": {
+    "fr": "Si une séance est inhabituellement difficile ou la récupération insuffisante, répétez ou réduisez la charge au lieu de progresser.",
+    "ar": "إذا كانت الحصة أصعب من المعتاد أو كان التعافي ضعيفًا فكرر العبء أو قلله بدل زيادته."
+  },
+  "Finish with easy movement and note how the session felt. Stop for pain or unusual symptoms.": {
+    "fr": "Terminez par un mouvement facile et notez votre ressenti. Arrêtez en cas de douleur ou de symptôme inhabituel.",
+    "ar": "اختم بحركة خفيفة وسجّل شعورك بعد الحصة. توقف عند الألم أو الأعراض غير المعتادة."
+  },
+  "This is focused practice for your chosen goals, not a complete assessment of your training needs. Session times include estimated work, rest and transitions.": {
+    "fr": "Cette pratique cible vos objectifs et ne constitue pas un bilan complet de vos besoins. Les durées incluent travail, repos et transitions estimés.",
+    "ar": "هذا تدريب موجه لأهدافك وليس تقييمًا كاملًا لاحتياجاتك التدريبية. تشمل المدة تقديرات العمل والراحة والانتقال بين التمارين."
+  },
+  "Training principles · ACSM": {
+    "fr": "Principes d’entraînement · ACSM",
+    "ar": "مبادئ التدريب · ACSM"
+  },
+  "{exercise}: {sets} × {dose} {unit} · rest {rest}s": {
+    "fr": "{exercise} : {sets} × {dose} {unit} · repos {rest}s",
+    "ar": "{exercise}: {sets} × {dose} {unit} · راحة {rest}ث"
+  },
+  "Use a controlled range you can repeat without losing technique.": {
+    "fr": "Utilisez une amplitude contrôlée et reproductible sans dégrader la technique.",
+    "ar": "استخدم مدى حركة متحكمًا فيه يمكنك تكراره دون فقدان التقنية."
+  },
+  "Reduce the load or range and keep the same controlled technique.": {
+    "fr": "Réduisez la charge ou l’amplitude tout en gardant le contrôle.",
+    "ar": "قلل الوزن أو مدى الحركة مع الحفاظ على التحكم."
+  },
+  "After two comfortable sessions, add one repetition per set. At the top of the range, add the smallest available load and return to the lower repetition count.": {
+    "fr": "Après deux séances confortables, ajoutez une répétition par série. En haut de la plage, ajoutez la plus petite charge et revenez au nombre inférieur de répétitions.",
+    "ar": "بعد حصتين مريحتين أضف تكرارًا لكل مجموعة. عند بلوغ أعلى عدد أضف أصغر وزن متاح وعد إلى عدد التكرارات الأقل."
+  },
+  "Review after four consistent weeks, using the same test protocol and a recovered day.": {
+    "fr": "Réévaluez après quatre semaines régulières avec le même protocole, un jour de bonne récupération.",
+    "ar": "راجع بعد أربعة أسابيع منتظمة بنفس بروتوكول الاختبار وفي يوم تكون فيه متعافيًا."
+  },
+  "Finish with at least three repetitions in reserve.": {
+    "fr": "Terminez en gardant au moins trois répétitions en réserve.",
+    "ar": "أنه المجموعة مع القدرة على أداء ثلاثة تكرارات إضافية على الأقل."
+  },
+  "Finish with two to three repetitions in reserve.": {
+    "fr": "Terminez en gardant deux à trois répétitions en réserve.",
+    "ar": "أنه المجموعة مع القدرة على أداء تكرارين إلى ثلاثة إضافية."
+  },
+  "Incline push-up against a stable surface": {
+    "fr": "Pompe inclinée sur support stable",
+    "ar": "ضغط مائل على سطح ثابت"
+  },
+  "Strict push-up": {
+    "fr": "Pompe stricte",
+    "ar": "ضغط كامل مضبوط"
+  },
+  "Keep the trunk straight; use the same controlled depth on every repetition.": {
+    "fr": "Gardez le tronc droit et la même profondeur contrôlée à chaque répétition.",
+    "ar": "حافظ على استقامة الجذع ونفس العمق المتحكم فيه بكل تكرار."
+  },
+  "Raise your hands onto a stable higher surface; use fewer repetitions if needed.": {
+    "fr": "Placez les mains sur un support stable plus haut ; réduisez les répétitions si nécessaire.",
+    "ar": "ضع يديك على سطح ثابت أعلى وقلل التكرارات عند الحاجة."
+  },
+  "After two comfortable sessions, add one repetition per set, up to twelve. Then lower the incline or choose a slightly harder variation; do not switch the recorded test protocol.": {
+    "fr": "Après deux séances confortables, ajoutez une répétition par série jusqu’à douze. Abaissez ensuite le support ou choisissez une variante légèrement plus difficile ; gardez le protocole du test enregistré.",
+    "ar": "بعد حصتين مريحتين أضف تكرارًا لكل مجموعة حتى اثني عشر. ثم اخفض ميل السطح أو اختر نسخة أصعب قليلًا مع الحفاظ على بروتوكول الاختبار المسجل."
+  },
+  "Brisk walk or stationary cycle": {
+    "fr": "Marche rapide ou vélo stationnaire",
+    "ar": "مشي نشيط أو دراجة ثابتة"
+  },
+  "Stay at a pace where you can talk in full sentences.": {
+    "fr": "Gardez une allure permettant de parler en phrases complètes.",
+    "ar": "حافظ على وتيرة تسمح بالتحدث بجمل كاملة."
+  },
+  "Start gently and keep breathing steady; reduce pace before technique or comfort deteriorates.": {
+    "fr": "Commencez doucement et respirez régulièrement ; ralentissez avant de perdre le contrôle ou le confort.",
+    "ar": "ابدأ بهدوء وتنفس بانتظام وخفف الوتيرة قبل تدهور التحكم أو الشعور بالراحة."
+  },
+  "Use a slower walk or an easy seated cycle.": {
+    "fr": "Marchez plus lentement ou pédalez doucement en position assise.",
+    "ar": "استخدم مشيًا أبطأ أو دراجة جلوس خفيفة."
+  },
+  "If the session feels comfortable twice, add two minutes within your available time before increasing pace.": {
+    "fr": "Après deux séances confortables, ajoutez deux minutes dans votre temps disponible avant d’accélérer.",
+    "ar": "بعد حصتين مريحتين أضف دقيقتين ضمن وقتك المتاح قبل زيادة السرعة."
+  },
+  "Review the same aerobic test after four to six consistent weeks; a CPET requires its original testing setting.": {
+    "fr": "Réévaluez le même test aérobie après quatre à six semaines régulières ; le CPET exige son cadre de test habituel.",
+    "ar": "أعد نفس الاختبار الهوائي بعد أربعة إلى ستة أسابيع منتظمة؛ يتطلب CPET بيئة الاختبار الأصلية."
+  },
+  "Bodyweight squat to a stable chair": {
+    "fr": "Squat au poids du corps vers une chaise stable",
+    "ar": "قرفصاء بوزن الجسم نحو كرسي ثابت"
+  },
+  "Unloaded hip-hinge practice": {
+    "fr": "Charnière de hanche sans charge",
+    "ar": "تمرين ثني الورك دون وزن"
+  },
+  "Prone back raise with controlled shoulder movement": {
+    "fr": "Extension du dos au sol avec épaules contrôlées",
+    "ar": "رفع الظهر مستلقيًا على البطن مع تحكم بالكتفين"
+  },
+  "Assisted or bodyweight pull-up": {
+    "fr": "Traction assistée ou au poids du corps",
+    "ar": "عقلة بمساعدة أو بوزن الجسم"
+  },
+  "Use assistance as needed. Zero added test weight does not mean zero total resistance.": {
+    "fr": "Utilisez une assistance si nécessaire. Zéro charge ajoutée au test ne signifie pas zéro résistance totale.",
+    "ar": "استخدم المساعدة عند الحاجة. صفر وزن إضافي في الاختبار لا يعني انعدام المقاومة الكلية."
+  },
+  "Build controlled repetitions first. This equipment-free preparation is not equivalent to training or retesting a loaded one-repetition maximum.": {
+    "fr": "Développez d’abord des répétitions contrôlées. Cette préparation sans matériel ne remplace pas l’entraînement ou le test maximal avec charge.",
+    "ar": "ابنِ تكرارات متحكمًا فيها أولًا. هذا التحضير دون معدات لا يعادل تدريب أو اختبار أقصى تكرار بوزن."
+  },
+  "Review submaximal performance after four weeks. Do not schedule a weekly one-repetition maximum; use an appropriate supervised setting for maximal testing.": {
+    "fr": "Réévaluez une performance sous-maximale après quatre semaines. Pas de test maximal hebdomadaire ; utilisez un cadre adapté et supervisé pour les tests maximaux.",
+    "ar": "راجع الأداء دون الحد الأقصى بعد أربعة أسابيع. لا تختبر أقصى تكرار أسبوعيًا؛ استخدم بيئة مناسبة وتحت إشراف للاختبارات القصوى."
+  },
+  "Light farmer carry or stationary hold": {
+    "fr": "Marche du fermier légère ou maintien statique",
+    "ar": "حمل خفيف أثناء المشي أو الثبات"
+  },
+  "Gentle towel squeeze": {
+    "fr": "Serrage léger d’une serviette",
+    "ar": "عصر منشفة بلطف"
+  },
+  "Use a comfortable grip effort; keep breathing and stop before the grip fails.": {
+    "fr": "Utilisez une prise confortable, respirez et arrêtez avant l’échec.",
+    "ar": "استخدم قبضة بجهد مريح وتنفس وتوقف قبل فشل القبضة."
+  },
+  "Keep wrists neutral and shoulders relaxed.": {
+    "fr": "Gardez les poignets neutres et les épaules détendues.",
+    "ar": "حافظ على الرسغين مستقيمين والكتفين مرتاحين."
+  },
+  "Use a lighter object or a softer towel squeeze.": {
+    "fr": "Utilisez un objet plus léger ou serrez moins fort la serviette.",
+    "ar": "استخدم جسمًا أخف أو اعصر المنشفة بجهد أقل."
+  },
+  "After two comfortable sessions, add five seconds, up to thirty; then increase load slightly and return to fifteen seconds.": {
+    "fr": "Après deux séances confortables, ajoutez cinq secondes jusqu’à trente ; augmentez ensuite légèrement la charge et revenez à quinze secondes.",
+    "ar": "بعد حصتين مريحتين أضف خمس ثوان حتى ثلاثين؛ ثم زد الوزن قليلًا وعد إلى خمس عشرة ثانية."
+  },
+  "Controlled chair rise": {
+    "fr": "Lever de chaise contrôlé",
+    "ar": "نهوض متحكم به من الكرسي"
+  },
+  "Low-effort jump and soft landing": {
+    "fr": "Saut léger et réception douce",
+    "ar": "قفزة خفيفة وهبوط ناعم"
+  },
+  "Practice crisp controlled movements, not maximum height or distance.": {
+    "fr": "Pratiquez des mouvements nets et contrôlés, sans chercher la hauteur ou la distance maximale.",
+    "ar": "تدرّب على حركات واضحة ومتحكم فيها دون السعي لأقصى ارتفاع أو مسافة."
+  },
+  "Use a clear non-slip area; land quietly and reset fully between repetitions.": {
+    "fr": "Utilisez une zone dégagée non glissante ; réceptionnez doucement et replacez-vous entre les répétitions.",
+    "ar": "استخدم مساحة خالية غير زلقة واهبط بهدوء وأعد وضعيتك بين التكرارات."
+  },
+  "Replace jumping with controlled chair rises.": {
+    "fr": "Remplacez les sauts par des levers de chaise contrôlés.",
+    "ar": "استبدل القفز بالنهوض المتحكم به من الكرسي."
+  },
+  "Keep three quality repetitions. Add a set only after two comfortable sessions within the session budget; do not chase maximal height while fatigued.": {
+    "fr": "Gardez trois répétitions de qualité. Ajoutez une série après deux séances confortables si le temps le permet ; ne cherchez pas la hauteur maximale en état de fatigue.",
+    "ar": "حافظ على ثلاث تكرارات بجودة جيدة. أضف مجموعة بعد حصتين مريحتين ضمن وقت الحصة ولا تسعَ لأقصى ارتفاع أثناء التعب."
+  },
+  "Brisk marching with controlled knee lift": {
+    "fr": "Marche dynamique avec genou contrôlé",
+    "ar": "مشي نشيط في المكان مع رفع الركبة بتحكم"
+  },
+  "Relaxed ten-metre acceleration": {
+    "fr": "Accélération détendue sur dix mètres",
+    "ar": "تسارع هادئ لمسافة عشرة أمتار"
+  },
+  "Stay below maximum effort and finish each repetition in control.": {
+    "fr": "Restez sous l’effort maximal et terminez chaque répétition en contrôle.",
+    "ar": "ابقَ دون أقصى جهد وأنهِ كل تكرار بتحكم."
+  },
+  "Use a clear level surface and leave enough room to slow down gradually.": {
+    "fr": "Utilisez une surface plane dégagée et gardez assez d’espace pour ralentir progressivement.",
+    "ar": "استخدم سطحًا مستويًا خاليًا واترك مساحة كافية للتباطؤ تدريجيًا."
+  },
+  "Use comfortable walking or supported marching.": {
+    "fr": "Marchez confortablement ou pratiquez avec un appui.",
+    "ar": "استخدم مشيًا مريحًا أو مشيًا في المكان مع دعم."
+  },
+  "After two comfortable sessions, add one repeat within your time budget before adding speed. Never turn the weekly review into a fatigued maximal sprint.": {
+    "fr": "Après deux séances confortables, ajoutez une répétition dans votre temps disponible avant d’accélérer. Le bilan hebdomadaire ne doit pas devenir un sprint maximal en état de fatigue.",
+    "ar": "بعد حصتين مريحتين أضف تكرارًا ضمن الوقت المتاح قبل زيادة السرعة. لا تحوّل المراجعة الأسبوعية إلى عدو أقصى وأنت متعب."
+  },
+  "Use a stable chair against a wall; stand fully and sit down under control.": {
+    "fr": "Utilisez une chaise stable contre un mur ; levez-vous complètement et asseyez-vous en contrôle.",
+    "ar": "استخدم كرسيًا ثابتًا ملاصقًا للحائط وقف كاملًا واجلس بتحكم."
+  },
+  "Use your hands for assistance in practice; keep the recorded test protocol unchanged.": {
+    "fr": "Aidez-vous des mains pendant la pratique ; gardez le protocole du test enregistré.",
+    "ar": "استخدم يديك للمساعدة أثناء التدريب مع إبقاء بروتوكول الاختبار دون تغيير."
+  },
+  "Supported single-leg balance, eyes open": {
+    "fr": "Équilibre sur une jambe avec appui, yeux ouverts",
+    "ar": "توازن على ساق واحدة مع دعم والعينان مفتوحتان"
+  },
+  "Use a support within reach; stop before balance control is lost.": {
+    "fr": "Gardez un appui à portée de main ; arrêtez avant de perdre l’équilibre.",
+    "ar": "أبقِ دعمًا في متناول اليد وتوقف قبل فقدان التحكم بالتوازن."
+  },
+  "Practice beside a stable counter. Keep your eyes open during practice.": {
+    "fr": "Pratiquez près d’un support stable et gardez les yeux ouverts.",
+    "ar": "تدرّب بجوار سطح ثابت وأبقِ عينيك مفتوحتين."
+  },
+  "Keep both feet on the floor and shift weight gently.": {
+    "fr": "Gardez les deux pieds au sol et déplacez le poids doucement.",
+    "ar": "أبقِ القدمين على الأرض وانقل الوزن بلطف."
+  },
+  "After two controlled sessions, add five seconds per side, up to thirty, before reducing hand support. Do not practice eyes closed without appropriate support.": {
+    "fr": "Après deux séances contrôlées, ajoutez cinq secondes par côté jusqu’à trente avant de réduire l’appui. Ne pratiquez pas les yeux fermés sans support adapté.",
+    "ar": "بعد حصتين متحكم فيهما أضف خمس ثوان لكل جهة حتى ثلاثين قبل تقليل دعم اليد. لا تتدرب مغمض العينين دون دعم مناسب."
+  },
+  "Gentle knee-to-wall ankle mobility": {
+    "fr": "Mobilité douce de cheville, genou vers le mur",
+    "ar": "حركة كاحل لطيفة بتقريب الركبة للحائط"
+  },
+  "Stay within a comfortable range without forcing a stretch.": {
+    "fr": "Restez dans une amplitude confortable sans forcer l’étirement.",
+    "ar": "ابقَ ضمن مدى مريح دون إجبار التمدد."
+  },
+  "Keep the heel grounded and move the knee slowly over the toes.": {
+    "fr": "Gardez le talon au sol et avancez lentement le genou au-dessus des orteils.",
+    "ar": "أبقِ الكعب على الأرض وحرّك الركبة ببطء فوق أصابع القدم."
+  },
+  "Reduce the movement range and use support.": {
+    "fr": "Réduisez l’amplitude et utilisez un appui.",
+    "ar": "قلل مدى الحركة واستخدم الدعم."
+  },
+  "After two comfortable sessions, increase the controlled range slightly without lifting the heel.": {
+    "fr": "Après deux séances confortables, augmentez légèrement l’amplitude contrôlée sans lever le talon.",
+    "ar": "بعد حصتين مريحتين زد مدى الحركة قليلًا دون رفع الكعب."
+  },
+  "Generate a maintenance week": {
+    "fr": "Générer une semaine de maintien",
+    "ar": "أنشئ أسبوعًا للمحافظة على المستوى"
+  },
+  "Goals reached. Keep a manageable maintenance routine.": {
+    "fr": "Objectifs atteints. Gardez une routine de maintien réaliste.",
+    "ar": "تحققت الأهداف. حافظ على روتين مناسب للمحافظة على مستواك."
+  },
+  "Maintain this comfortable workload. Reassess when your measurements or goals change.": {
+    "fr": "Maintenez cette charge confortable. Réévaluez si vos mesures ou objectifs changent.",
+    "ar": "حافظ على هذا العبء المريح. أعد التقييم عندما تتغير قياساتك أو أهدافك."
+  },
+  "Choose your available equipment and movement preference.": {
+    "fr": "Choisissez le matériel disponible et votre préférence de mouvement.",
+    "ar": "اختر المعدات المتاحة وتفضيل الحركة."
+  },
+  "Enter a working load from above 0 to 500 kg, or leave it blank.": {
+    "fr": "Saisissez une charge supérieure à 0 et jusqu’à 500 kg, ou laissez vide.",
+    "ar": "أدخل وزن تدريب أكبر من صفر وحتى ٥٠٠ كغ أو اتركه فارغًا."
+  },
+  "Game scores use provisional anchors and a normal-distribution display. Each metric is scaled to its attainable game ceiling before averaging. Best-range readings receive full game credit without rewarding extremes. Thermal exposure is excluded. These are product rules, not validated health targets.": {
+    "fr": "Les scores utilisent des repères provisoires et une distribution normale. Chaque mesure est normalisée selon son plafond atteignable. Les plages cibles obtiennent le maximum sans récompenser les extrêmes. L’exposition thermique est exclue. Ce sont des règles du produit, pas des objectifs de santé validés.",
+    "ar": "تستخدم النقاط مرتكزات افتراضية وتوزيعًا طبيعيًا. يُطبّع كل قياس وفق سقفه الممكن قبل المتوسط. تمنح النطاقات المستهدفة كامل النقاط دون مكافأة القيم المتطرفة. يُستبعد التعرض الحراري. هذه قواعد للمنصة وليست أهدافًا صحية مثبتة."
+  },
+  "seconds": {
+    "fr": "secondes",
+    "ar": "ثوانٍ"
+  },
+  "minutes": {
+    "fr": "minutes",
+    "ar": "دقائق"
+  },
+  "metres": {
+    "fr": "mètres",
+    "ar": "أمتار"
+  },
+  "Routes can change recorded physical performance, short sleep duration and sleep regularity. Lab results and other readings stay fixed.": {
+    "fr": "Les parcours peuvent modifier les performances, le sommeil court et sa régularité. Les analyses et autres mesures restent fixes.",
+    "ar": "يمكن للمسارات تغيير الأداء البدني ومدة النوم القصيرة وانتظامه. تبقى التحاليل والقراءات الأخرى ثابتة."
+  },
+  "Record a physical performance test or a sleep habit measurement to build a program. Other measurements still contribute to your game standing.": {
+    "fr": "Enregistrez un test physique ou une mesure de sommeil pour créer un programme. Les autres mesures comptent toujours dans votre classement ludique.",
+    "ar": "سجّل اختبار أداء بدني أو قياسًا لعادات النوم لبناء برنامج. تبقى القياسات الأخرى ضمن ترتيبك التوضيحي."
+  },
+  "Evening wind-down and sleep diary": {
+    "fr": "Retour au calme du soir et journal du sommeil",
+    "ar": "تهدئة مسائية ومفكرة النوم"
+  },
+  "Consistent wake-time habit": {
+    "fr": "Habitude d’heure de réveil régulière",
+    "ar": "عادة الاستيقاظ في موعد ثابت"
+  },
+  "Set aside five quiet minutes to prepare for bed; turn off electronic devices thirty minutes before your intended bedtime.": {
+    "fr": "Réservez cinq minutes calmes pour préparer le coucher ; éteignez les écrans trente minutes avant l’heure prévue.",
+    "ar": "خصص خمس دقائق هادئة للاستعداد للنوم وأطفئ الأجهزة الإلكترونية قبل موعد النوم المقصود بثلاثين دقيقة."
+  },
+  "Keep a consistent wake time and allow enough sleep opportunity for your needs; do not force sleep or reduce needed rest.": {
+    "fr": "Gardez une heure de réveil régulière et assez de temps pour vos besoins ; ne forcez pas le sommeil et ne réduisez pas le repos nécessaire.",
+    "ar": "حافظ على موعد استيقاظ ثابت وفرصة نوم كافية لاحتياجاتك؛ لا تجبر نفسك على النوم ولا تقلل الراحة اللازمة."
+  },
+  "Choose a realistic wake time and keep it consistent across workdays and days off.": {
+    "fr": "Choisissez une heure de réveil réaliste et régulière les jours travaillés et libres.",
+    "ar": "اختر وقت استيقاظ مناسبًا وحافظ عليه في أيام العمل والعطلة."
+  },
+  "Record bedtime and wake time each morning using the same diary or device.": {
+    "fr": "Notez chaque matin les heures de coucher et de réveil avec le même journal ou appareil.",
+    "ar": "سجّل وقت النوم والاستيقاظ كل صباح بنفس المفكرة أو الجهاز."
+  },
+  "Review the same seven-day measurement after two weeks. Habit completion does not guarantee a sleep score change.": {
+    "fr": "Réévaluez la même mesure sur sept jours après deux semaines. Réaliser l’habitude ne garantit pas un changement de score.",
+    "ar": "راجع نفس قياس الأيام السبعة بعد أسبوعين. إنجاز العادة لا يضمن تغير درجة النوم."
+  },
+  "Daily habit time is separate from the physical session budget.": {
+    "fr": "Le temps des habitudes quotidiennes est distinct de la séance physique.",
+    "ar": "وقت العادات اليومية منفصل عن وقت الحصة البدنية."
+  },
+  "Sleep habits · CDC": {
+    "fr": "Habitudes de sommeil · CDC",
+    "ar": "عادات النوم · CDC"
+  },
+  "daily": {
+    "fr": "chaque jour",
+    "ar": "يوميًا"
+  },
+  "Daily habits": {
+    "fr": "Habitudes quotidiennes",
+    "ar": "العادات اليومية"
+  },
+  "Scoring has been updated. Choose a tier again to refresh this scenario; your saved actions are retained.": {
+    "fr": "Le calcul a été mis à jour. Choisissez à nouveau un palier pour actualiser ce scénario ; vos actions enregistrées sont conservées.",
+    "ar": "تم تحديث الحساب. اختر المستوى مجددًا لتحديث السيناريو؛ تبقى مهامك المحفوظة كما هي."
+  },
+  "Routes change recorded physical performance and selected sleep habits. Programs use available days, session time, experience, equipment, movement preference, recovery and dated completion history. Completing actions does not prove improvement. No duration to a target is predicted.": {
+    "fr": "Les parcours modifient les performances et certaines habitudes de sommeil. Les programmes utilisent jours, temps, expérience, matériel, préférences, récupération et historique daté. Cocher une action ne prouve pas une amélioration. Aucun délai n’est prédit.",
+    "ar": "تغيّر المسارات الأداء البدني وبعض عادات النوم. تعتمد البرامج على الأيام والوقت والخبرة والمعدات وتفضيل الحركة والتعافي وسجل الإنجاز. إكمال المهام لا يثبت التحسن ولا يُحدد موعد للوصول."
   }
 }

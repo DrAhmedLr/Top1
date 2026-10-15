@@ -81,7 +81,7 @@ const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map
 const assignments: Record<PillarId, readonly (readonly string[])[]> = {
   bodymarkers: [ ['body_fat','waist_height_ratio'], ['fasting_glucose','hba1c','ggt'], ['apob','fasting_insulin','hscrp','lpa','homocysteine','cystatin_c','visceral_fat'] ],
   strength: [ ['rhr','sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','grip_combined','vo2_max','hrr_1min'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','zone2_power','pefr','farmers_carry','sprint_10m'] ],
-  recovery: [ ['total_sleep','sleep_efficiency','sauna_minutes','cold_plunge_minutes'], ['hrv','circadian_regularity'], ['thermal_hrv_rebound','reaction_time'] ],
+  recovery: [ ['total_sleep','sleep_efficiency'], ['hrv','circadian_regularity'], ['reaction_time'] ],
 };
 const additions: Row[] = [
  ['grip_combined','Combined handgrip strength','kg','Reference pending',1,'linear',0,1,0,240,'NHANES muscle strength protocol','Sum the best of three trials from each hand. This is distinct from single-hand grip.'],

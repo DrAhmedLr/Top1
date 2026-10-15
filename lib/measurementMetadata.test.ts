@@ -22,3 +22,5 @@ test('wearable imports retain timestamps, label estimates and do not overwrite n
  const result=transformHealthPayload(payload,{rhr:52},{rhr:{measuredAt:'2026-10-09T10:00:00Z'}});
  assert.equal(result.values.rhr,52);assert.equal(result.values.vo2_max,50);assert.equal(result.measurementDetails.vo2_max.method,'wearable_estimate');
 });
+
+test('retired thermal observations remain valid stored legacy values',()=>{const old={sauna_minutes:75,cold_plunge_minutes:13,thermal_hrv_rebound:1.5};assert.deepEqual(normalizeValues(old),old);});
