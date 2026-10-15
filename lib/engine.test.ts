@@ -92,3 +92,5 @@ test('tier assignments follow the brief and omit no active metric',()=>{
  assert.equal(m('sauna_minutes').tier,'tier1_everyday');assert.equal(m('thermal_hrv_rebound').tier,'tier3_precision');
  assert.equal(m('vo2_max').tier,'tier2_standard');
 });
+
+test('scenario sandbox can preview one eligible input without unlocking a saved assessment',()=>{const values={pushups:25},d={age:35,sex:'male' as const},result=evaluate(values,d);assert.equal(result.ready,false);assert.equal(simulate(values,d,result.modelScore+1,'Balanced').reason,'insufficient-data');const preview=simulate(values,d,result.modelScore+1,'Balanced',{}, {allowPartial:true});assert.equal(preview.reason,'reached');assert.ok(preview.targets.pushups!>25);assert.equal(evaluate(values,d).ready,false);assert.deepEqual(values,{pushups:25});});

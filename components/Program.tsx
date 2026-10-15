@@ -1,10 +1,12 @@
 'use client';
+import {MetricIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import {useEffect,useRef,useState} from 'react';
 import {captureEvent} from '@/lib/analytics';
 import {discardAcknowledgedDraft} from '@/lib/drafts';
 import {useAuth} from './providers/AuthProvider';
 import Scenarios from './Scenarios';
+import {addScenarioSteps,type ScenarioSelection} from '@/lib/scenarioPlan';
 import {emptyPlan,normalizePlan,type WeeklyPlan,type PlanFocus} from '@/lib/program';
 import {completedOn,dayInZone,emptyTimeline,normalizeTimeline,recordRoutine,routineProgress,scheduledTasks,type RoutineTimeline} from '@/lib/routineHistory';
 import type {Values,Demographics} from '@/lib/registry';
@@ -13,6 +15,7 @@ const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 export default function Program({values,demographics,details,onMeasurements,onNavigationRisk}:{values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onScience:()=>void;onNavigationRisk?:(risk:boolean)=>void}){
  const {t:tr}=useTranslations();
 
+ const [goal,setGoal]=useState<ScenarioSelection|null>(null);
  const auth=useAuth(),owner=auth.user?.id??'guest',ownerRef=useRef(owner);ownerRef.current=owner;
  const mounted=useRef(true);useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;onNavigationRisk?.(false);};},[onNavigationRisk]);
  const [,setClock]=useState(0);useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),60000);return()=>clearInterval(timer);},[]);
@@ -30,6 +33,9 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   }catch(e){if(active)setError(e instanceof Error?e.message:'Unable to load your plan.');}}
   void load();return()=>{active=false;};
  },[owner,auth.ready,attempt,onNavigationRisk]);
+ useEffect(()=>{setGoal(null);try{const raw=JSON.parse(localStorage.getItem(`top1-scenario-${owner}`)??'null');if(raw&&Number.isFinite(raw.modelTarget)&&Array.isArray(raw.targets)&&raw.targets.length<=12&&raw.targets.every((g:ScenarioSelection['targets'][number])=>g&&typeof g.name==='string'&&typeof g.unit==='string'&&Number.isFinite(g.target)&&Number.isFinite(g.current)))setGoal(raw);}catch{}},[owner]);
+ function chooseGoal(next:ScenarioSelection){setGoal(next);try{localStorage.setItem(`top1-scenario-${owner}`,JSON.stringify(next));}catch{setError('The scenario could not be stored on this device.');}document.getElementById('weekly-plan')?.scrollIntoView({behavior:'smooth',block:'start'});}
+ function addGoal(){if(!goal)return;try{setPlan(addScenarioSteps(plan,goal,(kind,name,target)=>kind==='review'?tr('Review recovery and adjust the next session'):kind==='practice'?tr('Practice {name} with a suitable session').replace('{name}',tr(name)):tr('Retest {name} toward {target} using the same protocol').replace('{name}',tr(name)).replace('{target}',target),()=>crypto.randomUUID()));setNotice('Scenario steps added. Review the days and save your plan.');}catch(e){setError(e instanceof Error?e.message:'Check the scenario targets.');}}
  const dirty=JSON.stringify(plan)!==saved.current;
  const needsDatedTracking=ready&&plan.tasks.length>0&&timeline.schedules.length===0;
  useEffect(()=>{if(!dirty&&!label.trim()&&!busy)return;const warn=(event:BeforeUnloadEvent)=>{event.preventDefault();event.returnValue='';};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[dirty,label,busy]);
@@ -42,7 +48,9 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   try{discardAcknowledgedDraft(localStorage,`top1-program-draft-${account}`,JSON.stringify(next));}catch{setNotice('Saved. Local draft cleanup is unavailable.');}return true;
  }catch(e){if(mounted.current&&ownerRef.current===account)setError(e instanceof Error?e.message:'Save failed; your draft is retained.');}finally{if(mounted.current&&ownerRef.current===account)setBusy(false);}}
  const progress=routineProgress(timeline,today),todays=scheduledTasks(timeline,today).filter(t=>t.days.includes(weekday));
- return <><section className="card potential-intro"><h2>{tr("Explore your next step")}</h2><p>{tr("Build your own routine below, or explore hypothetical changes to your recorded capacity inputs. Scenarios explain the experimental model; they are not predictions or training prescriptions.")}</p><a className="text-link" href="#potential-scenarios" onClick={()=>{const panel=document.getElementById("potential-scenarios") as HTMLDetailsElement|null;if(panel)panel.open=true;}}>{tr("Explore my scenarios")}</a></section><section className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly plan")}</h2><p>{tr("Your chosen routine. Schedule changes start tomorrow.")}</p></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
+ return <><section id="potential-scenarios" className="potential-first"><div className="potential-title"><span className="eyebrow">{tr('YOUR NEXT LEVEL')}</span><h2>{tr('Your Potential')}</h2><p>{tr('Explore a hypothetical target, see the measurements behind it, then build weekly steps toward it.')}</p></div><Scenarios values={values} demographics={demographics} details={details} onMeasurements={onMeasurements} onChoose={chooseGoal}/></section><section id="weekly-plan" className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly plan")}</h2><p>{tr("Small actions. Consistent check-ins. Your own pace.")}</p></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
+ <div className="weekly-quest"><progress max={progress.target||1} value={progress.done} aria-label={tr('Weekly plan completion')}/><span>{tr(progress.done?'Keep your momentum':'Your next step starts here')}</span></div>
+ {goal&&ready?<div className="chosen-scenario"><h3>{tr('Your chosen scenario')}</h3><small>{tr('Scenario target saved on this device.')}</small><ul>{goal.targets.map(g=><li key={g.id}><span className="metric-title"><MetricIcon id={g.id}/>{tr(g.name)}</span><bdi>{g.current} → {Number(g.target.toFixed(2))} {g.unit}</bdi></li>)}</ul><p>{tr('Targets describe a hypothetical result, not a promise for this week. Adjust sessions to your experience and circumstances.')}</p><button className="secondary-button" disabled={!ready||busy} onClick={addGoal}>{tr('Add scenario steps to my plan')}</button></div>:<p className="chosen-scenario">{tr('Choose a scenario above to connect it to your weekly plan.')}</p>}
  {!ready?<p role="status">{tr(error||'Loading your plan…')}</p>:<>
  <label>{tr("Focus")}<select aria-label={tr("Program focus")} value={plan.focus} disabled={busy} onChange={e=>setPlan({...plan,focus:e.target.value as PlanFocus})}><option value="consistency">{tr("Consistency")}</option><option value="strength">{tr("Strength & fitness")}</option><option value="recovery">{tr("Recovery")}</option></select></label>
  <h3>{tr("Today")}</h3>{todays.length?todays.map(t=><label className="program-task" key={t.id}><input type="checkbox" checked={completedOn(timeline,t.id,today)} disabled={busy||dirty} onChange={()=>void save(plan,{taskId:t.id,completed:!completedOn(timeline,t.id,today)})}/><span>{t.label}</span></label>):<p>{tr("No actions scheduled today.")}</p>}{dirty&&<p>{tr("Save your routine before recording completions.")}</p>}
@@ -52,5 +60,5 @@ export default function Program({values,demographics,details,onMeasurements,onNa
  {needsDatedTracking&&<p>{tr("Start tracking from today. Earlier check-ins are retained; earlier schedules are unknown.")}</p>}
  {progress.unknownDays>0&&timeline.schedules.length>0&&<p>{tr("Earlier schedule details were not recorded. Those days are excluded from adherence totals.")}</p>}
  <details><summary>{tr("Routine history")}</summary>{timeline.completions.length?<ul>{timeline.completions.slice(-50).reverse().map(e=><li key={e.id}>{tr(e.date)} · {e.label} · {tr(e.completed?'Completed':'Unchecked')}{tr(e.legacy?' · retained legacy check-in':'')}</li>)}</ul>:<p>{tr("No recorded check-ins yet.")}</p>}<p>{tr("Archived actions keep their history. The account export includes the complete timeline.")}</p></details>
- </>}{error&&!ready&&<button className="secondary-button" onClick={()=>setAttempt(n=>n+1)}>{tr("Retry loading")}</button>}{error&&ready&&<p role="alert" className="field-error">{tr(error)}</p>}{notice&&<p role="status">{tr(notice)}</p>}</section><details id="potential-scenarios" className="card program-scenarios"><summary>{tr("Explore hypothetical scenarios")}</summary><Scenarios values={values} demographics={demographics} details={details} onMeasurements={onMeasurements}/></details></>;
+ </>}{error&&!ready&&<button className="secondary-button" onClick={()=>setAttempt(n=>n+1)}>{tr("Retry loading")}</button>}{error&&ready&&<p role="alert" className="field-error">{tr(error)}</p>}{notice&&<p role="status">{tr(notice)}</p>}</section></>;
 }

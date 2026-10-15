@@ -3,7 +3,7 @@ import {useTranslations} from '@/components/providers/LocaleProvider';
 import {useRef,useState} from 'react';
 import {LOCAL_PROFILE_KEYS} from '@/lib/profile';
 import Modal from './Modal';
-const keys=[...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest','top1-favorites-guest'];
+const keys=[...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest','top1-favorites-guest','top1-scenario-guest'];
 export default function BrowserDataControls({onCleared}:{onCleared:()=>void}){
  const {t:tr}=useTranslations();
 

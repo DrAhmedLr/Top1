@@ -14,8 +14,14 @@ The requested display boundaries are 1, 2.5, 5, 7.5, 10, 15, 20, 25, 30, 35, 45,
 
 Eligible, documented VO2 treadmill and international-protocol grip tests have separate published individual-test comparisons. Each can display with just one measurement. FRIEND 2022 publishes decile thresholds. The display encloses the entire source interval within product boundaries: P60–P70 is top 30–40% in the study cohort, shown as Top 30–45%. Rounded threshold ties conservatively span both neighboring intervals. Open tails remain open: above P90 is Top 10% or better, never a fabricated Top 1% assignment. A source interval crossing the final boundary spans the 65%+ group.
 
-VO2 uses a named US laboratory cohort; grip uses published international smoothed norms for matching age/sex groups. Neither is a universally agreed whole-person rank. Missing measurements never become zero. The unvalidated composite remains available inside calculation details and cannot produce a population rank.
+VO2 uses a named US laboratory cohort; grip uses published international smoothed norms for matching age/sex groups. Neither is a universally agreed whole-person rank. Missing measurements never become zero. The unvalidated composite cannot produce an empirical population rank. With the owner’s explicit approval, the dashboard presents a separate, visibly labeled illustrative game estimate. It applies the mathematical normal CDF to the existing weighted provisional model units, then uses the product brackets. This distribution is an assumption, not observed population data. Clinical/recovery tracking-only values are excluded; missing entries are not penalized. Adding or removing eligible inputs can change the estimate. Source-backed per-test bands remain separate inside the section details.
 
 ## Public source
 
 The owner selected the MIT license. The application source is available under the root LICENSE file. Research papers, reference data and third-party dependencies retain their own terms; the application license does not relicense those materials.
+
+## Stitch-inspired experience and potential planning
+
+The dashboard uses a fire/ice/emerald SVG prism and gradients adapted to the original Stitch design direction. Decorative animation is independent of recorded values and respects reduced-motion settings. Icons share one mapping across categories and metrics.
+
+Your Potential shows the scenario sandbox before the weekly plan. One eligible performance input can be explored with `allowPartial` in the sandbox; this does not change the three-input requirement for a saved experimental assessment. Model steps are not weeks or an expected training rate. An explicit action chooses a scenario, another appends editable routine suggestions, and the existing Save action persists the reviewed plan. Existing actions are never overwritten; the eight-action limit remains. Chosen scenario context is stored on this device, scoped to the guest/account, while saved routine actions use the existing storage contract. Guest-data deletion includes guest scenario context, and account deletion cleans up account-scoped scenario context.

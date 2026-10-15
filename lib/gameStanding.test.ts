@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {illustrativeTop,gameStanding} from './gameStanding';
+import {evaluate} from './engine';
+import {addScenarioSteps} from './scenarioPlan';
+import {emptyPlan} from './program';
+const d={age:35,sex:'male' as const};
+test('illustrative display respects the top and bottom limits, never ranks missing data',()=>{assert.equal(illustrativeTop(undefined),null);assert.equal(illustrativeTop(NaN),null);assert.equal(illustrativeTop(3),'1%');assert.equal(illustrativeTop(-3),'65%+');assert.equal(gameStanding(evaluate({},d)).total,null);});
+test('only eligible performance inputs contribute; missing and clinical data never become a score',()=>{const a=gameStanding(evaluate({pushups:30},d)),b=gameStanding(evaluate({pushups:30,hba1c:5.2,total_sleep:450},d));assert.ok(a.total);assert.equal(a.total,b.total);assert.equal(b.sections.bodymarkers,null);assert.equal(b.sections.recovery,null);assert.equal(b.eligibleCount,1);});
+test('scenario suggestions append to the existing plan without saving or overwriting history',()=>{const plan=emptyPlan();plan.tasks=[{id:'existing',label:'My action',days:[2],completed:[]}];let i=0;const next=addScenarioSteps(plan,{modelTarget:70,targets:[{id:'pushups',name:'Push-ups',unit:'reps',current:20,target:30}]},(kind,name,target)=>`${kind} ${name} ${target}`,()=>`task-${++i}`);assert.equal(plan.tasks.length,1);assert.deepEqual(next.tasks[0],plan.tasks[0]);assert.equal(next.tasks.length,4);assert.ok(next.tasks.some(t=>t.label.includes('30 reps')));assert.ok(next.tasks.every(t=>t.days.every(d=>d>=1&&d<=7)));});
+test('plan capacity rejects added steps without replacing existing tasks',()=>{const plan=emptyPlan();plan.tasks=Array.from({length:7},(_,i)=>({id:String(i),label:'Existing',days:[1],completed:[]}));assert.throws(()=>addScenarioSteps(plan,{modelTarget:70,targets:[{id:'pushups',name:'Push-ups',unit:'reps',current:20,target:30}]},()=>'',()=>crypto.randomUUID()),/Make room/);assert.equal(plan.tasks.length,7);});
