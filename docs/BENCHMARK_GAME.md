@@ -40,21 +40,31 @@ Explicit extra anchors (mean, deviation): combined grip 95/20 kg (56/20 for the
 female option); 10m sprint 2.2/0.35 seconds. Other overrides are enumerated in the
 module. These are product assumptions. They have not been externally validated.
 
+The active protocol contains 35 optional metrics. Sauna duration, cold-plunge
+duration and thermal HRV rebound have been retired from entry, standings,
+coverage, routes and global scoring. Older raw observations remain stored and
+exportable through the existing legacy-data paths; no records are deleted.
+
 Health-related readings use disclosed broad product plateaus where implemented
 instead of rewarding ever more extreme readings. Sleep plateaus at 420–540 min.
-Body-fat game plateaus are sex dependent. These ranges are game choices, not
-clinical advice. Sauna minutes, cold exposure minutes and thermal HRV rebound
-receive a **neutral z=0** for every valid value: no dose or exposure is rewarded.
-That neutral position maps to the same illustrative Top 55% for every entry.
+Body-fat game plateaus are sex dependent. These are game choices, not clinical
+advice. Resting heart rate and useful recovery measures are retained.
 
-Scores are capped at -3/+3 and mapped through a normal CDF to enclosing tiers:
-1, 2.5, 5, 7.5, 10, 15, 20, 25, 30, 35, 45, 55, 65, then 65%+.
+Before aggregation, divide each raw metric z-score by its attainable positive
+ceiling and multiply by 3, then clamp to [-3,+3]. A plateau's raw ceiling is 1;
+a linear metric's ceiling is the smaller of 3 and its best valid endpoint's raw
+z-score. Thus every active metric can earn full game credit at an attainable
+value, including sleep and resting heart rate. This normalization fixes the
+previous ceiling defect; it does **not** establish population rarity. The score
+maps through a normal CDF into the same asymmetric game tiers. Published test
+percentile bands stay separate and are never recalibrated to invent precision.
+
 Each category averages its recorded metric z-scores. The overall game averages
 populated category means equally. Missing and invalid values are excluded,
 never filled as zero. Adding/removing metrics or categories changes the basis.
 
-Published test bands supersede the illustrative number on a compatible test
-card. Category/global rankings remain game estimates; published test percentiles
+Every test card leads with its normalized game estimate. Compatible published
+test bands appear separately, with their own source-resolution limit. Category/global rankings remain game estimates; published test percentiles
 are not averaged. The pyramid uses equal-height display tiers, not population
 areas. The current tier is highlighted, and reduced-motion settings are honored.
 
@@ -67,7 +77,7 @@ itself as illustrative. Neither artifact is a clinical health score.
 1. See the current game tier on the pyramid and choose a better tier.
 2. Compare focused (one metric), balanced (up to two) and broader (up to three)
    routes. The deterministic what-if search considers only already-recorded,
-   trainable physical capacity measurements (including explicitly enabled game-only combined grip, zone-2 power and sprint time); other values stay fixed.
+   trainable physical capacity measurements (including explicitly enabled game-only combined grip, zone-2 power and sprint time) or short-sleep / regularity habit measures; other values stay fixed.
 3. Inspect raw target measurements and generate an editable weekly program.
 
 Route increments and the 50%-or-five-increments cap are product choices, not
@@ -102,3 +112,41 @@ actions remain. Stable generated action IDs retain check-in links. Saving uses
 the existing versioned routine flow; historical schedules remain intact. The
 scenario and preferences remain scoped to the current account on this device.
 Clinical markers and thermal exposure never become automated optimization tasks.
+
+## Detailed session prescriptions
+
+The generated session preview now specifies exercises, sets, repetitions or
+duration/distance, rest, effort, form cues, an easier alternative, progression
+conditions and reassessment guidance. Work + inter-set rest + transitions +
+warm-up + cool-down fit within the chosen time budget. The routine stores concise
+matching dose/rest labels; full guidance is displayed in the program preview.
+
+Choose home/gym equipment and standard/gentle movement. Gentle mode replaces
+jumps/sprints with preparation exercises and labels them as alternatives, not
+equivalent test practice. Working weights for barbell lifts are optional values
+entered by the user, never inferred from a percentile or an unverified bodyweight.
+At low push-up capacity the program uses an incline regression. Progression is
+conditional on two comfortable sessions and does not happen merely from checking
+boxes. The program is focused practice, not a claim of a perfect personalized
+or comprehensive clinical training prescription.
+
+Training principles: https://acsm.org/resistance-training-guidelines-update-2026/
+The specific template choices, conservative starting doses and time budgets are
+TOP1 product rules, not directly validated individualized study prescriptions.
+
+When the selected tier or measurement goals are already reached, the planner can
+generate a maintenance week. Equal baseline/target values use finite achieved
+progress; a later drop is not treated as continued success. No above-Top-1%
+target is introduced.
+
+Short sleep duration and sleep regularity can also generate daily, five-minute
+habits, separate from the physical-session budget: consistent sleep opportunity,
+wake time, wind-down and a matched diary/device. These actions follow general
+CDC sleep-habit guidance, not a guaranteed numerical response. Routes never
+increase sleep past its plateau, advise forced sleep or automatically prescribe
+less sleep for a long-sleep observation. Habit tasks are scheduled daily, not
+just on workout days. Source: https://www.cdc.gov/sleep/about/
+
+Game display version: `2-attainable-35`. Older saved scenarios retain raw targets
+and routines, but their stale projected rank is hidden and a refresh notice is
+shown. The user reselects a tier to regenerate under the current rules.

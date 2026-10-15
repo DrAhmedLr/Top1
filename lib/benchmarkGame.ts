@@ -2,7 +2,8 @@ import {activeMetrics,type Values,type Demographics,type PillarId} from './regis
 import {valid,clamp} from './engine';
 import {getMetricCohortNorm} from './demographics';
 import {illustrativeTop} from './gameStanding';
-export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['zone2_power','grip_combined','sprint_10m']);
+export const BENCHMARK_GAME_VERSION='2-attainable-35';
+export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['zone2_power','grip_combined','sprint_10m','total_sleep','circadian_regularity']);
 /** Entertainment layer only. These anchors are product assumptions, not
  * population norms, clinical targets or a universal scientific consensus.
  * Never used in the scientific engine, signed reports or training optimizer. */
@@ -10,15 +11,19 @@ export function metricGameEstimate(id:string,value:number,d:Demographics){
  const m=activeMetrics.find(m=>m.id===id);if(!m||!valid(m,value))return null;
  let mean=m.mean,sd=m.sd;
  try{const r=getMetricCohortNorm(id,d);mean=r.mean;sd=r.stdDev;}catch{}
- const overrides:Record<string,[number,number]>={grip_combined:[d.sex==='female'?56:95,20],sprint_10m:[2.2,.35],waist_height_ratio:[.5,.08],fasting_glucose:[95,15],sauna_minutes:[60,30],cold_plunge_minutes:[10,5]};
+ const overrides:Record<string,[number,number]>={grip_combined:[d.sex==='female'?56:95,20],sprint_10m:[2.2,.35],waist_height_ratio:[.5,.08],fasting_glucose:[95,15]};
  if(overrides[id])[mean,sd]=overrides[id];
  // Prevent endlessly rewarding lower clinical readings, extreme body leanness,
  // sleep duration or thermal exposure. Plateaus are disclosed game policies.
- const plateaus:Record<string,[number,number]>={total_sleep:[420,540],body_fat:d.sex==='female'?[20,30]:[12,22],bp_systolic:[110,125],rhr:[50,65],hba1c:[4.8,5.6],fasting_glucose:[75,99],cystatin_c:[.7,1],fasting_insulin:[3,8],homocysteine:[5,10],waist_height_ratio:[.4,.5],sauna_minutes:[0,90],cold_plunge_minutes:[0,15]};
+ const plateaus:Record<string,[number,number]>={total_sleep:[420,540],body_fat:d.sex==='female'?[20,30]:[12,22],bp_systolic:[110,125],rhr:[50,65],hba1c:[4.8,5.6],fasting_glucose:[75,99],cystatin_c:[.7,1],fasting_insulin:[3,8],homocysteine:[5,10],waist_height_ratio:[.4,.5]};
  const range=plateaus[id];
- const neutral=['sauna_minutes','cold_plunge_minutes','thermal_hrv_rebound'].includes(id);
- const z=neutral?0:range?1-Math.max(range[0]-value,0,value-range[1])**2/sd**2:m.polarity*(value-mean)/sd;
- return {z:clamp(z,-3,3),top:illustrativeTop(clamp(z,-3,3))!};
+ const z=range?1-Math.max(range[0]-value,0,value-range[1])**2/sd**2:m.polarity*(value-mean)/sd;
+ // Each metric reaches full game credit at its own attainable ceiling.
+ // A useful plateau is fully credited without rewarding more extreme values.
+ const ceiling=range?1:Math.min(3,m.polarity*((m.polarity===1?m.max:m.min)-mean)/sd);
+ if(ceiling<=0)return null;
+ const normalized=clamp(z/ceiling*3,-3,3);
+ return {z:normalized,top:illustrativeTop(normalized)!,ceiling,rawZ:z};
 }
 export function benchmarkGame(values:Values,d:Demographics){
  const rows=activeMetrics.flatMap(m=>{const x=values[m.id];if(!valid(m,x))return [];const estimate=metricGameEstimate(m.id,x,d);return estimate?[{id:m.id,pillar:m.pillar,...estimate}]:[];});
