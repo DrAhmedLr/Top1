@@ -19,3 +19,13 @@ Published rounded threshold matches and bands are reported without interpolation
 The 2015 reference remains preserved in source for historical provenance. Signed 6.1 snapshots keep their model version; new calculations use 2022. These versions must not be compared as unchanged measurements under one model. The reference update does not validate the composite.
 
 Composite calibration still requires a defined target population, permitted joint participant data for the same test battery, documented sampling design/weights, frozen normalization, disjoint independent validation and justified uncertainty. No such dataset is connected. Separate unrelated cohorts cannot be joined into fictitious participants. An individual source-backed VO₂ comparison does not validate other metrics or clinical outcomes.
+
+## Individual grip-strength comparison
+
+Tomkinson GR, Lang JJ, Rubin L, et al. International norms for adult handgrip strength. Journal of Sport and Health Science 2025;14:101014. DOI: https://doi.org/10.1016/j.jshs.2024.101014. Author repository full text: https://publikationen.bibliothek.kit.edu/1000183719/163164559.
+
+Table 2 absolute kilogram quantiles P5, P10, P20, P30, P40, P50, P60, P70, P80, P90 and P95 are transcribed in lib/gripReference.ts for males and females, five-year groups 20–99 and the open 100+ group. The article is CC BY 4.0; attribution is retained here and in the source module. Display bands are TOP1's conservative grouping of the published quantiles. No interpolation or extreme-tail extrapolation is applied.
+
+These are population-weighted, smoothed norms synthesized from studies using harmonized pseudo-data, not an individual-participant worldwide probability sample or a validated whole-body strength index. The reference protocol uses a hydraulic dynamometer, seated position, flexed elbow, neutral forearm, hand-adjusted handle, both hands, three attempts per hand, maximum single result. A summed combined-grip value and generic single-hand measurement cannot be substituted. Date, age at test, reference sex and compatible protocol must be documented; measurements and matching remain self-reported.
+
+Per-test comparisons work with one eligible measurement. They do not change the experimental composite's parameters or validate its population distribution. Unranked observations remain recorded and never become zero.

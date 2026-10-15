@@ -12,9 +12,9 @@ The default experience is guest-first: visitors choose when to start and account
 
 The requested display boundaries are 1, 2.5, 5, 7.5, 10, 15, 20, 25, 30, 35, 45, 55 and 65 percent, followed by 65%+. No sub-1% label is displayed. Boundaries define display categories, not a new statistical model.
 
-Only eligible, documented VO2 treadmill tests currently have a published individual-test comparison. FRIEND 2022 publishes decile thresholds. The display encloses the entire source interval within product boundaries: P60–P70 is top 30–40% in the study cohort, shown as Top 30–45%. Rounded threshold ties conservatively span both neighboring intervals. Open tails remain open: above P90 is Top 10% or better, never a fabricated Top 1% assignment. A source interval crossing the final boundary spans the 65%+ group.
+Eligible, documented VO2 treadmill and international-protocol grip tests have separate published individual-test comparisons. Each can display with just one measurement. FRIEND 2022 publishes decile thresholds. The display encloses the entire source interval within product boundaries: P60–P70 is top 30–40% in the study cohort, shown as Top 30–45%. Rounded threshold ties conservatively span both neighboring intervals. Open tails remain open: above P90 is Top 10% or better, never a fabricated Top 1% assignment. A source interval crossing the final boundary spans the 65%+ group.
 
-This is a named US laboratory cohort comparison, not a universally agreed or worldwide rank. Missing measurements never become zero. The unvalidated composite remains available inside calculation details and cannot produce a population rank.
+VO2 uses a named US laboratory cohort; grip uses published international smoothed norms for matching age/sex groups. Neither is a universally agreed whole-person rank. Missing measurements never become zero. The unvalidated composite remains available inside calculation details and cannot produce a population rank.
 
 ## Public source
 
