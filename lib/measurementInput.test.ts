@@ -18,3 +18,11 @@ test('incomplete and malformed measurements stay invalid', () => {
     assert.equal(parseMeasurementInput(raw), 'NaN', raw);
   }
 });
+
+test('French decimal commas and Arabic numerals preserve the intended measurement',()=>{
+ assert.equal(parseMeasurementInput('٢٫٥'),'2.5');
+ assert.equal(parseMeasurementInput('۲,۵'),'2.5');
+ assert.equal(parseMeasurementInput('٣،٥'),'NaN');
+ assert.equal(parseMeasurementInput('٧٫٥',60),'450');
+ assert.equal(parseMeasurementInput('١٬٠٠٠'),'NaN');
+});

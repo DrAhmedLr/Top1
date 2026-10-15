@@ -31,7 +31,7 @@ export function scoringEligibility(m:Metric,d:Demographics,details:MeasurementMe
     if(context.method!=='direct_cpet'||context.exerciseMode!=='treadmill')return {status:'protocol-required',reason:'The published reference requires direct treadmill CPET. Cycle tests, estimates and unknown modalities remain tracking only.'};
     if(!context.measuredAt||context.protocol?.id!=='cpet_treadmill_v1'||!protocolComplete(m.id,context.protocol))return {status:'protocol-required',reason:'The FRIEND reference requires a dated direct treadmill CPET report, peak RER ≥ 1.0, and confirmed match to its population (no known cardiovascular disease or COPD). Unknown or unmatched context remains tracking only.'};
     const age=context.ageAtMeasurement;
-    if(!Number.isInteger(age)||age!<20||age!>79)return {status:'unsupported-cohort',reason:'Record a test age of 20–79 for the supported treadmill cohort.'};
+    if(!Number.isInteger(age)||age!<20||age!>89)return {status:'unsupported-cohort',reason:'Record a test age of 20–89 for the supported treadmill cohort.'};
     if(age!>d.age)return {status:'invalid-context',reason:'The test age exceeds your profile age. Check both before using this reference.'};
     if(context.measuredAt){const years=new Date(now).getUTCFullYear()-new Date(context.measuredAt).getUTCFullYear();if(Math.abs((d.age-age!)-years)>1)return {status:'invalid-context',reason:'The test date and recorded ages do not agree. Check the test age and your current profile age.'};}
   }

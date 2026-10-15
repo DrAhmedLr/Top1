@@ -1,3 +1,4 @@
+import {parseMeasurementInput} from './measurementInput';
 import { normalizeDemographics } from './profile';
 import type { Demographics } from './registry';
 
@@ -8,6 +9,6 @@ export function profileToDraft(profile?: Demographics): ProfileDraft {
 }
 export function parseProfileDraft(draft: ProfileDraft): Demographics | undefined {
   if (!draft.age.trim()) return;
-  try { return normalizeDemographics({ age: Number(draft.age), sex: draft.sex||'unselected', ...(draft.weight.trim()?{weight:Number(draft.weight.replace(',', '.'))}:{}),...(draft.height.trim()?{height:Number(draft.height.replace(',', '.'))}:{}) }); }
+  try { return normalizeDemographics({ age: Number(parseMeasurementInput(draft.age)), sex: draft.sex||'unselected', ...(draft.weight.trim()?{weight:Number(parseMeasurementInput(draft.weight))}:{}),...(draft.height.trim()?{height:Number(parseMeasurementInput(draft.height))}:{}) }); }
   catch { return; }
 }

@@ -20,13 +20,13 @@ test('all model cells are finite, but only VO2 parameters are source-grounded',(
 test('age cohort boundaries are explicit and do not falsely expand the published age range',()=>{
  for(const [age,bracket] of [[18,'18-24'],[24.9,'18-24'],[25,'25-29'],[30,'30-34'],[70,'70+'],[100,'70+']] as const)assert.equal(getAgeBracket(age),bracket);
  for(const age of [17,NaN,Infinity])assert.throws(()=>getAgeBracket(age),RangeError);
- assert.equal(getMetricCohortNorm('vo2_max',{...d,age:80}).provenance,'provisional');
+ assert.equal(getMetricCohortNorm('vo2_max',{...d,age:90}).provenance,'provisional');
 });
-test('FRIEND 2015 means/SDs replace arbitrary 7-percent decay and narrow SDs',()=>{
+test('FRIEND 2022 means/SDs replace arbitrary 7-percent decay and narrow SDs',()=>{
  const male=getMetricCohortNorm('vo2_max',d),female=getMetricCohortNorm('vo2_max',{...d,sex:'female'});
- near(male.mean,47.6);near(male.stdDev,11.3);near(female.mean,37.6);near(female.stdDev,10.2);
- near(getMetricCohortNorm('vo2_max',{...d,age:40}).mean,38.8);
- near(getMetricCohortNorm('vo2_max',{...d,age:70,sex:'female'}).stdDev,3.6);
+ near(male.mean,45.2);near(male.stdDev,11.8);near(female.mean,36.3);near(female.stdDev,10.2);
+ near(getMetricCohortNorm('vo2_max',{...d,age:40}).mean,35.8);
+ near(getMetricCohortNorm('vo2_max',{...d,age:70,sex:'female'}).stdDev,4.2);
 });
 test('lift SDs are no longer manufactured to turn a product target into P99',()=>{
  const m=metrics.find(m=>m.id==='squat_1rm')!,r=reference(m,d);near(r.sd,.45);
@@ -40,4 +40,9 @@ test('legacy correlations retain directional semantics but are not used by aggre
 test('full raw-data coverage is independent of scoring eligibility and does not establish confidence',()=>{
  const values:Values=Object.fromEntries(metrics.map(m=>[m.id,valid(m,m.mean)?m.mean:(m.min+m.max)/2]));
  for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,38);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<38);assert.ok(Number.isFinite(result.z));}
+});
+
+test('the 80–89 published cell is distinct from the UI 70+ group',()=>{
+ const norm=getMetricCohortNorm('vo2_max',{...d,age:85});near(norm.mean,17.9);near(norm.stdDev,3.9);assert.equal(norm.sampleSize,173);assert.equal(norm.cohortLabel,'80–89');
+ assert.equal(norm.referenceVersion,'friend-2022-treadmill-rer1-v1');
 });

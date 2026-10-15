@@ -1,9 +1,12 @@
 'use client';
+import {useTranslations} from '@/components/providers/LocaleProvider';
 
 import { useEffect, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
 export default function Modal({ title, onClose, children, returnFocus, safetyAction, wide = false, closeOnBackdrop = true }: { title: string; onClose: () => void; children: ReactNode; returnFocus?: HTMLElement | null; safetyAction?:ReactNode;wide?: boolean; closeOnBackdrop?: boolean }) {
+ const {t:tr}=useTranslations();
+
   const ref = useRef<HTMLDivElement>(null);
   const close = useRef(onClose); close.current = onClose;
   useEffect(() => {
@@ -24,7 +27,7 @@ export default function Modal({ title, onClose, children, returnFocus, safetyAct
   }, []);
   return <div className="modal-backdrop" onMouseDown={e => { if (closeOnBackdrop && e.target === e.currentTarget) onClose(); }}>
     <div ref={ref} className={`modal ${wide ? 'modal-wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div className="modal-heading"><h2 id="modal-title">{title}</h2><button className="icon-button" aria-label="Close panel" onClick={onClose}><X size={20}/></button></div>
+      <div className="modal-heading"><h2 id="modal-title">{tr(title)}</h2><button className="icon-button" aria-label={tr("Close panel")} onClick={onClose}><X size={20}/></button></div>
       {safetyAction}
       {children}
     </div>

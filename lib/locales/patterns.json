@@ -1,0 +1,192 @@
+[
+  [
+    "Optional. Enter {0} or leave blank if unmeasured.",
+    "Facultatif. Saisissez des {0} ou laissez vide si non mesuré.",
+    "اختياري. أدخل {0} أو اترك الحقل فارغًا إن لم يُقس."
+  ],
+  [
+    "Step {0} of 2",
+    "Étape {0} sur 2",
+    "الخطوة {0} من 2"
+  ],
+  [
+    "{0} measurements ready to save. You can add more later.",
+    "{0} mesures prêtes à enregistrer. Vous pourrez en ajouter ensuite.",
+    "{0} قياسات جاهزة للحفظ. يمكنك إضافة المزيد لاحقًا."
+  ],
+  [
+    "Remove {0} from favorites",
+    "Retirer {0} des favoris",
+    "إزالة {0} من المفضلة"
+  ],
+  [
+    "Add {0} to favorites",
+    "Ajouter {0} aux favoris",
+    "إضافة {0} إلى المفضلة"
+  ],
+  [
+    "Calculate {0}",
+    "Calculer {0}",
+    "حساب {0}"
+  ],
+  [
+    "Evidence for {0}",
+    "Sources pour {0}",
+    "أدلة {0}"
+  ],
+  [
+    "Method and date for {0}",
+    "Méthode et date pour {0}",
+    "طريقة وتاريخ {0}"
+  ],
+  [
+    "Protocol for {0}",
+    "Protocole pour {0}",
+    "بروتوكول {0}"
+  ],
+  [
+    "Equipment for {0}",
+    "Équipement pour {0}",
+    "جهاز {0}"
+  ],
+  [
+    "Side for {0}",
+    "Côté pour {0}",
+    "جانب {0}"
+  ],
+  [
+    "Trials for {0}",
+    "Essais pour {0}",
+    "محاولات {0}"
+  ],
+  [
+    "Method for {0}",
+    "Méthode pour {0}",
+    "طريقة {0}"
+  ],
+  [
+    "Measurement date for {0}",
+    "Date de mesure pour {0}",
+    "تاريخ قياس {0}"
+  ],
+  [
+    "Preview {0}",
+    "Simuler {0}",
+    "معاينة {0}"
+  ],
+  [
+    "{0} model points",
+    "{0} points du modèle",
+    "{0} نقاط النموذج"
+  ],
+  [
+    "{0} model units",
+    "{0} unités du modèle",
+    "{0} وحدات النموذج"
+  ],
+  [
+    "{0} model points in this scenario",
+    "{0} points du modèle dans ce scénario",
+    "{0} نقاط النموذج في هذا السيناريو"
+  ],
+  [
+    "{0} hypothetical model steps",
+    "{0} pas hypothétiques du modèle",
+    "{0} خطوات نموذجية افتراضية"
+  ],
+  [
+    "Send again in {0}s",
+    "Renvoyer dans {0} s",
+    "أعد الإرسال بعد {0} ثانية"
+  ],
+  [
+    "Resend confirmation in {0}s",
+    "Renvoyer la confirmation dans {0} s",
+    "إعادة إرسال التأكيد بعد {0} ثانية"
+  ],
+  [
+    "Next date: {0}",
+    "Prochaine date : {0}",
+    "الموعد التالي: {0}"
+  ],
+  [
+    "{0}% NGSP · rounded to 0.1% · preview only",
+    "{0} % NGSP · arrondi à 0,1 % · aperçu uniquement",
+    "{0}% NGSP · مقرب إلى 0.1% · معاينة فقط"
+  ],
+  [
+    "{0} / {1} active measurements",
+    "{0} / {1} mesures actives",
+    "{0} / {1} قياسات نشطة"
+  ],
+  [
+    "At the published {0}th-percentile threshold",
+    "Au seuil publié du percentile {0}",
+    "عند عتبة الرتبة المئينية {0} المنشورة"
+  ],
+  [
+    "Between the published {0}th and {1}th-percentile thresholds",
+    "Entre les seuils publiés des percentiles {0} et {1}",
+    "بين عتبتي الرتبتين المئينيتين {0} و{1} المنشورتين"
+  ],
+  [
+    "Use at least {0} characters.",
+    "Utilisez au moins {0} caractères.",
+    "استخدم {0} حرفًا على الأقل."
+  ],
+  [
+    "{0} days old",
+    "Il y a {0} jours",
+    "منذ {0} يومًا"
+  ],
+  [
+    "{0} · male",
+    "{0} · hommes",
+    "{0} · ذكور"
+  ],
+  [
+    "{0} · female",
+    "{0} · femmes",
+    "{0} · إناث"
+  ],
+  [
+    "{0} · unselected",
+    "{0} · non choisi",
+    "{0} · غير محدد"
+  ],
+  [
+    "Recorded {0} values. Full observations are listed below.",
+    "Valeurs de {0} enregistrées. Les observations complètes figurent ci-dessous.",
+    "قيم {0} المسجلة. تُعرض القياسات الكاملة أدناه."
+  ],
+  [
+    "{0} estimate added.",
+    "Estimation de {0} ajoutée.",
+    "أُضيف تقدير {0}."
+  ],
+  [
+    "Days for {0}",
+    "Jours pour {0}",
+    "أيام {0}"
+  ],
+  [
+    "{0} for {1}",
+    "{0} pour {1}",
+    "{0} لـ {1}"
+  ],
+  [
+    "Experimental reference for {0} · {1}. Mean {2}, standard deviation {3}. {4}",
+    "Référence expérimentale pour {0} · {1}. Moyenne {2}, écart-type {3}. {4}",
+    "مرجع تجريبي لـ {0} · {1}. المتوسط {2}، والانحراف المعياري {3}. {4}"
+  ],
+  [
+    "{0} points",
+    "{0} points",
+    "{0} نقاط"
+  ],
+  [
+    "Model step {0}",
+    "Pas du modèle {0}",
+    "خطوة النموذج {0}"
+  ]
+]

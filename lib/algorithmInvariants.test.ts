@@ -59,7 +59,8 @@ test('treadmill and cycle CPET cannot share a reference; impossible ages and dat
  const result=evaluate({vo2_max:50},d,{vo2_max:context},{now});assert.equal(result.scoredCount,1);assert.equal(result.submitted[0].reference.cohortLabel,'30–39');
  assert.equal(scoringEligibility(metric('vo2_max'),d,{vo2_max:{...context,ageAtMeasurement:70}},now).status,'invalid-context');
  assert.equal(scoringEligibility(metric('vo2_max'),d,{vo2_max:{...context,measuredAt:'2000-01-01T00:00:00Z'}},now).status,'invalid-context');
- for(const age of [18,19,80,120])assert.equal(scoringEligibility(metric('vo2_max'),{...d,age},{vo2_max:{...context,ageAtMeasurement:age}},now).status,'unsupported-cohort');
+ for(const age of [18,19,90,120])assert.equal(scoringEligibility(metric('vo2_max'),{...d,age},{vo2_max:{...context,ageAtMeasurement:age}},now).status,'unsupported-cohort');
+ for(const age of [80,89])assert.equal(scoringEligibility(metric('vo2_max'),{...d,age},{vo2_max:{...context,ageAtMeasurement:age}},now).status,'eligible');
  assert.throws(()=>normalizeMeasurementMetadata({pushups:{exerciseMode:'treadmill'}}));
 });
 
