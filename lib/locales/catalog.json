@@ -3726,5 +3726,161 @@
   "For the published comparison, use the international hydraulic seated protocol: both hands, three trials each, highest single result. Other grip protocols stay available for tracking; do not enter the sum of both hands here.": {
     "fr": "Pour la comparaison publiée, utilisez le protocole international hydraulique assis : deux mains, trois essais chacune, meilleur résultat unique. Les autres protocoles restent disponibles pour le suivi ; ne saisissez pas ici la somme des deux mains.",
     "ar": "للمقارنة المنشورة، استخدم البروتوكول الدولي الهيدروليكي أثناء الجلوس: كلتا اليدين، ثلاث محاولات لكل يد، وأعلى نتيجة منفردة. تبقى البروتوكولات الأخرى للمتابعة؛ ولا تدخل مجموع اليدين هنا."
+  },
+  "Illustrative estimate": {
+    "fr": "Estimation illustrative",
+    "ar": "تقدير توضيحي"
+  },
+  "YOU’RE ON THE": {
+    "fr": "VOUS ÊTES DANS LE",
+    "ar": "أنت ضمن"
+  },
+  "Decorative fire, ice and emerald prism": {
+    "fr": "Prisme décoratif feu, glace et émeraude",
+    "ar": "موشور زخرفي بألوان النار والجليد والزمرد"
+  },
+  "Explore Your Potential": {
+    "fr": "Explorez votre potentiel",
+    "ar": "استكشف إمكاناتك"
+  },
+  "Model estimate · not a validated world rank": {
+    "fr": "Estimation du modèle · pas un classement mondial validé",
+    "ar": "تقدير النموذج · ليس ترتيبًا عالميًا معتمدًا"
+  },
+  "Add an eligible performance measurement to begin.": {
+    "fr": "Ajoutez une mesure de performance admissible pour commencer.",
+    "ar": "أضف قياس أداء مؤهلًا للبدء."
+  },
+  "Illustrative section estimate · not a population rank": {
+    "fr": "Estimation illustrative de section · pas un rang de population",
+    "ar": "تقدير توضيحي للقسم · ليس ترتيبًا سكانيًا"
+  },
+  "These measurements are tracked without performance points.": {
+    "fr": "Ces mesures sont suivies sans points de performance.",
+    "ar": "تُتابع هذه القياسات دون نقاط أداء."
+  },
+  "About the estimate": {
+    "fr": "À propos de l’estimation",
+    "ar": "عن التقدير"
+  },
+  "This game-style estimate maps the provisional weighted model to an illustrative normal distribution. It is not measured population standing. Missing measurements never count as zero; changing the input set can change the estimate.": {
+    "fr": "Cette estimation ludique projette le modèle pondéré provisoire sur une distribution normale illustrative. Ce n’est pas un rang de population mesuré. Les données absentes ne valent jamais zéro ; changer les mesures peut modifier l’estimation.",
+    "ar": "يسقط هذا التقدير التفاعلي النموذج المرجح الأولي على توزيع طبيعي توضيحي. وليس ترتيبًا سكانيًا مقاسًا. القياسات الناقصة لا تُحسب صفرًا؛ وقد يتغير التقدير بتغيير مجموعة المدخلات."
+  },
+  "Source-backed test comparisons are separate and appear inside each section. Clinical markers and recovery habits do not earn performance points.": {
+    "fr": "Les comparaisons publiées restent distinctes dans chaque section. Les marqueurs cliniques et habitudes de récupération ne rapportent pas de points.",
+    "ar": "المقارنات المدعومة بالمصادر مستقلة وتظهر داخل كل قسم. لا تمنح المؤشرات السريرية وعادات التعافي نقاط أداء."
+  },
+  "Your Potential": {
+    "fr": "Votre potentiel",
+    "ar": "إمكاناتك"
+  },
+  "YOUR NEXT LEVEL": {
+    "fr": "VOTRE PROCHAIN PALIER",
+    "ar": "مستواك التالي"
+  },
+  "Explore a hypothetical target, see the measurements behind it, then build weekly steps toward it.": {
+    "fr": "Explorez un objectif hypothétique, découvrez les mesures associées puis préparez vos étapes hebdomadaires.",
+    "ar": "استكشف هدفًا افتراضيًا والقياسات التي يقوم عليها، ثم خطط لخطوات أسبوعية نحوه."
+  },
+  "Record an eligible performance measurement to explore your potential.": {
+    "fr": "Ajoutez une mesure de performance admissible pour explorer votre potentiel.",
+    "ar": "سجّل قياس أداء مؤهلًا لاستكشاف إمكاناتك."
+  },
+  "Scenario steps": {
+    "fr": "Étapes du scénario",
+    "ar": "خطوات السيناريو"
+  },
+  "Choose your focus": {
+    "fr": "Choisissez votre priorité",
+    "ar": "اختر تركيزك"
+  },
+  "Explore a target": {
+    "fr": "Explorez un objectif",
+    "ar": "استكشف هدفًا"
+  },
+  "Build your week": {
+    "fr": "Préparez votre semaine",
+    "ar": "خطط لأسبوعك"
+  },
+  "ILLUSTRATIVE MODEL ESTIMATE": {
+    "fr": "ESTIMATION ILLUSTRATIVE DU MODÈLE",
+    "ar": "تقدير توضيحي للنموذج"
+  },
+  "Target bracket": {
+    "fr": "Tranche cible",
+    "ar": "الفئة المستهدفة"
+  },
+  "Use this scenario for my weekly plan": {
+    "fr": "Utiliser ce scénario pour mon programme",
+    "ar": "استخدم هذا السيناريو لخطتي الأسبوعية"
+  },
+  "Your chosen scenario": {
+    "fr": "Votre scénario choisi",
+    "ar": "السيناريو الذي اخترته"
+  },
+  "Scenario target saved on this device.": {
+    "fr": "Objectif du scénario conservé sur cet appareil.",
+    "ar": "هدف السيناريو محفوظ على هذا الجهاز."
+  },
+  "Targets describe a hypothetical result, not a promise for this week. Adjust sessions to your experience and circumstances.": {
+    "fr": "Les objectifs décrivent un résultat hypothétique, sans promesse pour cette semaine. Adaptez les séances à votre expérience et situation.",
+    "ar": "تصف الأهداف نتيجة افتراضية وليست وعدًا لهذا الأسبوع. عدّل الجلسات وفق خبرتك وظروفك."
+  },
+  "Add scenario steps to my plan": {
+    "fr": "Ajouter les étapes du scénario à mon programme",
+    "ar": "أضف خطوات السيناريو إلى خطتي"
+  },
+  "Choose a scenario above to connect it to your weekly plan.": {
+    "fr": "Choisissez un scénario ci-dessus pour le relier à votre programme.",
+    "ar": "اختر سيناريو أعلاه لربطه بخطتك الأسبوعية."
+  },
+  "Small actions. Consistent check-ins. Your own pace.": {
+    "fr": "Petites actions. Suivi régulier. À votre rythme.",
+    "ar": "خطوات صغيرة. متابعة منتظمة. بوتيرتك."
+  },
+  "Weekly plan completion": {
+    "fr": "Avancement du programme hebdomadaire",
+    "ar": "إنجاز الخطة الأسبوعية"
+  },
+  "Keep your momentum": {
+    "fr": "Gardez votre élan",
+    "ar": "حافظ على تقدمك"
+  },
+  "Your next step starts here": {
+    "fr": "Votre prochaine étape commence ici",
+    "ar": "خطوتك التالية تبدأ هنا"
+  },
+  "Review recovery and adjust the next session": {
+    "fr": "Vérifier la récupération et adapter la prochaine séance",
+    "ar": "راجع التعافي وعدّل الجلسة التالية"
+  },
+  "Practice {name} with a suitable session": {
+    "fr": "Pratiquer {name} avec une séance adaptée",
+    "ar": "تدرّب على {name} بجلسة مناسبة"
+  },
+  "Retest {name} toward {target} using the same protocol": {
+    "fr": "Retester {name} vers {target} avec le même protocole",
+    "ar": "أعد اختبار {name} نحو {target} بالبروتوكول نفسه"
+  },
+  "Scenario steps added. Review the days and save your plan.": {
+    "fr": "Étapes ajoutées. Vérifiez les jours et enregistrez le programme.",
+    "ar": "أُضيفت الخطوات. راجع الأيام واحفظ خطتك."
+  },
+  "The scenario could not be stored on this device.": {
+    "fr": "Le scénario n’a pas pu être stocké sur cet appareil.",
+    "ar": "تعذر حفظ السيناريو على هذا الجهاز."
+  },
+  "Choose an attainable scenario first.": {
+    "fr": "Choisissez d’abord un scénario atteignable.",
+    "ar": "اختر سيناريو قابلًا للوصول أولًا."
+  },
+  "Check the scenario targets.": {
+    "fr": "Vérifiez les objectifs du scénario.",
+    "ar": "راجع أهداف السيناريو."
+  },
+  "Make room in your plan before adding scenario steps.": {
+    "fr": "Libérez de la place dans le programme avant d’ajouter des étapes.",
+    "ar": "أفسح مجالًا في خطتك قبل إضافة خطوات السيناريو."
   }
 }

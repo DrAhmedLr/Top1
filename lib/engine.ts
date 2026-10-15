@@ -100,10 +100,11 @@ export function evaluate(values:Values,d:Demographics,details:MeasurementMetadat
 }
 export function comparableAssessments(a:ReturnType<typeof evaluate>,b:ReturnType<typeof evaluate>){return a.comparable&&b.comparable&&a.comparisonKey===b.comparisonKey&&b.submitted.every(s=>Date.parse(s.context.measuredAt!)>Date.parse(a.submitted.find(previous=>previous.metric.id===s.metric.id)!.context.measuredAt!));}
 export type Strategy='Easiest first'|'Cardio focus'|'Strength focus'|'Balanced';
-export function simulate(values:Values,d:Demographics,target:number,strategy:Strategy,details:MeasurementMetadata={}){
+export function simulate(values:Values,d:Demographics,target:number,strategy:Strategy,details:MeasurementMetadata={},options:{allowPartial?:boolean}={}){
   if(!Number.isFinite(target)||target<0||target>100)throw new RangeError('Model target must be 0–100.');
   if(!['Easiest first','Cardio focus','Strength focus','Balanced'].includes(strategy))throw new RangeError('Choose a supported scenario strategy.');
   const now=Date.now(),result=evaluate(values,d,details,{now});
+  const ready=result.ready||!!options.allowPartial&&result.submitted.length>0;
   let selected=result.submitted.filter(s=>s.metric.scenarioChangePerStep>0);
   if(strategy==='Easiest first')selected=selected.filter(s=>s.metric.easiestPathPriority<=2);
   else if(strategy==='Balanced')selected=[...selected].sort((a,b)=>a.z-b.z).slice(0,3);
@@ -134,9 +135,9 @@ export function simulate(values:Values,d:Demographics,target:number,strategy:Str
   let steps:number|null=null;
   // Each selected trajectory is non-decreasing under the fixed reference set.
   // Find the first attainable integer step without reevaluating 260 full profiles.
-  if(result.ready){if(target<=result.modelScore)steps=0;else if(selected.length&&at(260).modelScore>=target){let lo=1,hi=260;while(lo<hi){const mid=Math.floor((lo+hi)/2);if(at(mid).modelScore>=target)hi=mid;else lo=mid+1;}steps=lo;}}
+  if(ready){if(target<=result.modelScore)steps=0;else if(selected.length&&at(260).modelScore>=target){let lo=1,hi=260;while(lo<hi){const mid=Math.floor((lo+hi)/2);if(at(mid).modelScore>=target)hi=mid;else lo=mid+1;}steps=lo;}}
   const horizon=steps??260;
-  const final=result.ready?targets(horizon):{...values};
-  return {steps,selected:result.ready?selected:[],targets:final,ceiling:result.ready?at(260).modelScore:null,reason:!result.ready?'insufficient-data':steps===null?'unreachable':'reached',points:result.ready?Array.from(new Set(Array.from({length:7},(_,i)=>Math.round(i*horizon/6)))).map(step=>({step,modelScore:at(step).modelScore,target})):[]};
+  const final=ready?targets(horizon):{...values};
+  return {steps,selected:ready?selected:[],targets:final,ceiling:ready?at(260).modelScore:null,reason:!ready?'insufficient-data':steps===null?'unreachable':'reached',points:ready?Array.from(new Set(Array.from({length:7},(_,i)=>Math.round(i*horizon/6)))).map(step=>({step,modelScore:at(step).modelScore,target})):[]};
 }
 export {cooper,epley,weightedPullupRatio,skinfold} from './derivations';

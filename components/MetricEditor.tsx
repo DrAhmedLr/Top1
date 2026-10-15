@@ -1,4 +1,5 @@
 'use client';
+import {MetricIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import {GRIP_PROTOCOL,GRIP_INSTRUCTIONS,gripComparison} from '@/lib/gripReference';
 import LabUnitHelper from './LabUnitHelper';
@@ -59,7 +60,7 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
     ? new Date(Date.parse(details.measuredAt) - new Date(details.measuredAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
   return <div data-metric-id={m.id} className={`metric-row ${m.pillar} ${compact ? 'compact-row' : ''}`} onFocusCapture={() => onEditingChange?.(m.id)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onEditingChange?.(null); }}>
     <div className="metric-label">
-      <label htmlFor={inputId}>{tr(m.name)}</label>
+      <label htmlFor={inputId}><MetricIcon id={m.id}/>{tr(m.name)}</label>
       <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{tr(compact ? starterInstructions[m.id] ?? m.proofData.instructions : `Optional. Enter ${shownUnit} or leave blank if unmeasured.`)}</span>
       {!compact && <span className={`metric-kind ${scored ? 'scored' : ''}`}>{tr(publishedGrip?'Published grip reference':scored ? m.id==='vo2_max'?'Published CPET reference':'Provisional model' : 'Tracking only')}</span>}
     </div>
