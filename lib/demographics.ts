@@ -1,4 +1,4 @@
-import {friend2015,FRIEND_SOURCE,FRIEND_REFERENCE_VERSION} from './friend2015';
+import {friend2022,FRIEND_SOURCE,FRIEND_REFERENCE_VERSION} from './friend2022';
 import { metrics, type Demographics } from './registry';
 
 export const ageBrackets = ['18-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+'] as const;
@@ -40,7 +40,7 @@ const strength = {
   deadlift_1rm: { male: 2.55, female: 1.95, mean: 1.35 },
   bench_1rm: { male: 1.65, female: 1.05, mean: .8 },
 };
-// FRIEND 2015 Table 4: directly measured treadmill CPET, US adults without CVD.
+// FRIEND 2022 Table 2: directly measured treadmill CPET, no known CVD or COPD.
 // These are cohort means/SDs, not global norms or a wearable-estimate calibration.
 
 
@@ -62,11 +62,11 @@ export const demographicLookup: DemographicLookup = Object.fromEntries(metrics.f
       if (metric.id === 'vo2_max') {
         const age = Number.parseInt(bracket, 10);
         const decade = Math.min(5, Math.max(0, Math.floor((age - 20) / 10)));
-        const cell=friend2015[sex][decade];norm.mean=cell.mean;norm.stdDev=cell.sd;norm.sampleSize=cell.n;norm.referenceVersion=FRIEND_REFERENCE_VERSION;
+        const cell=friend2022[sex][decade];norm.mean=cell.mean;norm.stdDev=cell.sd;norm.sampleSize=cell.n;norm.referenceVersion=FRIEND_REFERENCE_VERSION;
         norm.provenance = 'published';
         norm.source = FRIEND_SOURCE;
-        norm.sourceAgeRange = [20,79];
-        norm.method = 'Direct treadmill CPET; FRIEND 2015, no cardiovascular disease';
+        norm.sourceAgeRange = [20,89];
+        norm.method = 'Direct treadmill CPET; FRIEND 2022, no cardiovascular disease';
       }
       if (metric.id === 'grip_strength') {
         norm.mean = sex === 'male' ? 48 : 31;
@@ -91,7 +91,9 @@ export function getMetricCohortNorm(metricId: string, profile: Pick<Demographics
   const cohorts = demographicLookup[metricId];
   if (!cohorts) throw new RangeError(`Unknown metric: ${metricId}`);
   if (profile.sex !== 'male' && profile.sex !== 'female') throw new RangeError('Unsupported biological sex cohort.');
-  const norm=cohorts[profile.sex][getAgeBracket(profile.age)];
+  let norm=cohorts[profile.sex][getAgeBracket(profile.age)];
+  // The UI's broad 70+ grouping must not collapse the study's 80–89 cell.
+  if(metricId==='vo2_max'&&profile.age>=20&&profile.age<=89){const cell=friend2022[profile.sex][Math.floor((profile.age-20)/10)];norm={...norm,mean:cell.mean,stdDev:cell.sd,sampleSize:cell.n};}
   if(norm.sourceAgeRange&&(profile.age<norm.sourceAgeRange[0]||profile.age>norm.sourceAgeRange[1]))return {...norm,provenance:'provisional',source:undefined,method:'Outside published cohort age range'};
   const decade=Math.floor(profile.age/10)*10;
   return {...norm,cohortLabel:norm.provenance==='published'?`${decade}–${decade+9}`:getAgeBracket(profile.age)};
@@ -101,7 +103,7 @@ export function getMetricBenchmark(metricId: string, profile: Pick<Demographics,
   const metric=metrics.find(metric=>metric.id===metricId);
   if(!metric)throw new RangeError(`Unknown metric: ${metricId}`);
   if(!metric.scoringEligible)return 'Context required · tracked without scoring';
-  if(metricId==='vo2_max')return 'Direct treadmill CPET reference · ages 20–79';
+  if(metricId==='vo2_max')return 'Direct treadmill CPET reference · ages 20–89';
   const norm = getMetricCohortNorm(metricId, profile);
   if (norm.boundedOptimal) return `${norm.boundedOptimal.minOptimal}–${norm.boundedOptimal.maxOptimal}`;
   if (norm.benchmark !== undefined) return `≥ ${Number(norm.benchmark.toFixed(2))}`;

@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {localeDirection,normalizeLocale,translate} from './i18n';
+import patterns from './locales/patterns.json';
+import catalog from './locales/catalog.json';
+import {parseProfileDraft} from './onboarding';
+test('supported languages resolve safely and Arabic gets RTL',()=>{assert.equal(normalizeLocale('fr'),'fr');assert.equal(normalizeLocale('ar'),'ar');assert.equal(normalizeLocale('<script>'),'en');assert.equal(localeDirection('ar'),'rtl');assert.equal(localeDirection('fr'),'ltr');});
+test('UI messages and dynamic accessible labels translate without changing measurements',()=>{assert.equal(translate('fr','Log in'),'Connexion');assert.equal(translate('ar','Log in'),'تسجيل الدخول');assert.equal(translate('fr','Step 2 of 2'),'Étape 2 sur 2');assert.equal(translate('ar','Evidence for Body fat'),'أدلة دهون الجسم');assert.equal(translate('fr',' 45.5 '),' 45.5 ');assert.equal(translate('fr','owner_custom_id'),'owner_custom_id');assert.equal(translate('fr','  Log in '),'  Connexion ');});
+test('translation templates preserve every dynamic placeholder in each language',()=>{for(const [en,fr,ar] of patterns){const slots=(s:string)=>[...s.matchAll(/\{\d+\}/g)].map(m=>m[0]).sort();assert.deepEqual(slots(fr),slots(en),en);assert.deepEqual(slots(ar),slots(en),en);}for(const [key,entry] of Object.entries(catalog)){assert.ok(entry.fr.trim(),key);assert.ok(entry.ar.trim(),key);}});
+test('Arabic digits and French decimals work in optional guest setup',()=>{assert.deepEqual(parseProfileDraft({age:'٣٥',sex:'',weight:'٧٨٫٥',height:''}),{age:35,sex:'unselected',weight:78.5});assert.equal(parseProfileDraft({age:'',sex:'',weight:'',height:''}),undefined);});

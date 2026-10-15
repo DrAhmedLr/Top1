@@ -1,0 +1,3610 @@
+{
+  "Language": {
+    "fr": "Langue",
+    "ar": "اللغة"
+  },
+  "Log in": {
+    "fr": "Connexion",
+    "ar": "تسجيل الدخول"
+  },
+  "Join TOP1": {
+    "fr": "Créer un compte",
+    "ar": "إنشاء حساب"
+  },
+  "Join TOP1.": {
+    "fr": "Rejoignez TOP1.",
+    "ar": "انضم إلى TOP1."
+  },
+  "Dashboard": {
+    "fr": "Tableau de bord",
+    "ar": "لوحة المتابعة"
+  },
+  "My Potential": {
+    "fr": "Mon potentiel",
+    "ar": "إمكاناتي"
+  },
+  "Progress": {
+    "fr": "Progrès",
+    "ar": "التقدم"
+  },
+  "My profile": {
+    "fr": "Mon profil",
+    "ar": "ملفي"
+  },
+  "Methodology": {
+    "fr": "Méthodologie",
+    "ar": "المنهجية"
+  },
+  "Main navigation": {
+    "fr": "Navigation principale",
+    "ar": "التنقل الرئيسي"
+  },
+  "Skip to content": {
+    "fr": "Aller au contenu",
+    "ar": "انتقل إلى المحتوى"
+  },
+  "Get started": {
+    "fr": "Commencer",
+    "ar": "ابدأ"
+  },
+  "Start with a measurement. No account needed.": {
+    "fr": "Commencez par une mesure. Sans compte.",
+    "ar": "ابدأ بقياس. لا تحتاج إلى حساب."
+  },
+  "YOUR PERFORMANCE, IN PERSPECTIVE": {
+    "fr": "VOTRE PERFORMANCE EN PERSPECTIVE",
+    "ar": "أداؤك في سياقه"
+  },
+  "Your reference range": {
+    "fr": "Votre fourchette de référence",
+    "ar": "نطاقك المرجعي"
+  },
+  "Find your starting point.": {
+    "fr": "Trouvez votre point de départ.",
+    "ar": "اكتشف نقطة بدايتك."
+  },
+  "Your measurements. A clearer perspective. One step at a time.": {
+    "fr": "Vos mesures. Une vision plus claire. Un pas à la fois.",
+    "ar": "قياساتك. رؤية أوضح. خطوة بخطوة."
+  },
+  "Start free on this device. An account is optional for saving across devices.": {
+    "fr": "Commencez gratuitement sur cet appareil. Un compte est facultatif pour retrouver vos données ailleurs.",
+    "ar": "ابدأ مجانًا على هذا الجهاز. الحساب اختياري لحفظ بياناتك عبر الأجهزة."
+  },
+  "Record a measurement": {
+    "fr": "Ajouter une mesure",
+    "ar": "أضف قياسًا"
+  },
+  "A reference range becomes available with a matching, documented VO₂ laboratory test.": {
+    "fr": "Une fourchette devient disponible avec un test VO₂ de laboratoire compatible et documenté.",
+    "ar": "يتاح نطاق مرجعي عند تسجيل اختبار VO₂ مخبري موثّق ومتوافق."
+  },
+  "VO₂ · US laboratory reference": {
+    "fr": "VO₂ · référence de laboratoires américains",
+    "ar": "VO₂ · مرجع مختبرات أمريكية"
+  },
+  "A comparison with this study cohort, not a worldwide rank or a health verdict.": {
+    "fr": "Une comparaison avec le groupe étudié, sans classement mondial ni évaluation de santé.",
+    "ar": "مقارنة مع عينة الدراسة، وليست ترتيبًا عالميًا أو حكمًا على الصحة."
+  },
+  "Top": {
+    "fr": "Top",
+    "ar": "ضمن أعلى"
+  },
+  "Or better · the source cannot resolve a smaller band.": {
+    "fr": "Ou mieux · la source ne permet pas une fourchette plus fine.",
+    "ar": "أو أفضل · المصدر لا يتيح تحديد نطاق أدق."
+  },
+  "How the brackets work": {
+    "fr": "Comprendre les tranches",
+    "ar": "كيف تعمل الفئات"
+  },
+  "Smaller bands at the top, broader bands elsewhere. The best displayed bracket is Top 1%; the last is 65%+.": {
+    "fr": "Des tranches fines en tête, plus larges ensuite. La meilleure tranche affichée est le Top 1 % ; la dernière est 65 % et plus.",
+    "ar": "فئات أضيق في القمة وأوسع فيما بعدها. أفضل فئة معروضة هي أعلى 1%؛ والأخيرة 65% فأكثر."
+  },
+  "Reference bracket boundaries": {
+    "fr": "Limites des tranches de référence",
+    "ar": "حدود الفئات المرجعية"
+  },
+  "Results span multiple brackets when the published data is less precise. No decimal world ranks are inferred.": {
+    "fr": "Les résultats couvrent plusieurs tranches lorsque les données publiées sont moins précises. Aucun classement mondial décimal n’est déduit.",
+    "ar": "تشمل النتائج عدة فئات حين تكون البيانات المنشورة أقل دقة. لا نستنتج ترتيبًا عالميًا بأرقام عشرية."
+  },
+  "Methods & calculation details": {
+    "fr": "Méthodes et détails du calcul",
+    "ar": "المنهجية وتفاصيل الحساب"
+  },
+  "The combined index is experimental. It is not a population percentile.": {
+    "fr": "L’indice combiné est expérimental. Ce n’est pas un percentile de population.",
+    "ar": "المؤشر المجمّع تجريبي، وليس رتبة مئينية بين السكان."
+  },
+  "Experimental index": {
+    "fr": "Indice expérimental",
+    "ar": "المؤشر التجريبي"
+  },
+  "Missing entries never count as zero.": {
+    "fr": "Les données manquantes ne comptent jamais comme zéro.",
+    "ar": "القياسات الناقصة لا تُحسب أبدًا بصفر."
+  },
+  "Methods & evidence": {
+    "fr": "Méthodes et sources",
+    "ar": "المنهجية والأدلة"
+  },
+  "Download calculation report": {
+    "fr": "Télécharger le rapport de calcul",
+    "ar": "تنزيل تقرير الحساب"
+  },
+  "YOUR RECORDED DATA": {
+    "fr": "VOS DONNÉES ENREGISTRÉES",
+    "ar": "بياناتك المسجلة"
+  },
+  "of": {
+    "fr": "sur",
+    "ar": "من"
+  },
+  "recorded": {
+    "fr": "enregistrées",
+    "ar": "مسجلة"
+  },
+  "Every measurement is optional. Follow your own progress.": {
+    "fr": "Chaque mesure est facultative. Suivez vos propres progrès.",
+    "ar": "كل قياس اختياري. تابع تقدمك الشخصي."
+  },
+  "Body markers": {
+    "fr": "Marqueurs corporels",
+    "ar": "مؤشرات الجسم"
+  },
+  "Strength & fitness": {
+    "fr": "Force et condition physique",
+    "ar": "القوة واللياقة"
+  },
+  "Recovery": {
+    "fr": "Récupération",
+    "ar": "التعافي"
+  },
+  "Measurements": {
+    "fr": "Mesures",
+    "ar": "القياسات"
+  },
+  "All measurements": {
+    "fr": "Toutes les mesures",
+    "ar": "كل القياسات"
+  },
+  "All": {
+    "fr": "Tout",
+    "ar": "الكل"
+  },
+  "View history": {
+    "fr": "Voir l’historique",
+    "ar": "عرض السجل"
+  },
+  "Hide history": {
+    "fr": "Masquer l’historique",
+    "ar": "إخفاء السجل"
+  },
+  "Measurement category": {
+    "fr": "Catégorie de mesure",
+    "ar": "فئة القياس"
+  },
+  "Find a measurement": {
+    "fr": "Rechercher une mesure",
+    "ar": "ابحث عن قياس"
+  },
+  "Name, test or marker": {
+    "fr": "Nom, test ou marqueur",
+    "ar": "اسم أو اختبار أو مؤشر"
+  },
+  "Favorites (": {
+    "fr": "Favoris (",
+    "ar": "المفضلة ("
+  },
+  "Status": {
+    "fr": "État",
+    "ar": "الحالة"
+  },
+  "Filter by recording status": {
+    "fr": "Filtrer par état",
+    "ar": "تصفية حسب حالة التسجيل"
+  },
+  "Recorded": {
+    "fr": "Enregistré",
+    "ar": "مسجل"
+  },
+  "Not yet recorded": {
+    "fr": "Pas encore enregistré",
+    "ar": "لم يُسجّل بعد"
+  },
+  "Showing": {
+    "fr": "Affichage de",
+    "ar": "عرض"
+  },
+  "matching measurements. Every field is optional.": {
+    "fr": "mesures correspondantes. Chaque champ est facultatif.",
+    "ar": "قياسات مطابقة. كل حقل اختياري."
+  },
+  "measurement": {
+    "fr": "mesure",
+    "ar": "قياس"
+  },
+  "measurements": {
+    "fr": "mesures",
+    "ar": "قياسات"
+  },
+  "Show more measurements": {
+    "fr": "Afficher plus de mesures",
+    "ar": "عرض قياسات أخرى"
+  },
+  "Show all measurements": {
+    "fr": "Afficher toutes les mesures",
+    "ar": "عرض كل القياسات"
+  },
+  "No measurements with this status.": {
+    "fr": "Aucune mesure dans cet état.",
+    "ar": "لا توجد قياسات بهذه الحالة."
+  },
+  "Choose another category or reset the Status filter.": {
+    "fr": "Choisissez une autre catégorie ou réinitialisez le filtre d’état.",
+    "ar": "اختر فئة أخرى أو أعد ضبط مرشح الحالة."
+  },
+  "Reset filters": {
+    "fr": "Réinitialiser les filtres",
+    "ar": "إعادة ضبط المرشحات"
+  },
+  "Tracking-only entries stay outside the experimental model.": {
+    "fr": "Les mesures de suivi n’entrent pas dans le modèle expérimental.",
+    "ar": "قياسات المتابعة فقط لا تدخل في النموذج التجريبي."
+  },
+  "How scoring works": {
+    "fr": "Comprendre le calcul",
+    "ar": "كيف يعمل الحساب"
+  },
+  "Saved on this device": {
+    "fr": "Enregistré sur cet appareil",
+    "ar": "محفوظ على هذا الجهاز"
+  },
+  "Saved to your account": {
+    "fr": "Enregistré dans votre compte",
+    "ar": "محفوظ في حسابك"
+  },
+  "Saving…": {
+    "fr": "Enregistrement…",
+    "ar": "جارٍ الحفظ…"
+  },
+  "Save now": {
+    "fr": "Enregistrer",
+    "ar": "احفظ الآن"
+  },
+  "Unsaved changes": {
+    "fr": "Modifications non enregistrées",
+    "ar": "تغييرات غير محفوظة"
+  },
+  "Inputs need attention": {
+    "fr": "Des champs sont à vérifier",
+    "ar": "توجد حقول تحتاج إلى مراجعة"
+  },
+  "Editing · leave this field to save": {
+    "fr": "Modification · quittez ce champ pour enregistrer",
+    "ar": "قيد التعديل · غادر الحقل للحفظ"
+  },
+  "Save needs attention": {
+    "fr": "Enregistrement à vérifier",
+    "ar": "الحفظ يحتاج إلى مراجعة"
+  },
+  "Welcome to TOP1": {
+    "fr": "Bienvenue sur TOP1",
+    "ar": "مرحبًا بك في TOP1"
+  },
+  "Your starting point": {
+    "fr": "Votre point de départ",
+    "ar": "نقطة بدايتك"
+  },
+  "Close panel": {
+    "fr": "Fermer le panneau",
+    "ar": "إغلاق اللوحة"
+  },
+  "About you": {
+    "fr": "À propos de vous",
+    "ar": "معلوماتك"
+  },
+  "Easy measurements": {
+    "fr": "Mesures simples",
+    "ar": "قياسات سهلة"
+  },
+  "LET’S START WITH YOU": {
+    "fr": "COMMENÇONS PAR VOUS",
+    "ar": "لنبدأ بمعلوماتك"
+  },
+  "Build your profile.": {
+    "fr": "Créez votre profil.",
+    "ar": "أنشئ ملفك."
+  },
+  "Enter your own details. We haven’t filled in any personal data for you.": {
+    "fr": "Saisissez vos informations. Aucune donnée personnelle n’est préremplie.",
+    "ar": "أدخل معلوماتك. لم نملأ أي بيانات شخصية نيابةً عنك."
+  },
+  "Age": {
+    "fr": "Âge",
+    "ar": "العمر"
+  },
+  "Weight (kg)": {
+    "fr": "Poids (kg)",
+    "ar": "الوزن (كغ)"
+  },
+  "Height (cm)": {
+    "fr": "Taille (cm)",
+    "ar": "الطول (سم)"
+  },
+  "Your age in years": {
+    "fr": "Votre âge en années",
+    "ar": "عمرك بالسنوات"
+  },
+  "Your weight in kilograms": {
+    "fr": "Votre poids en kilogrammes",
+    "ar": "وزنك بالكيلوغرام"
+  },
+  "Your height in centimeters": {
+    "fr": "Votre taille en centimètres",
+    "ar": "طولك بالسنتيمتر"
+  },
+  "Reference cohort · optional": {
+    "fr": "Groupe de référence · facultatif",
+    "ar": "العينة المرجعية · اختياري"
+  },
+  "Reference cohort": {
+    "fr": "Groupe de référence",
+    "ar": "العينة المرجعية"
+  },
+  "Skip reference comparison": {
+    "fr": "Ignorer la comparaison",
+    "ar": "تخطي المقارنة المرجعية"
+  },
+  "Male": {
+    "fr": "Hommes",
+    "ar": "ذكور"
+  },
+  "Female": {
+    "fr": "Femmes",
+    "ar": "إناث"
+  },
+  "male": {
+    "fr": "Hommes",
+    "ar": "ذكور"
+  },
+  "female": {
+    "fr": "Femmes",
+    "ar": "إناث"
+  },
+  "Choose a reference cohort only for experimental comparisons. Weight and height are optional; calculators request weight when needed.": {
+    "fr": "Le groupe de référence sert uniquement aux comparaisons expérimentales. Poids et taille sont facultatifs ; les calculateurs demandent le poids si nécessaire.",
+    "ar": "اختر عينة مرجعية للمقارنات التجريبية فقط. الوزن والطول اختياريان؛ تطلب الحاسبات الوزن عند الحاجة."
+  },
+  "Private by default.": {
+    "fr": "Privé par défaut.",
+    "ar": "خاص افتراضيًا."
+  },
+  "Already a member? Log in": {
+    "fr": "Déjà inscrit ? Connectez-vous",
+    "ar": "لديك حساب؟ سجّل الدخول"
+  },
+  "Next: easy measurements": {
+    "fr": "Suite : mesures simples",
+    "ar": "التالي: قياسات سهلة"
+  },
+  "EASY TO TRACK AT HOME": {
+    "fr": "FACILE À SUIVRE CHEZ VOUS",
+    "ar": "قياسات سهلة في المنزل"
+  },
+  "Choose your first measurements.": {
+    "fr": "Choisissez vos premières mesures.",
+    "ar": "اختر قياساتك الأولى."
+  },
+  "Choose tests you can perform consistently. Skip anything unsuitable or unmeasured.": {
+    "fr": "Choisissez des tests que vous pouvez répéter de façon cohérente. Ignorez ceux qui ne vous conviennent pas ou ne sont pas mesurés.",
+    "ar": "اختر اختبارات يمكنك تكرارها بطريقة ثابتة. تجاوز ما لا يناسبك أو لم تقسْه."
+  },
+  "Choose starter measurements": {
+    "fr": "Choisir les premières mesures",
+    "ar": "اختر القياسات الأولية"
+  },
+  "Leave unmeasured fields blank.": {
+    "fr": "Laissez vides les champs non mesurés.",
+    "ar": "اترك الحقول غير المقاسة فارغة."
+  },
+  "Back": {
+    "fr": "Retour",
+    "ar": "رجوع"
+  },
+  "View my dashboard": {
+    "fr": "Voir mon tableau de bord",
+    "ar": "عرض لوحة متابعتي"
+  },
+  "Save & continue later": {
+    "fr": "Enregistrer et continuer plus tard",
+    "ar": "احفظ وتابع لاحقًا"
+  },
+  "Optional": {
+    "fr": "Facultatif",
+    "ar": "اختياري"
+  },
+  "Tracking only": {
+    "fr": "Suivi uniquement",
+    "ar": "للمتابعة فقط"
+  },
+  "Provisional model": {
+    "fr": "Modèle provisoire",
+    "ar": "نموذج أولي"
+  },
+  "Published CPET reference": {
+    "fr": "Référence CPET publiée",
+    "ar": "مرجع CPET منشور"
+  },
+  "How to measure & evidence": {
+    "fr": "Comment mesurer et sources",
+    "ar": "طريقة القياس والأدلة"
+  },
+  "How to measure": {
+    "fr": "Comment mesurer",
+    "ar": "كيفية القياس"
+  },
+  "Read the source": {
+    "fr": "Lire la source",
+    "ar": "قراءة المصدر"
+  },
+  "Calculate an estimate": {
+    "fr": "Calculer une estimation",
+    "ar": "حساب تقدير"
+  },
+  "Measurement method & date": {
+    "fr": "Méthode et date de mesure",
+    "ar": "طريقة القياس وتاريخه"
+  },
+  "Required for VO₂ scoring": {
+    "fr": "Requis pour le calcul VO₂",
+    "ar": "مطلوب لحساب VO₂"
+  },
+  "Test protocol": {
+    "fr": "Protocole du test",
+    "ar": "بروتوكول الاختبار"
+  },
+  "Unknown / not recorded": {
+    "fr": "Inconnu / non renseigné",
+    "ar": "غير معروف / غير مسجل"
+  },
+  "Unknown": {
+    "fr": "Inconnu",
+    "ar": "غير معروف"
+  },
+  "Equipment / task label": {
+    "fr": "Équipement / nom du test",
+    "ar": "الجهاز / اسم الاختبار"
+  },
+  "Same label for repeated tests": {
+    "fr": "Même nom pour les tests répétés",
+    "ar": "استخدم الاسم نفسه للاختبارات المتكررة"
+  },
+  "Measurement method": {
+    "fr": "Méthode de mesure",
+    "ar": "طريقة القياس"
+  },
+  "Manual observation": {
+    "fr": "Observation manuelle",
+    "ar": "قياس يدوي"
+  },
+  "Laboratory test": {
+    "fr": "Analyse de laboratoire",
+    "ar": "اختبار مخبري"
+  },
+  "Direct CPET": {
+    "fr": "CPET direct",
+    "ar": "اختبار CPET مباشر"
+  },
+  "Cooper run estimate": {
+    "fr": "Estimation par test de Cooper",
+    "ar": "تقدير اختبار كوبر"
+  },
+  "Wearable estimate": {
+    "fr": "Estimation par objet connecté",
+    "ar": "تقدير جهاز قابل للارتداء"
+  },
+  "Single-hand dynamometer": {
+    "fr": "Dynamomètre à une main",
+    "ar": "دينامومتر ليد واحدة"
+  },
+  "DEXA scan": {
+    "fr": "Examen DEXA",
+    "ar": "فحص DEXA"
+  },
+  "Skinfold estimate": {
+    "fr": "Estimation par plis cutanés",
+    "ar": "تقدير طيات الجلد"
+  },
+  "Measured one-rep max": {
+    "fr": "Maximum mesuré sur une répétition",
+    "ar": "أقصى وزن مقاس لتكرار واحد"
+  },
+  "Estimated one-rep max (Epley)": {
+    "fr": "Maximum estimé sur une répétition (Epley)",
+    "ar": "أقصى وزن مقدر لتكرار واحد (إيبلي)"
+  },
+  "Device measurement": {
+    "fr": "Mesure par appareil",
+    "ar": "قياس بجهاز"
+  },
+  "Measured date": {
+    "fr": "Date de mesure",
+    "ar": "تاريخ القياس"
+  },
+  "Age at this test": {
+    "fr": "Âge lors du test",
+    "ar": "العمر عند الاختبار"
+  },
+  "Age at VO₂ test": {
+    "fr": "Âge lors du test VO₂",
+    "ar": "العمر عند اختبار VO₂"
+  },
+  "Exercise modality for VO₂ test": {
+    "fr": "Modalité du test VO₂",
+    "ar": "نوع جهد اختبار VO₂"
+  },
+  "Exercise modality": {
+    "fr": "Modalité d’exercice",
+    "ar": "نوع الجهد"
+  },
+  "Treadmill": {
+    "fr": "Tapis roulant",
+    "ar": "جهاز المشي"
+  },
+  "Cycle ergometer": {
+    "fr": "Vélo ergomètre",
+    "ar": "دراجة اختبار الجهد"
+  },
+  "Other modality": {
+    "fr": "Autre modalité",
+    "ar": "نوع آخر"
+  },
+  "Peak RER from CPET report · optional": {
+    "fr": "RER maximal du rapport CPET · facultatif",
+    "ar": "ذروة RER من تقرير CPET · اختياري"
+  },
+  "Peak RER from CPET report": {
+    "fr": "RER maximal du rapport CPET",
+    "ar": "ذروة RER من تقرير CPET"
+  },
+  "FRIEND reference population · optional": {
+    "fr": "Population de référence FRIEND · facultatif",
+    "ar": "العينة المرجعية FRIEND · اختياري"
+  },
+  "FRIEND reference population": {
+    "fr": "Population de référence FRIEND",
+    "ar": "العينة المرجعية FRIEND"
+  },
+  "Unknown / prefer not to answer": {
+    "fr": "Inconnu / préfère ne pas répondre",
+    "ar": "غير معروف / أفضل عدم الإجابة"
+  },
+  "No known cardiovascular disease or COPD at the test": {
+    "fr": "Aucune maladie cardiovasculaire ni BPCO connue lors du test",
+    "ar": "لا مرض قلبي وعائي معروف أو انسداد رئوي مزمن عند الاختبار"
+  },
+  "Outside this reference population": {
+    "fr": "Hors de cette population de référence",
+    "ar": "خارج هذه العينة المرجعية"
+  },
+  "Hand": {
+    "fr": "Main",
+    "ar": "اليد"
+  },
+  "Test leg": {
+    "fr": "Jambe testée",
+    "ar": "الساق المختبرة"
+  },
+  "Left": {
+    "fr": "Gauche",
+    "ar": "اليسرى"
+  },
+  "Right": {
+    "fr": "Droite",
+    "ar": "اليمنى"
+  },
+  "Both hands · combined": {
+    "fr": "Deux mains · somme",
+    "ar": "كلتا اليدين · مجموع"
+  },
+  "Trials per side/test": {
+    "fr": "Essais par côté/test",
+    "ar": "المحاولات لكل جانب/اختبار"
+  },
+  "Chair height (cm)": {
+    "fr": "Hauteur de chaise (cm)",
+    "ar": "ارتفاع الكرسي (سم)"
+  },
+  "Chair height": {
+    "fr": "Hauteur de chaise",
+    "ar": "ارتفاع الكرسي"
+  },
+  "HRV statistic": {
+    "fr": "Statistique VFC",
+    "ar": "مقياس تباين نبض القلب"
+  },
+  "SDNN · different statistic": {
+    "fr": "SDNN · autre statistique",
+    "ar": "SDNN · مقياس مختلف"
+  },
+  "Window start": {
+    "fr": "Début de période",
+    "ar": "بداية الفترة"
+  },
+  "Window end": {
+    "fr": "Fin de période",
+    "ar": "نهاية الفترة"
+  },
+  "Samples / nights": {
+    "fr": "Échantillons / nuits",
+    "ar": "العينات / الليالي"
+  },
+  "Clear window": {
+    "fr": "Effacer la période",
+    "ar": "مسح الفترة"
+  },
+  "Observation window for": {
+    "fr": "Période d’observation de",
+    "ar": "فترة القياس لـ"
+  },
+  "· optional": {
+    "fr": "· facultatif",
+    "ar": "· اختياري"
+  },
+  "Only direct CPET with documented date, treadmill modality, test age 20–89, peak RER ≥ 1.0 and confirmed reference-population match enters this reference. Estimates and cycle tests remain available for tracking.": {
+    "fr": "Seul un CPET direct daté, sur tapis roulant, à 20–89 ans, avec RER maximal ≥ 1,0 et compatibilité confirmée avec la population de référence entre dans cette référence. Les estimations et tests sur vélo restent disponibles pour le suivi.",
+    "ar": "يدخل هذا المرجع فقط اختبار CPET مباشر موثق التاريخ على جهاز المشي، بعمر 20–89 عامًا، وذروة RER ≥ 1.0 وتوافق مؤكد مع عينة المرجع. تبقى التقديرات واختبارات الدراجة متاحة للمتابعة."
+  },
+  "Count consecutive strict push-ups. Stop when you can no longer keep the same form.": {
+    "fr": "Comptez les pompes strictes consécutives. Arrêtez lorsque vous ne pouvez plus garder la même technique.",
+    "ar": "عُدّ تمارين الضغط المتتالية بتقنية سليمة. توقف عندما تعجز عن الحفاظ على التقنية نفسها."
+  },
+  "Count full stands from a chair in 30 seconds. Use the same chair and technique each time.": {
+    "fr": "Comptez les levers complets d’une chaise en 30 secondes. Utilisez la même chaise et la même technique.",
+    "ar": "عُدّ مرات الوقوف الكامل من كرسي خلال 30 ثانية. استخدم الكرسي والتقنية نفسيهما كل مرة."
+  },
+  "Enter your average hours of sleep per night over the last seven days.": {
+    "fr": "Saisissez vos heures moyennes de sommeil par nuit sur les sept derniers jours.",
+    "ar": "أدخل متوسط ساعات نومك ليلًا خلال الأيام السبعة الماضية."
+  },
+  "Welcome back.": {
+    "fr": "Heureux de vous revoir.",
+    "ar": "مرحبًا بعودتك."
+  },
+  "Log in to your account.": {
+    "fr": "Connectez-vous à votre compte.",
+    "ar": "سجّل الدخول إلى حسابك."
+  },
+  "Your progress. Always with you.": {
+    "fr": "Vos progrès. Toujours avec vous.",
+    "ar": "تقدمك. معك دائمًا."
+  },
+  "Reset your password.": {
+    "fr": "Réinitialisez votre mot de passe.",
+    "ar": "أعد تعيين كلمة مرورك."
+  },
+  "We’ll email a secure link to reset your password.": {
+    "fr": "Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe.",
+    "ar": "سنرسل رابطًا آمنًا إلى بريدك لإعادة تعيين كلمة المرور."
+  },
+  "Account action": {
+    "fr": "Action du compte",
+    "ar": "إجراء الحساب"
+  },
+  "Email": {
+    "fr": "Adresse e-mail",
+    "ar": "البريد الإلكتروني"
+  },
+  "Password": {
+    "fr": "Mot de passe",
+    "ar": "كلمة المرور"
+  },
+  "Confirm password": {
+    "fr": "Confirmer le mot de passe",
+    "ar": "تأكيد كلمة المرور"
+  },
+  "Hide password": {
+    "fr": "Masquer le mot de passe",
+    "ar": "إخفاء كلمة المرور"
+  },
+  "Show password": {
+    "fr": "Afficher le mot de passe",
+    "ar": "إظهار كلمة المرور"
+  },
+  "At least": {
+    "fr": "Au moins",
+    "ar": "على الأقل"
+  },
+  "characters.": {
+    "fr": "caractères.",
+    "ar": "حرفًا."
+  },
+  "Please wait…": {
+    "fr": "Veuillez patienter…",
+    "ar": "يرجى الانتظار…"
+  },
+  "Send reset link": {
+    "fr": "Envoyer le lien",
+    "ar": "إرسال رابط الاستعادة"
+  },
+  "Forgot password?": {
+    "fr": "Mot de passe oublié ?",
+    "ar": "نسيت كلمة المرور؟"
+  },
+  "Back to log in": {
+    "fr": "Retour à la connexion",
+    "ar": "العودة لتسجيل الدخول"
+  },
+  "Resend confirmation email": {
+    "fr": "Renvoyer l’e-mail de confirmation",
+    "ar": "إعادة إرسال رسالة التأكيد"
+  },
+  "Back to TOP1": {
+    "fr": "Retour à TOP1",
+    "ar": "العودة إلى TOP1"
+  },
+  "Data &amp; privacy": {
+    "fr": "Données et confidentialité",
+    "ar": "البيانات والخصوصية"
+  },
+  "Data & privacy": {
+    "fr": "Données et confidentialité",
+    "ar": "البيانات والخصوصية"
+  },
+  "Account access is temporarily unavailable. Your local measurements remain on this device.": {
+    "fr": "L’accès au compte est temporairement indisponible. Vos mesures locales restent sur cet appareil.",
+    "ar": "الدخول إلى الحساب غير متاح مؤقتًا. تبقى قياساتك المحلية على هذا الجهاز."
+  },
+  "ACCOUNT SECURITY": {
+    "fr": "SÉCURITÉ DU COMPTE",
+    "ar": "أمان الحساب"
+  },
+  "ACCOUNT RECOVERY": {
+    "fr": "RÉCUPÉRATION DU COMPTE",
+    "ar": "استعادة الحساب"
+  },
+  "Change your password.": {
+    "fr": "Changez votre mot de passe.",
+    "ar": "غيّر كلمة مرورك."
+  },
+  "Set a new password.": {
+    "fr": "Définissez un nouveau mot de passe.",
+    "ar": "عيّن كلمة مرور جديدة."
+  },
+  "Choose a new password. After saving it, you’ll sign in again.": {
+    "fr": "Choisissez un nouveau mot de passe. Après l’enregistrement, vous vous reconnecterez.",
+    "ar": "اختر كلمة مرور جديدة. بعد حفظها، ستسجل الدخول مجددًا."
+  },
+  "Checking your recovery link…": {
+    "fr": "Vérification du lien de récupération…",
+    "ar": "جارٍ التحقق من رابط الاستعادة…"
+  },
+  "Checking your account…": {
+    "fr": "Vérification de votre compte…",
+    "ar": "جارٍ التحقق من حسابك…"
+  },
+  "Current password": {
+    "fr": "Mot de passe actuel",
+    "ar": "كلمة المرور الحالية"
+  },
+  "New password": {
+    "fr": "Nouveau mot de passe",
+    "ar": "كلمة المرور الجديدة"
+  },
+  "Confirm new password": {
+    "fr": "Confirmer le nouveau mot de passe",
+    "ar": "تأكيد كلمة المرور الجديدة"
+  },
+  "Update password": {
+    "fr": "Mettre à jour le mot de passe",
+    "ar": "تحديث كلمة المرور"
+  },
+  "Updating…": {
+    "fr": "Mise à jour…",
+    "ar": "جارٍ التحديث…"
+  },
+  "This recovery link is missing or expired. Request a new email and use its latest reset link.": {
+    "fr": "Ce lien est absent ou expiré. Demandez un nouvel e-mail et utilisez le dernier lien reçu.",
+    "ar": "رابط الاستعادة مفقود أو منتهي الصلاحية. اطلب رسالة جديدة واستخدم أحدث رابط فيها."
+  },
+  "Send a new reset link": {
+    "fr": "Envoyer un nouveau lien",
+    "ar": "إرسال رابط جديد"
+  },
+  "Sign in before changing your password.": {
+    "fr": "Connectez-vous avant de changer votre mot de passe.",
+    "ar": "سجّل الدخول قبل تغيير كلمة مرورك."
+  },
+  "Sign in": {
+    "fr": "Se connecter",
+    "ar": "تسجيل الدخول"
+  },
+  "Sign out": {
+    "fr": "Se déconnecter",
+    "ar": "تسجيل الخروج"
+  },
+  "Change password": {
+    "fr": "Changer le mot de passe",
+    "ar": "تغيير كلمة المرور"
+  },
+  "Your account": {
+    "fr": "Votre compte",
+    "ar": "حسابك"
+  },
+  "Keep your progress.": {
+    "fr": "Conservez vos progrès.",
+    "ar": "احتفظ بتقدمك."
+  },
+  "Access your measurements across devices.": {
+    "fr": "Retrouvez vos mesures sur tous vos appareils.",
+    "ar": "اطّلع على قياساتك عبر أجهزتك."
+  },
+  "Account & sharing": {
+    "fr": "Compte et partage",
+    "ar": "الحساب والمشاركة"
+  },
+  "About TOP1": {
+    "fr": "À propos de TOP1",
+    "ar": "عن TOP1"
+  },
+  "Privacy": {
+    "fr": "Confidentialité",
+    "ar": "الخصوصية"
+  },
+  "Support": {
+    "fr": "Assistance",
+    "ar": "الدعم"
+  },
+  "Support & data requests": {
+    "fr": "Assistance et demandes de données",
+    "ar": "الدعم وطلبات البيانات"
+  },
+  "Add your basics to get started.": {
+    "fr": "Ajoutez vos informations pour commencer.",
+    "ar": "أضف معلوماتك الأساسية للبدء."
+  },
+  "Create my profile": {
+    "fr": "Créer mon profil",
+    "ar": "إنشاء ملفي"
+  },
+  "Your performance passport": {
+    "fr": "Votre passeport de performance",
+    "ar": "جواز أدائك"
+  },
+  "Download passport": {
+    "fr": "Télécharger le passeport",
+    "ar": "تنزيل جواز الأداء"
+  },
+  "Experimental model index ·": {
+    "fr": "Indice expérimental ·",
+    "ar": "مؤشر النموذج التجريبي ·"
+  },
+  "awaiting measurements": {
+    "fr": "en attente de mesures",
+    "ar": "بانتظار القياسات"
+  },
+  "Your measurements": {
+    "fr": "Vos mesures",
+    "ar": "قياساتك"
+  },
+  "SVG image · generated on this device": {
+    "fr": "Image SVG · créée sur cet appareil",
+    "ar": "صورة SVG · أُنشئت على هذا الجهاز"
+  },
+  "Record 3 eligible capacity measurements to export.": {
+    "fr": "Ajoutez 3 mesures de capacité admissibles pour exporter.",
+    "ar": "سجّل 3 قياسات قدرة مؤهلة للتصدير."
+  },
+  "Start over on this device": {
+    "fr": "Recommencer sur cet appareil",
+    "ar": "ابدأ من جديد على هذا الجهاز"
+  },
+  "Replace your local profile with a new one. Export your summary first if you want to keep it.": {
+    "fr": "Remplacez votre profil local. Exportez d’abord votre résumé si vous souhaitez le conserver.",
+    "ar": "استبدل ملفك المحلي بآخر جديد. صدّر ملخصك أولًا إن أردت الاحتفاظ به."
+  },
+  "Reset local profile": {
+    "fr": "Réinitialiser le profil local",
+    "ar": "إعادة ضبط الملف المحلي"
+  },
+  "Reset this local profile?": {
+    "fr": "Réinitialiser ce profil local ?",
+    "ar": "إعادة ضبط هذا الملف المحلي؟"
+  },
+  "This replaces the personal measurements stored on this device. Download your summary before continuing if you want a copy.": {
+    "fr": "Cela remplace les mesures personnelles de cet appareil. Téléchargez votre résumé avant de continuer si vous souhaitez une copie.",
+    "ar": "سيستبدل هذا القياسات الشخصية المحفوظة على هذا الجهاز. نزّل الملخص أولًا إن أردت نسخة."
+  },
+  "Keep my profile": {
+    "fr": "Conserver mon profil",
+    "ar": "الاحتفاظ بملفي"
+  },
+  "Reset & start again": {
+    "fr": "Réinitialiser et recommencer",
+    "ar": "إعادة الضبط والبدء مجددًا"
+  },
+  "Your data": {
+    "fr": "Vos données",
+    "ar": "بياناتك"
+  },
+  "Browser data": {
+    "fr": "Données du navigateur",
+    "ar": "بيانات المتصفح"
+  },
+  "Guest measurements, history, routine and drafts stay in this browser.": {
+    "fr": "Les mesures, l’historique, la routine et les brouillons invités restent dans ce navigateur.",
+    "ar": "تبقى قياسات الضيف وسجله وروتينه ومسوداته في هذا المتصفح."
+  },
+  "Export browser data": {
+    "fr": "Exporter les données du navigateur",
+    "ar": "تصدير بيانات المتصفح"
+  },
+  "Delete guest data": {
+    "fr": "Supprimer les données invitées",
+    "ar": "حذف بيانات الضيف"
+  },
+  "Delete guest browser data": {
+    "fr": "Supprimer les données invitées du navigateur",
+    "ar": "حذف بيانات الضيف من المتصفح"
+  },
+  "Delete guest data in this browser?": {
+    "fr": "Supprimer les données invitées dans ce navigateur ?",
+    "ar": "حذف بيانات الضيف في هذا المتصفح؟"
+  },
+  "This permanently removes the guest profile, measurements, history, routine and guest drafts. Saved cloud accounts and account drafts are separate.": {
+    "fr": "Cela supprime définitivement le profil invité, ses mesures, son historique, sa routine et ses brouillons. Les comptes et brouillons de compte restent séparés.",
+    "ar": "يحذف هذا نهائيًا ملف الضيف وقياساته وسجله وروتينه ومسوداته. الحسابات السحابية ومسوداتها منفصلة."
+  },
+  "Type DELETE BROWSER DATA": {
+    "fr": "Saisissez DELETE BROWSER DATA",
+    "ar": "اكتب DELETE BROWSER DATA"
+  },
+  "Export account data": {
+    "fr": "Exporter les données du compte",
+    "ar": "تصدير بيانات الحساب"
+  },
+  "Export includes saved measurements, methods, calculator inputs, assessment history, import receipts and routine history.": {
+    "fr": "L’export inclut les mesures, méthodes, paramètres de calcul, évaluations, reçus d’importation et l’historique de routine.",
+    "ar": "يشمل التصدير القياسات المحفوظة وطرقها ومدخلات الحاسبات وسجل التقييمات وإيصالات الاستيراد وسجل الروتين."
+  },
+  "Delete measurement history": {
+    "fr": "Supprimer l’historique des mesures",
+    "ar": "حذف سجل القياسات"
+  },
+  "Delete measurement history?": {
+    "fr": "Supprimer l’historique des mesures ?",
+    "ar": "حذف سجل القياسات؟"
+  },
+  "History to delete": {
+    "fr": "Historique à supprimer",
+    "ar": "السجل المطلوب حذفه"
+  },
+  "All measurement history": {
+    "fr": "Tout l’historique des mesures",
+    "ar": "كل سجل القياسات"
+  },
+  "Delete selected history": {
+    "fr": "Supprimer l’historique sélectionné",
+    "ar": "حذف السجل المحدد"
+  },
+  "This permanently deletes the chosen measurement history, including its current value. Public sharing is disabled and assessment summaries derived from that history are removed.": {
+    "fr": "Cela supprime définitivement l’historique choisi et sa valeur actuelle. Le partage public est désactivé et les évaluations qui en découlent sont supprimées.",
+    "ar": "يحذف هذا نهائيًا السجل المحدد بما فيه القيمة الحالية. تُعطل المشاركة العامة وتُحذف ملخصات التقييم المستمدة منه."
+  },
+  "Delete account": {
+    "fr": "Supprimer le compte",
+    "ar": "حذف الحساب"
+  },
+  "Delete my account": {
+    "fr": "Supprimer mon compte",
+    "ar": "حذف حسابي"
+  },
+  "Delete your account?": {
+    "fr": "Supprimer votre compte ?",
+    "ar": "حذف حسابك؟"
+  },
+  "This permanently deletes your account, profile, observations, assessment records and routine history. Sign-in sessions will be revoked.": {
+    "fr": "Cela supprime définitivement votre compte, profil, observations, évaluations et historique de routine. Les sessions seront révoquées.",
+    "ar": "يحذف هذا نهائيًا حسابك وملفك وقياساتك وتقييماتك وسجل روتينك. ستُلغى جلسات الدخول."
+  },
+  "Export a copy first": {
+    "fr": "Exporter d’abord une copie",
+    "ar": "صدّر نسخة أولًا"
+  },
+  "Export first if you want a copy. Existing third-party public copies and provider backups are outside this live-data action.": {
+    "fr": "Exportez d’abord pour conserver une copie. Les copies publiques de tiers et sauvegardes du fournisseur ne sont pas concernées.",
+    "ar": "صدّر أولًا إن أردت نسخة. لا يشمل هذا الإجراء النسخ العامة لدى الآخرين أو نسخ المزود الاحتياطية."
+  },
+  "Processing…": {
+    "fr": "Traitement…",
+    "ar": "جارٍ التنفيذ…"
+  },
+  "Checking account deletion availability…": {
+    "fr": "Vérification de la suppression du compte…",
+    "ar": "جارٍ التحقق من إتاحة حذف الحساب…"
+  },
+  "Could not check account deletion availability.": {
+    "fr": "Impossible de vérifier la suppression du compte.",
+    "ar": "تعذر التحقق من إتاحة حذف الحساب."
+  },
+  "Retry availability check": {
+    "fr": "Réessayer la vérification",
+    "ar": "إعادة محاولة التحقق"
+  },
+  "Account deletion is awaiting server administration setup.": {
+    "fr": "La suppression du compte attend une configuration du serveur.",
+    "ar": "حذف الحساب ينتظر إعداد الخادم."
+  },
+  "Save or resolve current edits before deleting data.": {
+    "fr": "Enregistrez ou résolvez les modifications avant de supprimer des données.",
+    "ar": "احفظ التعديلات الحالية أو عالجها قبل حذف البيانات."
+  },
+  "Type": {
+    "fr": "Saisissez",
+    "ar": "اكتب"
+  },
+  "Profile visibility": {
+    "fr": "Visibilité du profil",
+    "ar": "ظهور الملف"
+  },
+  "Public profile visibility": {
+    "fr": "Visibilité publique du profil",
+    "ar": "ظهور الملف للعامة"
+  },
+  "Public username": {
+    "fr": "Nom d’utilisateur public",
+    "ar": "اسم المستخدم العام"
+  },
+  "Save username": {
+    "fr": "Enregistrer le nom",
+    "ar": "حفظ الاسم"
+  },
+  "3–30 letters, numbers, underscores or hyphens. Start with a letter or number. Raw metric logs stay private.": {
+    "fr": "3 à 30 lettres, chiffres, tirets ou tirets bas. Commencez par une lettre ou un chiffre. Les mesures brutes restent privées.",
+    "ar": "من 3 إلى 30 حرفًا أو رقمًا أو شرطة أو شرطة سفلية. ابدأ بحرف أو رقم. تبقى القياسات الخام خاصة."
+  },
+  "Your profile and measurements are private.": {
+    "fr": "Votre profil et vos mesures sont privés.",
+    "ar": "ملفك وقياساتك خاصة."
+  },
+  "Your reviewed summary fields are public.": {
+    "fr": "Les champs de résumé validés sont publics.",
+    "ar": "حقول الملخص التي راجعتها متاحة للعامة."
+  },
+  "Make my profile private": {
+    "fr": "Rendre mon profil privé",
+    "ar": "جعل ملفي خاصًا"
+  },
+  "Withdrawing…": {
+    "fr": "Retrait…",
+    "ar": "جارٍ سحب النشر…"
+  },
+  "Optional public fields": {
+    "fr": "Champs publics facultatifs",
+    "ar": "حقول عامة اختيارية"
+  },
+  "Include reference sex": {
+    "fr": "Inclure le sexe de référence",
+    "ar": "تضمين جنس العينة المرجعية"
+  },
+  "Include weight and height": {
+    "fr": "Inclure poids et taille",
+    "ar": "تضمين الوزن والطول"
+  },
+  "Public summary preview: username, age cohort, recording coverage and experimental capacity points": {
+    "fr": "Aperçu public : nom, tranche d’âge, couverture des mesures et points expérimentaux de capacité",
+    "ar": "معاينة الملخص العام: الاسم والفئة العمرية وتغطية القياسات ونقاط القدرة التجريبية"
+  },
+  ". Raw observations and exact age stay private.": {
+    "fr": ". Les mesures brutes et l’âge exact restent privés.",
+    "ar": ". تبقى القياسات الخام والعمر الدقيق خاصين."
+  },
+  "Switching back to private blocks new public-page and social-card requests. People and social networks may retain copies or images already saved.": {
+    "fr": "Le retour au privé bloque les nouvelles demandes de page publique et de carte sociale. Des personnes et réseaux peuvent conserver des copies déjà enregistrées.",
+    "ar": "العودة إلى الوضع الخاص تمنع الطلبات الجديدة للصفحة العامة وبطاقات المشاركة. قد يحتفظ الآخرون والشبكات بنسخ محفوظة سابقًا."
+  },
+  "Copy profile link": {
+    "fr": "Copier le lien du profil",
+    "ar": "نسخ رابط الملف"
+  },
+  "Share on X": {
+    "fr": "Partager sur X",
+    "ar": "المشاركة على X"
+  },
+  "Complete your profile before sharing.": {
+    "fr": "Complétez votre profil avant de partager.",
+    "ar": "أكمل ملفك قبل المشاركة."
+  },
+  "A guest profile is available in this browser. Review it before importing into your account.": {
+    "fr": "Un profil invité est disponible ici. Vérifiez-le avant de l’importer dans votre compte.",
+    "ar": "يوجد ملف ضيف في هذا المتصفح. راجعه قبل استيراده إلى حسابك."
+  },
+  "Review guest import": {
+    "fr": "Vérifier l’importation invitée",
+    "ar": "مراجعة استيراد ملف الضيف"
+  },
+  "Review import": {
+    "fr": "Vérifier l’importation",
+    "ar": "مراجعة الاستيراد"
+  },
+  "Import into my account": {
+    "fr": "Importer dans mon compte",
+    "ar": "استيراد إلى حسابي"
+  },
+  "Importing…": {
+    "fr": "Importation…",
+    "ar": "جارٍ الاستيراد…"
+  },
+  "Keep separate": {
+    "fr": "Garder séparés",
+    "ar": "إبقاء البيانات منفصلة"
+  },
+  "Import only if this is your data. Guest measurements are removed from this browser only after a successful, verified import.": {
+    "fr": "Importez uniquement vos données. Les mesures invitées ne sont retirées qu’après une importation réussie et vérifiée.",
+    "ar": "استورد فقط إن كانت هذه بياناتك. لا تُحذف قياسات الضيف من المتصفح إلا بعد استيراد ناجح ومؤكد."
+  },
+  "observations from this browser profile. Existing account measurements and basics take priority.": {
+    "fr": "observations de ce navigateur. Les mesures et informations déjà présentes dans le compte sont prioritaires.",
+    "ar": "قياسات من ملف هذا المتصفح. قياسات الحساب ومعلوماته الموجودة لها الأولوية."
+  },
+  "Leave without saving?": {
+    "fr": "Quitter sans enregistrer ?",
+    "ar": "المغادرة دون حفظ؟"
+  },
+  "Leave without saving": {
+    "fr": "Quitter sans enregistrer",
+    "ar": "المغادرة دون حفظ"
+  },
+  "Some inputs are unfinished or invalid. Discard those inputs before leaving this view, or keep editing.": {
+    "fr": "Des champs sont incomplets ou invalides. Abandonnez-les avant de quitter ou poursuivez la modification.",
+    "ar": "بعض المدخلات غير مكتملة أو غير صالحة. تجاهلها قبل المغادرة أو تابع التعديل."
+  },
+  "Keep working": {
+    "fr": "Continuer",
+    "ar": "متابعة العمل"
+  },
+  "Discard unfinished inputs and leave": {
+    "fr": "Abandonner les champs et quitter",
+    "ar": "تجاهل المدخلات غير المكتملة والمغادرة"
+  },
+  "An unsaved draft is available": {
+    "fr": "Un brouillon non enregistré est disponible",
+    "ar": "توجد مسودة غير محفوظة"
+  },
+  "Review draft": {
+    "fr": "Vérifier le brouillon",
+    "ar": "مراجعة المسودة"
+  },
+  "Discard draft": {
+    "fr": "Abandonner le brouillon",
+    "ar": "تجاهل المسودة"
+  },
+  "Download draft": {
+    "fr": "Télécharger le brouillon",
+    "ar": "تنزيل المسودة"
+  },
+  "Reviewing your retained draft. It has not overwritten the saved profile.": {
+    "fr": "Vous consultez le brouillon conservé. Il n’a pas remplacé le profil enregistré.",
+    "ar": "أنت تراجع المسودة المحتفظ بها. لم تستبدل الملف المحفوظ."
+  },
+  "Save reviewed draft": {
+    "fr": "Enregistrer le brouillon vérifié",
+    "ar": "حفظ المسودة المراجعة"
+  },
+  "Keep saved profile": {
+    "fr": "Garder le profil enregistré",
+    "ar": "الاحتفاظ بالملف المحفوظ"
+  },
+  "Review latest profile": {
+    "fr": "Vérifier le dernier profil",
+    "ar": "مراجعة أحدث ملف"
+  },
+  "Retry save": {
+    "fr": "Réessayer l’enregistrement",
+    "ar": "إعادة محاولة الحفظ"
+  },
+  "Retry loading": {
+    "fr": "Réessayer le chargement",
+    "ar": "إعادة محاولة التحميل"
+  },
+  "Retry": {
+    "fr": "Réessayer",
+    "ar": "إعادة المحاولة"
+  },
+  "Loading your profile…": {
+    "fr": "Chargement du profil…",
+    "ar": "جارٍ تحميل ملفك…"
+  },
+  "Your account could not be loaded. Retry above before making changes.": {
+    "fr": "Votre compte n’a pas pu être chargé. Réessayez ci-dessus avant toute modification.",
+    "ar": "تعذر تحميل حسابك. أعد المحاولة أعلاه قبل التعديل."
+  },
+  "Your changes are only in memory. Device storage is unavailable. Keep this page open or sign in to save.": {
+    "fr": "Vos modifications sont en mémoire uniquement. Le stockage local est indisponible. Gardez cette page ouverte ou connectez-vous pour enregistrer.",
+    "ar": "تغييراتك في الذاكرة فقط. تخزين الجهاز غير متاح. أبقِ الصفحة مفتوحة أو سجّل الدخول للحفظ."
+  },
+  "Dismiss notification": {
+    "fr": "Fermer la notification",
+    "ar": "إغلاق الإشعار"
+  },
+  "Understand your progress.": {
+    "fr": "Comprenez vos progrès.",
+    "ar": "افهم تقدمك."
+  },
+  "Record what you know": {
+    "fr": "Notez ce que vous connaissez",
+    "ar": "سجّل ما تعرفه"
+  },
+  "Choose measurements that matter to you. Every measurement is optional. Missing data never becomes zero or a penalty. Guests store data in this browser; accounts can save across devices.": {
+    "fr": "Choisissez les mesures qui comptent pour vous. Toutes sont facultatives. Une donnée absente ne devient jamais zéro ni une pénalité. Les invités conservent leurs données dans ce navigateur ; les comptes permettent la sauvegarde sur plusieurs appareils.",
+    "ar": "اختر القياسات المهمة لك. كل القياسات اختيارية. البيانات الناقصة لا تصبح صفرًا أو عقوبة. تُحفظ بيانات الضيف في المتصفح؛ ويتيح الحساب حفظها عبر الأجهزة."
+  },
+  "Repeat a consistent test": {
+    "fr": "Répétez un test cohérent",
+    "ar": "كرّر اختبارًا ثابت الطريقة"
+  },
+  "Record the date, method and equipment. History connects documented comparable tests so a change of technique is not mistaken for a change in performance.": {
+    "fr": "Notez la date, la méthode et l’équipement. L’historique relie les tests comparables documentés pour ne pas confondre changement de technique et progrès physique.",
+    "ar": "سجّل التاريخ والطريقة والجهاز. يربط السجل الاختبارات المتوافقة الموثقة حتى لا يُفسّر تغير التقنية على أنه تغير في الأداء."
+  },
+  "Illustrative example only: a test recorded as 20 repetitions and later as 24 repetitions is a raw change of 4 repetitions. That does not establish a peer percentile.": {
+    "fr": "Exemple illustratif : passer de 20 à 24 répétitions représente une variation brute de 4 répétitions. Cela n’établit pas un percentile parmi ses pairs.",
+    "ar": "مثال توضيحي فقط: الانتقال من 20 إلى 24 تكرارًا يعني تغيرًا خامًا من 4 تكرارات. لا يحدد هذا رتبتك المئينية بين أقرانك."
+  },
+  "Know the limits": {
+    "fr": "Connaître les limites",
+    "ar": "اعرف حدود المقارنة"
+  },
+  "The optional capacity index uses provisional references. Clinical markers and recovery habits are tracked without performance points. A validated peer reference is not connected, so no worldwide or age-peer rank is offered.": {
+    "fr": "L’indice facultatif de capacité utilise des références provisoires. Les marqueurs cliniques et habitudes de récupération sont suivis sans points de performance. Aucune référence représentative validée n’est connectée pour un classement mondial ou parmi les pairs.",
+    "ar": "يستخدم مؤشر القدرة الاختياري مراجع أولية. تُتابع المؤشرات السريرية وعادات التعافي دون نقاط أداء. لا يتوفر مرجع تمثيلي معتمد لإعطاء ترتيب عالمي أو بين الأقران."
+  },
+  "Control your data": {
+    "fr": "Maîtrisez vos données",
+    "ar": "تحكّم في بياناتك"
+  },
+  "Profiles are private by default. Review any public summary before publishing. Exports and deletion controls are separate from clearing a measurement.": {
+    "fr": "Les profils sont privés par défaut. Vérifiez tout résumé public avant publication. Les exports et suppressions sont distincts de l’effacement d’une mesure.",
+    "ar": "الملفات خاصة افتراضيًا. راجع أي ملخص عام قبل نشره. التصدير والحذف منفصلان عن مسح قياس."
+  },
+  "Read the data and privacy details": {
+    "fr": "Lire les détails sur les données et la confidentialité",
+    "ar": "قراءة تفاصيل البيانات والخصوصية"
+  },
+  "Record a measurement →": {
+    "fr": "Ajouter une mesure →",
+    "ar": "أضف قياسًا ←"
+  },
+  "For account help or a data request, email": {
+    "fr": "Pour une aide ou une demande concernant vos données, écrivez à",
+    "ar": "للمساعدة بشأن الحساب أو طلب البيانات، راسل"
+  },
+  ". Include the account email and request type. Please do not send passwords, lab reports or medical details. Identity verification is required before account changes.": {
+    "fr": ". Précisez l’adresse du compte et le type de demande. N’envoyez ni mot de passe, ni bilan biologique, ni détail médical. L’identité doit être vérifiée avant toute modification du compte.",
+    "ar": ". اذكر بريد الحساب ونوع الطلب. لا ترسل كلمات مرور أو تقارير مختبر أو تفاصيل طبية. يلزم التحقق من الهوية قبل تعديل الحساب."
+  },
+  "YOUR DATA, YOUR CHOICE": {
+    "fr": "VOS DONNÉES, VOTRE CHOIX",
+    "ar": "بياناتك، خيارك"
+  },
+  "Data & privacy.": {
+    "fr": "Données et confidentialité.",
+    "ar": "البيانات والخصوصية."
+  },
+  "On your device": {
+    "fr": "Sur votre appareil",
+    "ar": "على جهازك"
+  },
+  "Signed-out personal measurements are stored in this browser. Other people using the same browser profile may be able to access them. Demo measurements stay separate from personal account imports. Starting a fresh local profile replaces the local working profile. Browser-data controls export guest history and routine drafts or explicitly delete the guest records in this browser. Saved account data and account-scoped drafts are separate.": {
+    "fr": "Les mesures sans connexion sont stockées dans ce navigateur. D’autres utilisateurs du même profil de navigateur peuvent y accéder. Les données de démonstration restent séparées des imports personnels. Un nouveau profil local remplace le profil de travail. Les commandes du navigateur permettent d’exporter l’historique et les brouillons invités ou de les supprimer explicitement. Les données et brouillons de compte sont séparés.",
+    "ar": "تُخزّن القياسات عند عدم تسجيل الدخول في هذا المتصفح، وقد يتمكن مستخدمو ملف المتصفح نفسه من الوصول إليها. تبقى بيانات العرض منفصلة عن الاستيرادات الشخصية. إنشاء ملف محلي جديد يستبدل ملف العمل المحلي. تتيح أدوات المتصفح تصدير سجل الضيف ومسوداته أو حذفها صراحةً. بيانات الحساب ومسوداته منفصلة."
+  },
+  "Supabase manages email-and-password authentication and stores account profiles and measurement history. Passwords are handled by Supabase Auth; they are not stored in your measurement profile. Signing in offers a review of any guest profile. Measurements are imported only after you choose to import them. Profiles default to private.": {
+    "fr": "Supabase gère l’authentification par e-mail et mot de passe et stocke les profils et historiques. Supabase Auth traite les mots de passe ; ils ne sont pas stockés dans votre profil de mesures. À la connexion, vous pouvez vérifier un profil invité. Les mesures ne sont importées qu’après votre choix. Les profils sont privés par défaut.",
+    "ar": "تدير Supabase تسجيل الدخول بالبريد وكلمة المرور وتخزن الملفات وسجل القياسات. تتولى Supabase Auth كلمات المرور ولا تُخزّنها في ملف قياساتك. يتيح تسجيل الدخول مراجعة ملف الضيف، ولا تُستورد القياسات إلا باختيارك. الملفات خاصة افتراضيًا."
+  },
+  "Raw measurement logs and import receipts are restricted to their account owner. Measurement clearing adds a history marker; it does not erase earlier observations. Signing out clears cloud measurements from the active dashboard and does not copy them into guest storage. Account exports include saved observations and metadata, assessment records, import receipts and routine history. You can delete selected measurement history after signing in again; this also removes derived assessment summaries and disables public sharing. Account deletion is offered when the secure server or authenticated account-deletion function is available. It requires confirmation and a recent sign-in. Live deletion does not erase third-party copies or provider backups; backup retention has not been independently verified. Unsaved account drafts may remain in this browser, scoped to that account, until you save or discard them. Other people with access to the same browser profile may access local storage.": {
+    "fr": "Les mesures brutes et reçus d’importation sont réservés au propriétaire du compte. Effacer une mesure ajoute un repère sans supprimer les observations précédentes. La déconnexion retire les mesures cloud du tableau actif sans les copier dans le stockage invité. Les exports incluent observations, contexte, évaluations, reçus et historique de routine. Après reconnexion, vous pouvez supprimer un historique choisi ; cela retire aussi les évaluations dérivées et désactive le partage public. La suppression du compte est proposée lorsque le serveur sécurisé ou la fonction authentifiée est disponible. Une confirmation et une connexion récente sont requises. La suppression ne touche pas les copies de tiers ou sauvegardes du fournisseur ; leur conservation n’a pas été vérifiée indépendamment. Les brouillons non enregistrés peuvent rester dans ce navigateur, rattachés au compte, jusqu’à leur enregistrement ou abandon. D’autres utilisateurs du même profil de navigateur peuvent accéder au stockage local.",
+    "ar": "سجلات القياس الخام وإيصالات الاستيراد متاحة لصاحب الحساب فقط. مسح قياس يضيف علامة في السجل ولا يحذف القياسات السابقة. تسجيل الخروج يزيل القياسات السحابية من اللوحة النشطة ولا ينسخها إلى تخزين الضيف. تشمل الصادرات القياسات والسياق والتقييمات والإيصالات وسجل الروتين. يمكنك حذف سجل محدد بعد إعادة الدخول؛ ويزيل ذلك الملخصات المستمدة منه ويعطل المشاركة العامة. يتاح حذف الحساب عند توفر الخادم الآمن أو وظيفة الحذف الموثقة، ويتطلب تأكيدًا وتسجيل دخول حديثًا. لا يحذف هذا نسخ الآخرين أو نسخ المزود الاحتياطية، ولم تُتحقق مدة الاحتفاظ بها بشكل مستقل. قد تبقى مسودات الحساب في المتصفح حتى حفظها أو تجاهلها. ويمكن لمن يستخدم ملف المتصفح نفسه الوصول إلى التخزين المحلي."
+  },
+  "Public snapshots": {
+    "fr": "Résumés publics",
+    "ar": "الملخصات العامة"
+  },
+  "Publishing a profile shares its username, age cohort, coverage and model aggregates. Reference sex and body size are optional public fields; review the preview before publishing. Raw measurement logs remain private. A signed snapshot attests calculation by TOP1, not independent verification of the input measurements.": {
+    "fr": "Publier un profil partage son nom, sa tranche d’âge, sa couverture et les agrégats du modèle. Le sexe de référence et la corpulence sont facultatifs ; vérifiez l’aperçu. Les mesures brutes restent privées. Un résumé signé atteste le calcul par TOP1, pas une vérification indépendante des mesures saisies.",
+    "ar": "نشر الملف يشارك الاسم والفئة العمرية والتغطية ومجاميع النموذج. جنس المرجع وحجم الجسم حقول عامة اختيارية؛ راجع المعاينة قبل النشر. تبقى القياسات الخام خاصة. يؤكد توقيع الملخص أن TOP1 أجرى الحساب، لا أن جهة مستقلة تحققت من القياسات."
+  },
+  "Hosting and usage events": {
+    "fr": "Hébergement et événements d’utilisation",
+    "ar": "الاستضافة وأحداث الاستخدام"
+  },
+  "Vercel hosts the application and may retain operational request information. Optional PostHog usage events are inactive without a configured project key. The optional integration sends event names, route categories and metric IDs rather than measurement values, demographics, account identity, public usernames or full URLs.": {
+    "fr": "Vercel héberge l’application et peut conserver des informations techniques de requête. Les événements facultatifs PostHog sont inactifs sans clé configurée. Cette intégration envoie les noms d’événements, catégories de pages et identifiants de mesures, sans valeurs, données démographiques, identité, noms publics ni URL complètes.",
+    "ar": "تستضيف Vercel التطبيق وقد تحتفظ بمعلومات تشغيل الطلبات. أحداث PostHog الاختيارية غير مفعلة دون مفتاح مشروع. يرسل التكامل أسماء الأحداث وفئات المسارات ومعرفات القياسات، دون قيم القياس أو المعلومات الديموغرافية أو هوية الحساب أو الأسماء العامة أو الروابط الكاملة."
+  },
+  "Measurement limits": {
+    "fr": "Limites des mesures",
+    "ar": "حدود القياسات"
+  },
+  "The index is experimental and self-reported. It is not a population rank, clinical score or diagnosis. Thermal and clinical observations require context and do not receive a health rank. View Methodology in your dashboard for metric evidence and calibration limits.": {
+    "fr": "L’indice est expérimental et déclaratif. Il ne constitue ni classement de population, ni score clinique, ni diagnostic. Les observations thermiques et cliniques exigent du contexte et n’obtiennent aucun classement de santé. Consultez la méthodologie pour les sources et limites de calibration.",
+    "ar": "المؤشر تجريبي ومعتمد على بيانات المستخدم، وليس ترتيبًا سكانيًا أو درجة سريرية أو تشخيصًا. تحتاج القياسات الحرارية والسريرية إلى سياق ولا تحصل على ترتيب صحي. راجع المنهجية في اللوحة للاطلاع على الأدلة وحدود المعايرة."
+  },
+  "Back to your overview →": {
+    "fr": "Retour à votre tableau de bord →",
+    "ar": "العودة إلى لوحة المتابعة ←"
+  },
+  "UNDERSTAND YOUR NUMBERS": {
+    "fr": "COMPRENEZ VOS CHIFFRES",
+    "ar": "افهم أرقامك"
+  },
+  "A useful perspective, with clear limits.": {
+    "fr": "Une perspective utile, avec des limites claires.",
+    "ar": "رؤية مفيدة بحدود واضحة."
+  },
+  "TOP1 brings your measurements together in an experimental model. It does not assign population rankings, health scores or diagnoses. Most scored references are product assumptions.": {
+    "fr": "TOP1 regroupe vos mesures dans un modèle expérimental. Il ne fournit ni classement de population, ni score de santé, ni diagnostic. La plupart des références de calcul sont des hypothèses du produit.",
+    "ar": "يجمع TOP1 قياساتك في نموذج تجريبي. لا يمنح ترتيبًا سكانيًا أو درجة صحية أو تشخيصًا. معظم مراجع الحساب افتراضات للمنتج."
+  },
+  "Start with a small snapshot": {
+    "fr": "Commencez par un petit aperçu",
+    "ar": "ابدأ بلمحة بسيطة"
+  },
+  "Raw measurements appear as you enter them. Three eligible physical capacity measurements unlock the optional experimental snapshot. Recorded coverage is the number of valid active observations divided by the active measurement count. Tracking-only entries count as recorded data, but do not enter the model. The internal weighted availability field is retained for signed-snapshot compatibility and is not the displayed percentage. Coverage is not confidence. Comparisons require the same metric set, known methods, exercise modality and reference cohort, with newer measurement dates. Unknown, incompatible or future-dated context is excluded from model scoring.": {
+    "fr": "Les mesures brutes apparaissent à la saisie. Trois mesures de capacité admissibles ouvrent l’aperçu expérimental facultatif. La couverture correspond aux observations valides divisées par le nombre de mesures actives. Les mesures de suivi comptent dans la couverture, pas dans le modèle. Le champ interne de disponibilité pondérée reste conservé pour compatibilité avec les résumés signés ; ce n’est pas le pourcentage affiché. La couverture ne mesure pas la confiance. Les comparaisons exigent mêmes mesures, méthodes connues, modalité et groupe de référence, avec des dates plus récentes. Les contextes inconnus, incompatibles ou futurs sont exclus du calcul.",
+    "ar": "تظهر القياسات الخام عند إدخالها. تتيح ثلاثة قياسات قدرة مؤهلة الملخص التجريبي الاختياري. التغطية هي عدد القياسات النشطة الصالحة مقسومًا على عدد القياسات النشطة. تدخل قياسات المتابعة في التغطية ولا تدخل في النموذج. يُحتفظ بحقل الإتاحة المرجحة الداخلي للتوافق مع الملخصات الموقعة، وليس هو النسبة المعروضة. التغطية لا تعني الثقة العلمية. تتطلب المقارنة مجموعة القياسات والطرق ونوع الجهد والعينة المرجعية نفسها مع تواريخ أحدث. يُستبعد السياق المجهول أو غير المتوافق أو المؤرخ في المستقبل من الحساب."
+  },
+  "Evidence & reference": {
+    "fr": "Sources et référence",
+    "ar": "الأدلة والمرجع"
+  },
+  "Direct treadmill CPET VO₂ uses FRIEND 2022 decade means and standard deviations only when treadmill modality, date, test age 20–89, peak RER ≥ 1.0 and a match to the reference population are explicitly recorded. Wearable and Cooper estimates stay tracking-only. Other scored references remain provisional assumptions.": {
+    "fr": "Le VO₂ mesuré par CPET direct sur tapis utilise les moyennes et écarts-types décennaux FRIEND 2022 uniquement si la modalité, la date, l’âge de 20–89 ans, le RER maximal ≥ 1,0 et la compatibilité avec la population sont documentés. Les estimations Cooper et d’objets connectés restent du suivi. Les autres références demeurent des hypothèses provisoires.",
+    "ar": "يستخدم VO₂ المقاس باختبار CPET مباشر على جهاز المشي متوسطات وانحرافات FRIEND 2022 لكل عقد عمري فقط عند توثيق نوع الجهد والتاريخ والعمر 20–89 وذروة RER ≥ 1.0 والتوافق مع العينة. تبقى تقديرات كوبر والأجهزة القابلة للارتداء للمتابعة فقط، وبقية المراجع افتراضات أولية."
+  },
+  "Experimental capacity": {
+    "fr": "Capacité expérimentale",
+    "ar": "القدرة التجريبية"
+  },
+  "Eligible measurements are capped at ±3 model units and averaged within each pillar. Body markers are context only. Only physical capacity observations enter the experimental index. Recovery habits and body markers remain tracking-only. The underlying index is 50 + 15 × the combined value, giving a 5–95 experimental scale. The calculation report shows the actual normalized weights and contributions. No representative population distribution has been validated for this composite.": {
+    "fr": "Les mesures admissibles sont bornées à ±3 unités puis moyennées par pilier. Seules les capacités physiques entrent dans l’indice ; marqueurs corporels et récupération restent du suivi. La formule 50 + 15 × la valeur combinée produit une échelle expérimentale de 5 à 95. Le rapport montre les poids normalisés et contributions réels. Aucune distribution représentative de population n’est validée pour ce composite.",
+    "ar": "تُحصر القياسات المؤهلة ضمن ±3 وحدات ثم تُحسب متوسطاتها في كل محور. تدخل القدرة البدنية فقط في المؤشر؛ وتبقى مؤشرات الجسم وعادات التعافي للمتابعة. تنتج الصيغة 50 + 15 × القيمة المجمعة نطاقًا تجريبيًا من 5 إلى 95. يعرض التقرير الأوزان المطبّعة والمساهمات الفعلية. لم يُعتمد توزيع سكاني تمثيلي لهذا المؤشر المركّب."
+  },
+  "Explore without promises": {
+    "fr": "Explorez sans promesses",
+    "ar": "استكشف دون وعود"
+  },
+  "Scenarios apply arbitrary model steps. They have no time or clinical meaning. Sleep and recovery do not earn capacity points. The model does not optimize clinical markers or thermal exposure.": {
+    "fr": "Les scénarios appliquent des pas arbitraires, sans durée ni sens clinique. Sommeil et récupération n’ajoutent pas de points de capacité. Le modèle n’optimise ni marqueurs cliniques ni exposition thermique.",
+    "ar": "تطبق السيناريوهات خطوات نموذجية افتراضية دون معنى زمني أو سريري. لا يمنح النوم والتعافي نقاط قدرة. ولا يحسّن النموذج المؤشرات السريرية أو التعرض الحراري."
+  },
+  "Scientific calibration record": {
+    "fr": "État de calibration scientifique",
+    "ar": "سجل المعايرة العلمية"
+  },
+  "One individual test has a published reference. The composite and all other scored inputs remain unvalidated. Evidence that a measurement matters does not establish a percentile distribution.": {
+    "fr": "Un test individuel dispose d’une référence publiée. Le composite et les autres mesures notées restent non validés. L’importance d’une mesure ne prouve pas sa distribution en percentiles.",
+    "ar": "يوجد مرجع منشور لاختبار فردي واحد. المؤشر المركّب وبقية المدخلات المحتسبة غير معتمدة. أهمية القياس لا تثبت توزيعه المئيني."
+  },
+  "New calculations use the reviewed 2022 treadmill tables with an RER criterion of at least 1.0. Earlier signed snapshots keep their original model version. The 10th–90th percentile thresholds do not support an exact percentile or a top-1% claim. This US laboratory registry is not a worldwide probability sample.": {
+    "fr": "Les nouveaux calculs utilisent les tables 2022 sur tapis avec RER ≥ 1,0. Les résumés signés antérieurs gardent leur version d’origine. Les seuils P10–P90 ne permettent ni percentile exact ni affirmation Top 1 %. Ce registre de laboratoires américains n’est pas un échantillon probabiliste mondial.",
+    "ar": "تستخدم الحسابات الجديدة جداول جهاز المشي لعام 2022 بشرط RER ≥ 1.0. تحتفظ الملخصات الموقعة السابقة بإصدار نموذجها الأصلي. لا تتيح عتبات P10–P90 رتبة دقيقة أو ادعاء أعلى 1%. هذا السجل المخبري الأمريكي ليس عينة احتمالية عالمية."
+  },
+  "Unlocking a composite peer rank requires a named target population, compatible joint participant data, sampling weights where applicable, independent validation and justified uncertainty estimates. Optional missing measurements never become zero.": {
+    "fr": "Un classement composite exige une population cible nommée, des données conjointes compatibles, des pondérations d’échantillonnage si nécessaires, une validation indépendante et une incertitude justifiée. Les mesures facultatives absentes ne deviennent jamais zéro.",
+    "ar": "يتطلب ترتيب مركّب تحديد المجتمع المستهدف وبيانات مشتركة متوافقة وأوزان عينة عند الحاجة وتحققًا مستقلًا وتقديرات مبررة لعدم اليقين. القياسات الاختيارية الناقصة لا تصبح صفرًا."
+  },
+  "Published individual-test reference": {
+    "fr": "Référence publiée pour un test",
+    "ar": "مرجع منشور لاختبار فردي"
+  },
+  "Uncalibrated product model": {
+    "fr": "Modèle produit non calibré",
+    "ar": "نموذج منتج غير معاير"
+  },
+  "Tracking without a reference": {
+    "fr": "Suivi sans référence",
+    "ar": "متابعة دون مرجع"
+  },
+  "measurement calibration statuses": {
+    "fr": "états de calibration des mesures",
+    "ar": "حالات معايرة القياسات"
+  },
+  "VO₂ · published cohort comparison": {
+    "fr": "VO₂ · comparaison au groupe publié",
+    "ar": "VO₂ · مقارنة بعينة منشورة"
+  },
+  ". Recorded value:": {
+    "fr": ". Valeur enregistrée :",
+    "ar": ". القيمة المسجلة:"
+  },
+  "cohort, ages": {
+    "fr": "du groupe, âges",
+    "ar": "من العينة، الأعمار"
+  },
+  "mL/kg/min. FRIEND 2022": {
+    "fr": "mL/kg/min. FRIEND 2022",
+    "ar": "مل/كغ/دقيقة. FRIEND 2022"
+  },
+  "mL/kg/min; standard deviation": {
+    "fr": "mL/kg/min ; écart-type",
+    "ar": "مل/كغ/دقيقة؛ الانحراف المعياري"
+  },
+  "Cohort mean": {
+    "fr": "Moyenne du groupe",
+    "ar": "متوسط العينة"
+  },
+  ". This describes the study distribution, not measurement uncertainty.": {
+    "fr": ". Cela décrit la distribution de l’étude, pas l’incertitude de mesure.",
+    "ar": ". يصف هذا توزيع الدراسة وليس عدم يقين القياس."
+  },
+  "Published thresholds and source": {
+    "fr": "Seuils publiés et source",
+    "ar": "العتبات المنشورة والمصدر"
+  },
+  "Reference version:": {
+    "fr": "Version de référence :",
+    "ar": "إصدار المرجع:"
+  },
+  "FRIEND 2022 · Tables 2 and 3": {
+    "fr": "FRIEND 2022 · tableaux 2 et 3",
+    "ar": "FRIEND 2022 · الجدولان 2 و3"
+  },
+  "Protocol and population match are self-reported. This individual-test comparison does not validate the experimental composite.": {
+    "fr": "Le protocole et la compatibilité de population sont déclarés par l’utilisateur. Cette comparaison individuelle ne valide pas le composite expérimental.",
+    "ar": "البروتوكول والتوافق مع العينة مُبلّغ عنهما ذاتيًا. لا تعتمد هذه المقارنة الفردية المؤشر المركّب التجريبي."
+  },
+  "Record a valid VO₂ measurement; leaving it blank is fine.": {
+    "fr": "Enregistrez une mesure VO₂ valide ; vous pouvez aussi laisser ce champ vide.",
+    "ar": "سجّل قياس VO₂ صالحًا؛ ويمكنك ترك الحقل فارغًا."
+  },
+  "Rounded published thresholds from a US laboratory cohort, not a representative worldwide sample. No exact rank, confidence interval, clinical interpretation or composite calibration is inferred.": {
+    "fr": "Seuils publiés arrondis d’un groupe de laboratoires américains, sans représentativité mondiale. Aucun rang exact, intervalle de confiance, interprétation clinique ni calibration du composite n’est déduit.",
+    "ar": "عتبات منشورة مقربة من عينة مختبرات أمريكية غير ممثلة للعالم. لا نستنتج ترتيبًا دقيقًا أو مجال ثقة أو تفسيرًا سريريًا أو معايرة للمؤشر المركّب."
+  },
+  "Below the published 10th-percentile threshold": {
+    "fr": "Sous le seuil publié du 10e percentile",
+    "ar": "أقل من عتبة الرتبة المئينية العاشرة المنشورة"
+  },
+  "Above the published 90th-percentile threshold": {
+    "fr": "Au-dessus du seuil publié du 90e percentile",
+    "ar": "أعلى من عتبة الرتبة المئينية التسعين المنشورة"
+  },
+  "Your age & sex peer benchmark": {
+    "fr": "Votre référence selon l’âge et le sexe",
+    "ar": "مرجع أقرانك بحسب العمر والجنس"
+  },
+  "Peer percentile: pending calibration.": {
+    "fr": "Percentile parmi les pairs : calibration en attente.",
+    "ar": "الرتبة المئينية بين الأقران: بانتظار المعايرة."
+  },
+  "Compare physical performance with adults in the same age and reference-sex group. A representative peer reference measured with the same tests is not connected yet.": {
+    "fr": "Comparez les capacités physiques avec des adultes du même âge et sexe de référence. Une référence représentative utilisant les mêmes tests n’est pas encore connectée.",
+    "ar": "قارن الأداء البدني مع بالغين من العمر وجنس المرجع نفسيهما. لم يُربط بعد مرجع تمثيلي مقاس بالاختبارات نفسها."
+  },
+  "Review the proposed benchmark battery": {
+    "fr": "Voir la batterie de tests proposée",
+    "ar": "مراجعة مجموعة الاختبارات المقترحة"
+  },
+  "This battery measures selected physical capacities. It does not rate every aspect of human ability. All measurements remain optional; incomplete batteries do not receive a comparative rank. Absolute adult comparisons are separate from age/sex peer rankings.": {
+    "fr": "Cette batterie mesure certaines capacités physiques, pas toutes les aptitudes humaines. Toutes les mesures restent facultatives ; une batterie incomplète n’a pas de rang comparatif. Les comparaisons adultes absolues sont distinctes des rangs selon l’âge et le sexe.",
+    "ar": "تقيس هذه المجموعة قدرات بدنية محددة وليس كل جوانب القدرة البشرية. كل القياسات اختيارية، ولا يُمنح ترتيب مقارن للمجموعة غير المكتملة. المقارنات المطلقة للبالغين منفصلة عن ترتيب الأقران حسب العمر والجنس."
+  },
+  "Record a test": {
+    "fr": "Enregistrer un test",
+    "ar": "تسجيل اختبار"
+  },
+  "tests documented": {
+    "fr": "tests documentés",
+    "ar": "اختبارات موثقة"
+  },
+  "Explore your next step": {
+    "fr": "Explorez votre prochaine étape",
+    "ar": "استكشف خطوتك التالية"
+  },
+  "Build your own routine below, or explore hypothetical changes to your recorded capacity inputs. Scenarios explain the experimental model; they are not predictions or training prescriptions.": {
+    "fr": "Créez votre routine ci-dessous ou explorez des changements hypothétiques de vos capacités enregistrées. Les scénarios expliquent le modèle expérimental ; ils ne prédisent pas vos progrès et ne prescrivent pas d’entraînement.",
+    "ar": "أنشئ روتينك أدناه أو استكشف تغييرات افتراضية في قياسات قدرتك. تشرح السيناريوهات النموذج التجريبي، ولا تقدم تنبؤات أو وصفات تدريب."
+  },
+  "Explore my scenarios": {
+    "fr": "Explorer mes scénarios",
+    "ar": "استكشاف سيناريوهاتي"
+  },
+  "Your weekly plan": {
+    "fr": "Votre programme hebdomadaire",
+    "ar": "خطتك الأسبوعية"
+  },
+  "Your chosen routine. Schedule changes start tomorrow.": {
+    "fr": "Votre routine choisie. Les changements commencent demain.",
+    "ar": "روتينك المختار. تبدأ تغييرات الجدول غدًا."
+  },
+  "due so far": {
+    "fr": "prévues à ce jour",
+    "ar": "مستحقة حتى الآن"
+  },
+  "planned this week": {
+    "fr": "prévues cette semaine",
+    "ar": "مخططة هذا الأسبوع"
+  },
+  "Focus": {
+    "fr": "Priorité",
+    "ar": "التركيز"
+  },
+  "Program focus": {
+    "fr": "Priorité du programme",
+    "ar": "تركيز البرنامج"
+  },
+  "Consistency": {
+    "fr": "Régularité",
+    "ar": "الانتظام"
+  },
+  "Today": {
+    "fr": "Aujourd’hui",
+    "ar": "اليوم"
+  },
+  "No actions scheduled today.": {
+    "fr": "Aucune action prévue aujourd’hui.",
+    "ar": "لا توجد أنشطة مجدولة اليوم."
+  },
+  "Save your routine before recording completions.": {
+    "fr": "Enregistrez votre routine avant de cocher les actions terminées.",
+    "ar": "احفظ روتينك قبل تسجيل الأنشطة المكتملة."
+  },
+  "Edit your routine": {
+    "fr": "Modifier votre routine",
+    "ar": "تعديل روتينك"
+  },
+  "Action": {
+    "fr": "Action",
+    "ar": "النشاط"
+  },
+  "Archive action": {
+    "fr": "Archiver l’action",
+    "ar": "أرشفة النشاط"
+  },
+  "New action": {
+    "fr": "Nouvelle action",
+    "ar": "نشاط جديد"
+  },
+  "An action you want to repeat": {
+    "fr": "Une action à répéter",
+    "ar": "نشاط تريد تكراره"
+  },
+  "Optional routine examples": {
+    "fr": "Exemples facultatifs de routine",
+    "ar": "أمثلة روتين اختيارية"
+  },
+  "Record a chosen measurement": {
+    "fr": "Noter une mesure choisie",
+    "ar": "تسجيل قياس مختار"
+  },
+  "Review my routine": {
+    "fr": "Revoir ma routine",
+    "ar": "مراجعة روتيني"
+  },
+  "Note my sleep": {
+    "fr": "Noter mon sommeil",
+    "ar": "تسجيل نومي"
+  },
+  "Add action": {
+    "fr": "Ajouter l’action",
+    "ar": "إضافة نشاط"
+  },
+  "Add": {
+    "fr": "Ajouter",
+    "ar": "إضافة"
+  },
+  "Remove": {
+    "fr": "Retirer",
+    "ar": "إزالة"
+  },
+  "Save program": {
+    "fr": "Enregistrer le programme",
+    "ar": "حفظ البرنامج"
+  },
+  "Start dated tracking": {
+    "fr": "Commencer le suivi daté",
+    "ar": "بدء متابعة مؤرخة"
+  },
+  "Start tracking from today. Earlier check-ins are retained; earlier schedules are unknown.": {
+    "fr": "Commencez le suivi aujourd’hui. Les suivis antérieurs sont conservés ; leurs programmes sont inconnus.",
+    "ar": "ابدأ المتابعة من اليوم. تُحفظ التسجيلات السابقة، وجداولها السابقة غير معروفة."
+  },
+  "Earlier schedule details were not recorded. Those days are excluded from adherence totals.": {
+    "fr": "Les programmes antérieurs n’étaient pas enregistrés. Ces jours sont exclus des totaux de suivi.",
+    "ar": "لم تُسجّل تفاصيل الجداول السابقة، لذلك تُستبعد أيامها من إجمالي الالتزام."
+  },
+  "Routine history": {
+    "fr": "Historique de routine",
+    "ar": "سجل الروتين"
+  },
+  "Completed": {
+    "fr": "Terminé",
+    "ar": "مكتمل"
+  },
+  "Unchecked": {
+    "fr": "Non coché",
+    "ar": "غير محدد"
+  },
+  "· retained legacy check-in": {
+    "fr": "· ancien suivi conservé",
+    "ar": "· تسجيل سابق محفوظ"
+  },
+  "No recorded check-ins yet.": {
+    "fr": "Aucun suivi enregistré pour le moment.",
+    "ar": "لا توجد تسجيلات متابعة بعد."
+  },
+  "Archived actions keep their history. The account export includes the complete timeline.": {
+    "fr": "Les actions archivées gardent leur historique. L’export du compte inclut la chronologie complète.",
+    "ar": "تحتفظ الأنشطة المؤرشفة بسجلها. يشمل تصدير الحساب التسلسل الزمني الكامل."
+  },
+  "Explore hypothetical scenarios": {
+    "fr": "Explorer des scénarios hypothétiques",
+    "ar": "استكشاف سيناريوهات افتراضية"
+  },
+  "Loading your plan…": {
+    "fr": "Chargement du programme…",
+    "ar": "جارٍ تحميل خطتك…"
+  },
+  "Your routine changes could not be stored. Leaving may lose them.": {
+    "fr": "Les changements de routine n’ont pas pu être enregistrés. Ils risquent d’être perdus si vous quittez.",
+    "ar": "تعذر حفظ تغييرات روتينك، وقد تفقدها عند المغادرة."
+  },
+  "Start with your measurements.": {
+    "fr": "Commencez par vos mesures.",
+    "ar": "ابدأ بقياساتك."
+  },
+  "Record three eligible capacity measurements to explore scenarios with your own data.": {
+    "fr": "Ajoutez trois mesures de capacité admissibles pour explorer vos scénarios.",
+    "ar": "سجّل ثلاثة قياسات قدرة مؤهلة لاستكشاف سيناريوهات ببياناتك."
+  },
+  "Build a hypothetical scenario": {
+    "fr": "Créer un scénario hypothétique",
+    "ar": "إنشاء سيناريو افتراضي"
+  },
+  "Preview only. Your saved measurements stay unchanged.": {
+    "fr": "Aperçu uniquement. Vos mesures enregistrées ne changent pas.",
+    "ar": "معاينة فقط. لا تتغير قياساتك المحفوظة."
+  },
+  "Try a change": {
+    "fr": "Essayer un changement",
+    "ar": "جرّب تغييرًا"
+  },
+  "Target index": {
+    "fr": "Indice cible",
+    "ar": "المؤشر المستهدف"
+  },
+  "Target": {
+    "fr": "Objectif",
+    "ar": "الهدف"
+  },
+  "Approach": {
+    "fr": "Approche",
+    "ar": "النهج"
+  },
+  "Easiest first": {
+    "fr": "Le plus simple d’abord",
+    "ar": "الأسهل أولًا"
+  },
+  "Smaller changes": {
+    "fr": "Petits changements",
+    "ar": "تغييرات أصغر"
+  },
+  "Adjust the slider.": {
+    "fr": "Ajustez le curseur.",
+    "ar": "اضبط شريط التمرير."
+  },
+  "Set a target and choose an approach.": {
+    "fr": "Définissez un objectif et choisissez une approche.",
+    "ar": "حدد هدفًا واختر نهجًا."
+  },
+  "Already at this target": {
+    "fr": "Objectif déjà atteint",
+    "ar": "بلغت هذا الهدف بالفعل"
+  },
+  "Target beyond this scenario": {
+    "fr": "Objectif hors de ce scénario",
+    "ar": "الهدف خارج نطاق هذا السيناريو"
+  },
+  "These inputs cannot reach the selected target.": {
+    "fr": "Ces données ne permettent pas d’atteindre l’objectif choisi.",
+    "ar": "لا تتيح هذه المدخلات بلوغ الهدف المحدد."
+  },
+  "Model steps represent arbitrary changes, not weeks or an expected rate of improvement.": {
+    "fr": "Les pas du modèle représentent des changements arbitraires, pas des semaines ni un rythme de progrès attendu.",
+    "ar": "تمثل خطوات النموذج تغييرات افتراضية، لا أسابيع أو معدل تحسن متوقعًا."
+  },
+  "Scenarios help explain the experimental model. They are not training prescriptions or predictions. Clinical markers are excluded from optimization.": {
+    "fr": "Les scénarios expliquent le modèle expérimental. Ce ne sont ni prescriptions ni prédictions. Les marqueurs cliniques sont exclus de l’optimisation.",
+    "ar": "تساعد السيناريوهات على فهم النموذج التجريبي. ليست وصفات تدريب أو تنبؤات. المؤشرات السريرية مستبعدة من التحسين."
+  },
+  "Modeled index": {
+    "fr": "Indice simulé",
+    "ar": "المؤشر المحاكى"
+  },
+  "Add measurements": {
+    "fr": "Ajouter des mesures",
+    "ar": "أضف قياسات"
+  },
+  "Reset": {
+    "fr": "Réinitialiser",
+    "ar": "إعادة الضبط"
+  },
+  "Current:": {
+    "fr": "Actuel :",
+    "ar": "الحالي:"
+  },
+  "Experimental model": {
+    "fr": "Modèle expérimental",
+    "ar": "النموذج التجريبي"
+  },
+  "EXPERIMENTAL MODEL INDEX": {
+    "fr": "INDICE DU MODÈLE EXPÉRIMENTAL",
+    "ar": "مؤشر النموذج التجريبي"
+  },
+  "No scored data": {
+    "fr": "Aucune donnée calculable",
+    "ar": "لا توجد بيانات للحساب"
+  },
+  "Measured subset": {
+    "fr": "Sous-ensemble mesuré",
+    "ar": "المجموعة المقاسة"
+  },
+  "Not selected · raw tracking": {
+    "fr": "Non sélectionné · suivi brut",
+    "ar": "غير محدد · متابعة خام"
+  },
+  "Three-pillar model chart. Missing scored data is shown at the center, not as a zero score.": {
+    "fr": "Graphique à trois piliers. Les données calculables manquantes sont placées au centre, sans compter comme zéro.",
+    "ar": "رسم بثلاثة محاور. تظهر البيانات الناقصة في المركز دون احتسابها بدرجة صفر."
+  },
+  "Body markers, Strength and fitness, and Recovery": {
+    "fr": "Marqueurs corporels, force et condition physique, récupération",
+    "ar": "مؤشرات الجسم، والقوة واللياقة، والتعافي"
+  },
+  "Measurement accessibility tier": {
+    "fr": "Niveau d’accessibilité des mesures",
+    "ar": "مستوى سهولة القياس"
+  },
+  "Filtering never clears measurements or changes your score.": {
+    "fr": "Les filtres n’effacent pas vos mesures et ne changent pas votre indice.",
+    "ar": "التصفية لا تمسح القياسات ولا تغير نتيجتك."
+  },
+  "Your measurement history": {
+    "fr": "Historique de vos mesures",
+    "ar": "سجل قياساتك"
+  },
+  "Compare repeated observations using the same method.": {
+    "fr": "Comparez des observations répétées avec la même méthode.",
+    "ar": "قارن القياسات المتكررة بالطريقة نفسها."
+  },
+  "History measurement": {
+    "fr": "Mesure de l’historique",
+    "ar": "القياس المعروض في السجل"
+  },
+  "Choose a recorded measurement": {
+    "fr": "Choisir une mesure enregistrée",
+    "ar": "اختر قياسًا مسجلًا"
+  },
+  "Loading observations…": {
+    "fr": "Chargement des observations…",
+    "ar": "جارٍ تحميل القياسات…"
+  },
+  "No history recorded for this measurement yet.": {
+    "fr": "Aucun historique pour cette mesure.",
+    "ar": "لا يوجد سجل لهذا القياس بعد."
+  },
+  "Load older observations": {
+    "fr": "Charger des observations antérieures",
+    "ar": "تحميل قياسات أقدم"
+  },
+  "The chart shows loaded observations; the comparison uses the complete measurement history. Loading pages does not change it.": {
+    "fr": "Le graphique montre les observations chargées ; la comparaison utilise tout l’historique. Charger d’autres pages ne la modifie pas.",
+    "ar": "يعرض الرسم القياسات المحمّلة؛ وتستخدم المقارنة السجل الكامل. تحميل صفحات أخرى لا يغيرها."
+  },
+  "Lines connect only documented comparable tests. Isolated points retain unknown or changed context; unknown measurement dates use the saved date.": {
+    "fr": "Les lignes relient uniquement les tests comparables documentés. Les points isolés gardent un contexte inconnu ou différent ; une date de mesure inconnue est remplacée par la date de sauvegarde.",
+    "ar": "تربط الخطوط الاختبارات المتوافقة الموثقة فقط. تحتفظ النقاط المنفصلة بسياق مجهول أو مختلف؛ ويُستخدم تاريخ الحفظ عند غياب تاريخ القياس."
+  },
+  "History recorded in this browser stays on this device. Earlier observations were not reconstructed.": {
+    "fr": "L’historique de ce navigateur reste sur cet appareil. Les observations antérieures n’ont pas été reconstituées.",
+    "ar": "يبقى سجل هذا المتصفح على هذا الجهاز. لم تُعَد إنشاء القياسات السابقة."
+  },
+  "Record a new observation": {
+    "fr": "Ajouter une observation",
+    "ar": "تسجيل قياس جديد"
+  },
+  "Recorded change:": {
+    "fr": "Variation enregistrée :",
+    "ar": "التغير المسجل:"
+  },
+  "Comparable change needs two dated observations with matching methods, protocols, equipment and non-overlapping averaging windows.": {
+    "fr": "Une variation comparable exige deux observations datées avec mêmes méthodes, protocoles, équipements et périodes de moyenne sans chevauchement.",
+    "ar": "تتطلب المقارنة قياسين مؤرخين بالطريقة والبروتوكول والجهاز نفسها، مع فترات متوسط غير متداخلة."
+  },
+  "Measurement date unknown · saved date shown": {
+    "fr": "Date de mesure inconnue · date de sauvegarde affichée",
+    "ar": "تاريخ القياس مجهول · يُعرض تاريخ الحفظ"
+  },
+  "Cleared": {
+    "fr": "Effacé",
+    "ar": "ممسوح"
+  },
+  "Cleared date": {
+    "fr": "Date d’effacement",
+    "ar": "تاريخ المسح"
+  },
+  "Date & time": {
+    "fr": "Date et heure",
+    "ar": "التاريخ والوقت"
+  },
+  "Record this measurement": {
+    "fr": "Enregistrer cette mesure",
+    "ar": "تسجيل هذا القياس"
+  },
+  "Back to observation": {
+    "fr": "Retour à l’observation",
+    "ar": "العودة إلى القياس"
+  },
+  "Save reviewed observation": {
+    "fr": "Enregistrer l’observation vérifiée",
+    "ar": "حفظ القياس بعد المراجعة"
+  },
+  "Record this only after repeating the test. Review the copied value and equipment. Enter new calculation inputs, test age or averaging window where appropriate; the previous inputs have been cleared.": {
+    "fr": "Enregistrez uniquement après avoir répété le test. Vérifiez la valeur copiée et l’équipement. Ajoutez les nouveaux paramètres, l’âge au test ou la période si nécessaire ; les anciens ont été effacés.",
+    "ar": "سجّل فقط بعد إعادة الاختبار. راجع القيمة المنسوخة والجهاز. أدخل مدخلات الحساب والعمر وفترة القياس الجديدة عند الحاجة؛ فقد مُسحت المدخلات السابقة."
+  },
+  "Record this value again today": {
+    "fr": "Enregistrer à nouveau cette valeur aujourd’hui",
+    "ar": "إعادة تسجيل هذه القيمة اليوم"
+  },
+  "Use this only after repeating the measurement. To change the result, open Measurements.": {
+    "fr": "À utiliser uniquement après avoir répété la mesure. Pour changer le résultat, ouvrez les mesures.",
+    "ar": "استخدمه فقط بعد إعادة القياس. لتغيير النتيجة، افتح القياسات."
+  },
+  "Your next check-in": {
+    "fr": "Votre prochain suivi",
+    "ar": "متابعتك التالية"
+  },
+  "Your chosen repeat interval": {
+    "fr": "Votre intervalle de suivi",
+    "ar": "فترة التكرار المختارة"
+  },
+  "Every two weeks": {
+    "fr": "Toutes les deux semaines",
+    "ar": "كل أسبوعين"
+  },
+  "Every month": {
+    "fr": "Chaque mois",
+    "ar": "كل شهر"
+  },
+  "Weekly": {
+    "fr": "Chaque semaine",
+    "ar": "أسبوعيًا"
+  },
+  "No dated observation yet.": {
+    "fr": "Aucune observation datée.",
+    "ar": "لا توجد قياسات مؤرخة بعد."
+  },
+  "Choose your first check-in": {
+    "fr": "Choisir votre premier suivi",
+    "ar": "اختر متابعتك الأولى"
+  },
+  "Choose a measurement that suits you. Skip tests you cannot perform; no value is filled for you.": {
+    "fr": "Choisissez une mesure adaptée. Ignorez les tests que vous ne pouvez pas réaliser ; aucune valeur n’est préremplie.",
+    "ar": "اختر قياسًا يناسبك. تجاوز الاختبارات التي لا يمكنك إجراؤها؛ لا تُملأ أي قيمة نيابة عنك."
+  },
+  "This preference stays in this browser; no notification is sent.": {
+    "fr": "Ce choix reste dans ce navigateur ; aucune notification n’est envoyée.",
+    "ar": "يبقى هذا التفضيل في المتصفح؛ لا يُرسل أي إشعار."
+  },
+  "LOOK A LITTLE CLOSER": {
+    "fr": "REGARDEZ DE PLUS PRÈS",
+    "ar": "ألقِ نظرة أقرب"
+  },
+  "Measurement methods & evidence": {
+    "fr": "Méthodes et sources des mesures",
+    "ar": "طرق القياس والأدلة"
+  },
+  "How TOP1 uses it": {
+    "fr": "Comment TOP1 l’utilise",
+    "ar": "كيف يستخدمه TOP1"
+  },
+  "Evidence and method": {
+    "fr": "Source et méthode",
+    "ar": "الأدلة والطريقة"
+  },
+  "Study associations do not establish a universal target or population rank.": {
+    "fr": "Les associations d’études n’établissent ni cible universelle ni rang de population.",
+    "ar": "لا تحدد علاقات الدراسات هدفًا عالميًا أو ترتيبًا سكانيًا."
+  },
+  "Complete your profile to see the reference for your own age and biological sex. Most references remain provisional product assumptions.": {
+    "fr": "Complétez votre profil pour voir la référence selon votre âge et sexe biologique. La plupart des références restent des hypothèses provisoires.",
+    "ar": "أكمل ملفك لعرض المرجع المناسب للعمر والجنس البيولوجي. معظم المراجع افتراضات أولية للمنتج."
+  },
+  "These reference parameters are provisional product assumptions.": {
+    "fr": "Ces paramètres sont des hypothèses provisoires du produit.",
+    "ar": "هذه المعلمات المرجعية افتراضات أولية للمنتج."
+  },
+  "FRIEND 2022 direct treadmill CPET reference; explicit treadmill modality and a recorded test age of 20–89 are required.": {
+    "fr": "Référence CPET direct FRIEND 2022 sur tapis ; la modalité tapis et un âge au test de 20–89 ans doivent être renseignés.",
+    "ar": "مرجع FRIEND 2022 لاختبار CPET مباشر على جهاز المشي؛ يلزم توثيق جهاز المشي والعمر 20–89 عند الاختبار."
+  },
+  "Reference tables and inclusion criteria": {
+    "fr": "Tables de référence et critères d’inclusion",
+    "ar": "الجداول المرجعية وشروط الإدراج"
+  },
+  "VO₂ uses the frozen FRIEND 2022 US treadmill cohort, ages 20–89, with a documented date, test age, peak RER ≥ 1.0 and a self-reported match to the study population. Its published percentile thresholds are shown as intervals; there is no normal-distribution conversion or extrapolated top-1% claim.": {
+    "fr": "Le VO₂ utilise le groupe américain FRIEND 2022 sur tapis, de 20 à 89 ans, avec date, âge, RER maximal ≥ 1,0 et compatibilité déclarée avec la population. Les seuils publiés sont montrés en intervalles, sans conversion par loi normale ni extrapolation vers le Top 1 %.",
+    "ar": "يستخدم VO₂ عينة FRIEND 2022 الأمريكية على جهاز المشي للأعمار 20–89، مع توثيق التاريخ والعمر وذروة RER ≥ 1.0 وتوافق مُبلّغ ذاتيًا مع العينة. تُعرض العتبات كفترات دون تحويل بتوزيع طبيعي أو استقراء ادعاء أعلى 1%."
+  },
+  "Context / tracking only": {
+    "fr": "Contexte / suivi uniquement",
+    "ar": "سياق / متابعة فقط"
+  },
+  "One-rep max estimate": {
+    "fr": "Estimation du maximum sur une répétition",
+    "ar": "تقدير أقصى وزن لتكرار واحد"
+  },
+  "Body weight at this test (kg)": {
+    "fr": "Poids lors de ce test (kg)",
+    "ar": "وزن الجسم عند الاختبار (كغ)"
+  },
+  "Required for this ratio": {
+    "fr": "Requis pour ce ratio",
+    "ar": "مطلوب لهذه النسبة"
+  },
+  "Age at test": {
+    "fr": "Âge lors du test",
+    "ar": "العمر عند الاختبار"
+  },
+  "A Cooper run gives an estimate of VO₂. It is saved for tracking and does not enter the index.": {
+    "fr": "Le test de Cooper estime le VO₂. Il est enregistré pour le suivi et n’entre pas dans l’indice.",
+    "ar": "يعطي اختبار كوبر تقديرًا لـ VO₂. يُحفظ للمتابعة ولا يدخل في المؤشر."
+  },
+  "The male Jackson–Pollock three-site equation estimates body fat. It is not interchangeable with DEXA.": {
+    "fr": "L’équation masculine Jackson–Pollock à trois plis estime la masse grasse. Elle n’est pas interchangeable avec le DEXA.",
+    "ar": "تقدّر معادلة جاكسون–بولوك ذات ثلاثة مواضع للذكور دهون الجسم. ولا تُعادل قياس DEXA."
+  },
+  "Estimate a one-rep maximum using Epley. The result is converted to a ratio of your recorded body weight.": {
+    "fr": "Estimez le maximum sur une répétition avec Epley. Le résultat est converti en ratio de votre poids enregistré.",
+    "ar": "قدّر أقصى وزن لتكرار واحد بمعادلة إيبلي. تُحوّل النتيجة إلى نسبة من وزن جسمك المسجل."
+  },
+  "This skinfold equation supports men aged 18–61. Use a different measurement method.": {
+    "fr": "Cette équation des plis cutanés concerne les hommes de 18–61 ans. Utilisez une autre méthode.",
+    "ar": "تدعم معادلة طيات الجلد هذه الذكور بعمر 18–61 عامًا. استخدم طريقة أخرى."
+  },
+  "Calculate & use estimate": {
+    "fr": "Calculer et utiliser l’estimation",
+    "ar": "حساب التقدير واستخدامه"
+  },
+  "Create a personal profile before saving a calculated measurement.": {
+    "fr": "Créez un profil avant d’enregistrer une mesure calculée.",
+    "ar": "أنشئ ملفًا شخصيًا قبل حفظ قياس محسوب."
+  },
+  "HbA1c unit helper": {
+    "fr": "Convertisseur d’unité HbA1c",
+    "ar": "مساعد وحدات HbA1c"
+  },
+  "Keep the laboratory's reported units. Lipoprotein(a) has no universal mg/dL-to-nmol/L conversion; this field accepts nmol/L only.": {
+    "fr": "Conservez les unités du laboratoire. La lipoprotéine(a) n’a pas de conversion universelle mg/dL–nmol/L ; ce champ accepte uniquement les nmol/L.",
+    "ar": "احتفظ بوحدات تقرير المختبر. لا يوجد تحويل عالمي للبروتين الدهني (أ) من mg/dL إلى nmol/L؛ هذا الحقل يقبل nmol/L فقط."
+  },
+  "IFCC result (mmol/mol)": {
+    "fr": "Résultat IFCC (mmol/mol)",
+    "ar": "نتيجة IFCC (ملليمول/مول)"
+  },
+  "Enter a result to preview NGSP percent.": {
+    "fr": "Saisissez un résultat pour voir le pourcentage NGSP.",
+    "ar": "أدخل نتيجة لمعاينة نسبة NGSP."
+  },
+  "Formula: NGSP (%) = 0.09148 × IFCC + 2.152. Record the converted percent above if appropriate and retain your original lab report. This helper does not infer a diagnosis.": {
+    "fr": "Formule : NGSP (%) = 0,09148 × IFCC + 2,152. Notez le pourcentage converti ci-dessus si approprié et gardez le rapport original. Cet outil ne pose aucun diagnostic.",
+    "ar": "الصيغة: NGSP (%) = 0.09148 × IFCC + 2.152. سجّل النسبة المحوّلة أعلاه إن كانت مناسبة واحتفظ بالتقرير الأصلي. لا يستنتج هذا المساعد تشخيصًا."
+  },
+  "NGSP conversion source": {
+    "fr": "Source de conversion NGSP",
+    "ar": "مصدر تحويل NGSP"
+  },
+  "Stored measurement details need review. Original context remains in history/export.": {
+    "fr": "Les détails enregistrés doivent être vérifiés. Le contexte original reste dans l’historique et l’export.",
+    "ar": "تفاصيل القياس المحفوظة تحتاج إلى مراجعة. يبقى السياق الأصلي في السجل والتصدير."
+  },
+  "Keep value and clear unreadable details": {
+    "fr": "Garder la valeur et effacer les détails illisibles",
+    "ar": "الاحتفاظ بالقيمة ومسح التفاصيل غير المقروءة"
+  },
+  "Use a whole test age from 18 to 120. This change has not been saved.": {
+    "fr": "Indiquez un âge entier de 18 à 120 ans. Cette modification n’est pas enregistrée.",
+    "ar": "أدخل عمرًا صحيحًا من 18 إلى 120 عند الاختبار. لم يُحفظ هذا التغيير."
+  },
+  "Original calculation:": {
+    "fr": "Calcul d’origine :",
+    "ar": "الحساب الأصلي:"
+  },
+  "· inputs": {
+    "fr": "· paramètres",
+    "ar": "· المدخلات"
+  },
+  ". Editing the result manually removes this derivation.": {
+    "fr": ". Modifier manuellement le résultat retire cette dérivation.",
+    "ar": ". تعديل النتيجة يدويًا يزيل تفاصيل الاشتقاق هذه."
+  },
+  "At the experimental index limit. Further raw progress may not change these points.": {
+    "fr": "À la limite de l’indice expérimental. D’autres progrès bruts peuvent ne pas modifier les points.",
+    "ar": "عند حد المؤشر التجريبي. قد لا يغير التحسن الخام الإضافي هذه النقاط."
+  },
+  "· review for your next check-in": {
+    "fr": "· à revoir au prochain suivi",
+    "ar": "· راجعه عند المتابعة التالية"
+  },
+  "This detail change has not been saved.": {
+    "fr": "Ce changement de détail n’est pas enregistré.",
+    "ar": "لم يُحفظ تعديل هذه التفاصيل."
+  },
+  ". This change has not been saved.": {
+    "fr": ". Cette modification n’est pas enregistrée.",
+    "ar": ". لم يُحفظ هذا التغيير."
+  },
+  ". This value is excluded until corrected.": {
+    "fr": ". Cette valeur est exclue jusqu’à correction.",
+    "ar": ". تُستبعد هذه القيمة حتى تصحيحها."
+  },
+  "Enter": {
+    "fr": "Saisissez",
+    "ar": "أدخل"
+  },
+  "from": {
+    "fr": "de",
+    "ar": "من"
+  },
+  "to": {
+    "fr": "à",
+    "ar": "إلى"
+  },
+  "a value": {
+    "fr": "une valeur",
+    "ar": "قيمة"
+  },
+  "a whole number": {
+    "fr": "un nombre entier",
+    "ar": "عددًا صحيحًا"
+  },
+  "as a whole number": {
+    "fr": "en nombre entier",
+    "ar": "كعدد صحيح"
+  },
+  "values need attention. Changes are not saved until corrected.": {
+    "fr": "valeurs sont à vérifier. Les changements ne sont enregistrés qu’après correction.",
+    "ar": "قيم تحتاج إلى مراجعة. لا تُحفظ التغييرات حتى تصحيحها."
+  },
+  "Review all": {
+    "fr": "Tout vérifier",
+    "ar": "مراجعة الكل"
+  },
+  "Review your age: it was last recorded over a year ago.": {
+    "fr": "Vérifiez votre âge : sa dernière saisie date de plus d’un an.",
+    "ar": "راجع عمرك: مر أكثر من عام على آخر تسجيل له."
+  },
+  ". These details update your experimental references.": {
+    "fr": ". Ces détails actualisent vos références expérimentales.",
+    "ar": ". تحدّث هذه التفاصيل مراجعك التجريبية."
+  },
+  ". Review it before saving.": {
+    "fr": ". Vérifiez avant d’enregistrer.",
+    "ar": ". راجعه قبل الحفظ."
+  },
+  ". Same recorded method; this does not verify identical testing conditions.": {
+    "fr": ". Même méthode déclarée ; cela ne garantit pas des conditions identiques.",
+    "ar": ". طريقة مسجلة متطابقة؛ لا يضمن هذا تطابق ظروف الاختبار."
+  },
+  "Preserved legacy observations:": {
+    "fr": "Observations anciennes conservées :",
+    "ar": "قياسات سابقة محفوظة:"
+  },
+  ". These stay outside active scores and coverage.": {
+    "fr": ". Elles restent hors des calculs et de la couverture actifs.",
+    "ar": ". تبقى خارج الحسابات والتغطية النشطة."
+  },
+  ", body size": {
+    "fr": ", corpulence",
+    "ar": "، حجم الجسم"
+  },
+  ", reference sex": {
+    "fr": ", sexe de référence",
+    "ar": "، جنس المرجع"
+  },
+  "Recorded:": {
+    "fr": "Enregistré :",
+    "ar": "مسجل:"
+  },
+  "Reference cohort:": {
+    "fr": "Groupe de référence :",
+    "ar": "العينة المرجعية:"
+  },
+  "Measurement": {
+    "fr": "Mesure",
+    "ar": "القياس"
+  },
+  "age": {
+    "fr": "âge",
+    "ar": "العمر"
+  },
+  "eligible": {
+    "fr": "admissible",
+    "ar": "مؤهل"
+  },
+  "published": {
+    "fr": "publié",
+    "ar": "منشور"
+  },
+  "since": {
+    "fr": "depuis",
+    "ar": "منذ"
+  },
+  "unselected": {
+    "fr": "non choisi",
+    "ar": "غير محدد"
+  },
+  "model points": {
+    "fr": "points du modèle",
+    "ar": "نقاط النموذج"
+  },
+  "your measurements": {
+    "fr": "vos mesures",
+    "ar": "قياساتك"
+  },
+  "your-name": {
+    "fr": "votre-nom",
+    "ar": "اسمك"
+  },
+  "kg. A ratio change can also reflect a change in body weight.": {
+    "fr": "kg. Une variation du ratio peut aussi refléter un changement de poids.",
+    "ar": "كغ. قد يعكس تغير النسبة تغيرًا في وزن الجسم أيضًا."
+  },
+  "measurements are optional. Use the actual method and date when you know them. Clinical and protocol-dependent observations stay available for tracking without receiving a score.": {
+    "fr": "mesures sont facultatives. Indiquez méthode et date réelles si connues. Les observations cliniques et dépendantes du protocole restent disponibles pour le suivi sans points.",
+    "ar": "قياسات اختيارية. استخدم الطريقة والتاريخ الفعليين عند معرفتهما. تبقى القياسات السريرية والمعتمدة على البروتوكول للمتابعة دون نقاط."
+  },
+  "bodymarkers": {
+    "fr": "marqueurs corporels",
+    "ar": "مؤشرات الجسم"
+  },
+  "strength": {
+    "fr": "force",
+    "ar": "القوة"
+  },
+  "tests.": {
+    "fr": "tests.",
+    "ar": "اختبارات."
+  },
+  "Apolipoprotein B": {
+    "fr": "Apolipoprotéine B",
+    "ar": "صميم البروتين الشحمي B"
+  },
+  "Atherogenic particle density": {
+    "fr": "Densité de particules athérogènes",
+    "ar": "كثافة الجسيمات المسببة لتصلب الشرايين"
+  },
+  "Use a laboratory result in the stated units. Follow the laboratory’s preparation instructions; discuss interpretation with your clinician.": {
+    "fr": "Utilisez un résultat de laboratoire dans les unités indiquées. Respectez les consignes de préparation et discutez de l’interprétation avec votre médecin.",
+    "ar": "استخدم نتيجة مختبر بالوحدات المذكورة. اتبع تعليمات التحضير وناقش التفسير مع طبيبك."
+  },
+  "No study-derived quantitative reference distribution is loaded for this metric.": {
+    "fr": "Aucune distribution quantitative issue d’une étude n’est chargée pour cette mesure.",
+    "ar": "لا يتوفر توزيع مرجعي كمي مستمد من دراسة لهذا القياس."
+  },
+  "Confirm the measurement and review it with a clinician before choosing an intervention.": {
+    "fr": "Confirmez la mesure avec un médecin avant de choisir une intervention.",
+    "ar": "أكد القياس وراجعه مع طبيب قبل اختيار أي تدخل."
+  },
+  "Lipoprotein(a)": {
+    "fr": "Lipoprotéine(a)",
+    "ar": "البروتين الدهني (أ)"
+  },
+  "Inherited cardiovascular risk": {
+    "fr": "Risque cardiovasculaire héréditaire",
+    "ar": "الخطر القلبي الوعائي الوراثي"
+  },
+  "Discuss inherited risk with your clinician. Lifestyle changes generally do not lower Lp(a).": {
+    "fr": "Discutez du risque héréditaire avec votre médecin. Le mode de vie ne réduit généralement pas la Lp(a).",
+    "ar": "ناقش الخطر الوراثي مع طبيبك. عادةً لا تخفض تغييرات نمط الحياة Lp(a)."
+  },
+  "Fasting insulin": {
+    "fr": "Insuline à jeun",
+    "ar": "الإنسولين الصائم"
+  },
+  "Insulin sensitivity": {
+    "fr": "Sensibilité à l’insuline",
+    "ar": "حساسية الإنسولين"
+  },
+  "Systemic inflammation": {
+    "fr": "Inflammation systémique",
+    "ar": "الالتهاب الجهازي"
+  },
+  "Long-term blood glucose exposure": {
+    "fr": "Exposition prolongée au glucose sanguin",
+    "ar": "التعرض طويل المدى لغلوكوز الدم"
+  },
+  "Homocysteine": {
+    "fr": "Homocystéine",
+    "ar": "الهوموسيستين"
+  },
+  "Vascular and methylation markers": {
+    "fr": "Marqueurs vasculaires et de méthylation",
+    "ar": "مؤشرات الأوعية والمثيلة"
+  },
+  "Cystatin C": {
+    "fr": "Cystatine C",
+    "ar": "السيستاتين C"
+  },
+  "Kidney filtration marker": {
+    "fr": "Marqueur de filtration rénale",
+    "ar": "مؤشر الترشيح الكلوي"
+  },
+  "Gamma-glutamyl transferase": {
+    "fr": "Gamma-glutamyl transférase",
+    "ar": "ناقلة غاما غلوتاميل"
+  },
+  "Liver enzyme and metabolic marker": {
+    "fr": "Enzyme hépatique et marqueur métabolique",
+    "ar": "إنزيم كبدي ومؤشر استقلابي"
+  },
+  "Aerobic oxygen utilization": {
+    "fr": "Utilisation aérobie de l’oxygène",
+    "ar": "استخدام الأكسجين الهوائي"
+  },
+  "Measure under a consistent protocol. Use a rested morning average for resting measures and supervised testing for maximal exercise.": {
+    "fr": "Mesurez selon un protocole constant. Utilisez une moyenne matinale au repos pour les mesures basales et un test supervisé pour l’effort maximal.",
+    "ar": "قِس ببروتوكول ثابت. استخدم متوسطًا صباحيًا أثناء الراحة لقياسات الراحة، واختبارًا تحت الإشراف للجهد الأقصى."
+  },
+  "16,278 treadmill tests: 9,564 men and 6,714 women, ages 20–89; no known CVD or COPD; peak RER ≥ 1.0. FRIEND 2022 Tables 2 and 3.": {
+    "fr": "16 278 tests sur tapis : 9 564 hommes et 6 714 femmes, 20–89 ans ; sans maladie cardiovasculaire ni BPCO connue ; RER maximal ≥ 1,0. FRIEND 2022, tableaux 2 et 3.",
+    "ar": "16,278 اختبار جهاز مشي: 9,564 رجلًا و6,714 امرأة بعمر 20–89؛ دون مرض قلبي وعائي أو انسداد رئوي مزمن معروف؛ ذروة RER ≥ 1.0. FRIEND 2022، الجدولان 2 و3."
+  },
+  "Build a consistent aerobic base, then reassess with the same test protocol.": {
+    "fr": "Construisez une base aérobie régulière puis réévaluez avec le même protocole.",
+    "ar": "ابنِ قاعدة هوائية منتظمة ثم أعد التقييم بالبروتوكول نفسه."
+  },
+  "Zone 2 power": {
+    "fr": "Puissance en zone 2",
+    "ar": "قدرة المنطقة الثانية"
+  },
+  "Submaximal endurance capacity": {
+    "fr": "Capacité d’endurance sous-maximale",
+    "ar": "قدرة التحمل دون القصوى"
+  },
+  "Peak expiratory flow": {
+    "fr": "Débit expiratoire de pointe",
+    "ar": "ذروة تدفق الزفير"
+  },
+  "Pulmonary expiratory performance": {
+    "fr": "Performance expiratoire pulmonaire",
+    "ar": "أداء الزفير الرئوي"
+  },
+  "Resting heart rate": {
+    "fr": "Fréquence cardiaque au repos",
+    "ar": "معدل نبض القلب أثناء الراحة"
+  },
+  "Resting cardiovascular physiology": {
+    "fr": "Physiologie cardiovasculaire au repos",
+    "ar": "فسيولوجيا القلب والأوعية أثناء الراحة"
+  },
+  "Heart rate variability": {
+    "fr": "Variabilité de la fréquence cardiaque",
+    "ar": "تباين معدل نبض القلب"
+  },
+  "Autonomic variability (rMSSD)": {
+    "fr": "Variabilité autonome (rMSSD)",
+    "ar": "التباين العصبي الذاتي (rMSSD)"
+  },
+  "1-minute heart rate recovery": {
+    "fr": "Récupération cardiaque à 1 minute",
+    "ar": "استعادة النبض خلال دقيقة"
+  },
+  "Post-exercise autonomic recovery": {
+    "fr": "Récupération autonome après effort",
+    "ar": "التعافي العصبي الذاتي بعد الجهد"
+  },
+  "Body fat": {
+    "fr": "Masse grasse",
+    "ar": "دهون الجسم"
+  },
+  "Relative fat and lean mass": {
+    "fr": "Masse grasse et maigre relatives",
+    "ar": "الدهون والكتلة الخالية من الدهون النسبية"
+  },
+  "Use a DEXA or validated imaging report. Skinfold estimates are an alternative method, not interchangeable with DEXA.": {
+    "fr": "Utilisez un rapport DEXA ou d’imagerie validée. Les plis cutanés sont une méthode alternative, non interchangeable avec le DEXA.",
+    "ar": "استخدم تقرير DEXA أو تصوير معتمد. تقديرات طيات الجلد طريقة بديلة لا تعادل DEXA."
+  },
+  "Track comparable measurements over time; assess targets individually.": {
+    "fr": "Suivez des mesures comparables dans le temps et évaluez les objectifs individuellement.",
+    "ar": "تابع قياسات قابلة للمقارنة عبر الزمن وقيّم الأهداف فرديًا."
+  },
+  "Visceral fat area": {
+    "fr": "Surface de graisse viscérale",
+    "ar": "مساحة الدهون الحشوية"
+  },
+  "Intra-abdominal adiposity": {
+    "fr": "Adiposité intra-abdominale",
+    "ar": "الدهون داخل البطن"
+  },
+  "Grip strength": {
+    "fr": "Force de préhension",
+    "ar": "قوة القبضة"
+  },
+  "Hand dynamometer force": {
+    "fr": "Force au dynamomètre manuel",
+    "ar": "قوة اليد بالدينامومتر"
+  },
+  "Use consistent equipment and technique. Warm up; use a qualified spotter for loaded tests. Enter body-weight ratios where shown.": {
+    "fr": "Gardez les mêmes équipements et techniques. Échauffez-vous ; faites-vous assister par une personne qualifiée pour les tests chargés. Entrez les ratios de poids corporel indiqués.",
+    "ar": "استخدم الجهاز والتقنية نفسيهما. أجرِ الإحماء واستعن بمرافق مؤهل للاختبارات بالأوزان. أدخل نسب وزن الجسم حيث يُطلب ذلك."
+  },
+  "Practice progressive strength and mobility work with consistent technique.": {
+    "fr": "Pratiquez un renforcement et une mobilité progressifs avec une technique constante.",
+    "ar": "مارس تمارين قوة وحركة تدريجية بتقنية ثابتة."
+  },
+  "Countermovement jump": {
+    "fr": "Saut avec contre-mouvement",
+    "ar": "قفزة بالحركة المضادة"
+  },
+  "Vertical explosive power": {
+    "fr": "Puissance explosive verticale",
+    "ar": "القدرة الانفجارية العمودية"
+  },
+  "Standing broad jump": {
+    "fr": "Saut en longueur sans élan",
+    "ar": "الوثب الطويل من الثبات"
+  },
+  "Horizontal explosive power": {
+    "fr": "Puissance explosive horizontale",
+    "ar": "القدرة الانفجارية الأفقية"
+  },
+  "Barbell squat": {
+    "fr": "Squat à la barre",
+    "ar": "القرفصاء بالبار"
+  },
+  "Lower-body maximal strength": {
+    "fr": "Force maximale du bas du corps",
+    "ar": "القوة القصوى للجزء السفلي"
+  },
+  "Deadlift": {
+    "fr": "Soulevé de terre",
+    "ar": "الرفعة الميتة"
+  },
+  "Posterior-chain maximal strength": {
+    "fr": "Force maximale de la chaîne postérieure",
+    "ar": "القوة القصوى للسلسلة الخلفية"
+  },
+  "Bench press": {
+    "fr": "Développé couché",
+    "ar": "ضغط الصدر بالبار"
+  },
+  "Upper-body pressing strength": {
+    "fr": "Force de poussée du haut du corps",
+    "ar": "قوة دفع الجزء العلوي"
+  },
+  "Weighted pull-up": {
+    "fr": "Traction lestée",
+    "ar": "العقلة بأوزان إضافية"
+  },
+  "Vertical pulling force": {
+    "fr": "Force de traction verticale",
+    "ar": "قوة السحب العمودي"
+  },
+  "Farmer’s carry (total load 1× BW)": {
+    "fr": "Marche du fermier (charge totale 1× poids)",
+    "ar": "مشي المزارع (الحمل الكلي 1× وزن الجسم)"
+  },
+  "Loaded grip and trunk endurance": {
+    "fr": "Endurance de préhension et du tronc sous charge",
+    "ar": "تحمل القبضة والجذع تحت الحمل"
+  },
+  "30-second sit-to-stand": {
+    "fr": "Levers de chaise en 30 secondes",
+    "ar": "الوقوف من الكرسي خلال 30 ثانية"
+  },
+  "Functional lower-body endurance": {
+    "fr": "Endurance fonctionnelle du bas du corps",
+    "ar": "التحمل الوظيفي للجزء السفلي"
+  },
+  "Count full stands completed in 30 seconds using the same chair and technique each time. Record repetitions and keep the protocol consistent.": {
+    "fr": "Comptez les levers complets en 30 secondes avec la même chaise et technique. Notez les répétitions et gardez le même protocole.",
+    "ar": "عُدّ مرات الوقوف الكامل خلال 30 ثانية بالكرسي والتقنية نفسيهما. سجّل التكرارات والتزم بالبروتوكول نفسه."
+  },
+  "Total sleep time": {
+    "fr": "Durée totale de sommeil",
+    "ar": "مدة النوم الكلية"
+  },
+  "Restorative sleep duration": {
+    "fr": "Durée de sommeil réparateur",
+    "ar": "مدة النوم المُرمّم"
+  },
+  "Use a representative seven-day average of time asleep per night, measured consistently with the same device or sleep diary. Enter hours per night in TOP1; the stored value uses minutes.": {
+    "fr": "Utilisez une moyenne représentative sur sept nuits, avec le même appareil ou journal. Saisissez des heures par nuit dans TOP1 ; le stockage utilise des minutes.",
+    "ar": "استخدم متوسطًا ممثلًا لسبعة أيام من النوم الليلي بالجهاز أو المفكرة نفسها. أدخل ساعات لكل ليلة في TOP1؛ وتُحفظ القيمة بالدقائق."
+  },
+  "Keep a consistent sleep opportunity and track a 7-day average.": {
+    "fr": "Gardez une plage de sommeil régulière et suivez une moyenne sur sept jours.",
+    "ar": "حافظ على فرصة نوم منتظمة وتابع متوسط سبعة أيام."
+  },
+  "Sleep efficiency": {
+    "fr": "Efficacité du sommeil",
+    "ar": "كفاءة النوم"
+  },
+  "Time asleep relative to time in bed": {
+    "fr": "Temps endormi par rapport au temps au lit",
+    "ar": "وقت النوم نسبةً لوقت البقاء في السرير"
+  },
+  "Use a representative 7-day average and consistent device. For balance, test beside a stable support.": {
+    "fr": "Utilisez une moyenne représentative sur sept jours et le même appareil. Pour l’équilibre, restez près d’un support stable.",
+    "ar": "استخدم متوسطًا ممثلًا لسبعة أيام والجهاز نفسه. لاختبار التوازن، قف بجانب دعامة ثابتة."
+  },
+  "Circadian regularity": {
+    "fr": "Régularité circadienne",
+    "ar": "انتظام الإيقاع اليومي"
+  },
+  "Consistency of sleep timing": {
+    "fr": "Régularité des horaires de sommeil",
+    "ar": "انتظام مواعيد النوم"
+  },
+  "Eyes-closed single-leg balance": {
+    "fr": "Équilibre sur une jambe, yeux fermés",
+    "ar": "التوازن على ساق واحدة والعينان مغلقتان"
+  },
+  "Vestibular and proprioceptive control": {
+    "fr": "Contrôle vestibulaire et proprioceptif",
+    "ar": "التحكم الدهليزي والحس العميق"
+  },
+  "Reaction time": {
+    "fr": "Temps de réaction",
+    "ar": "زمن الاستجابة"
+  },
+  "Simple visual response with device/input latency": {
+    "fr": "Réponse visuelle simple avec latence d’appareil",
+    "ar": "استجابة بصرية بسيطة مع تأخر الجهاز والإدخال"
+  },
+  "Choose the actual simple or choice-reaction protocol, use the same task and device, and record multiple trials. These protocols are not interchangeable. Browser/device latency is not independently calibrated; results remain tracking-only.": {
+    "fr": "Choisissez le protocole réel, simple ou à choix, gardez la même tâche et appareil et notez plusieurs essais. Ces protocoles ne sont pas interchangeables. La latence n’est pas calibrée indépendamment ; les résultats restent du suivi.",
+    "ar": "اختر بروتوكول الاستجابة البسيطة أو الاختيارية الفعلي، واستخدم المهمة والجهاز نفسيهما وسجّل محاولات متعددة. البروتوكولات لا تتعادل. تأخر الجهاز والمتصفح غير معاير مستقلًا؛ فالنتائج للمتابعة فقط."
+  },
+  "Combined handgrip strength": {
+    "fr": "Force de préhension combinée",
+    "ar": "قوة القبضتين المجمّعة"
+  },
+  "Sum the best of three trials from each hand. This is distinct from single-hand grip.": {
+    "fr": "Additionnez le meilleur des trois essais de chaque main. Ce n’est pas la force d’une seule main.",
+    "ar": "اجمع أفضل نتيجة من ثلاث محاولات لكل يد. يختلف هذا عن قياس يد واحدة."
+  },
+  "Use a calibrated dynamometer with a consistent adjusted handle and standing position. Alternate hands for three trials per hand with 60 seconds between trials. Add the highest left-hand result to the highest right-hand result. A US reference is not a worldwide benchmark.": {
+    "fr": "Utilisez un dynamomètre calibré, avec poignée et position debout constantes. Alternez trois essais par main, espacés de 60 secondes. Additionnez les meilleurs résultats gauche et droit. Une référence américaine n’est pas un étalon mondial.",
+    "ar": "استخدم دينامومتر معايرًا بمقبض مضبوط ووضعية وقوف ثابتة. بدّل اليدين لثلاث محاولات لكل يد بفاصل 60 ثانية. اجمع أفضل نتيجة لليسرى واليمنى. المرجع الأمريكي ليس معيارًا عالميًا."
+  },
+  "No study-derived quantitative reference distribution is loaded.": {
+    "fr": "Aucune distribution quantitative issue d’une étude n’est chargée.",
+    "ar": "لا يتوفر توزيع مرجعي كمي مستمد من دراسة."
+  },
+  "Log comparable observations; do not increase exposure to chase a score.": {
+    "fr": "Notez des observations comparables ; n’augmentez pas l’exposition pour gagner des points.",
+    "ar": "سجّل قياسات قابلة للمقارنة؛ ولا تزد التعرض سعيًا وراء النقاط."
+  },
+  "10-metre sprint": {
+    "fr": "Sprint de 10 mètres",
+    "ar": "عدو 10 أمتار"
+  },
+  "Acceleration over ten metres; electronic and hand-timed measurements are not interchangeable.": {
+    "fr": "Accélération sur dix mètres ; les chronométrages électronique et manuel ne sont pas interchangeables.",
+    "ar": "تسارع لمسافة عشرة أمتار؛ التوقيت الإلكتروني واليدوي لا يتعادلان."
+  },
+  "Use electronic timing gates over a measured ten-metre distance, with the same standing-start position, gate setup and surface. Record seconds and equipment. Hand timing is a different protocol. No population distribution is loaded.": {
+    "fr": "Utilisez des cellules électroniques sur dix mètres mesurés, avec départ debout, réglage et surface constants. Notez les secondes et l’équipement. Le chronométrage manuel est un autre protocole. Aucune distribution de population n’est chargée.",
+    "ar": "استخدم بوابات توقيت إلكترونية لمسافة عشرة أمتار مقاسة مع وضعية انطلاق وإعداد بوابات وسطح ثابتة. سجّل الثواني والجهاز. التوقيت اليدوي بروتوكول مختلف. لا يتوفر توزيع سكاني."
+  },
+  "Waist-to-height ratio": {
+    "fr": "Rapport tour de taille / taille",
+    "ar": "نسبة محيط الخصر إلى الطول"
+  },
+  "Waist circumference divided by height in the same units": {
+    "fr": "Tour de taille divisé par la taille, dans les mêmes unités",
+    "ar": "محيط الخصر مقسومًا على الطول بالوحدات نفسها"
+  },
+  "Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is tracking-only.": {
+    "fr": "Mesurez le tour de taille et la taille dans les mêmes unités, puis divisez. Gardez le même site anatomique et technique. Suivi uniquement.",
+    "ar": "قِس محيط الخصر والطول بالوحدات نفسها ثم اقسم الخصر على الطول. حافظ على الموضع التشريحي والتقنية نفسيهما. للمتابعة فقط."
+  },
+  "Fasting glucose": {
+    "fr": "Glycémie à jeun",
+    "ar": "سكر الدم الصائم"
+  },
+  "Fasting plasma glucose; clinical interpretation requires individual context": {
+    "fr": "Glycémie plasmatique à jeun ; interprétation clinique individuelle requise",
+    "ar": "غلوكوز البلازما الصائم؛ يتطلب التفسير السريري سياقًا فرديًا"
+  },
+  "Enter a fasting laboratory plasma glucose result in mg/dL. Do not enter mmol/L; multiply mmol/L by 18.0182 first. Follow laboratory fasting instructions and review results clinically.": {
+    "fr": "Saisissez la glycémie à jeun en mg/dL. Pour des mmol/L, multipliez d’abord par 18,0182. Respectez les consignes de jeûne et faites interpréter le résultat médicalement.",
+    "ar": "أدخل غلوكوز البلازما الصائم المخبري بوحدة mg/dL. لا تدخل mmol/L؛ اضربها أولًا في 18.0182. اتبع تعليمات الصيام وراجع النتائج طبيًا."
+  },
+  "Strict push-up repetitions": {
+    "fr": "Pompes strictes",
+    "ar": "تكرارات الضغط الصارم"
+  },
+  "Upper-body muscular endurance under a standardized strict technique": {
+    "fr": "Endurance musculaire du haut du corps avec technique stricte",
+    "ar": "تحمل عضلات الجزء العلوي بتقنية صارمة موحدة"
+  },
+  "Count consecutive strict repetitions with a straight trunk, consistent depth and full elbow extension. Stop at form failure. Knee, incline and strict variants are not interchangeable.": {
+    "fr": "Comptez les répétitions strictes consécutives, tronc droit, profondeur constante et coudes complètement tendus. Arrêtez à la perte de technique. Les variantes inclinées, sur genoux et strictes ne sont pas interchangeables.",
+    "ar": "عُدّ التكرارات الصارمة المتتالية بجذع مستقيم وعمق ثابت ومد كامل للمرفق. توقف عند فقدان التقنية. الضغط على الركبتين أو المائل أو الصارم لا يتعادل."
+  },
+  "Use consistent strict technique and stop when form cannot be maintained.": {
+    "fr": "Gardez une technique stricte et arrêtez dès qu’elle ne peut plus être maintenue.",
+    "ar": "التزم بتقنية صارمة ثابتة وتوقف عند العجز عن الحفاظ عليها."
+  },
+  "Weekly sauna duration": {
+    "fr": "Durée hebdomadaire de sauna",
+    "ar": "مدة الساونا الأسبوعية"
+  },
+  "Heat exposure duration; exposure time alone does not establish benefit or safety": {
+    "fr": "Durée d’exposition à la chaleur ; elle seule n’établit ni bénéfice ni sécurité",
+    "ar": "مدة التعرض للحرارة؛ الوقت وحده لا يثبت الفائدة أو السلامة"
+  },
+  "Sum actual sauna exposure over the same seven-day window. Record temperature and session pattern separately in your own notes. The requested 60–90 min/week band is an unvalidated product assumption, not a prescribed dose.": {
+    "fr": "Additionnez l’exposition réelle au sauna sur sept jours. Notez séparément température et séances. La plage de 60–90 min/semaine est une hypothèse non validée du produit, pas une dose prescrite.",
+    "ar": "اجمع التعرض الفعلي للساونا خلال سبعة أيام ثابتة. دوّن الحرارة ونمط الجلسات منفصلًا. نطاق 60–90 دقيقة أسبوعيًا افتراض غير معتمد للمنتج وليس جرعة موصوفة."
+  },
+  "2,315 Finnish men, ages 42–60. Observational associations; not a validated weekly optimal window.": {
+    "fr": "2 315 hommes finlandais, 42–60 ans. Associations observationnelles, sans plage hebdomadaire optimale validée.",
+    "ar": "2,315 رجلًا فنلنديًا بعمر 42–60. علاقات رصدية وليست فترة أسبوعية مثلى معتمدة."
+  },
+  "Weekly cold plunge duration": {
+    "fr": "Durée hebdomadaire d’immersion froide",
+    "ar": "مدة الغمر البارد الأسبوعية"
+  },
+  "Cold exposure duration; temperature, acclimatization and session pattern matter": {
+    "fr": "Exposition au froid ; température, acclimatation et séances comptent",
+    "ar": "التعرض للبرد؛ تؤثر الحرارة والتأقلم ونمط الجلسات"
+  },
+  "Sum actual immersion duration over seven days. Temperature, acclimatization and session pattern affect exposure. Do not convert a weekly total into a required dose; avoid solo immersion.": {
+    "fr": "Additionnez les immersions réelles sur sept jours. Température, acclimatation et séances modifient l’exposition. Le total hebdomadaire n’est pas une dose requise ; évitez l’immersion seul.",
+    "ar": "اجمع مدة الغمر الفعلية خلال سبعة أيام. تؤثر الحرارة والتأقلم ونمط الجلسات في التعرض. لا تحوّل المجموع الأسبوعي إلى جرعة مطلوبة؛ وتجنب الغمر منفردًا."
+  },
+  "Small study in experienced male winter swimmers; no validated universal 11–15 min/week optimum.": {
+    "fr": "Petite étude chez des nageurs hivernaux masculins expérimentés ; aucun optimum universel validé de 11–15 min/semaine.",
+    "ar": "دراسة صغيرة على سباحين شتويين ذكور ذوي خبرة؛ لا يوجد نطاق عالمي أمثل معتمد من 11–15 دقيقة أسبوعيًا."
+  },
+  "Post-thermal HRV rebound ratio": {
+    "fr": "Ratio de rebond VFC après exposition thermique",
+    "ar": "نسبة ارتداد تباين النبض بعد التعرض الحراري"
+  },
+  "Post-exposure RMSSD divided by matched pre-exposure RMSSD": {
+    "fr": "RMSSD après exposition divisé par le RMSSD comparable avant exposition",
+    "ar": "RMSSD بعد التعرض مقسومًا على RMSSD المتوافق قبله"
+  },
+  "Divide post-exposure RMSSD by pre-exposure RMSSD measured with the same device, posture, recording length and timing. Do not mix SDNN and RMSSD. No validated recovery or optimal ratio is established.": {
+    "fr": "Divisez le RMSSD après exposition par celui d’avant, avec mêmes appareil, posture, durée et horaire. Ne mélangez pas SDNN et RMSSD. Aucun ratio optimal ou de récupération n’est validé.",
+    "ar": "اقسم RMSSD بعد التعرض على قيمته قبله، بالجهاز والوضعية ومدة التسجيل والتوقيت نفسها. لا تخلط SDNN وRMSSD. لا توجد نسبة تعافٍ أو نسبة مثلى معتمدة."
+  },
+  "YOUR PERFORMANCE, SIMPLIFIED": {
+    "fr": "VOTRE PERFORMANCE, SIMPLIFIÉE",
+    "ar": "أداؤك ببساطة"
+  },
+  "Your performance dashboard.": {
+    "fr": "Votre tableau de performance.",
+    "ar": "لوحة متابعة أدائك."
+  },
+  "Understand your measurements and decide what to explore next.": {
+    "fr": "Comprenez vos mesures et choisissez votre prochaine étape.",
+    "ar": "افهم قياساتك وحدد ما تريد استكشافه بعد ذلك."
+  },
+  "YOUR MEASUREMENT LIBRARY": {
+    "fr": "VOTRE BIBLIOTHÈQUE DE MESURES",
+    "ar": "مكتبة قياساتك"
+  },
+  "My metrics.": {
+    "fr": "Mes mesures.",
+    "ar": "قياساتي."
+  },
+  "Every field is optional. Add real measurements at your own pace.": {
+    "fr": "Chaque champ est facultatif. Ajoutez vos mesures à votre rythme.",
+    "ar": "كل حقل اختياري. أضف قياسات حقيقية بالوتيرة التي تناسبك."
+  },
+  "ROOM TO EXPLORE": {
+    "fr": "DES POSSIBILITÉS À EXPLORER",
+    "ar": "مساحة للاستكشاف"
+  },
+  "My Potential.": {
+    "fr": "Mon potentiel.",
+    "ar": "إمكاناتي."
+  },
+  "Explore how hypothetical changes affect your experimental index.": {
+    "fr": "Explorez l’effet de changements hypothétiques sur votre indice expérimental.",
+    "ar": "استكشف كيف تؤثر التغييرات الافتراضية على مؤشرك التجريبي."
+  },
+  "YOUR SPACE, YOUR CHOICE": {
+    "fr": "VOTRE ESPACE, VOTRE CHOIX",
+    "ar": "مساحتك، خيارك"
+  },
+  "My profile & passport.": {
+    "fr": "Mon profil et mon passeport.",
+    "ar": "ملفي وجواز أدائي."
+  },
+  "Manage your details, save your progress and choose what to share.": {
+    "fr": "Gérez vos informations, enregistrez vos progrès et choisissez ce que vous partagez.",
+    "ar": "أدر معلوماتك واحفظ تقدمك واختر ما تشاركه."
+  },
+  "THE THINKING BEHIND TOP1": {
+    "fr": "LES PRINCIPES DE TOP1",
+    "ar": "المنطق وراء TOP1"
+  },
+  "Understand what your index means.": {
+    "fr": "Comprenez votre indice.",
+    "ar": "افهم معنى مؤشرك."
+  },
+  "Clear methods, transparent assumptions and evidence you can explore.": {
+    "fr": "Méthodes claires, hypothèses transparentes et sources à explorer.",
+    "ar": "طرق واضحة وافتراضات شفافة وأدلة يمكنك استكشافها."
+  },
+  "Your profile is saved on this device.": {
+    "fr": "Votre profil est enregistré sur cet appareil.",
+    "ar": "ملفك محفوظ على هذا الجهاز."
+  },
+  "Your profile is syncing to your account.": {
+    "fr": "Votre profil se synchronise avec votre compte.",
+    "ar": "تتم مزامنة ملفك مع حسابك."
+  },
+  "Wait for your profile to finish loading before making changes.": {
+    "fr": "Attendez la fin du chargement avant de modifier votre profil.",
+    "ar": "انتظر اكتمال تحميل ملفك قبل إجراء تغييرات."
+  },
+  "Your profile is private. Unsaved edits are retained.": {
+    "fr": "Votre profil est privé. Les modifications non enregistrées sont conservées.",
+    "ar": "ملفك خاص. التعديلات غير المحفوظة محفوظة مؤقتًا."
+  },
+  "Your profile is now private.": {
+    "fr": "Votre profil est maintenant privé.",
+    "ar": "أصبح ملفك خاصًا."
+  },
+  "Your summary is now public.": {
+    "fr": "Votre résumé est maintenant public.",
+    "ar": "أصبح ملخصك متاحًا للعامة."
+  },
+  "Your session changed. Wait for the profile to load and try again.": {
+    "fr": "Votre session a changé. Attendez le chargement du profil puis réessayez.",
+    "ar": "تغيرت جلستك. انتظر تحميل الملف ثم أعد المحاولة."
+  },
+  "Your session changed. Sign in again.": {
+    "fr": "Votre session a changé. Reconnectez-vous.",
+    "ar": "تغيرت جلستك. سجّل الدخول مجددًا."
+  },
+  "Unable to change visibility.": {
+    "fr": "Impossible de modifier la visibilité.",
+    "ar": "تعذر تغيير الظهور."
+  },
+  "Privacy withdrawal failed. Retry.": {
+    "fr": "Le retrait du partage a échoué. Réessayez.",
+    "ar": "تعذر سحب المشاركة العامة. أعد المحاولة."
+  },
+  "Load your personal profile before sharing.": {
+    "fr": "Chargez votre profil personnel avant de partager.",
+    "ar": "حمّل ملفك الشخصي قبل المشاركة."
+  },
+  "Your account is ready.": {
+    "fr": "Votre compte est prêt.",
+    "ar": "حسابك جاهز."
+  },
+  "Enter a valid email address.": {
+    "fr": "Saisissez une adresse e-mail valide.",
+    "ar": "أدخل بريدًا إلكترونيًا صالحًا."
+  },
+  "Enter your password.": {
+    "fr": "Saisissez votre mot de passe.",
+    "ar": "أدخل كلمة مرورك."
+  },
+  "Enter your current password.": {
+    "fr": "Saisissez votre mot de passe actuel.",
+    "ar": "أدخل كلمة مرورك الحالية."
+  },
+  "The passwords do not match.": {
+    "fr": "Les mots de passe ne correspondent pas.",
+    "ar": "كلمتا المرور غير متطابقتين."
+  },
+  "Use a password of 128 characters or fewer.": {
+    "fr": "Utilisez un mot de passe de 128 caractères maximum.",
+    "ar": "استخدم كلمة مرور من 128 حرفًا أو أقل."
+  },
+  "Choose a different password from the current one.": {
+    "fr": "Choisissez un mot de passe différent de l’actuel.",
+    "ar": "اختر كلمة مرور تختلف عن الحالية."
+  },
+  "The email or password is incorrect.": {
+    "fr": "L’adresse e-mail ou le mot de passe est incorrect.",
+    "ar": "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+  },
+  "Confirm your email before signing in. You can resend the confirmation below.": {
+    "fr": "Confirmez votre adresse avant de vous connecter. Vous pouvez renvoyer la confirmation ci-dessous.",
+    "ar": "أكد بريدك قبل تسجيل الدخول. يمكنك إعادة إرسال التأكيد أدناه."
+  },
+  "Too many attempts. Wait a moment before trying again.": {
+    "fr": "Trop de tentatives. Patientez avant de réessayer.",
+    "ar": "محاولات كثيرة. انتظر قليلًا قبل المحاولة مجددًا."
+  },
+  "Choose a longer, stronger password.": {
+    "fr": "Choisissez un mot de passe plus long et plus robuste.",
+    "ar": "اختر كلمة مرور أطول وأقوى."
+  },
+  "New account registration is temporarily unavailable.": {
+    "fr": "L’inscription est temporairement indisponible.",
+    "ar": "إنشاء الحسابات غير متاح مؤقتًا."
+  },
+  "Email delivery is unavailable for this address. Please contact support.": {
+    "fr": "L’envoi est indisponible pour cette adresse. Contactez l’assistance.",
+    "ar": "إرسال البريد غير متاح لهذا العنوان. تواصل مع الدعم."
+  },
+  "The confirmation or recovery link has expired. Request a new one.": {
+    "fr": "Le lien de confirmation ou de récupération a expiré. Demandez-en un nouveau.",
+    "ar": "انتهت صلاحية رابط التأكيد أو الاستعادة. اطلب رابطًا جديدًا."
+  },
+  "Unable to complete this request. Please try again.": {
+    "fr": "Impossible de terminer cette demande. Réessayez.",
+    "ar": "تعذر إتمام الطلب. أعد المحاولة."
+  },
+  "Check your inbox to confirm your email before signing in. If you already have an account, sign in instead.": {
+    "fr": "Consultez vos e-mails pour confirmer votre adresse avant la connexion. Si vous avez déjà un compte, connectez-vous.",
+    "ar": "راجع بريدك لتأكيد العنوان قبل الدخول. إن كان لديك حساب بالفعل، سجّل الدخول بدلًا من ذلك."
+  },
+  "If this address has an account, a password recovery email has been sent. Check your inbox and spam folder.": {
+    "fr": "Si cette adresse possède un compte, un e-mail de récupération a été envoyé. Vérifiez votre boîte et les indésirables.",
+    "ar": "إن كان لهذا العنوان حساب، فقد أُرسلت رسالة استعادة. راجع صندوق الوارد والبريد غير المرغوب فيه."
+  },
+  "If confirmation is needed, a new email has been sent. Check your inbox and spam folder.": {
+    "fr": "Si une confirmation est nécessaire, un nouvel e-mail a été envoyé. Vérifiez votre boîte et les indésirables.",
+    "ar": "إن لزم التأكيد، فقد أُرسلت رسالة جديدة. راجع صندوق الوارد والبريد غير المرغوب فيه."
+  },
+  "Your current password is incorrect.": {
+    "fr": "Votre mot de passe actuel est incorrect.",
+    "ar": "كلمة المرور الحالية غير صحيحة."
+  },
+  "Your password has been updated. Sign in with your new password.": {
+    "fr": "Votre mot de passe est modifié. Connectez-vous avec le nouveau.",
+    "ar": "حُدثت كلمة مرورك. سجّل الدخول بكلمتك الجديدة."
+  },
+  "Your password was updated, but we could not sign out all sessions. Sign out from your account before signing in again.": {
+    "fr": "Le mot de passe est modifié mais toutes les sessions n’ont pas pu être fermées. Déconnectez-vous avant de revenir.",
+    "ar": "حُدثت كلمة المرور لكن تعذر إنهاء كل الجلسات. سجّل الخروج قبل الدخول مجددًا."
+  },
+  "The confirmation or recovery link could not be completed. Request a new email.": {
+    "fr": "Le lien n’a pas pu aboutir. Demandez un nouvel e-mail.",
+    "ar": "تعذر إكمال رابط التأكيد أو الاستعادة. اطلب رسالة جديدة."
+  },
+  "This recovery link is missing or expired. Request a new reset email.": {
+    "fr": "Le lien est absent ou expiré. Demandez un nouvel e-mail de réinitialisation.",
+    "ar": "رابط الاستعادة مفقود أو منتهي الصلاحية. اطلب رسالة جديدة."
+  },
+  "Unable to verify this recovery session. Request a new link.": {
+    "fr": "Impossible de vérifier cette session. Demandez un nouveau lien.",
+    "ar": "تعذر التحقق من جلسة الاستعادة. اطلب رابطًا جديدًا."
+  },
+  "We couldn’t reach cloud storage. Please try again.": {
+    "fr": "Le stockage cloud est injoignable. Réessayez.",
+    "ar": "تعذر الوصول إلى التخزين السحابي. أعد المحاولة."
+  },
+  "Device storage is unavailable. Keep this page open to retain your profile.": {
+    "fr": "Le stockage local est indisponible. Gardez la page ouverte pour conserver votre profil.",
+    "ar": "تخزين الجهاز غير متاح. أبقِ الصفحة مفتوحة للاحتفاظ بملفك."
+  },
+  "Draft storage is unavailable. Keep this page open.": {
+    "fr": "Le stockage des brouillons est indisponible. Gardez cette page ouverte.",
+    "ar": "تخزين المسودات غير متاح. أبقِ الصفحة مفتوحة."
+  },
+  "Save failed; your draft is retained.": {
+    "fr": "L’enregistrement a échoué ; votre brouillon est conservé.",
+    "ar": "فشل الحفظ؛ مسودتك محفوظة مؤقتًا."
+  },
+  "Routine saved. Schedule edits start tomorrow; earlier days keep their original schedule.": {
+    "fr": "Routine enregistrée. Les changements commencent demain ; les jours antérieurs gardent leur programme d’origine.",
+    "ar": "حُفظ الروتين. تبدأ التغييرات غدًا؛ وتحتفظ الأيام السابقة بجداولها الأصلية."
+  },
+  "Check-in saved.": {
+    "fr": "Suivi enregistré.",
+    "ar": "حُفظت المتابعة."
+  },
+  "Saved. Local draft cleanup is unavailable.": {
+    "fr": "Enregistré. Le nettoyage du brouillon local est indisponible.",
+    "ar": "تم الحفظ. تعذر تنظيف المسودة المحلية."
+  },
+  "Unsaved program draft restored. Review before saving.": {
+    "fr": "Brouillon de programme restauré. Vérifiez avant d’enregistrer.",
+    "ar": "استُعيدت مسودة برنامج غير محفوظة. راجعها قبل الحفظ."
+  },
+  "Unable to load your plan.": {
+    "fr": "Impossible de charger votre programme.",
+    "ar": "تعذر تحميل خطتك."
+  },
+  "Unable to load older observations.": {
+    "fr": "Impossible de charger les observations antérieures.",
+    "ar": "تعذر تحميل القياسات السابقة."
+  },
+  "Check-in preference could not be loaded.": {
+    "fr": "Impossible de charger votre préférence de suivi.",
+    "ar": "تعذر تحميل تفضيل المتابعة."
+  },
+  "This preference could not be saved in this browser.": {
+    "fr": "Ce choix n’a pas pu être enregistré ici.",
+    "ar": "تعذر حفظ هذا التفضيل في المتصفح."
+  },
+  "Reviewed observation recorded.": {
+    "fr": "Observation vérifiée enregistrée.",
+    "ar": "حُفظ القياس بعد المراجعة."
+  },
+  "Browser data could not be exported.": {
+    "fr": "Impossible d’exporter les données du navigateur.",
+    "ar": "تعذر تصدير بيانات المتصفح."
+  },
+  "Some browser data could not be removed. Keep the page open and retry.": {
+    "fr": "Certaines données n’ont pas pu être retirées. Gardez la page ouverte et réessayez.",
+    "ar": "تعذر حذف بعض بيانات المتصفح. أبقِ الصفحة مفتوحة وأعد المحاولة."
+  },
+  "Saved account data exported. Browser drafts are separate.": {
+    "fr": "Données du compte exportées. Les brouillons du navigateur restent séparés.",
+    "ar": "صُدرت بيانات الحساب المحفوظة. مسودات المتصفح منفصلة."
+  },
+  "Your account and associated live records were deleted.": {
+    "fr": "Votre compte et ses données actives ont été supprimés.",
+    "ar": "حُذف حسابك وسجلاته النشطة المرتبطة به."
+  },
+  "Selected history deleted. Sharing disabled and derived assessment history removed.": {
+    "fr": "Historique sélectionné supprimé. Partage désactivé et évaluations dérivées retirées.",
+    "ar": "حُذف السجل المحدد. عُطلت المشاركة وأُزيلت التقييمات المستمدة منه."
+  },
+  "Sign in again before deleting data.": {
+    "fr": "Reconnectez-vous avant de supprimer des données.",
+    "ar": "سجّل الدخول مجددًا قبل حذف البيانات."
+  },
+  "Authentication failed or your account changed. Nothing was deleted.": {
+    "fr": "Authentification échouée ou compte modifié. Rien n’a été supprimé.",
+    "ar": "فشل التحقق أو تغير حسابك. لم يُحذف شيء."
+  },
+  "Unable to delete data.": {
+    "fr": "Impossible de supprimer les données.",
+    "ar": "تعذر حذف البيانات."
+  },
+  "Capability check failed.": {
+    "fr": "La vérification de disponibilité a échoué.",
+    "ar": "فشل التحقق من الإتاحة."
+  },
+  "Invalid capability response.": {
+    "fr": "Réponse de disponibilité invalide.",
+    "ar": "استجابة الإتاحة غير صالحة."
+  },
+  "Profile summary downloaded.": {
+    "fr": "Résumé du profil téléchargé.",
+    "ar": "نُزّل ملخص الملف."
+  },
+  "Public profile link copied.": {
+    "fr": "Lien public copié.",
+    "ar": "نُسخ رابط الملف العام."
+  },
+  "Clipboard unavailable. Select the link below to copy it.": {
+    "fr": "Presse-papiers indisponible. Sélectionnez le lien ci-dessous.",
+    "ar": "الحافظة غير متاحة. حدد الرابط أدناه لنسخه."
+  },
+  "Keep a username while your profile is public, or make it private first.": {
+    "fr": "Gardez un nom tant que le profil est public, ou rendez-le d’abord privé.",
+    "ar": "احتفظ باسم مستخدم ما دام ملفك عامًا، أو اجعله خاصًا أولًا."
+  },
+  "Correct invalid measurements before publishing.": {
+    "fr": "Corrigez les mesures invalides avant publication.",
+    "ar": "صحح القياسات غير الصالحة قبل النشر."
+  },
+  "Check your username.": {
+    "fr": "Vérifiez votre nom d’utilisateur.",
+    "ar": "تحقق من اسم المستخدم."
+  },
+  "Enter a number in every field.": {
+    "fr": "Saisissez un nombre dans chaque champ.",
+    "ar": "أدخل رقمًا في كل حقل."
+  },
+  "The estimate is outside the supported range. Check your inputs.": {
+    "fr": "L’estimation est hors plage. Vérifiez vos données.",
+    "ar": "التقدير خارج النطاق المدعوم. راجع مدخلاتك."
+  },
+  "Enter your actual body weight (25–350 kg) to calculate a body-weight ratio.": {
+    "fr": "Saisissez votre poids réel (25–350 kg) pour calculer le ratio.",
+    "ar": "أدخل وزن جسمك الفعلي (25–350 كغ) لحساب النسبة."
+  },
+  "Distance in 12 minutes (m)": {
+    "fr": "Distance en 12 minutes (m)",
+    "ar": "المسافة خلال 12 دقيقة (م)"
+  },
+  "Chest skinfold (mm)": {
+    "fr": "Pli pectoral (mm)",
+    "ar": "طية الصدر (مم)"
+  },
+  "Abdominal skinfold (mm)": {
+    "fr": "Pli abdominal (mm)",
+    "ar": "طية البطن (مم)"
+  },
+  "Thigh skinfold (mm)": {
+    "fr": "Pli de cuisse (mm)",
+    "ar": "طية الفخذ (مم)"
+  },
+  "Load (kg)": {
+    "fr": "Charge (kg)",
+    "ar": "الوزن المرفوع (كغ)"
+  },
+  "Added load (kg)": {
+    "fr": "Charge ajoutée (kg)",
+    "ar": "الحمل الإضافي (كغ)"
+  },
+  "Repetitions": {
+    "fr": "Répétitions",
+    "ar": "التكرارات"
+  },
+  "Weight (kg) · optional": {
+    "fr": "Poids (kg) · facultatif",
+    "ar": "الوزن (كغ) · اختياري"
+  },
+  "Height (cm) · optional": {
+    "fr": "Taille (cm) · facultative",
+    "ar": "الطول (سم) · اختياري"
+  },
+  "Not selected": {
+    "fr": "Non choisi",
+    "ar": "غير محدد"
+  },
+  "Tier 1 · Express / Everyday": {
+    "fr": "Niveau 1 · Simple / quotidien",
+    "ar": "المستوى 1 · سريع / يومي"
+  },
+  "Tier 2 · Gym & Wearable": {
+    "fr": "Niveau 2 · Salle et objets connectés",
+    "ar": "المستوى 2 · الصالة والأجهزة القابلة للارتداء"
+  },
+  "Tier 3 · Precision / Advanced": {
+    "fr": "Niveau 3 · Précision / avancé",
+    "ar": "المستوى 3 · دقة / متقدم"
+  },
+  "Everyday": {
+    "fr": "Quotidien",
+    "ar": "يومي"
+  },
+  "Standard": {
+    "fr": "Standard",
+    "ar": "قياسي"
+  },
+  "Precision": {
+    "fr": "Précision",
+    "ar": "دقة"
+  },
+  "Simple observations and accessible tests.": {
+    "fr": "Observations simples et tests accessibles.",
+    "ar": "قياسات بسيطة واختبارات متاحة."
+  },
+  "Common laboratory, gym and wearable measurements.": {
+    "fr": "Mesures courantes de laboratoire, salle et objets connectés.",
+    "ar": "قياسات شائعة للمختبر والصالة والأجهزة القابلة للارتداء."
+  },
+  "Specialist labs, equipment and advanced protocols.": {
+    "fr": "Laboratoires spécialisés, équipements et protocoles avancés.",
+    "ar": "مختبرات متخصصة وأجهزة وبروتوكولات متقدمة."
+  },
+  "Morphology & biochemistry. Context before interpretation.": {
+    "fr": "Morphologie et biochimie. Le contexte avant l’interprétation.",
+    "ar": "الشكل والكيمياء الحيوية. السياق قبل التفسير."
+  },
+  "Muscular & heart strength. Capacity in motion.": {
+    "fr": "Force musculaire et cardiaque. La capacité en mouvement.",
+    "ar": "قوة العضلات والقلب. القدرة أثناء الحركة."
+  },
+  "Sleep, autonomic tone & thermal exposure.": {
+    "fr": "Sommeil, régulation autonome et exposition thermique.",
+    "ar": "النوم والتنظيم العصبي الذاتي والتعرض الحراري."
+  },
+  "Stored details need review. The raw observation is retained but does not enter the model.": {
+    "fr": "Les détails doivent être vérifiés. La mesure brute est conservée mais exclue du modèle.",
+    "ar": "التفاصيل تحتاج إلى مراجعة. يُحتفظ بالقياس الخام لكنه لا يدخل في النموذج."
+  },
+  "Preserved legacy observation; outside the active model.": {
+    "fr": "Ancienne observation conservée ; hors du modèle actif.",
+    "ar": "قياس سابق محفوظ؛ خارج النموذج النشط."
+  },
+  "Context and tracking only; no model score.": {
+    "fr": "Contexte et suivi uniquement ; sans points.",
+    "ar": "للسياق والمتابعة فقط؛ دون نقاط نموذج."
+  },
+  "Raw tracking is available. Choose a supported reference cohort only if you want experimental comparisons.": {
+    "fr": "Le suivi brut est disponible. Choisissez un groupe de référence seulement pour des comparaisons expérimentales.",
+    "ar": "المتابعة الخام متاحة. اختر عينة مرجعية مدعومة فقط إن أردت مقارنات تجريبية."
+  },
+  "The method or date needs correction before this observation can enter the model.": {
+    "fr": "La méthode ou date doit être corrigée pour inclure cette observation dans le modèle.",
+    "ar": "تحتاج الطريقة أو التاريخ إلى تصحيح قبل إدخال القياس في النموذج."
+  },
+  "The published reference requires direct treadmill CPET. Cycle tests, estimates and unknown modalities remain tracking only.": {
+    "fr": "La référence publiée exige un CPET direct sur tapis. Vélo, estimations et modalités inconnues restent du suivi.",
+    "ar": "يتطلب المرجع المنشور CPET مباشرًا على جهاز المشي. تبقى اختبارات الدراجة والتقديرات والأنواع المجهولة للمتابعة فقط."
+  },
+  "The FRIEND reference requires a dated direct treadmill CPET report, peak RER ≥ 1.0, and confirmed match to its population (no known cardiovascular disease or COPD). Unknown or unmatched context remains tracking only.": {
+    "fr": "FRIEND exige un rapport CPET direct daté sur tapis, RER maximal ≥ 1,0 et compatibilité confirmée avec sa population (sans maladie cardiovasculaire ni BPCO connue). Tout contexte inconnu ou incompatible reste du suivi.",
+    "ar": "يتطلب FRIEND تقرير CPET مباشرًا مؤرخًا على جهاز المشي، وذروة RER ≥ 1.0، وتوافقًا مؤكدًا مع العينة (دون مرض قلبي وعائي أو انسداد رئوي مزمن معروف). يبقى السياق المجهول أو غير المتوافق للمتابعة فقط."
+  },
+  "Record a test age of 20–89 for the supported treadmill cohort.": {
+    "fr": "Indiquez un âge au test de 20–89 ans pour ce groupe sur tapis.",
+    "ar": "سجّل عمرًا عند الاختبار من 20 إلى 89 للعينة المدعومة على جهاز المشي."
+  },
+  "The test age exceeds your profile age. Check both before using this reference.": {
+    "fr": "L’âge au test dépasse celui du profil. Vérifiez les deux avant d’utiliser cette référence.",
+    "ar": "العمر عند الاختبار أكبر من عمر ملفك. تحقق منهما قبل استخدام المرجع."
+  },
+  "The test date and recorded ages do not agree. Check the test age and your current profile age.": {
+    "fr": "La date et les âges ne concordent pas. Vérifiez l’âge au test et l’âge actuel.",
+    "ar": "تاريخ الاختبار والأعمار غير متوافقة. راجع العمر عند الاختبار وعمرك الحالي."
+  },
+  "Published treadmill cohort parameters; self-reported protocol.": {
+    "fr": "Paramètres publiés du groupe sur tapis ; protocole déclaré.",
+    "ar": "معلمات منشورة لعينة جهاز المشي؛ البروتوكول مُبلّغ ذاتيًا."
+  },
+  "Provisional product reference; not a validated benchmark.": {
+    "fr": "Référence provisoire du produit ; étalon non validé.",
+    "ar": "مرجع أولي للمنتج؛ ليس معيارًا معتمدًا."
+  },
+  "Published US test-cohort thresholds, with explicit inclusion criteria; no global rank.": {
+    "fr": "Seuils d’un groupe américain avec critères d’inclusion explicites ; sans classement mondial.",
+    "ar": "عتبات عينة اختبار أمريكية بشروط إدراج واضحة؛ دون ترتيب عالمي."
+  },
+  "Product parameters; no validated population distribution.": {
+    "fr": "Paramètres du produit ; aucune distribution de population validée.",
+    "ar": "معلمات المنتج؛ دون توزيع سكاني معتمد."
+  },
+  "No quantitative performance reference is enabled.": {
+    "fr": "Aucune référence quantitative de performance n’est activée.",
+    "ar": "لا يوجد مرجع أداء كمي مفعّل."
+  },
+  "Not recorded": {
+    "fr": "Non enregistré",
+    "ar": "غير مسجل"
+  },
+  "Dated test needed": {
+    "fr": "Test daté nécessaire",
+    "ar": "يلزم اختبار مؤرخ"
+  },
+  "Direct treadmill CPET needed": {
+    "fr": "CPET direct sur tapis nécessaire",
+    "ar": "يلزم CPET مباشر على جهاز المشي"
+  },
+  "Matching protocol details needed": {
+    "fr": "Détails de protocole compatibles requis",
+    "ar": "تلزم تفاصيل بروتوكول متوافقة"
+  },
+  "Protocol recorded · self-reported": {
+    "fr": "Protocole renseigné · déclaratif",
+    "ar": "البروتوكول مسجل · مُبلّغ ذاتيًا"
+  },
+  "Endurance": {
+    "fr": "Endurance",
+    "ar": "التحمل"
+  },
+  "Lower-body power": {
+    "fr": "Puissance du bas du corps",
+    "ar": "قدرة الجزء السفلي"
+  },
+  "Upper-body endurance": {
+    "fr": "Endurance du haut du corps",
+    "ar": "تحمل الجزء العلوي"
+  },
+  "Acceleration": {
+    "fr": "Accélération",
+    "ar": "التسارع"
+  },
+  "Invalid demographic profile.": {
+    "fr": "Profil démographique invalide.",
+    "ar": "معلومات الملف غير صالحة."
+  },
+  "Unsupported measurement method.": {
+    "fr": "Méthode de mesure non prise en charge.",
+    "ar": "طريقة قياس غير مدعومة."
+  },
+  "Unsupported measurement source.": {
+    "fr": "Source de mesure non prise en charge.",
+    "ar": "مصدر قياس غير مدعوم."
+  },
+  "Measurement dates cannot be in the future.": {
+    "fr": "La date de mesure ne peut pas être future.",
+    "ar": "لا يمكن أن يكون تاريخ القياس في المستقبل."
+  },
+  "Use a whole test age from 18 to 120.": {
+    "fr": "Utilisez un âge entier de 18 à 120 ans au test.",
+    "ar": "استخدم عمرًا صحيحًا من 18 إلى 120 عند الاختبار."
+  },
+  "Complete the window dates and sample count, or clear the window.": {
+    "fr": "Complétez les dates et le nombre d’échantillons, ou effacez la période.",
+    "ar": "أكمل تواريخ الفترة وعدد العينات، أو امسح الفترة."
+  },
+  "Check the averaging window.": {
+    "fr": "Vérifiez la période de moyenne.",
+    "ar": "راجع فترة حساب المتوسط."
+  },
+  "Check window dates, statistic and sample count.": {
+    "fr": "Vérifiez les dates, la statistique et le nombre d’échantillons.",
+    "ar": "راجع تواريخ الفترة والمقياس وعدد العينات."
+  },
+  "Check the measurement details.": {
+    "fr": "Vérifiez les détails de la mesure.",
+    "ar": "راجع تفاصيل القياس."
+  },
+  "Use a chair height of 25–70 cm.": {
+    "fr": "Utilisez une hauteur de chaise de 25–70 cm.",
+    "ar": "استخدم ارتفاع كرسي من 25 إلى 70 سم."
+  },
+  "Enter the peak RER from a direct treadmill CPET report (greater than 0, up to 3).": {
+    "fr": "Saisissez le RER maximal du rapport CPET direct sur tapis (supérieur à 0, jusqu’à 3).",
+    "ar": "أدخل ذروة RER من تقرير CPET مباشر على جهاز المشي (أكبر من صفر وحتى 3)."
+  },
+  "Review the CPET reference population.": {
+    "fr": "Vérifiez la population de référence CPET.",
+    "ar": "راجع العينة المرجعية لاختبار CPET."
+  },
+  "Choose a protocol compatible with this measurement.": {
+    "fr": "Choisissez un protocole compatible avec cette mesure.",
+    "ar": "اختر بروتوكولًا متوافقًا مع هذا القياس."
+  },
+  "Choose a supported VO₂ exercise modality.": {
+    "fr": "Choisissez une modalité VO₂ prise en charge.",
+    "ar": "اختر نوع جهد VO₂ مدعومًا."
+  },
+  "Use an equipment label of up to 60 characters.": {
+    "fr": "Limitez le nom d’équipement à 60 caractères.",
+    "ar": "استخدم اسم جهاز لا يتجاوز 60 حرفًا."
+  },
+  "Record 1–10 trials.": {
+    "fr": "Indiquez 1 à 10 essais.",
+    "ar": "سجّل من 1 إلى 10 محاولات."
+  },
+  "Record the chair height in centimetres (25–70).": {
+    "fr": "Notez la hauteur de chaise en centimètres (25–70).",
+    "ar": "سجّل ارتفاع الكرسي بالسنتيمتر (25–70)."
+  },
+  "Choose the hand measured for single-hand grip.": {
+    "fr": "Choisissez la main mesurée pour la préhension à une main.",
+    "ar": "اختر اليد المقاسة لاختبار قبضة يد واحدة."
+  },
+  "NHANES requires both hands and three trials per hand.": {
+    "fr": "NHANES exige deux mains et trois essais par main.",
+    "ar": "يتطلب NHANES كلتا اليدين وثلاث محاولات لكل يد."
+  },
+  "This protocol requires RMSSD, not SDNN.": {
+    "fr": "Ce protocole exige RMSSD, pas SDNN.",
+    "ar": "يتطلب هذا البروتوكول RMSSD وليس SDNN."
+  },
+  "Stored context needs review.": {
+    "fr": "Le contexte enregistré doit être vérifié.",
+    "ar": "السياق المحفوظ يحتاج إلى مراجعة."
+  },
+  "Review the stored measurement details before saving.": {
+    "fr": "Vérifiez les détails enregistrés avant de sauvegarder.",
+    "ar": "راجع تفاصيل القياس المحفوظة قبل الحفظ."
+  },
+  "This metric does not accept an averaging window.": {
+    "fr": "Cette mesure n’accepte pas de période de moyenne.",
+    "ar": "لا يقبل هذا القياس فترة لحساب المتوسط."
+  },
+  "Invalid measurement details.": {
+    "fr": "Détails de mesure invalides.",
+    "ar": "تفاصيل القياس غير صالحة."
+  },
+  "Invalid measurement protocol.": {
+    "fr": "Protocole de mesure invalide.",
+    "ar": "بروتوكول القياس غير صالح."
+  },
+  "Invalid hand or leg context.": {
+    "fr": "Contexte de main ou jambe invalide.",
+    "ar": "سياق اليد أو الساق غير صالح."
+  },
+  "Invalid HRV statistic.": {
+    "fr": "Statistique VFC invalide.",
+    "ar": "مقياس تباين النبض غير صالح."
+  },
+  "VO₂ protocol does not match its measurement method.": {
+    "fr": "Le protocole VO₂ ne correspond pas à sa méthode.",
+    "ar": "بروتوكول VO₂ لا يتوافق مع طريقة القياس."
+  },
+  "Invalid age at measurement.": {
+    "fr": "Âge lors de la mesure invalide.",
+    "ar": "العمر عند القياس غير صالح."
+  },
+  "Invalid stored context marker.": {
+    "fr": "Marqueur de contexte enregistré invalide.",
+    "ar": "علامة السياق المحفوظ غير صالحة."
+  },
+  "Unknown measurement details.": {
+    "fr": "Détails de mesure inconnus.",
+    "ar": "تفاصيل القياس غير معروفة."
+  },
+  "Date needs correction": {
+    "fr": "Date à corriger",
+    "ar": "التاريخ يحتاج إلى تصحيح"
+  },
+  "Measurement date unknown": {
+    "fr": "Date de mesure inconnue",
+    "ar": "تاريخ القياس غير معروف"
+  },
+  "Future date · correct this observation": {
+    "fr": "Date future · corrigez cette observation",
+    "ar": "تاريخ مستقبلي · صحح القياس"
+  },
+  "No calibrated cohort loaded": {
+    "fr": "Aucun groupe calibré chargé",
+    "ar": "لا توجد عينة معايرة"
+  },
+  "Experimental model available; this is not statistical confidence.": {
+    "fr": "Modèle expérimental disponible ; cela n’indique pas une confiance statistique.",
+    "ar": "النموذج التجريبي متاح؛ ولا يعني هذا ثقة إحصائية."
+  },
+  "Record three eligible observations.": {
+    "fr": "Ajoutez trois observations admissibles.",
+    "ar": "سجّل ثلاثة قياسات مؤهلة."
+  },
+  "Record three eligible capacity observations.": {
+    "fr": "Ajoutez trois observations de capacité admissibles.",
+    "ar": "سجّل ثلاثة قياسات قدرة مؤهلة."
+  },
+  "Weight lifted (kg)": {
+    "fr": "Poids soulevé (kg)",
+    "ar": "الوزن المرفوع (كغ)"
+  },
+  "Repetitions (1–10)": {
+    "fr": "Répétitions (1–10)",
+    "ar": "التكرارات (1–10)"
+  },
+  "Check your inputs.": {
+    "fr": "Vérifiez vos données.",
+    "ar": "راجع مدخلاتك."
+  },
+  "Method unknown": {
+    "fr": "Méthode inconnue",
+    "ar": "الطريقة غير معروفة"
+  },
+  "10 metres · electronic timing gates": {
+    "fr": "10 mètres · cellules électroniques",
+    "ar": "10 أمتار · بوابات توقيت إلكترونية"
+  },
+  "12-minute Cooper run · measured track": {
+    "fr": "Cooper 12 minutes · piste mesurée",
+    "ar": "اختبار كوبر 12 دقيقة · مسار مقاس"
+  },
+  "30 seconds · arms crossed, same chair": {
+    "fr": "30 secondes · bras croisés, même chaise",
+    "ar": "30 ثانية · الذراعان متقاطعتان والكرسي نفسه"
+  },
+  "60 seconds · active walking recovery": {
+    "fr": "60 secondes · récupération en marchant",
+    "ar": "60 ثانية · استشفاء بالمشي"
+  },
+  "60 seconds · passive seated recovery": {
+    "fr": "60 secondes · récupération assise",
+    "ar": "60 ثانية · استشفاء بالجلوس"
+  },
+  "Choice reaction · same task/device": {
+    "fr": "Réaction à choix · mêmes tâche et appareil",
+    "ar": "استجابة اختيارية · المهمة والجهاز نفسيهما"
+  },
+  "Consecutive strict repetitions to form failure": {
+    "fr": "Répétitions strictes jusqu’à perte de technique",
+    "ar": "تكرارات صارمة حتى فقدان التقنية"
+  },
+  "Countermovement · hands on hips": {
+    "fr": "Contre-mouvement · mains sur les hanches",
+    "ar": "حركة مضادة · اليدان على الوركين"
+  },
+  "Direct treadmill CPET": {
+    "fr": "CPET direct sur tapis",
+    "ar": "CPET مباشر على جهاز المشي"
+  },
+  "Eyes closed · same leg and stop rule": {
+    "fr": "Yeux fermés · même jambe et règle d’arrêt",
+    "ar": "العينان مغلقتان · الساق وقاعدة التوقف نفسهما"
+  },
+  "NHANES · best of 3 per hand, summed": {
+    "fr": "NHANES · somme des meilleurs de 3 par main",
+    "ar": "NHANES · مجموع أفضل نتيجة من 3 لكل يد"
+  },
+  "RMSSD · rested supine recording": {
+    "fr": "RMSSD · enregistrement allongé au repos",
+    "ar": "RMSSD · تسجيل مستلقٍ أثناء الراحة"
+  },
+  "Seven-day device average": {
+    "fr": "Moyenne sur sept jours par appareil",
+    "ar": "متوسط جهاز لسبعة أيام"
+  },
+  "Seven-day regularity · same algorithm/device": {
+    "fr": "Régularité sur sept jours · mêmes algorithme et appareil",
+    "ar": "انتظام سبعة أيام · الخوارزمية والجهاز نفسيهما"
+  },
+  "Seven-day sleep diary average": {
+    "fr": "Moyenne du journal de sommeil sur sept jours",
+    "ar": "متوسط مفكرة النوم لسبعة أيام"
+  },
+  "Seven-day sleep efficiency average": {
+    "fr": "Efficacité moyenne du sommeil sur sept jours",
+    "ar": "متوسط كفاءة النوم لسبعة أيام"
+  },
+  "Simple reaction · same task/device": {
+    "fr": "Réaction simple · mêmes tâche et appareil",
+    "ar": "استجابة بسيطة · المهمة والجهاز نفسيهما"
+  },
+  "Single hand · same dynamometer and position": {
+    "fr": "Une main · mêmes dynamomètre et position",
+    "ar": "يد واحدة · الدينامومتر والوضعية نفسهما"
+  },
+  "Standing broad jump · same technique": {
+    "fr": "Saut en longueur sans élan · même technique",
+    "ar": "وثب طويل من الثبات · التقنية نفسها"
+  },
+  "Wearable estimate · same device/algorithm": {
+    "fr": "Estimation connectée · mêmes appareil et algorithme",
+    "ar": "تقدير جهاز قابل للارتداء · الجهاز والخوارزمية نفسيهما"
+  },
+  "Mon": {
+    "fr": "Lun",
+    "ar": "الاثنين"
+  },
+  "Tue": {
+    "fr": "Mar",
+    "ar": "الثلاثاء"
+  },
+  "Wed": {
+    "fr": "Mer",
+    "ar": "الأربعاء"
+  },
+  "Thu": {
+    "fr": "Jeu",
+    "ar": "الخميس"
+  },
+  "Fri": {
+    "fr": "Ven",
+    "ar": "الجمعة"
+  },
+  "Sat": {
+    "fr": "Sam",
+    "ar": "السبت"
+  },
+  "Sun": {
+    "fr": "Dim",
+    "ar": "الأحد"
+  },
+  "Recording coverage": {
+    "fr": "Couverture des mesures",
+    "ar": "تغطية القياسات"
+  },
+  "This graph shows recorded data, not performance.": {
+    "fr": "Ce graphique montre les données enregistrées, pas la performance.",
+    "ar": "يعرض هذا الرسم البيانات المسجلة وليس الأداء."
+  },
+  "Loading history…": {
+    "fr": "Chargement de l’historique…",
+    "ar": "جارٍ تحميل السجل…"
+  },
+  "Loading your program…": {
+    "fr": "Chargement de votre programme…",
+    "ar": "جارٍ تحميل برنامجك…"
+  },
+  "Let’s try again.": {
+    "fr": "Réessayons.",
+    "ar": "لنحاول مجددًا."
+  },
+  "Try again": {
+    "fr": "Réessayer",
+    "ar": "حاول مجددًا"
+  },
+  "Account access →": {
+    "fr": "Accès au compte →",
+    "ar": "الدخول إلى الحساب ←"
+  },
+  "This page could not load. Reload it to reconnect with your workspace.": {
+    "fr": "Cette page n’a pas pu se charger. Rechargez-la pour retrouver votre espace.",
+    "ar": "تعذر تحميل الصفحة. أعد تحميلها لاستعادة مساحتك."
+  },
+  "Cardio focus": {
+    "fr": "Priorité cardio",
+    "ar": "تركيز القلب والتحمل"
+  },
+  "Strength focus": {
+    "fr": "Priorité force",
+    "ar": "تركيز القوة"
+  },
+  "Balanced": {
+    "fr": "Équilibré",
+    "ar": "متوازن"
+  },
+  "Index": {
+    "fr": "Indice",
+    "ar": "المؤشر"
+  },
+  "points": {
+    "fr": "points",
+    "ar": "نقاط"
+  },
+  "Model step": {
+    "fr": "Pas du modèle",
+    "ar": "خطوة النموذج"
+  },
+  "% measurement coverage": {
+    "fr": "% de couverture des mesures",
+    "ar": "% تغطية القياسات"
+  },
+  "/100 experimental index": {
+    "fr": "/100 indice expérimental",
+    "ar": "/100 مؤشر تجريبي"
+  },
+  "No model assessment yet": {
+    "fr": "Aucune évaluation du modèle",
+    "ar": "لا يوجد تقييم للنموذج بعد"
+  },
+  "A PERSONAL PERFORMANCE SNAPSHOT": {
+    "fr": "UN APERÇU PERSONNEL DE PERFORMANCE",
+    "ar": "لمحة أداء شخصية"
+  },
+  "Physical capacity · research battery": {
+    "fr": "Capacités physiques · batterie de recherche",
+    "ar": "القدرة البدنية · مجموعة بحثية"
+  },
+  "How TOP1 protects your data": {
+    "fr": "Comment TOP1 protège vos données",
+    "ar": "كيف يحمي TOP1 بياناتك"
+  },
+  "Self-reported measurements and provisional model references. This index is not a population rank, health score or medical assessment. A signed snapshot confirms calculation by TOP1, not independent verification of the measurements. Raw logs stay private. The snapshot date is the calculation date; the underlying tests may be undated or from different dates.": {
+    "fr": "Mesures déclarées et références provisoires. Cet indice n’est ni classement de population, ni score de santé, ni évaluation médicale. Un résumé signé confirme le calcul par TOP1, pas une vérification des mesures. Les mesures brutes restent privées. La date du résumé est celle du calcul ; les tests peuvent être non datés ou de dates différentes.",
+    "ar": "قياسات مُبلّغ عنها ذاتيًا ومراجع أولية. هذا المؤشر ليس ترتيبًا سكانيًا أو درجة صحة أو تقييمًا طبيًا. يؤكد التوقيع حساب TOP1 لا التحقق المستقل من القياسات. تبقى السجلات الخام خاصة. تاريخ الملخص هو تاريخ الحساب؛ وقد تكون الاختبارات غير مؤرخة أو من تواريخ مختلفة."
+  },
+  ". Its original calculation is preserved; the owner can save a new assessment to use the current model.": {
+    "fr": ". Son calcul d’origine est conservé ; le propriétaire peut enregistrer une nouvelle évaluation avec le modèle actuel.",
+    "ar": ". يُحتفظ بحسابه الأصلي؛ ويمكن للمالك حفظ تقييم جديد باستخدام النموذج الحالي."
+  },
+  "Earlier model snapshot ·": {
+    "fr": "Résumé d’un ancien modèle ·",
+    "ar": "ملخص نموذج سابق ·"
+  },
+  "Experimental model index · snapshot": {
+    "fr": "Indice expérimental · résumé",
+    "ar": "مؤشر تجريبي · ملخص"
+  },
+  "Profile temporarily unavailable.": {
+    "fr": "Profil temporairement indisponible.",
+    "ar": "الملف غير متاح مؤقتًا."
+  },
+  "Stored profile could not be loaded. Your saved data has been retained.": {
+    "fr": "Le profil n’a pas pu être chargé. Vos données enregistrées sont conservées.",
+    "ar": "تعذر تحميل الملف. بياناتك المحفوظة لا تزال محفوظة."
+  },
+  "No approved representative reference population is connected. Recording these tests does not yet establish a top-1% rank.": {
+    "fr": "Aucune population représentative approuvée n’est connectée. Ces tests ne permettent pas encore un rang Top 1 %.",
+    "ar": "لا توجد عينة مرجعية تمثيلية معتمدة مرتبطة. تسجيل الاختبارات لا يثبت بعد رتبة أعلى 1%."
+  },
+  "Complete the same fixed protocol battery; missing tests are not scored as zero.": {
+    "fr": "Complétez la même batterie fixe ; les tests absents ne valent pas zéro.",
+    "ar": "أكمل مجموعة البروتوكولات الثابتة نفسها؛ الاختبارات الناقصة لا تُحسب صفرًا."
+  },
+  "Candidate test · calibration pending": {
+    "fr": "Test proposé · calibration en attente",
+    "ar": "اختبار مقترح · بانتظار المعايرة"
+  },
+  "Provisional": {
+    "fr": "Provisoire",
+    "ar": "أولي"
+  },
+  "Tracking": {
+    "fr": "Suivi",
+    "ar": "متابعة"
+  },
+  "Clinical context": {
+    "fr": "Contexte clinique",
+    "ar": "سياق سريري"
+  },
+  "Strength": {
+    "fr": "Force",
+    "ar": "القوة"
+  },
+  "BodyMarkers": {
+    "fr": "Marqueurs corporels",
+    "ar": "مؤشرات الجسم"
+  },
+  "≥ 420 regularly; individual needs vary": {
+    "fr": "≥ 420 régulièrement ; besoins individuels variables",
+    "ar": "≥ 420 بانتظام؛ تختلف الاحتياجات الفردية"
+  },
+  "Ankle dorsiflexion": {
+    "fr": "Dorsiflexion de cheville",
+    "ar": "الثني الظهري للكاحل"
+  },
+  "Systolic blood pressure": {
+    "fr": "Pression artérielle systolique",
+    "ar": "ضغط الدم الانقباضي"
+  },
+  "Simple visual reaction time": {
+    "fr": "Temps de réaction visuelle simple",
+    "ar": "زمن استجابة بصرية بسيطة"
+  },
+  "h/night": {
+    "fr": "h/nuit",
+    "ar": "ساعة/ليلة"
+  },
+  "reps": {
+    "fr": "rép.",
+    "ar": "تكرار"
+  },
+  "s": {
+    "fr": "s",
+    "ar": "ث"
+  },
+  "min": {
+    "fr": "min",
+    "ar": "دقيقة"
+  },
+  "bpm": {
+    "fr": "bpm",
+    "ar": "نبضة/دقيقة"
+  },
+  "bpm drop": {
+    "fr": "bpm de baisse",
+    "ar": "انخفاض نبضة/دقيقة"
+  },
+  "× BW": {
+    "fr": "× poids corporel",
+    "ar": "× وزن الجسم"
+  },
+  "× BW added": {
+    "fr": "× poids corporel ajouté",
+    "ar": "× وزن الجسم الإضافي"
+  },
+  "from an older profile revision": {
+    "fr": "d’une ancienne version du profil",
+    "ar": "من إصدار سابق للملف"
+  },
+  "Monday": {
+    "fr": "Lundi",
+    "ar": "الاثنين"
+  },
+  "Tuesday": {
+    "fr": "Mardi",
+    "ar": "الثلاثاء"
+  },
+  "Wednesday": {
+    "fr": "Mercredi",
+    "ar": "الأربعاء"
+  },
+  "Thursday": {
+    "fr": "Jeudi",
+    "ar": "الخميس"
+  },
+  "Friday": {
+    "fr": "Vendredi",
+    "ar": "الجمعة"
+  },
+  "Saturday": {
+    "fr": "Samedi",
+    "ar": "السبت"
+  },
+  "Sunday": {
+    "fr": "Dimanche",
+    "ar": "الأحد"
+  },
+  "Awaiting measurements": {
+    "fr": "En attente de mesures",
+    "ar": "بانتظار القياسات"
+  },
+  "measurements recorded": {
+    "fr": "mesures enregistrées",
+    "ar": "قياسات مسجلة"
+  },
+  "Explore TOP1": {
+    "fr": "Explorer TOP1",
+    "ar": "استكشف TOP1"
+  }
+}
