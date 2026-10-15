@@ -1,0 +1,13 @@
+'use client';
+import {useId} from 'react';
+import {useReducedMotion} from 'framer-motion';
+import {PYRAMID_TIERS,pyramidTier} from '@/lib/pyramid';
+import {useTranslations} from './providers/LocaleProvider';
+export default function Pyramid({top,onChoose,selected}:{top:string|null;onChoose?:(tier:number)=>void;selected?:number}){
+ const {t}=useTranslations(),id=useId().replace(/:/g,''),reduced=useReducedMotion();
+ return <div className={`ranking-pyramid ${reduced?'motion-still':''}`}><svg viewBox="0 0 420 320" role="img" aria-label={`${t('Ranking pyramid')} · ${top?`${t('Top')} ${top}`:t('Add a measurement')}`}><defs><filter id={`${id}glow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter><linearGradient id={`${id}floor`}><stop stopColor="#ef4444" stopOpacity="0"/><stop offset=".5" stopColor="#34d399" stopOpacity=".4"/><stop offset="1" stopColor="#3b82f6" stopOpacity="0"/></linearGradient></defs>
+ {PYRAMID_TIERS.map((tier,i)=>{const active=pyramidTier(top)===i,y=18+i*20,w=18+i*10.4,next=w+8.6,color=['#f87171','#fb7185','#f59e0b','#fbbf24','#a3e635','#6ee7b7','#34d399','#2dd4bf','#22d3ee','#38bdf8','#60a5fa','#818cf8','#818cf8','#64748b'][i],points=`${170-w},${y} ${170+w},${y} ${170+next},${y+16} ${170-next},${y+16}`;return <g key={tier} data-pyramid-tier={tier} data-active={active}><polygon className={active?'pyramid-current':''} points={points} fill={color} fillOpacity={active?.85:.13} stroke={active?'#f8fafc':color} strokeOpacity={active?1:.4} strokeWidth={active?1.7:.7}/>{active&&<polygon className="pyramid-halo" points={points} fill={color} filter={`url(#${id}glow)`} opacity=".4"/>}<line x1={170+next+4} y1={y+8} x2="329" y2={y+8} stroke={color} strokeOpacity={active?1:.15} strokeDasharray={active?undefined:'2 4'}/><text x="337" y={y+12} fill={active?'#f8fafc':'#94a3b8'} fontSize={active?12:10} fontWeight={active?800:400} direction="ltr" textAnchor="start">{tier}</text>{active&&<circle className="pyramid-marker" cx="326" cy={y+8} r="3" fill={color}/>}</g>;})}<ellipse cx="170" cy="308" rx="155" ry="5" fill={`url(#${id}floor)`}/></svg>
+ <span className="pyramid-caption">{t(top?'Your current tier is highlighted':'Record a measurement to light up your tier')}</span>
+ {onChoose&&<div className="pyramid-targets" role="group" aria-label={t('Choose your target tier')}>{PYRAMID_TIERS.filter(tier=>tier!=='65%+').map(tier=>{const n=Number.parseFloat(tier);return <button key={tier} aria-pressed={selected===n} disabled={!top||top!=='65%+'&&n>=Number.parseFloat(top)} onClick={()=>onChoose(n)}>{t('Top')} {tier}</button>;})}</div>}
+ </div>;
+}
