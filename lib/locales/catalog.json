@@ -3622,5 +3622,109 @@
   "A supported reference range is unavailable.": {
     "fr": "Aucune fourchette de référence compatible n’est disponible.",
     "ar": "لا يتوفر نطاق مرجعي مدعوم."
+  },
+  "Your results, test by test": {
+    "fr": "Vos résultats, test par test",
+    "ar": "نتائجك، اختبارًا باختبار"
+  },
+  "Each recorded test stands on its own. You do not need all 38 measurements.": {
+    "fr": "Chaque test enregistré a son propre résultat. Les 38 mesures ne sont pas nécessaires.",
+    "ar": "لكل اختبار مسجل نتيجته المستقلة. لا تحتاج إلى القياسات الـ38 كلها."
+  },
+  "Recorded · reference pending": {
+    "fr": "Enregistré · référence en attente",
+    "ar": "مسجل · بانتظار مرجع"
+  },
+  "No compatible percentile reference is connected for this test. Your measurement is still recorded.": {
+    "fr": "Aucune référence de percentiles compatible pour ce test. Votre mesure reste enregistrée.",
+    "ar": "لا يتوفر مرجع مئيني متوافق لهذا الاختبار. يبقى قياسك مسجلًا."
+  },
+  "Grip comparison only; not an overall strength rank.": {
+    "fr": "Comparaison de préhension uniquement ; pas un classement global de force.",
+    "ar": "مقارنة لقوة القبضة فقط؛ وليست ترتيبًا شاملًا للقوة."
+  },
+  "Aerobic test comparison only; not an overall fitness rank.": {
+    "fr": "Comparaison du test aérobie uniquement ; pas un classement global de forme.",
+    "ar": "مقارنة للاختبار الهوائي فقط؛ وليست ترتيبًا شاملًا للياقة."
+  },
+  "International grip reference · 2025": {
+    "fr": "Référence internationale de préhension · 2025",
+    "ar": "مرجع دولي لقوة القبضة · 2025"
+  },
+  "Record a valid grip-strength measurement.": {
+    "fr": "Enregistrez une mesure de préhension valide.",
+    "ar": "سجّل قياسًا صالحًا لقوة القبضة."
+  },
+  "Choose a reference sex to compare this test.": {
+    "fr": "Choisissez le sexe de référence pour comparer ce test.",
+    "ar": "اختر جنس المرجع لمقارنة هذا الاختبار."
+  },
+  "Check the method, date and protocol for this test.": {
+    "fr": "Vérifiez la méthode, la date et le protocole de ce test.",
+    "ar": "راجع طريقة الاختبار وتاريخه وبروتوكوله."
+  },
+  "Record your age at the grip test (20 or older).": {
+    "fr": "Indiquez votre âge lors du test de préhension (20 ans ou plus).",
+    "ar": "سجّل عمرك عند اختبار القبضة (20 عامًا أو أكثر)."
+  },
+  "Record the date of this test.": {
+    "fr": "Indiquez la date du test.",
+    "ar": "سجّل تاريخ هذا الاختبار."
+  },
+  "Check the test date and recorded ages.": {
+    "fr": "Vérifiez la date du test et les âges enregistrés.",
+    "ar": "راجع تاريخ الاختبار والأعمار المسجلة."
+  },
+  "Confirm the international grip protocol in measurement details.": {
+    "fr": "Confirmez le protocole international de préhension dans les détails de mesure.",
+    "ar": "أكد بروتوكول القبضة الدولي في تفاصيل القياس."
+  },
+  "International grip · seated hydraulic, best of both hands": {
+    "fr": "Préhension internationale · hydraulique assis, meilleur des deux mains",
+    "ar": "قبضة دولية · جهاز هيدروليكي أثناء الجلوس، أفضل اليدين"
+  },
+  "Both hands · maximum": {
+    "fr": "Deux mains · maximum",
+    "ar": "كلتا اليدين · أعلى نتيجة"
+  },
+  "Age at grip test": {
+    "fr": "Âge lors du test de préhension",
+    "ar": "العمر عند اختبار القبضة"
+  },
+  "Complete test details": {
+    "fr": "Compléter les détails du test",
+    "ar": "أكمل تفاصيل الاختبار"
+  },
+  "Published population norms; protocol match and measurements are self-reported. Brackets reflect the resolution of the source, not an exact world rank.": {
+    "fr": "Normes de population publiées ; protocole et mesures déclarés. Les tranches reflètent la précision de la source, pas un rang mondial exact.",
+    "ar": "معايير سكانية منشورة؛ توافق البروتوكول والقياسات مُبلّغ عنهما ذاتيًا. تعكس الفئات دقة المصدر وليست ترتيبًا عالميًا دقيقًا."
+  },
+  "Use a hydraulic dynamometer seated, with elbow flexed, forearm neutral and handle adjusted to your hand. Test both hands three times each. Enter the highest single result in kg, not the sum of both hands. Record the test date and your age at that test.": {
+    "fr": "Utilisez un dynamomètre hydraulique assis, coude fléchi, avant-bras neutre, poignée ajustée à la main. Testez chaque main trois fois. Entrez le meilleur résultat unique en kg, pas la somme des mains. Notez la date et votre âge au test.",
+    "ar": "استخدم دينامومتر هيدروليكيًا أثناء الجلوس مع ثني المرفق ووضع الساعد محايدًا وضبط المقبض لليد. اختبر كل يد ثلاث مرات. أدخل أعلى نتيجة منفردة بالكيلوغرام وليس مجموع اليدين. سجّل التاريخ وعمرك عند الاختبار."
+  },
+  "Published international grip norms for a specific protocol; not an overall strength or world rank.": {
+    "fr": "Normes internationales de préhension pour un protocole précis ; pas un classement global de force ou mondial.",
+    "ar": "معايير دولية للقبضة ببروتوكول محدد؛ وليست ترتيبًا شاملًا للقوة أو ترتيبًا عالميًا."
+  },
+  "VO₂ and grip strength have separate published test references. The composite remains unvalidated. A test percentile is not an overall fitness rank.": {
+    "fr": "Le VO₂ et la préhension ont des références publiées distinctes. Le composite reste non validé. Un percentile de test n’est pas un classement global de forme.",
+    "ar": "لـ VO₂ وقوة القبضة مراجع منشورة مستقلة. يبقى المؤشر المركب غير معتمد. الرتبة المئينية لاختبار ليست ترتيبًا شاملًا للياقة."
+  },
+  "Published grip reference": {
+    "fr": "Référence de préhension publiée",
+    "ar": "مرجع قبضة منشور"
+  },
+  "Tomkinson et al. · International grip norms · 2025": {
+    "fr": "Tomkinson et al. · Normes internationales de préhension · 2025",
+    "ar": "تومكينسون وزملاؤه · معايير دولية للقبضة · 2025"
+  },
+  "2,405,863 adults from 69 countries and regions. Published smoothed, population-weighted norms; not a worldwide probability sample.": {
+    "fr": "2 405 863 adultes de 69 pays et régions. Normes lissées pondérées par population ; pas un échantillon probabiliste mondial.",
+    "ar": "2,405,863 بالغًا من 69 بلدًا ومنطقة. معايير منشورة ملساء ومرجحة سكانيًا؛ وليست عينة احتمالية عالمية."
+  },
+  "For the published comparison, use the international hydraulic seated protocol: both hands, three trials each, highest single result. Other grip protocols stay available for tracking; do not enter the sum of both hands here.": {
+    "fr": "Pour la comparaison publiée, utilisez le protocole international hydraulique assis : deux mains, trois essais chacune, meilleur résultat unique. Les autres protocoles restent disponibles pour le suivi ; ne saisissez pas ici la somme des deux mains.",
+    "ar": "للمقارنة المنشورة، استخدم البروتوكول الدولي الهيدروليكي أثناء الجلوس: كلتا اليدين، ثلاث محاولات لكل يد، وأعلى نتيجة منفردة. تبقى البروتوكولات الأخرى للمتابعة؛ ولا تدخل مجموع اليدين هنا."
   }
 }

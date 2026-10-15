@@ -163,7 +163,7 @@ export default function Dashboard() {
     window.history.pushState(null, '', url); window.scrollTo({ top: 0, behavior: 'instant' });
     requestAnimationFrame(() => pageHeading.current?.focus());
   }
-  function openMeasurements(next?: PillarId) { setEditingId(null); setPillar(next ?? 'all'); setRecordFilter('all'); setVisibleLimit(6); go('overview'); requestAnimationFrame(()=>document.getElementById('measurements')?.scrollIntoView({behavior:'smooth',block:'start'})); }
+  function openMeasurements(next?: PillarId,metricId?:string) { setQuery(metricId??'');setFavoritesOnly(false);setEditingId(null); setPillar(next ?? 'all'); setRecordFilter('all'); setVisibleLimit(6); go('overview'); requestAnimationFrame(()=>{document.getElementById('measurements')?.scrollIntoView({behavior:'smooth',block:'start'});if(metricId){const panel=document.querySelector<HTMLDetailsElement>(`[data-metric-id="${metricId}"] details.measurement-details`);if(panel)panel.open=true;}}); }
   function firstCheckIn(id:string){focusMetric.current=id;openMeasurements(activeMetrics.find(m=>m.id===id)?.pillar);}
   useEffect(()=>{if(view==='overview'&&focusMetric.current){document.querySelector<HTMLInputElement>(`[data-metric-id="${focusMetric.current}"] input`)?.focus();focusMetric.current=null;}},[view,pillar]);
   function start() { panelTrigger.current = document.activeElement as HTMLElement; if (editable){setPanel('onboarding');captureEvent('onboarding_started');} else setToast('Wait for your profile to finish loading before making changes.'); }

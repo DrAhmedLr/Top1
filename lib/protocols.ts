@@ -1,6 +1,6 @@
 export const protocolOptions:Record<string,readonly {id:string;label:string}[]>={
  vo2_max:[{id:'cpet_treadmill_v1',label:'Direct treadmill CPET'},{id:'cooper_track_12min_v1',label:'12-minute Cooper run · measured track'},{id:'wearable_vo2_estimate_v1',label:'Wearable estimate · same device/algorithm'}],
- grip_strength:[{id:'grip_single_v1',label:'Single hand · same dynamometer and position'}],
+ grip_strength:[{id:'grip_single_v1',label:'Single hand · same dynamometer and position'},{id:'igrips_hydraulic_max_v1',label:'International grip · seated hydraulic, best of both hands'}],
  grip_combined:[{id:'nhanes_grip_combined_v1',label:'NHANES · best of 3 per hand, summed'}],
  cmj:[{id:'cmj_hands_hips_v1',label:'Countermovement · hands on hips'}],
  broad_jump:[{id:'standing_broad_jump_v1',label:'Standing broad jump · same technique'}],

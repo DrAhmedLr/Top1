@@ -1,8 +1,9 @@
+import {GRIP_SOURCE} from './gripReference';
 import {friend2022,FRIEND_PERCENTILES,FRIEND_SOURCE,FRIEND_REFERENCE_VERSION} from './friend2022';
 import {scoringEligibility,valid} from './engine';
 import {activeMetrics,type Demographics,type Values,type Metric} from './registry';
 import type {MeasurementMetadata} from './measurementMetadata';
-export function metricCalibration(m:Metric){return {metricId:m.id,status:m.id==='vo2_max'?'published-test-reference':m.scoringEligible?'provisional-model':'tracking-only',populationCalibrated:false,source:m.id==='vo2_max'?FRIEND_SOURCE:null,referenceVersion:m.id==='vo2_max'?FRIEND_REFERENCE_VERSION:null,reason:m.id==='vo2_max'?'Published US test-cohort thresholds, with explicit inclusion criteria; no global rank.':m.scoringEligible?'Product parameters; no validated population distribution.':'No quantitative performance reference is enabled.'};}
+export function metricCalibration(m:Metric){return {metricId:m.id,status:['vo2_max','grip_strength'].includes(m.id)?'published-test-reference':m.scoringEligible?'provisional-model':'tracking-only',populationCalibrated:false,source:m.id==='vo2_max'?FRIEND_SOURCE:m.id==='grip_strength'?GRIP_SOURCE:null,referenceVersion:m.id==='vo2_max'?FRIEND_REFERENCE_VERSION:m.id==='grip_strength'?'igrips-2025-table2-v1':null,reason:m.id==='grip_strength'?'Published international grip norms for a specific protocol; not an overall strength or world rank.':m.id==='vo2_max'?'Published US test-cohort thresholds, with explicit inclusion criteria; no global rank.':m.scoringEligible?'Product parameters; no validated population distribution.':'No quantitative performance reference is enabled.'};}
 export const calibrationInventory=()=>activeMetrics.map(metricCalibration);
 /** Report published threshold intervals, never interpolate/extrapolate an exact
  * percentile from means/SDs, rounded quantiles or an unrepresentative sample. */
