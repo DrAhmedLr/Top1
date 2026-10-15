@@ -3606,5 +3606,21 @@
   "Explore TOP1": {
     "fr": "Explorer TOP1",
     "ar": "استكشف TOP1"
+  },
+  "Your measurements are recorded.": {
+    "fr": "Vos mesures sont enregistrées.",
+    "ar": "قياساتك مسجلة."
+  },
+  "Reference percentage unavailable": {
+    "fr": "Pourcentage de référence indisponible",
+    "ar": "النسبة المرجعية غير متاحة"
+  },
+  "Recording coverage · not a performance rank": {
+    "fr": "Couverture des mesures · pas un classement de performance",
+    "ar": "تغطية القياسات · ليست ترتيب أداء"
+  },
+  "A supported reference range is unavailable.": {
+    "fr": "Aucune fourchette de référence compatible n’est disponible.",
+    "ar": "لا يتوفر نطاق مرجعي مدعوم."
   }
 }
