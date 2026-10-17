@@ -1,8 +1,8 @@
 import { TRACKING_ONLY_METRICS } from './model';
 export const pillars = [
-  { id: 'bodymarkers', name: 'BodyMarkers', short: 'BodyMarkers', weight: .38, color: '#60a5fa', description: 'Morphology & biochemistry. Context before interpretation.' },
+  { id: 'bodymarkers', name: 'BodyMarkers', short: 'BodyMarkers', weight: .38, color: '#60a5fa', description: 'Body composition with consistent measurement methods.' },
   { id: 'strength', name: 'Strength', short: 'Strength', weight: .38, color: '#ef4444', description: 'Muscular & heart strength. Capacity in motion.' },
-  { id: 'recovery', name: 'Recovery', short: 'Recovery', weight: .24, color: '#3b82f6', description: 'Sleep, autonomic tone & thermal exposure.' },
+  { id: 'recovery', name: 'Recovery', short: 'Recovery', weight: .24, color: '#3b82f6', description: 'Sleep duration and rested heart-rate observations.' },
 ] as const;
 export type PillarId = 'bodymarkers' | 'strength' | 'recovery';
 export type AccessibilityTier = 'tier1_everyday' | 'tier2_standard' | 'tier3_precision';
@@ -69,7 +69,7 @@ const sources: Partial<Record<string,string>> = {
   hrr_1min:'https://doi.org/10.1056/NEJM199910283411804',
 };
 const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map(r => ({
-  id:r[0],name:r[1],pillar,unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],weight:1/rows.length,
+  id:r[0],name:r[1],pillar,unit:r[2],target:r[0]==='body_fat'?'Interpret by method and individual context':r[0]==='rhr'?'Rested personal trend; lower is not always better':r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],weight:1/rows.length,
   optimal:r[0]==='total_sleep'?[420,540] as [number,number]:undefined,
   easiestPathPriority:['total_sleep','circadian_regularity','fasting_insulin','ankle_dorsiflexion'].includes(r[0])?1:3,
   scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),
@@ -79,9 +79,9 @@ const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map
 })));
 
 const assignments: Record<PillarId, readonly (readonly string[])[]> = {
-  bodymarkers: [ ['body_fat','waist_height_ratio'], ['fasting_glucose','hba1c','ggt'], ['apob','fasting_insulin','hscrp','lpa','homocysteine','cystatin_c','visceral_fat'] ],
-  strength: [ ['rhr','sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','grip_combined','vo2_max','hrr_1min'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','zone2_power','pefr','farmers_carry','sprint_10m'] ],
-  recovery: [ ['total_sleep','sleep_efficiency'], ['hrv','circadian_regularity'], ['reaction_time'] ],
+  bodymarkers: [ ['body_fat','waist_height_ratio'], [], [] ],
+  strength: [ ['sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','vo2_max'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','sprint_10m'] ],
+  recovery: [ ['total_sleep','rhr'], [], [] ],
 };
 const additions: Row[] = [
  ['grip_combined','Combined handgrip strength','kg','Reference pending',1,'linear',0,1,0,240,'NHANES muscle strength protocol','Sum the best of three trials from each hand. This is distinct from single-hand grip.'],
@@ -95,6 +95,7 @@ const additions: Row[] = [
 ];
 const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:r[0]==='pushups'?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
 const specialProof: Record<string, Partial<Metric['proofData']>> = {
+ rhr:{study:'American Heart Association · resting heart rate',url:'https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse',instructions:'Record a representative seven-day average while awake, rested and in the same posture. Medication, illness, stress and training affect this reading. Lower is not always better; the game plateau is a product choice, not a health target.'},
  cmj:{study:'Hoffmann et al. 2019 · CHMS jump-height Table 4',url:'https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002-eng.htm',sampleSize:'CHMS cycle 5; age/sex-specific Canadian population norms, ages 18–69 in TOP1. Exact Leonardo protocol required.',instructions:'Select the measurement protocol. Canadian comparison requires a Leonardo Mechanograph, arm swing and the highest of three valid jumps. Wall, app and hands-on-hips results receive only an illustrative game estimate.'},
  grip_strength:{study:'Tomkinson et al. · International grip norms · 2025',sampleSize:'2,405,863 adults from 69 countries and regions. Published smoothed, population-weighted norms; not a worldwide probability sample.',url:'https://doi.org/10.1016/j.jshs.2024.101014',instructions:'For the published comparison, use the international hydraulic seated protocol: both hands, three trials each, highest single result. Other grip protocols stay available for tracking; do not enter the sum of both hands here.'},
  grip_combined:{study:'Hoffmann et al. 2019 · CHMS combined grip Table 1',url:'https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002-eng.htm',sampleSize:'Canadian age/sex reference, ages 18–79 in TOP1. Protocol match required.',instructions:'Select the protocol before comparing. Canadian norms require standing Smedley III, two trials per hand, best results summed. The NHANES option uses three trials per hand and is not ranked against the Canadian table.'},
@@ -104,7 +105,7 @@ const specialProof: Record<string, Partial<Metric['proofData']>> = {
  sauna_minutes:{study:'Finnish KIHD observational cohort (2015)',sampleSize:'2,315 Finnish men, ages 42–60. Observational associations; not a validated weekly optimal window.',url:'https://pubmed.ncbi.nlm.nih.gov/25705824/',instructions:'Sum actual sauna exposure over the same seven-day window. Record temperature and session pattern separately in your own notes. The requested 60–90 min/week band is an unvalidated product assumption, not a prescribed dose.'},
  cold_plunge_minutes:{study:'Winter-swimming thermogenesis study (2021)',url:'https://pubmed.ncbi.nlm.nih.gov/34755128/',sampleSize:'Small study in experienced male winter swimmers; no validated universal 11–15 min/week optimum.',instructions:'Sum actual immersion duration over seven days. Temperature, acclimatization and session pattern affect exposure. Do not convert a weekly total into a required dose; avoid solo immersion.'},
  thermal_hrv_rebound:{instructions:'Divide post-exposure RMSSD by pre-exposure RMSSD measured with the same device, posture, recording length and timing. Do not mix SDNN and RMSSD. No validated recovery or optimal ratio is established.'},
- waist_height_ratio:{instructions:'Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is tracking-only.'},
+ waist_height_ratio:{study:'NICE NG246 · central adiposity assessment',url:'https://www.nice.org.uk/guidance/ng246/chapter/Identifying-and-assessing-overweight-obesity-and-central-adiposity',instructions:'Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is a body-composition observation; its game tier is not a clinical assessment.'},
  fasting_glucose:{instructions:'Enter a fasting laboratory plasma glucose result in mg/dL. Do not enter mmol/L; multiply mmol/L by 18.0182 first. Follow laboratory fasting instructions and review results clinically.'},
  pushups:{instructions:'Count consecutive strict repetitions with a straight trunk, consistent depth and full elbow extension. Stop at form failure. Knee, incline and strict variants are not interchangeable.'},
  reaction_time:{instructions:'Choose the actual simple or choice-reaction protocol, use the same task and device, and record multiple trials. These protocols are not interchangeable. Browser/device latency is not independently calibrated; results remain tracking-only.'},

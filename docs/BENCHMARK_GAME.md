@@ -1,3 +1,7 @@
+# Current inventory
+
+The 17 October 2026 [metric review](METRIC_REVIEW.md) supersedes older inventory descriptions below. Combined-grip reference data are retained for historical compatibility; only single maximum grip is active. Zone 2 power, HRV and circadian regularity are retired from the current game.
+
 # TOP1 benchmark game and weekly routes
 
 The dashboard is an entertainment and self-tracking layer. Its Top X% labels
@@ -40,7 +44,7 @@ Explicit extra anchors (mean, deviation): combined grip 95/20 kg (56/20 for the
 female option); 10m sprint 2.2/0.35 seconds. Other overrides are enumerated in the
 module. These are product assumptions. They have not been externally validated.
 
-The active protocol contains 35 optional metrics. Sauna duration, cold-plunge
+The active protocol contains 16 optional metrics. See [the per-metric review](METRIC_REVIEW.md) for every keep/remove decision. Sauna duration, cold-plunge
 duration and thermal HRV rebound have been retired from entry, standings,
 coverage, routes and global scoring. Older raw observations remain stored and
 exportable through the existing legacy-data paths; no records are deleted.
@@ -147,6 +151,6 @@ increase sleep past its plateau, advise forced sleep or automatically prescribe
 less sleep for a long-sleep observation. Habit tasks are scheduled daily, not
 just on workout days. Source: https://www.cdc.gov/sleep/about/
 
-Game display version: `2-attainable-35`. Older saved scenarios retain raw targets
+Game display version: `3-focused-16`. Older saved scenarios retain raw targets
 and routines, but their stale projected rank is hidden and a refresh notice is
 shown. The user reselects a tier to regenerate under the current rules.
