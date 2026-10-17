@@ -4782,5 +4782,69 @@
   "Routes change recorded physical performance and selected sleep habits. Programs use available days, session time, experience, equipment, movement preference, recovery and dated completion history. Completing actions does not prove improvement. No duration to a target is predicted.": {
     "fr": "Les parcours modifient les performances et certaines habitudes de sommeil. Les programmes utilisent jours, temps, expérience, matériel, préférences, récupération et historique daté. Cocher une action ne prouve pas une amélioration. Aucun délai n’est prédit.",
     "ar": "تغيّر المسارات الأداء البدني وبعض عادات النوم. تعتمد البرامج على الأيام والوقت والخبرة والمعدات وتفضيل الحركة والتعافي وسجل الإنجاز. إكمال المهام لا يثبت التحسن ولا يُحدد موعد للوصول."
+  },
+  "GOATs": {
+    "fr": "GOATs",
+    "ar": "الأساطير"
+  },
+  "Elite": {
+    "fr": "Élite",
+    "ar": "النخبة"
+  },
+  "Champions": {
+    "fr": "Champions",
+    "ar": "الأبطال"
+  },
+  "Challengers": {
+    "fr": "Challengers",
+    "ar": "المتحدّون"
+  },
+  "Climbers": {
+    "fr": "Grimpeurs",
+    "ar": "الصاعدون"
+  },
+  "Rising": {
+    "fr": "En route",
+    "ar": "البداية"
+  },
+  "Your climb starts here": {
+    "fr": "Votre ascension commence ici",
+    "ar": "رحلتك تبدأ هنا"
+  },
+  "Next milestone": {
+    "fr": "Prochain palier",
+    "ar": "المحطة التالية"
+  },
+  "Summit reached · keep your momentum": {
+    "fr": "Sommet atteint · gardez le rythme",
+    "ar": "وصلت إلى القمة · حافظ على زخمك"
+  },
+  "One measurement lights up your league": {
+    "fr": "Une mesure révèle votre ligue",
+    "ar": "قياس واحد يكشف مستواك"
+  },
+  "1 · Your starting league": {
+    "fr": "1 · Votre ligue de départ",
+    "ar": "١ · مستواك الحالي"
+  },
+  "2 · Choose your mission": {
+    "fr": "2 · Choisissez votre mission",
+    "ar": "٢ · اختر مهمتك"
+  },
+  "3 · Unlock your quest board": {
+    "fr": "3 · Créez vos quêtes",
+    "ar": "٣ · أنشئ لوحة مهامك"
+  },
+  "Your weekly quests": {
+    "fr": "Vos quêtes de la semaine",
+    "ar": "مهامك الأسبوعية"
+  },
+  "Today’s quests": {
+    "fr": "Les quêtes du jour",
+    "ar": "مهام اليوم"
+  },
+  "Quest board complete": {
+    "fr": "Toutes les quêtes sont terminées",
+    "ar": "اكتملت جميع المهام"
   }
 }
