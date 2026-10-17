@@ -1,4 +1,4 @@
-import {activeMetrics,type Values,type Demographics} from './registry';
+import {metrics,type Values,type Demographics} from './registry';
 import {valid} from './engine';
 import {normalizeMeasurementMetadata,type MeasurementMetadata} from './measurementMetadata';
 import {topBandForThresholds} from './topBands';
@@ -18,7 +18,7 @@ export const canadianQuantiles={
  grip_combined:{male:[[62.3,83.3,105.1],[68.8,90.7,113.4],[73.2,95.3,118.1],[74.3,96,118.4],[73.6,94.8,116.7],[71.9,92.6,114],[69.8,89.9,110.8],[67.4,87,107.4],[64.8,84,103.8],[62.1,80.8,100.1],[59.4,77.5,96.2],[56.5,74.1,92.2],[53.6,70.6,88.1]],female:[[40.2,52.5,65.6],[41.7,54.3,67.8],[42.5,55.3,69],[42.9,55.8,69.6],[43,56,69.9],[42.8,55.7,69.5],[42.1,54.8,68.4],[41.1,53.4,66.6],[39.7,51.6,64.4],[38.2,49.6,61.9],[36.5,47.5,59.2],[34.8,45.3,56.5],[33.1,43.1,53.8]]}
 };
 export function canadianComparison(id:'cmj'|'grip_combined',values:Values,d:Demographics,details:MeasurementMetadata,now=Date.now()){
- const metric=activeMetrics.find(m=>m.id===id)!,value=values[id],ctx=details[id];
+ const metric=metrics.find(m=>m.id===id)!,value=values[id],ctx=details[id];
  if(!valid(metric,value))return {available:false as const,reason:'Record a valid measurement to compare this test.'};
  if(d.sex==='unselected')return {available:false as const,reason:'Choose a reference sex to compare this test.'};
  try{normalizeMeasurementMetadata({[id]:ctx??{}},{now});}catch{return {available:false as const,reason:'Check the method, date and protocol for this test.'};}

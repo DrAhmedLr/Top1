@@ -2,8 +2,8 @@ import {activeMetrics,type Values,type Demographics,type PillarId} from './regis
 import {valid,clamp} from './engine';
 import {getMetricCohortNorm} from './demographics';
 import {illustrativeTop} from './gameStanding';
-export const BENCHMARK_GAME_VERSION='2-attainable-35';
-export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['zone2_power','grip_combined','sprint_10m','total_sleep','circadian_regularity']);
+export const BENCHMARK_GAME_VERSION='3-focused-16';
+export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['sprint_10m','total_sleep']);
 /** Entertainment layer only. These anchors are product assumptions, not
  * population norms, clinical targets or a universal scientific consensus.
  * Never used in the scientific engine, signed reports or training optimizer. */

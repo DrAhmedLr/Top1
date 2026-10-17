@@ -28,7 +28,7 @@ test('every active metric and cohort remains finite, bounded and a convex aggreg
    checks+=result.submitted.length;
   }
  }
- assert.ok(checks>1000);
+ assert.ok(checks>=2*11*4*(activeMetrics.filter(m=>m.scoringEligible).length-1));
 });
 
 test('scoring is monotonic within each supported metric and sleep has no gain above its plateau',()=>{
@@ -128,7 +128,7 @@ test('scenarios never worsen supported performance, mutate saved inputs or emit 
 
 test('calculation reports distinguish sparse output from a score and reconcile every recorded contribution',()=>{
  const sparse=calculationReport({values:{pushups:150},demographics:d},now);assert.equal(sparse.overall.modelPoints,null);assert.equal(sparse.coverage.recorded,1);
- const report=calculationReport({values:{...base,apob:95},demographics:d},now);assert.equal(report.coverage.scored,3);assert.equal(report.coverage.trackingOnly,1);assert.equal(report.coverage.percentage,100*4/activeMetrics.length);
+ const report=calculationReport({values:{...base,body_fat:20},demographics:d},now);assert.equal(report.coverage.scored,3);assert.equal(report.coverage.trackingOnly,1);assert.equal(report.coverage.percentage,100*4/activeMetrics.length);
  near(report.observations.reduce((sum,o)=>sum+(o.contribution??0),0),report.overall.modelUnits!);assert.equal(report.comparison.recordedMethodsAndDates,false);
 });
 

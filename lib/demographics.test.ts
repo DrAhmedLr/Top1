@@ -39,7 +39,7 @@ test('legacy correlations retain directional semantics but are not used by aggre
 });
 test('full raw-data coverage is independent of scoring eligibility and does not establish confidence',()=>{
  const values:Values=Object.fromEntries(metrics.map(m=>[m.id,valid(m,m.mean)?m.mean:(m.min+m.max)/2]));
- for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,35);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<38);assert.ok(Number.isFinite(result.z));}
+ for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,16);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<38);assert.ok(Number.isFinite(result.z));}
 });
 
 test('the 80–89 published cell is distinct from the UI 70+ group',()=>{

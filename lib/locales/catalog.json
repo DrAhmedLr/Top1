@@ -5026,5 +5026,45 @@
   "Mission & training details": {
     "fr": "Détails de la mission et du programme",
     "ar": "تفاصيل المهمة والتدريب"
+  },
+  "Routes can change recorded performance tests and short sleep duration. Body composition and resting heart rate stay fixed.": {
+    "fr": "Les parcours modifient les tests de performance et le sommeil court. La composition corporelle et le pouls au repos restent fixes.",
+    "ar": "تعدل المسارات اختبارات الأداء والنوم القصير. تبقى قياسات الجسم والنبض أثناء الراحة ثابتة."
+  },
+  "Your saved routine is retained. Choose a new mission for the current metrics.": {
+    "fr": "Votre routine est conservée. Choisissez une nouvelle mission pour les mesures actuelles.",
+    "ar": "روتينك المحفوظ باقٍ. اختر مهمة جديدة للقياسات الحالية."
+  },
+  "16 optional measurements. Retired records stay in your export and do not affect current ranks.": {
+    "fr": "16 mesures facultatives. Les anciennes données restent dans votre export sans modifier les classements actuels.",
+    "ar": "١٦ قياسًا اختياريًا. تبقى السجلات المستبعدة في التصدير ولا تؤثر على الترتيب الحالي."
+  },
+  "Why these metrics?": {
+    "fr": "Pourquoi ces mesures ?",
+    "ar": "لماذا هذه القياسات؟"
+  },
+  "Rested personal trend; lower is not always better": {
+    "fr": "Tendance personnelle au repos ; plus bas ne veut pas toujours dire mieux",
+    "ar": "اتجاه شخصي أثناء الراحة؛ الأقل ليس أفضل دائمًا"
+  },
+  "Interpret by method and individual context": {
+    "fr": "Interpréter selon la méthode et le contexte individuel",
+    "ar": "يفسر حسب الطريقة والسياق الفردي"
+  },
+  "Body composition with consistent measurement methods.": {
+    "fr": "Composition corporelle avec des méthodes de mesure cohérentes.",
+    "ar": "تكوين الجسم باستخدام طرق قياس متسقة."
+  },
+  "Sleep duration and rested heart-rate observations.": {
+    "fr": "Durée de sommeil et fréquence cardiaque au repos.",
+    "ar": "مدة النوم وقياسات النبض أثناء الراحة."
+  },
+  "Record a representative seven-day average while awake, rested and in the same posture. Medication, illness, stress and training affect this reading. Lower is not always better; the game plateau is a product choice, not a health target.": {
+    "fr": "Notez une moyenne représentative sur sept jours, éveillé, au repos et dans la même position. Médicaments, maladie, stress et entraînement influencent la mesure. Plus bas ne veut pas toujours dire mieux ; le plateau du jeu n’est pas un objectif médical.",
+    "ar": "سجّل متوسطًا ممثلًا لسبعة أيام وأنت مستيقظ ومرتاح وفي الوضعية نفسها. تؤثر الأدوية والمرض والتوتر والتدريب في القراءة. الأقل ليس أفضل دائمًا؛ نطاق اللعبة اختيار تصميمي وليس هدفًا صحيًا."
+  },
+  "Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is a body-composition observation; its game tier is not a clinical assessment.": {
+    "fr": "Mesurez le tour de taille et la taille dans la même unité, puis divisez-les. Gardez le même emplacement et la même technique. Ce palier ludique n’est pas une évaluation clinique.",
+    "ar": "قِس الخصر والطول بالوحدة نفسها، ثم اقسم محيط الخصر على الطول. حافظ على موضع القياس والطريقة. هذا قياس لتكوين الجسم، ومستواه في اللعبة ليس تقييمًا سريريًا."
   }
 }
