@@ -3,14 +3,14 @@ import {MetricIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import {metricGameEstimate} from '@/lib/benchmarkGame';
 import {CANADIAN_INSTRUCTIONS,CANADIAN_JUMP_PROTOCOL,CANADIAN_GRIP_PROTOCOL} from '@/lib/canadianReference';
-import {GRIP_PROTOCOL,GRIP_INSTRUCTIONS,gripComparison} from '@/lib/gripReference';
+import {GRIP_PROTOCOL,GRIP_INSTRUCTIONS} from '@/lib/gripReference';
 import LabUnitHelper from './LabUnitHelper';
 import {protocolOptions,type MeasurementProtocol} from '@/lib/protocols';
 
 import { useEffect, useId, useRef, useState } from 'react';
-import { Star, Calculator, Check, ChevronDown, CircleHelp } from 'lucide-react';
+import { Star, Calculator, ChevronDown, CircleHelp } from 'lucide-react';
 import { parseMeasurementInput } from '@/lib/measurementInput';
-import { eligible, scoringEligibility, valid,score } from '@/lib/engine';
+import { eligible, scoringEligibility, valid } from '@/lib/engine';
 import {normalizeMeasurementMetadata, type MeasurementDetails, type MeasurementMethod, type ExerciseMode } from '@/lib/measurementMetadata';
 import {allowedMethods,countMetrics,observationAge} from '@/lib/measurementRules';
 import type { Demographics, Metric } from '@/lib/registry';
@@ -55,7 +55,6 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
   const low = sleep ? m.min / 60 : m.min, high = sleep ? m.max / 60 : m.max;
   const starterInstructions: Record<string, string> = { pushups: 'Count consecutive strict push-ups. Stop when you can no longer keep the same form.', sit_to_stand: 'Count full stands from a chair in 30 seconds. Use the same chair and technique each time.', total_sleep: 'Enter your average hours of sleep per night over the last seven days.' };
   const bad = value !== undefined && !valid(m, value);
-  const publishedGrip=m.id==='grip_strength'&&gripComparison({grip_strength:value},demographics,{grip_strength:details}).available;
   const scored = eligible(m, demographics, { [m.id]: details });
   const eligibility = scoringEligibility(m, demographics, { [m.id]: details });
   const measuredAt = details.measuredAt && Number.isFinite(Date.parse(details.measuredAt))
@@ -64,11 +63,11 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
     <div className="metric-label">
       <label htmlFor={inputId}><MetricIcon id={m.id}/>{tr(m.name)}</label>
       <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{tr(compact ? starterInstructions[m.id] ?? m.proofData.instructions : `Optional. Enter ${shownUnit} or leave blank if unmeasured.`)}</span>
-      {!compact&&value!==undefined&&!bad&&<strong className="metric-game-top">{tr('Top')} {metricGameEstimate(m.id,value,demographics)?.top??'—'} <small>{tr('Illustrative estimate')}</small></strong>}
-      {!compact && <span className={`metric-kind ${scored ? 'scored' : ''}`}>{tr(publishedGrip?'Published grip reference':scored ? m.id==='vo2_max'?'Published CPET reference':'Provisional model' : 'Illustrative benchmark')}</span>}
+      {!compact&&value!==undefined&&!bad&&<strong className="metric-game-top">{tr('Top')} {metricGameEstimate(m.id,value,demographics)?.top??'—'}</strong>}
+
     </div>
     <div className="metric-controls">{onFavorite&&<button className="icon-button" aria-label={tr(`${favorite?"Remove":"Add"} ${m.name} ${favorite?"from":"to"} favorites`)} aria-pressed={!!favorite} onClick={onFavorite}><Star size={18} fill={favorite?"currentColor":"none"}/></button>}
-      {valid(m, value) && <Check size={15} className="measured-check" aria-label={tr("Recorded")}/>}
+
       <div className={`input-unit ${bad ? 'invalid' : ''}`}>
         <input id={inputId} type="text" inputMode={countMetrics.has(m.id)?"numeric":"decimal"} value={raw} placeholder={tr("—")} disabled={readOnly} aria-invalid={bad} aria-describedby={bad ? `${inputId}-error` : `${inputId}-hint`} onFocus={() => { focused.current = true; }} onBlur={() => { focused.current = false; }} onChange={e => { setRaw(e.target.value); onValue(m.id, parseMeasurementInput(e.target.value, sleep ? 60 : 1)); }}/>
 
@@ -107,7 +106,7 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
     </details>}
     {!compact&&<LabUnitHelper metricId={m.id}/>}
     {!compact&&value!==undefined&&<small className="observation-age">{tr(observationAge(m.id,details).label)}{tr(observationAge(m.id,details).older?' · review for your next check-in':'')}</small>}
-    {!compact&&value!==undefined&&!bad&&scored&&Math.abs(score(m,value,demographics,{[m.id]:details}))>=3&&<small className="observation-age">{tr("At the experimental index limit. Further raw progress may not change these points.")}</small>}
+
     {contextError&&<p id={`${inputId}-context-error`} className="field-error" role="alert">{tr(contextError)} {tr("This detail change has not been saved.")}</p>}
     {bad && <p id={`${inputId}-error`} className="field-error" role="alert">{tr("Enter ")}{tr(countMetrics.has(m.id)?'a whole number':'a value')} {tr("from ")}{low} {tr("to ")}{high} {tr(shownUnit)}{tr(". This value is excluded until corrected.")}</p>}
   </div>;

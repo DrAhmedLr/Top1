@@ -5066,5 +5066,53 @@
   "Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is a body-composition observation; its game tier is not a clinical assessment.": {
     "fr": "Mesurez le tour de taille et la taille dans la même unité, puis divisez-les. Gardez le même emplacement et la même technique. Ce palier ludique n’est pas une évaluation clinique.",
     "ar": "قِس الخصر والطول بالوحدة نفسها، ثم اقسم محيط الخصر على الطول. حافظ على موضع القياس والطريقة. هذا قياس لتكوين الجسم، ومستواه في اللعبة ليس تقييمًا سريريًا."
+  },
+  "YOUR METRICS": {
+    "fr": "VOS MESURES",
+    "ar": "قياساتك"
+  },
+  "Latest recorded result": {
+    "fr": "Dernier résultat enregistré",
+    "ar": "آخر نتيجة مسجلة"
+  },
+  "Comparable change": {
+    "fr": "Évolution comparable",
+    "ar": "التغير القابل للمقارنة"
+  },
+  "Loaded observations": {
+    "fr": "Observations chargées",
+    "ar": "القياسات المحملة"
+  },
+  "No observations yet": {
+    "fr": "Aucune observation pour le moment",
+    "ar": "لا توجد قياسات بعد"
+  },
+  "Same recorded method": {
+    "fr": "Même méthode enregistrée",
+    "ar": "الطريقة المسجلة نفسها"
+  },
+  "Repeat with the same method": {
+    "fr": "Répéter avec la même méthode",
+    "ar": "كرر بالطريقة نفسها"
+  },
+  "Archived measurement": {
+    "fr": "Mesure archivée",
+    "ar": "قياس مؤرشف"
+  },
+  "Current measurement": {
+    "fr": "Mesure actuelle",
+    "ar": "قياس حالي"
+  },
+  "Archived": {
+    "fr": "Archivée",
+    "ar": "مؤرشف"
+  },
+  "How comparisons work": {
+    "fr": "Comment fonctionnent les comparaisons",
+    "ar": "كيف تعمل المقارنات"
+  },
+  "Latest result cleared": {
+    "fr": "Dernier résultat effacé",
+    "ar": "تم مسح آخر نتيجة"
   }
 }
