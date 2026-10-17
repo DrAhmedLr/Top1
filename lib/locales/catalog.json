@@ -5114,5 +5114,193 @@
   "Latest result cleared": {
     "fr": "Dernier résultat effacé",
     "ar": "تم مسح آخر نتيجة"
+  },
+  "Calculate": {
+    "fr": "Calculer",
+    "ar": "احسب"
+  },
+  "Clear measurement": {
+    "fr": "Effacer la mesure",
+    "ar": "مسح القياس"
+  },
+  "Test details": {
+    "fr": "Détails du test",
+    "ar": "تفاصيل الاختبار"
+  },
+  "Your best bench press, relative to body weight.": {
+    "fr": "Votre meilleur développé couché, par rapport à votre poids.",
+    "ar": "أفضل أداء في ضغط الصدر نسبةً إلى وزن جسمك."
+  },
+  "Your best squat, relative to body weight.": {
+    "fr": "Votre meilleur squat, par rapport à votre poids.",
+    "ar": "أفضل أداء في القرفصاء نسبةً إلى وزن جسمك."
+  },
+  "Your best deadlift, relative to body weight.": {
+    "fr": "Votre meilleur soulevé de terre, par rapport à votre poids.",
+    "ar": "أفضل أداء في الرفعة الميتة نسبةً إلى وزن جسمك."
+  },
+  "Total pull-up load, including body weight.": {
+    "fr": "Charge totale en traction, poids du corps compris.",
+    "ar": "الحمل الكلي في العقلة، بما فيه وزن الجسم."
+  },
+  "Your strongest hand on a grip dynamometer.": {
+    "fr": "Votre main la plus forte, au dynamomètre.",
+    "ar": "قوة يدك الأقوى باستخدام مقياس القبضة."
+  },
+  "Consecutive strict reps with consistent form.": {
+    "fr": "Répétitions strictes consécutives, avec une technique constante.",
+    "ar": "تكرارات متتالية بتقنية صحيحة وثابتة."
+  },
+  "Your vertical jump height, without a run-up.": {
+    "fr": "Hauteur de votre saut vertical, sans élan.",
+    "ar": "ارتفاع قفزتك العمودية دون ركض تمهيدي."
+  },
+  "Your standing jump distance, from a still start.": {
+    "fr": "Distance de votre saut en longueur, sans élan.",
+    "ar": "مسافة قفزتك للأمام من الثبات."
+  },
+  "Time your fastest 10-metre sprint.": {
+    "fr": "Chronométrez votre sprint le plus rapide sur 10 mètres.",
+    "ar": "سجّل زمن أسرع عدو لك لمسافة 10 أمتار."
+  },
+  "Use a test result, or calculate a run estimate.": {
+    "fr": "Utilisez un résultat de test ou une estimation de course.",
+    "ar": "أدخل نتيجة اختبار أو احسب تقديرًا من الجري."
+  },
+  "Full chair stands completed in 30 seconds.": {
+    "fr": "Levers complets de chaise en 30 secondes.",
+    "ar": "عدد مرات النهوض الكامل من الكرسي خلال 30 ثانية."
+  },
+  "Time how long you balance on one leg.": {
+    "fr": "Chronométrez votre équilibre sur une jambe.",
+    "ar": "سجّل مدة توازنك على ساق واحدة."
+  },
+  "Use a measured percentage or the calculator.": {
+    "fr": "Utilisez un pourcentage mesuré ou le calculateur.",
+    "ar": "أدخل النسبة المقاسة أو استخدم الحاسبة."
+  },
+  "Waist divided by height, using the same units.": {
+    "fr": "Tour de taille divisé par la taille, dans la même unité.",
+    "ar": "محيط الخصر مقسومًا على الطول بنفس الوحدة."
+  },
+  "Your average nightly sleep over seven days.": {
+    "fr": "Votre sommeil moyen par nuit sur sept jours.",
+    "ar": "متوسط ساعات نومك ليلاً خلال سبعة أيام."
+  },
+  "Your resting pulse, measured while relaxed.": {
+    "fr": "Votre pouls au repos, mesuré au calme.",
+    "ar": "نبضك أثناء الراحة، عند الاسترخاء."
+  },
+  "Added pull-up strength, relative to body weight.": {
+    "fr": "Force ajoutée en traction, par rapport au poids du corps.",
+    "ar": "قوة العقلة الإضافية نسبةً إلى وزن الجسم."
+  },
+  "Body weight": {
+    "fr": "Poids du corps",
+    "ar": "وزن الجسم"
+  },
+  "Edit": {
+    "fr": "Modifier",
+    "ar": "تعديل"
+  },
+  "Add body weight": {
+    "fr": "Ajouter mon poids",
+    "ar": "أضف وزن الجسم"
+  },
+  "Save result": {
+    "fr": "Enregistrer le résultat",
+    "ar": "احفظ النتيجة"
+  },
+  "Result saved": {
+    "fr": "Résultat enregistré",
+    "ar": "تم حفظ النتيجة"
+  },
+  "Enter your lift": {
+    "fr": "Saisissez votre série",
+    "ar": "أدخل تفاصيل الرفعة"
+  },
+  "Add your body weight in your profile to calculate this result.": {
+    "fr": "Ajoutez votre poids dans votre profil pour calculer ce résultat.",
+    "ar": "أضف وزنك في ملفك الشخصي لحساب هذه النتيجة."
+  },
+  "Your previous result is kept until you save a new calculation.": {
+    "fr": "Votre résultat précédent est conservé jusqu’au nouvel enregistrement.",
+    "ar": "تبقى نتيجتك السابقة حتى تحفظ حسابًا جديدًا."
+  },
+  "Use a valid weight and 1–10 whole repetitions within this test’s range.": {
+    "fr": "Utilisez une charge valide et 1 à 10 répétitions entières dans les limites du test.",
+    "ar": "أدخل وزنًا صالحًا وعددًا صحيحًا من 1 إلى 10 تكرارات ضمن نطاق الاختبار."
+  },
+  "Warm up, use a spotter or safety bars, and enter a controlled bench press set. Use 1–10 clean reps; do not attempt an unfamiliar maximum.": {
+    "fr": "Échauffez-vous, utilisez un pareur ou des barres de sécurité, puis saisissez une série maîtrisée au développé couché. Faites 1 à 10 répétitions propres, sans tenter un maximum inhabituel.",
+    "ar": "أحمِ جسمك واستخدم مساعدًا أو حواجز أمان. أدخل مجموعة ضغط صدر متحكمًا بها من 1 إلى 10 تكرارات صحيحة، دون تجربة وزن أقصى غير معتاد."
+  },
+  "Warm up and use safety bars. Enter the load and clean reps from a squat set with consistent depth. Use a familiar, controlled load.": {
+    "fr": "Échauffez-vous et utilisez des barres de sécurité. Saisissez la charge et les répétitions propres d’un squat à profondeur constante. Choisissez une charge habituelle et maîtrisée.",
+    "ar": "أحمِ جسمك واستخدم حواجز أمان. أدخل الحمل والتكرارات الصحيحة للقرفصاء بعمق ثابت. استخدم حملًا معتادًا ومتحكمًا به."
+  },
+  "Warm up, then enter the bar’s total weight and clean reps from the floor. Stop when you cannot keep the same technique.": {
+    "fr": "Échauffez-vous, puis saisissez le poids total de la barre et les répétitions propres depuis le sol. Arrêtez si la technique se dégrade.",
+    "ar": "أحمِ جسمك ثم أدخل الوزن الكلي للقضيب والتكرارات الصحيحة من الأرض. توقف عندما لا تستطيع الحفاظ على نفس التقنية."
+  },
+  "Enter only the extra weight attached to you, not your body weight. Start from straight arms, clear the bar with your chin and avoid swinging. Zero extra weight is allowed.": {
+    "fr": "Saisissez uniquement le lest ajouté, sans votre poids corporel. Partez bras tendus, passez le menton au-dessus de la barre, sans balancement. Un lest de zéro est accepté.",
+    "ar": "أدخل الوزن الإضافي المعلق بك فقط دون وزن جسمك. ابدأ بذراعين مستقيمتين وارفع ذقنك فوق العارضة دون تأرجح. يُسمح بوزن إضافي صفر."
+  },
+  "Start in a straight plank. Lower your chest consistently, then straighten your arms. Count consecutive clean reps and stop when your form changes.": {
+    "fr": "Commencez en planche bien alignée. Descendez la poitrine à la même profondeur, puis tendez les bras. Comptez les répétitions propres consécutives et arrêtez si la posture change.",
+    "ar": "ابدأ بوضعية لوح مستقيمة. اخفض صدرك بنفس العمق ثم مد ذراعيك. احسب التكرارات الصحيحة المتتالية وتوقف عند تغير وضعيتك."
+  },
+  "Place a sturdy chair against a wall. With arms crossed, stand fully and sit back down. Count full stands in 30 seconds; use the same chair each time.": {
+    "fr": "Placez une chaise stable contre un mur. Bras croisés, levez-vous complètement puis rasseyez-vous. Comptez les levers complets en 30 secondes, avec la même chaise.",
+    "ar": "ضع كرسيًا ثابتًا مقابل حائط. اعقد ذراعيك وانهض بالكامل ثم اجلس. احسب مرات النهوض الكاملة خلال 30 ثانية واستخدم نفس الكرسي كل مرة."
+  },
+  "Stand beside a stable support with eyes open. Lift one foot and time until it touches down or you need support. Use the same leg and setup each time.": {
+    "fr": "Tenez-vous près d’un appui stable, yeux ouverts. Levez un pied et chronométrez jusqu’à ce qu’il touche le sol ou qu’un appui soit nécessaire. Gardez la même jambe et les mêmes conditions.",
+    "ar": "قف بجانب دعامة ثابتة وعيناك مفتوحتان. ارفع قدمًا واحسب الوقت حتى تلمس الأرض أو تحتاج إلى دعم. استخدم نفس الساق والإعداد كل مرة."
+  },
+  "From standing, dip and jump straight up. Measure vertical height with the same app or device each time. Repeat three times with rest and keep your best result.": {
+    "fr": "Debout, fléchissez puis sautez verticalement. Mesurez la hauteur avec la même application ou le même appareil. Faites trois essais avec repos et gardez le meilleur.",
+    "ar": "من الوقوف، اثنِ ركبتيك واقفز عموديًا. قِس الارتفاع بنفس التطبيق أو الجهاز. كرر ثلاث مرات مع الراحة واحتفظ بأفضل نتيجة."
+  },
+  "Stand behind a line with both feet. Jump forward and land on both feet. Measure from the line to your nearest heel; keep the best of three attempts.": {
+    "fr": "Placez les deux pieds derrière une ligne. Sautez vers l’avant et atterrissez sur les deux pieds. Mesurez jusqu’au talon le plus proche et gardez le meilleur de trois essais.",
+    "ar": "قف بقدميك خلف خط. اقفز للأمام واهبط على القدمين. قِس من الخط إلى الكعب الأقرب واحتفظ بأفضل محاولة من ثلاث."
+  },
+  "Mark a clear, flat 10-metre lane. Warm up, use the same standing start and timing setup, and rest between trials. Timing gates are more consistent than a handheld stopwatch.": {
+    "fr": "Tracez un couloir plat et dégagé de 10 mètres. Échauffez-vous, gardez le même départ arrêté et le même chronométrage, et reposez-vous entre les essais. Les cellules sont plus constantes qu’un chronomètre manuel.",
+    "ar": "حدد مسارًا مستويًا وخاليًا بطول 10 أمتار. أحمِ جسمك واستخدم نفس الانطلاقة الثابتة وطريقة التوقيت واسترح بين المحاولات. بوابات التوقيت أدق من الساعة اليدوية."
+  },
+  "Use a grip dynamometer while seated, with your elbow bent. Test each hand three times with rest. Enter the highest single reading, not the sum of both hands.": {
+    "fr": "Assis, coude fléchi, utilisez un dynamomètre de préhension. Testez chaque main trois fois avec repos. Saisissez la meilleure lecture unique, sans additionner les mains.",
+    "ar": "استخدم مقياس قوة القبضة وأنت جالس ومرفقك مثني. اختبر كل يد ثلاث مرات مع الراحة. أدخل أعلى قراءة منفردة دون جمع اليدين."
+  },
+  "Measure your waist midway between your lowest rib and hip bone after a normal breath out. Divide by your height in the same units: 80 cm ÷ 180 cm = 0.44.": {
+    "fr": "Mesurez votre tour de taille à mi-distance entre la dernière côte et la hanche après une expiration normale. Divisez par votre taille dans la même unité : 80 cm ÷ 180 cm = 0,44.",
+    "ar": "قِس محيط خصرك بين أدنى ضلع وعظم الورك بعد زفير طبيعي. اقسمه على طولك بنفس الوحدة: 80 سم ÷ 180 سم = 0.44."
+  },
+  "Add the hours you actually slept over seven nights and divide by seven. Exclude time awake in bed. A sleep diary or the same wearable helps keep it consistent.": {
+    "fr": "Additionnez vos heures de sommeil réel sur sept nuits et divisez par sept. Excluez le temps éveillé au lit. Utilisez un journal ou le même appareil.",
+    "ar": "اجمع ساعات النوم الفعلي لسبع ليالٍ واقسمها على سبعة. استبعد وقت اليقظة في السرير. استخدم مفكرة نوم أو نفس الجهاز للاتساق."
+  },
+  "Measure your pulse while awake and relaxed, in the same posture. Count beats for 60 seconds, or use the same device. Average seven comparable days.": {
+    "fr": "Mesurez votre pouls éveillé et détendu, dans la même posture. Comptez pendant 60 secondes ou utilisez le même appareil. Faites la moyenne de sept jours comparables.",
+    "ar": "قِس نبضك وأنت مستيقظ ومسترخٍ بنفس الوضعية. عد النبضات لمدة 60 ثانية أو استخدم نفس الجهاز. احسب متوسط سبعة أيام متشابهة."
+  },
+  "Enter a body-fat percentage from a measured test. Use the same method for comparisons; scales, skinfolds and DEXA can give different results.": {
+    "fr": "Saisissez un pourcentage de graisse issu d’un test. Gardez la même méthode pour comparer : balance, plis cutanés et DEXA peuvent donner des résultats différents.",
+    "ar": "أدخل نسبة الدهون من اختبار مقاس. استخدم نفس الطريقة للمقارنة؛ قد تعطي الموازين وثنيات الجلد وفحص DEXA نتائج مختلفة."
+  },
+  "Enter the oxygen-capacity result from a test or wearable, in ml/kg/min. The calculator can estimate it from a 12-minute run; an estimate differs from a laboratory test.": {
+    "fr": "Saisissez votre capacité en oxygène issue d’un test ou appareil, en ml/kg/min. Le calculateur l’estime à partir d’une course de 12 minutes ; cette estimation diffère d’un test de laboratoire.",
+    "ar": "أدخل نتيجة استهلاك الأكسجين من اختبار أو جهاز بوحدة مل/كغ/دقيقة. يمكن للحاسبة تقديرها من جري 12 دقيقة؛ التقدير يختلف عن الفحص المخبري."
+  },
+  "Estimated added max ÷ body weight": {
+    "fr": "Maximum ajouté estimé ÷ poids du corps",
+    "ar": "الوزن الإضافي الأقصى المقدّر ÷ وزن الجسم"
+  },
+  "Estimated one-rep max ÷ body weight": {
+    "fr": "Maximum estimé sur une répétition ÷ poids du corps",
+    "ar": "أقصى وزن مقدّر لتكرار واحد ÷ وزن الجسم"
   }
 }

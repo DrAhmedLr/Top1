@@ -57,8 +57,14 @@ const pageTitles: Record<View, [string, string, string]> = {
 };
 const viewLabels: Record<View,string> = { overview:'Dashboard', measurements:'Dashboard', scenarios:'Your Potential', progress:'Progress', profile:'My profile', methodology:'Methodology' };
 
-const tierOrder = { tier1_everyday: 0, tier2_standard: 1, tier3_precision: 2 };
-const measurementPillars = [pillars[1], pillars[2], pillars[0]];
+const measurementRows = [
+  ['bench_1rm', 'squat_1rm', 'deadlift_1rm'],
+  ['pullup_1rm', 'grip_strength', 'pushups'],
+  ['cmj', 'broad_jump', 'sprint_10m'],
+  ['vo2_max', 'sit_to_stand', 'single_leg_balance'],
+  ['body_fat', 'waist_height_ratio'],
+  ['total_sleep', 'rhr'],
+];
 const fmt = (n: number, d = 1) => n.toFixed(d).replace(/\.0$/, '');
 function currentView(): View {
   const raw = new URLSearchParams(window.location.search).get('view');
@@ -140,7 +146,6 @@ export default function Dashboard() {
   const canDisplayProfile=ownsCurrentProfile;
   const editable = canDisplayProfile;
   const guestHistory=useGuestHistory(values,details,auth.user?.id??'guest',loaded&&auth.ready&&!auth.loading&&errors.length===0,!!editingId);
-  const filtered=[...activeMetrics].sort((a,b)=>tierOrder[a.tier]-tierOrder[b.tier]);
 
   useEffect(() => {
     if (!errors.length && !localSaveError && !cloudSave.unsaved && cloudSave.status !== 'saving' && cloudSave.status !== 'error') return;
@@ -156,7 +161,7 @@ export default function Dashboard() {
     window.history.pushState(null, '', url); window.scrollTo({ top: 0, behavior: 'instant' });
     requestAnimationFrame(() => pageHeading.current?.focus());
   }
-  function openMeasurements(next?: PillarId,metricId?:string) {setEditingId(null);go('overview');requestAnimationFrame(()=>{const target=metricId?document.querySelector<HTMLElement>(`[data-metric-id="${metricId}"]`):next?document.getElementById(`measurements-${next}`):document.getElementById('measurements');target?.scrollIntoView({behavior:'smooth',block:'start'});if(metricId)target?.querySelector<HTMLInputElement>('input[inputmode]')?.focus({preventScroll:true});});}
+  function openMeasurements(next?: PillarId,metricId?:string) {setEditingId(null);go('overview');requestAnimationFrame(()=>{const target=metricId?document.querySelector<HTMLElement>(`[data-metric-id="${metricId}"]`):next?document.querySelector<HTMLElement>(`#measurements [data-pillar="${next}"]`):document.getElementById('measurements');target?.scrollIntoView({behavior:'smooth',block:'start'});if(metricId)target?.querySelector<HTMLInputElement>('input[inputmode]')?.focus({preventScroll:true});});}
   function start() { panelTrigger.current = document.activeElement as HTMLElement; if (editable){setPanel('onboarding');captureEvent('onboarding_started');} else setToast('Wait for your profile to finish loading before making changes.'); }
   function showEvidence(metric: Metric) { panelTrigger.current = document.activeElement as HTMLElement; setProof(metric); }
   function showCalculator(metric: Metric) { panelTrigger.current = document.activeElement as HTMLElement; setCalculator(metric); }
@@ -206,7 +211,7 @@ export default function Dashboard() {
     <div inert={panel || proof || calculator || repeatMetric ? true : undefined} className="main-wrap"><header className="topbar"><div className="topbar-right"><LanguageToggle/>{auth.user ? <button className="mobile-profile-account icon-button" aria-label={tr("My profile")} onClick={() => go('profile')}><UserRound size={19}/></button> : <div className="auth-entry-actions"><Link className="header-login" href={authEntryPath('sign-in')}>{tr("Log in")}</Link></div>}</div></header>
       <main id="main-content" className="workspace-main">
         {auth.user&&<div className="account-safety"><button className="text-link" disabled={privacyBusy} onClick={()=>void changeVisibility(false).catch(e=>setToast(e instanceof Error?e.message:'Privacy withdrawal failed. Retry.'))}>{tr(privacyBusy?'Withdrawing…':'Make my profile private')}</button></div>}
-        {canDisplayProfile&&!needsSetup&&<div className="save-status" role="status">{auth.user&&<span>{tr(errors.length||!profileValid?'Inputs need attention':editingId?'Editing · leave this field to save':cloudSave.status==='saving'?'Saving…':cloudSave.unsaved?'Unsaved changes':cloudSave.status==='error'?'Save needs attention':'Saved to your account')}</span>}{auth.user&&cloudSave.unsaved&&<button className="text-link" disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save now")}</button>}<button className="text-link" onClick={()=>openMeasurements()}>{tr("Record a measurement")}</button></div>}
+        {canDisplayProfile&&!needsSetup&&<div className="save-status" role="status">{auth.user&&<span>{tr(errors.length||!profileValid?'Inputs need attention':editingId?'Editing · leave this field to save':cloudSave.status==='saving'?'Saving…':cloudSave.unsaved?'Unsaved changes':cloudSave.status==='error'?'Save needs attention':'Saved to your account')}</span>}{auth.user&&cloudSave.unsaved&&<button className="text-link" disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save now")}</button>}</div>}
         {cloudSave.storageWarning&&<div className="cloud-error" role="status"><span>{tr(cloudSave.storageWarning)}</span><button className="text-link" onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button></div>}
         {localSaveError && !auth.user && <div className="cloud-error" role="alert"><span>{tr("Your changes are only in memory. Device storage is unavailable. Keep this page open or sign in to save.")}</span><Link href="/sign-in">{tr("Sign in")}</Link></div>}
         {auth.error && <div className="cloud-error" role="alert"><span>{tr(auth.error)}</span><button onClick={auth.retry}>{tr("Retry")}</button></div>}
@@ -218,7 +223,11 @@ export default function Dashboard() {
         {canDisplayProfile?<>
 
         {view === 'overview' && <Overview key={auth.user?.id??'guest'} guestEntries={guestHistory.entries} revision={cloudSave.saved?.revision??auth.cloud?.revision} demographics={demographics} values={values} details={details} result={result} needsSetup={needsSetup} onMeasurements={openMeasurements} onStart={id=>{setQuickStarter(id);start();}} onScience={() => go('methodology')} onCalculationReport={downloadCalculationReport} onPotential={()=>go('scenarios')}/>}
-        {view === 'overview' && <section id="measurements" className="card measurement-library"><div className="merged-library-heading"><h2>{tr("Measurements")}</h2><button className="text-link" onClick={()=>go('profile')}>{tr('View history')}</button></div>{errors.length > 0 && <div className="field-error" role="alert">{errors.length} {tr('values need attention. Changes are not saved until corrected. ')}</div>}{filtered.length ? measurementPillars.filter(p => filtered.some(m => m.pillar === p.id)).map(p => <div className="metric-group" id={`measurements-${p.id}`} key={p.id}><div className="metric-group-title"><CategoryIcon id={p.id}/><h3>{tr(pillarNames[p.id])}</h3><span>{filtered.filter(m => m.pillar === p.id).length} {tr(filtered.filter(m => m.pillar === p.id).length === 1 ? 'measurement' : 'measurements')}</span></div><div className="metric-card-grid">{filtered.filter(m => m.pillar === p.id).map(m => <MetricEditor key={`${auth.user?.id??'guest'}:${m.id}:${editorEpoch}`} metric={m} value={values[m.id]} details={details[m.id]} demographics={demographics} onValue={changeValue} onDetails={changeDetails} onEvidence={showEvidence} onCalculate={showCalculator} onEditingChange={setEditingId} onContextError={(id,error)=>setContextErrors(e=>({...e,[id]:error}))} readOnly={needsSetup || !editable}/>)}</div></div>) : null}</section>}
+        {view === 'overview' && <section id="measurements" className="measurement-library simplified-library" aria-label={tr('Measurements')}>
+          <div className="measurement-toolbar"><button className="text-link" onClick={()=>go('profile')}>{tr('View history')} <ArrowUpRight size={14}/></button></div>
+          {errors.length > 0 && <div className="field-error" role="alert">{errors.length} {tr('values need attention. Changes are not saved until corrected. ')}</div>}
+          {measurementRows.map(row=><div className="metric-card-grid measurement-line" key={row[0]}>{row.map(id=>activeMetrics.find(m=>m.id===id)).filter((m):m is Metric=>!!m).map(m=><MetricEditor dashboardCard onProfile={()=>go('profile')} key={`${auth.user?.id??'guest'}:${m.id}:${editorEpoch}`} metric={m} value={values[m.id]} details={details[m.id]} demographics={demographics} onValue={changeValue} onDetails={changeDetails} onEvidence={showEvidence} onCalculate={showCalculator} onEditingChange={setEditingId} onContextError={(id,error)=>setContextErrors(e=>({...e,[id]:error}))} readOnly={needsSetup || !editable}/>)}</div>)}
+        </section>}
 
         {guestHistory.error&&<p className="field-error" role="alert">{tr(guestHistory.error)}</p>}
         {view === 'scenarios' && <Program guestEntries={guestHistory.entries} revision={cloudSave.saved?.revision??auth.cloud?.revision} key={auth.user?.id ?? 'local'} values={values} demographics={demographics} details={details} onMeasurements={needsSetup ? start : () => openMeasurements()} onScience={() => go('methodology')} onNavigationRisk={setProgramRisk}/>}
