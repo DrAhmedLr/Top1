@@ -1,4 +1,5 @@
 'use client';
+import StrengthEquation from './StrengthEquation';
 import {MetricIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import {metricGameEstimate} from '@/lib/benchmarkGame';
@@ -8,7 +9,7 @@ import LabUnitHelper from './LabUnitHelper';
 import {protocolOptions,type MeasurementProtocol} from '@/lib/protocols';
 
 import { useEffect, useId, useRef, useState } from 'react';
-import { Star, Calculator, ChevronDown, CircleHelp } from 'lucide-react';
+import { Star, Calculator, ChevronDown, CircleHelp, X, CircleAlert } from 'lucide-react';
 import { parseMeasurementInput } from '@/lib/measurementInput';
 import { eligible, scoringEligibility, valid } from '@/lib/engine';
 import {normalizeMeasurementMetadata, type MeasurementDetails, type MeasurementMethod, type ExerciseMode } from '@/lib/measurementMetadata';
@@ -24,14 +25,54 @@ const methodLabels: Record<MeasurementMethod, string> = {
 };
 const calculators = new Set(['vo2_max', 'body_fat', 'squat_1rm', 'deadlift_1rm', 'bench_1rm', 'pullup_1rm']);
 
-export default function MetricEditor({ favorite,onFavorite,metric: m, value, details = {}, demographics, onValue, onDetails, onEvidence, onCalculate, compact = false, readOnly = false, onEditingChange,onContextError }: {
+const cardPrompts: Record<string,string> = {
+ bench_1rm:'Your best bench press, relative to body weight.',
+ squat_1rm:'Your best squat, relative to body weight.',
+ deadlift_1rm:'Your best deadlift, relative to body weight.',
+ pullup_1rm:'Added pull-up strength, relative to body weight.',
+ grip_strength:'Your strongest hand on a grip dynamometer.',
+ pushups:'Consecutive strict reps with consistent form.',
+ cmj:'Your vertical jump height, without a run-up.',
+ broad_jump:'Your standing jump distance, from a still start.',
+ sprint_10m:'Time your fastest 10-metre sprint.',
+ vo2_max:'Use a test result, or calculate a run estimate.',
+ sit_to_stand:'Full chair stands completed in 30 seconds.',
+ single_leg_balance:'Time how long you balance on one leg.',
+ body_fat:'Use a measured percentage or the calculator.',
+ waist_height_ratio:'Waist divided by height, using the same units.',
+ total_sleep:'Your average nightly sleep over seven days.',
+ rhr:'Your resting pulse, measured while relaxed.',
+};
+
+const testHelp:Record<string,string>={
+ bench_1rm:'Warm up, use a spotter or safety bars, and enter a controlled bench press set. Use 1–10 clean reps; do not attempt an unfamiliar maximum.',
+ squat_1rm:'Warm up and use safety bars. Enter the load and clean reps from a squat set with consistent depth. Use a familiar, controlled load.',
+ deadlift_1rm:'Warm up, then enter the bar’s total weight and clean reps from the floor. Stop when you cannot keep the same technique.',
+ pullup_1rm:'Enter only the extra weight attached to you, not your body weight. Start from straight arms, clear the bar with your chin and avoid swinging. Zero extra weight is allowed.',
+ pushups:'Start in a straight plank. Lower your chest consistently, then straighten your arms. Count consecutive clean reps and stop when your form changes.',
+ sit_to_stand:'Place a sturdy chair against a wall. With arms crossed, stand fully and sit back down. Count full stands in 30 seconds; use the same chair each time.',
+ single_leg_balance:'Stand beside a stable support with eyes open. Lift one foot and time until it touches down or you need support. Use the same leg and setup each time.',
+ cmj:'From standing, dip and jump straight up. Measure vertical height with the same app or device each time. Repeat three times with rest and keep your best result.',
+ broad_jump:'Stand behind a line with both feet. Jump forward and land on both feet. Measure from the line to your nearest heel; keep the best of three attempts.',
+ sprint_10m:'Mark a clear, flat 10-metre lane. Warm up, use the same standing start and timing setup, and rest between trials. Timing gates are more consistent than a handheld stopwatch.',
+ grip_strength:'Use a grip dynamometer while seated, with your elbow bent. Test each hand three times with rest. Enter the highest single reading, not the sum of both hands.',
+ waist_height_ratio:'Measure your waist midway between your lowest rib and hip bone after a normal breath out. Divide by your height in the same units: 80 cm ÷ 180 cm = 0.44.',
+ total_sleep:'Add the hours you actually slept over seven nights and divide by seven. Exclude time awake in bed. A sleep diary or the same wearable helps keep it consistent.',
+ rhr:'Measure your pulse while awake and relaxed, in the same posture. Count beats for 60 seconds, or use the same device. Average seven comparable days.',
+ body_fat:'Enter a body-fat percentage from a measured test. Use the same method for comparisons; scales, skinfolds and DEXA can give different results.',
+ vo2_max:'Enter the oxygen-capacity result from a test or wearable, in ml/kg/min. The calculator can estimate it from a 12-minute run; an estimate differs from a laboratory test.',
+};
+
+export default function MetricEditor({ favorite,onFavorite,metric: m, value, details = {}, demographics, onValue, onDetails, onEvidence, onCalculate, compact = false, dashboardCard = false, onProfile, readOnly = false, onEditingChange,onContextError }: {
   favorite?:boolean;onFavorite?:()=>void;metric: Metric; value: number | undefined; details?: MeasurementDetails; demographics: Demographics;
   onValue: (id: string, raw: string) => void;
   onDetails: (id: string, details: MeasurementDetails) => void;
   onEvidence: (metric: Metric) => void; onCalculate: (metric: Metric) => void;
-  compact?: boolean; readOnly?: boolean; onEditingChange?: (id: string | null) => void;onContextError?:(id:string,error:string)=>void;
+  compact?: boolean; dashboardCard?: boolean; onProfile?:()=>void; readOnly?: boolean; onEditingChange?: (id: string | null) => void;onContextError?:(id:string,error:string)=>void;
 }) {
  const {t:tr}=useTranslations();
+ const [helpOpen,setHelpOpen]=useState(false);
+ const equation=dashboardCard&&['bench_1rm','squat_1rm','deadlift_1rm','pullup_1rm'].includes(m.id);
 
   const [testAge, setTestAge] = useState(String(details.ageAtMeasurement ?? ''));
   const [testAgeError, setTestAgeError] = useState(false);
@@ -59,28 +100,35 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
   const eligibility = scoringEligibility(m, demographics, { [m.id]: details });
   const measuredAt = details.measuredAt && Number.isFinite(Date.parse(details.measuredAt))
     ? new Date(Date.parse(details.measuredAt) - new Date(details.measuredAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
-  return <div data-metric-id={m.id} className={`metric-row ${m.pillar} ${compact ? 'compact-row' : ''}`} onFocusCapture={() => onEditingChange?.(m.id)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onEditingChange?.(null); }}>
+  return <div data-metric-id={m.id} data-pillar={m.pillar} className={`metric-row ${m.pillar} ${dashboardCard ? 'measurement-card' : ''} ${value !== undefined && !bad ? 'has-result' : ''} ${compact ? 'compact-row' : ''}`} onFocusCapture={() => onEditingChange?.(m.id)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onEditingChange?.(null); }}>
     <div className="metric-label">
-      <label htmlFor={inputId}><MetricIcon id={m.id}/>{tr(m.name)}</label>
+      {equation?<span className="metric-name"><MetricIcon id={m.id}/>{tr(m.name)}</span>:<label className="metric-name" htmlFor={inputId}><MetricIcon id={m.id}/>{tr(m.name)}</label>}
+      {dashboardCard&&<span className="metric-tip" onMouseEnter={()=>setHelpOpen(true)} onMouseLeave={()=>setHelpOpen(false)}><button className="metric-tip-trigger" aria-label={tr('How to measure')+': '+tr(m.name)} aria-expanded={helpOpen} aria-describedby={helpOpen?`${inputId}-tip`:undefined} onFocus={()=>setHelpOpen(true)} onBlur={()=>setHelpOpen(false)} onClick={()=>setHelpOpen(true)} onKeyDown={e=>{if(e.key==='Escape'){setHelpOpen(false);e.stopPropagation();}}}><CircleAlert size={17}/></button>{helpOpen&&<span className="metric-tip-content" role="tooltip" id={`${inputId}-tip`}>{tr(testHelp[m.id]??m.proofData.instructions)}</span>}</span>}
       <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{tr(compact ? starterInstructions[m.id] ?? m.proofData.instructions : `Optional. Enter ${shownUnit} or leave blank if unmeasured.`)}</span>
       {!compact&&value!==undefined&&!bad&&<strong className="metric-game-top">{tr('Top')} {metricGameEstimate(m.id,value,demographics)?.top??'—'}</strong>}
 
     </div>
-    <div className="metric-controls">{onFavorite&&<button className="icon-button" aria-label={tr(`${favorite?"Remove":"Add"} ${m.name} ${favorite?"from":"to"} favorites`)} aria-pressed={!!favorite} onClick={onFavorite}><Star size={18} fill={favorite?"currentColor":"none"}/></button>}
+    {dashboardCard&&<p className="measurement-prompt">{tr(cardPrompts[m.id])}</p>}
+    {equation?<StrengthEquation key={`${value}:${JSON.stringify(details.derivation)}`} metric={m} weight={demographics.weight} value={value} details={details} disabled={readOnly} onProfile={onProfile} onUse={(next,context)=>{onValue(m.id,String(next));onDetails(m.id,context);onEditingChange?.(null);}}/>:<div className="metric-controls">{onFavorite&&<button className="icon-button" aria-label={tr(`${favorite?"Remove":"Add"} ${m.name} ${favorite?"from":"to"} favorites`)} aria-pressed={!!favorite} onClick={onFavorite}><Star size={18} fill={favorite?"currentColor":"none"}/></button>}
 
       <div className={`input-unit ${bad ? 'invalid' : ''}`}>
         <input id={inputId} type="text" inputMode={countMetrics.has(m.id)?"numeric":"decimal"} value={raw} placeholder={tr("—")} disabled={readOnly} aria-invalid={bad} aria-describedby={bad ? `${inputId}-error` : `${inputId}-hint`} onFocus={() => { focused.current = true; }} onBlur={() => { focused.current = false; }} onChange={e => { setRaw(e.target.value); onValue(m.id, parseMeasurementInput(e.target.value, sleep ? 60 : 1)); }}/>
 
         <span>{tr(shownUnit)}</span>
       </div>
-      {!compact && <>
+      {!compact && !dashboardCard && <>
         {calculators.has(m.id) && <button className="icon-button" aria-label={tr(`Calculate ${m.name}`)} title={tr("Calculate an estimate")} onClick={() => onCalculate(m)}><Calculator size={18}/></button>}
         <button className="icon-button" aria-label={tr(`Evidence for ${m.name}`)} title={tr("How to measure & evidence")} onClick={() => onEvidence(m)}><CircleHelp size={18}/></button>
       </>}
-    </div>
+    </div>}
+    {dashboardCard&&<div className="measurement-actions">
+      <button className="measurement-help" aria-label={tr(`Evidence for ${m.name}`)} onClick={()=>onEvidence(m)}><CircleHelp size={15}/>{tr('How to measure')}</button>
+      {!equation&&calculators.has(m.id)&&<button className="measurement-calculate" aria-label={tr(`Calculate ${m.name}`)} disabled={readOnly} onClick={()=>onCalculate(m)}><Calculator size={15}/>{tr('Calculate')}</button>}
+      {value!==undefined&&<button className="measurement-clear" disabled={readOnly} aria-label={tr('Clear measurement')} title={tr('Clear measurement')} onClick={()=>{setRaw('');onValue(m.id,'');onEditingChange?.(null);}}><X size={15}/></button>}
+    </div>}
     {compact && <details className="starter-evidence"><summary><CircleHelp size={14}/> {tr("How to measure & evidence")}</summary><p>{tr(m.proofData.instructions)}</p><p>{tr(m.proofData.study)}. {tr(m.proofData.sampleSize)}</p>{m.proofData.url && <a className="text-link" href={m.proofData.url} target="_blank" rel="noreferrer">{tr("Read the source")}</a>}</details>}
     {!compact && <details className="measurement-details">
-      <summary aria-label={tr(`Method and date for ${m.name}`)}><ChevronDown size={13}/> {tr("Measurement method & date ")}{m.id === 'vo2_max' && !scored && <span>{tr("Required for VO₂ scoring")}</span>}</summary>
+      <summary aria-label={tr(`Method and date for ${m.name}`)}><ChevronDown size={13}/> {tr(dashboardCard?"Test details":"Measurement method & date ")}{m.id === 'vo2_max' && !scored && <span>{tr("Required for VO₂ scoring")}</span>}</summary>
       {details.invalidContext&&<p role="alert">{tr("Stored measurement details need review. Original context remains in history/export. ")}<button className="text-link" disabled={readOnly} onClick={()=>updateDetails({invalidContext:undefined})}>{tr("Keep value and clear unreadable details")}</button></p>}
       <div className="measurement-context">
         {protocolOptions[m.id]&&<label>{tr("Test protocol")}<select disabled={readOnly} aria-label={tr(`Protocol for ${m.name}`)} value={details.protocol?.id??''} onChange={e=>updateDetails({...details,protocol:e.target.value?{id:e.target.value}:undefined})}><option value="">{tr("Unknown / not recorded")}</option>{protocolOptions[m.id].map(p=><option key={p.id} value={p.id}>{tr(p.label)}</option>)}</select></label>}
