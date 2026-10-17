@@ -4846,5 +4846,185 @@
   "Quest board complete": {
     "fr": "Toutes les quêtes sont terminées",
     "ar": "اكتملت جميع المهام"
+  },
+  "My TOP1 standing": {
+    "fr": "Mon classement TOP1",
+    "ar": "ترتيبي في TOP1"
+  },
+  "Illustrative estimate · not a world rank": {
+    "fr": "Estimation illustrative · pas un classement mondial",
+    "ar": "تقدير توضيحي · ليس ترتيبًا عالميًا"
+  },
+  "Your progress": {
+    "fr": "Vos progrès",
+    "ar": "تقدمك"
+  },
+  "Results improved this week": {
+    "fr": "Résultats améliorés cette semaine",
+    "ar": "النتائج المتحسنة هذا الأسبوع"
+  },
+  "Create share card": {
+    "fr": "Créer une carte à partager",
+    "ar": "أنشئ بطاقة للمشاركة"
+  },
+  "Choose what appears. No name or raw measurements are included. Downloading does not publish your card.": {
+    "fr": "Choisissez le contenu. Aucun nom ni mesure brute. Télécharger ne publie pas votre carte.",
+    "ar": "اختر ما يظهر. لا تتضمن البطاقة اسمًا أو قياسات خامًا. تنزيلها لا ينشرها."
+  },
+  "Download rank card": {
+    "fr": "Télécharger ma carte",
+    "ar": "تنزيل بطاقة الترتيب"
+  },
+  "Personal best": {
+    "fr": "Record personnel",
+    "ar": "أفضل نتيجة شخصية"
+  },
+  "Improved result": {
+    "fr": "Résultat amélioré",
+    "ar": "نتيجة متحسنة"
+  },
+  "Recorded change": {
+    "fr": "Évolution enregistrée",
+    "ar": "تغير مسجل"
+  },
+  "Progress history could not load. Your measurements are retained.": {
+    "fr": "Impossible de charger les progrès. Vos mesures sont conservées.",
+    "ar": "تعذر تحميل سجل التقدم. قياساتك محفوظة."
+  },
+  "Repeat a measurement with the same method and date it to reveal your progress and earn personal-best badges.": {
+    "fr": "Répétez une mesure avec la même méthode et une date pour voir vos progrès et vos records personnels.",
+    "ar": "كرر قياسًا بالطريقة نفسها وحدد تاريخه لإظهار تقدمك وكسب شارات أفضل النتائج."
+  },
+  "No comparable improvements recorded this week yet.": {
+    "fr": "Aucune amélioration comparable enregistrée cette semaine.",
+    "ar": "لم تُسجل تحسينات قابلة للمقارنة هذا الأسبوع بعد."
+  },
+  "Badges compare documented matching tests. Adding a measurement can change your global estimate without a performance improvement.": {
+    "fr": "Les badges comparent des tests documentés compatibles. Ajouter une mesure peut modifier l’estimation globale sans amélioration de performance.",
+    "ar": "تقارن الشارات اختبارات موثقة ومتوافقة. إضافة قياس قد تغير تقديرك العام دون تحسن الأداء."
+  },
+  "Record a new result": {
+    "fr": "Enregistrer un nouveau résultat",
+    "ar": "سجّل نتيجة جديدة"
+  },
+  "Based on recorded measurements": {
+    "fr": "Basé sur vos mesures",
+    "ar": "استنادًا إلى القياسات المسجلة"
+  },
+  "Choose a test you already know": {
+    "fr": "Choisissez un test que vous connaissez",
+    "ar": "اختر اختبارًا تعرفه"
+  },
+  "One result reveals your first tier. Every other measurement is optional.": {
+    "fr": "Un résultat révèle votre premier palier. Toutes les autres mesures sont facultatives.",
+    "ar": "نتيجة واحدة تكشف مستواك الأول. كل القياسات الأخرى اختيارية."
+  },
+  "Browse all measurements": {
+    "fr": "Parcourir toutes les mesures",
+    "ar": "تصفح كل القياسات"
+  },
+  "Discover my tier": {
+    "fr": "Découvrir mon palier",
+    "ar": "اكتشف مستواي"
+  },
+  "New tier unlocked": {
+    "fr": "Nouveau palier débloqué",
+    "ar": "تم فتح مستوى جديد"
+  },
+  "More options": {
+    "fr": "Plus d’options",
+    "ar": "خيارات إضافية"
+  },
+  "Reveal my tier": {
+    "fr": "Révéler mon palier",
+    "ar": "أظهر مستواي"
+  },
+  "Discover your starting tier": {
+    "fr": "Découvrez votre palier de départ",
+    "ar": "اكتشف مستواك الأول"
+  },
+  "Record one result first. Then choose your target and build your plan.": {
+    "fr": "Enregistrez un résultat, puis choisissez votre objectif et créez votre programme.",
+    "ar": "سجّل نتيجة أولًا، ثم اختر هدفك وأنشئ برنامجك."
+  },
+  "1 · Choose target": {
+    "fr": "1 · Choisir un objectif",
+    "ar": "١ · اختر هدفًا"
+  },
+  "2 · Compare routes": {
+    "fr": "2 · Comparer les parcours",
+    "ar": "٢ · قارن المسارات"
+  },
+  "3 · Build plan": {
+    "fr": "3 · Créer le programme",
+    "ar": "٣ · أنشئ البرنامج"
+  },
+  "Compare routes": {
+    "fr": "Comparer les parcours",
+    "ar": "قارن المسارات"
+  },
+  "Continue with this route": {
+    "fr": "Continuer avec ce parcours",
+    "ar": "تابع بهذا المسار"
+  },
+  "How these scenarios work": {
+    "fr": "Comment fonctionnent les scénarios",
+    "ar": "كيف تعمل هذه السيناريوهات"
+  },
+  "Your active mission": {
+    "fr": "Votre mission active",
+    "ar": "مهمتك الحالية"
+  },
+  "One mission. Small steps. Your own pace.": {
+    "fr": "Une mission. De petits pas. À votre rythme.",
+    "ar": "مهمة واحدة. خطوات صغيرة. بإيقاعك."
+  },
+  "Explore other targets": {
+    "fr": "Explorer d’autres objectifs",
+    "ar": "استكشف أهدافًا أخرى"
+  },
+  "Adjust my training preferences": {
+    "fr": "Ajuster mes préférences",
+    "ar": "عدّل تفضيلات التدريب"
+  },
+  "Your weekly recap": {
+    "fr": "Votre bilan hebdomadaire",
+    "ar": "ملخصك الأسبوعي"
+  },
+  "quests completed this week": {
+    "fr": "quêtes terminées cette semaine",
+    "ar": "مهام مكتملة هذا الأسبوع"
+  },
+  "Next action: follow today’s quests, or record a result when ready.": {
+    "fr": "Prochaine action : suivez les quêtes du jour ou enregistrez un résultat lorsque vous êtes prêt.",
+    "ar": "الخطوة التالية: اتبع مهام اليوم، أو سجل نتيجة عندما تكون مستعدًا."
+  },
+  "Open my quest board": {
+    "fr": "Ouvrir mes quêtes",
+    "ar": "افتح لوحة مهامي"
+  },
+  "Since opening this dashboard": {
+    "fr": "Depuis l’ouverture de ce tableau de bord",
+    "ar": "منذ فتح لوحة المتابعة"
+  },
+  "Reference profile changed": {
+    "fr": "Profil de référence modifié",
+    "ar": "تغير ملف المقارنة"
+  },
+  "Measurements added or removed": {
+    "fr": "Mesures ajoutées ou retirées",
+    "ar": "أُضيفت قياسات أو حُذفت"
+  },
+  "Recorded results changed": {
+    "fr": "Résultats enregistrés modifiés",
+    "ar": "تغيرت النتائج المسجلة"
+  },
+  "Badges use available matching history. Adding a measurement can change your global estimate without a performance improvement.": {
+    "fr": "Les badges utilisent l’historique compatible disponible. Ajouter une mesure peut modifier l’estimation globale sans amélioration de performance.",
+    "ar": "تستخدم الشارات السجل المتوافق المتاح. إضافة قياس قد تغير تقديرك العام دون تحسن الأداء."
+  },
+  "Mission & training details": {
+    "fr": "Détails de la mission et du programme",
+    "ar": "تفاصيل المهمة والتدريب"
   }
 }
