@@ -51,7 +51,7 @@ const testHelp:Record<string,string>={
  pullup_1rm:'Enter only the extra weight attached to you, not your body weight. Start from straight arms, clear the bar with your chin and avoid swinging. Zero extra weight is allowed.',
  pushups:'Start in a straight plank. Lower your chest consistently, then straighten your arms. Count consecutive clean reps and stop when your form changes.',
  sit_to_stand:'Place a sturdy chair against a wall. With arms crossed, stand fully and sit back down. Count full stands in 30 seconds; use the same chair each time.',
- single_leg_balance:'Stand beside a stable support with eyes open. Lift one foot and time until it touches down or you need support. Use the same leg and setup each time.',
+ single_leg_balance:'Stand beside a stable support. Lift one foot, find your balance, then close your eyes and start timing. Stop when the foot touches down, your eyes open or you need support. Use the same leg and setup each time.',
  cmj:'From standing, dip and jump straight up. Measure vertical height with the same app or device each time. Repeat three times with rest and keep your best result.',
  broad_jump:'Stand behind a line with both feet. Jump forward and land on both feet. Measure from the line to your nearest heel; keep the best of three attempts.',
  sprint_10m:'Mark a clear, flat 10-metre lane. Warm up, use the same standing start and timing setup, and rest between trials. Timing gates are more consistent than a handheld stopwatch.',
@@ -71,7 +71,8 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
   compact?: boolean; dashboardCard?: boolean; onProfile?:()=>void; readOnly?: boolean; onEditingChange?: (id: string | null) => void;onContextError?:(id:string,error:string)=>void;
 }) {
  const {t:tr}=useTranslations();
- const [helpOpen,setHelpOpen]=useState(false);
+ const [helpOpen,setHelpOpen]=useState(false),tipRef=useRef<HTMLSpanElement>(null);
+ useEffect(()=>{if(!helpOpen)return;const key=(e:KeyboardEvent)=>{if(e.key==='Escape')setHelpOpen(false);};const outside=(e:PointerEvent)=>{if(!tipRef.current?.contains(e.target as Node))setHelpOpen(false);};document.addEventListener('keydown',key);document.addEventListener('pointerdown',outside);return()=>{document.removeEventListener('keydown',key);document.removeEventListener('pointerdown',outside);};},[helpOpen]);
  const equation=dashboardCard&&['bench_1rm','squat_1rm','deadlift_1rm','pullup_1rm'].includes(m.id);
 
   const [testAge, setTestAge] = useState(String(details.ageAtMeasurement ?? ''));
@@ -100,11 +101,11 @@ export default function MetricEditor({ favorite,onFavorite,metric: m, value, det
   const eligibility = scoringEligibility(m, demographics, { [m.id]: details });
   const measuredAt = details.measuredAt && Number.isFinite(Date.parse(details.measuredAt))
     ? new Date(Date.parse(details.measuredAt) - new Date(details.measuredAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
-  return <div data-metric-id={m.id} data-pillar={m.pillar} className={`metric-row ${m.pillar} ${dashboardCard ? 'measurement-card' : ''} ${value !== undefined && !bad ? 'has-result' : ''} ${compact ? 'compact-row' : ''}`} onFocusCapture={() => onEditingChange?.(m.id)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onEditingChange?.(null); }}>
+  return <div data-metric-id={m.id} data-pillar={m.pillar} role={dashboardCard?"group":undefined} aria-label={dashboardCard?tr(m.name):undefined} className={`metric-row ${m.pillar} ${dashboardCard ? 'measurement-card' : ''} ${value !== undefined && !bad ? 'has-result' : ''} ${compact ? 'compact-row' : ''}`} onFocusCapture={() => onEditingChange?.(m.id)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onEditingChange?.(null); }}>
     <div className="metric-label">
       {equation?<span className="metric-name"><MetricIcon id={m.id}/>{tr(m.name)}</span>:<label className="metric-name" htmlFor={inputId}><MetricIcon id={m.id}/>{tr(m.name)}</label>}
-      {dashboardCard&&<span className="metric-tip" onMouseEnter={()=>setHelpOpen(true)} onMouseLeave={()=>setHelpOpen(false)}><button className="metric-tip-trigger" aria-label={tr('How to measure')+': '+tr(m.name)} aria-expanded={helpOpen} aria-describedby={helpOpen?`${inputId}-tip`:undefined} onFocus={()=>setHelpOpen(true)} onBlur={()=>setHelpOpen(false)} onClick={()=>setHelpOpen(true)} onKeyDown={e=>{if(e.key==='Escape'){setHelpOpen(false);e.stopPropagation();}}}><CircleAlert size={17}/></button>{helpOpen&&<span className="metric-tip-content" role="tooltip" id={`${inputId}-tip`}>{tr(testHelp[m.id]??m.proofData.instructions)}</span>}</span>}
-      <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{tr(compact ? starterInstructions[m.id] ?? m.proofData.instructions : `Optional. Enter ${shownUnit} or leave blank if unmeasured.`)}</span>
+      {dashboardCard&&<span ref={tipRef} className="metric-tip" onMouseEnter={()=>setHelpOpen(true)} onMouseLeave={()=>setHelpOpen(false)}><button className="metric-tip-trigger" aria-label={tr('How to measure')+': '+tr(m.name)} aria-expanded={helpOpen} aria-describedby={helpOpen?`${inputId}-tip`:undefined} onFocus={()=>setHelpOpen(true)} onBlur={()=>setHelpOpen(false)} onClick={()=>setHelpOpen(true)} onKeyDown={e=>{if(e.key==='Escape'){setHelpOpen(false);e.stopPropagation();}}}><CircleAlert size={17}/></button>{helpOpen&&<span className="metric-tip-content" role="tooltip" id={`${inputId}-tip`}>{tr(testHelp[m.id]??m.proofData.instructions)}</span>}</span>}
+      <span id={`${inputId}-hint`} className={compact ? "metric-description" : "sr-only"}>{tr(compact ? starterInstructions[m.id] ?? m.proofData.instructions : equation?'Enter kilograms and 1–10 repetitions; body weight comes from your profile.':`Optional. Enter ${shownUnit} or leave blank if unmeasured.`)}</span>
       {!compact&&value!==undefined&&!bad&&<strong className="metric-game-top">{tr('Top')} {metricGameEstimate(m.id,value,demographics)?.top??'—'}</strong>}
 
     </div>
