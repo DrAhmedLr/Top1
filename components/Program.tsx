@@ -11,7 +11,7 @@ import {benchmarkGame} from '@/lib/benchmarkGame';
 import type {Observation} from '@/lib/history';
 import {BENCHMARK_GAME_VERSION} from '@/lib/benchmarkGame';
 import TrainingDetails from './TrainingDetails';
-import PotentialHero from './PotentialHero';
+import PotentialProgramPreview from './PotentialProgramPreview';
 import {trainingPrescription} from '@/lib/trainingPrescription';
 import {type ScenarioSelection} from '@/lib/scenarioPlan';
 import {weeklyCoach,appendCoachPlan,defaultCoachPreferences,normalizeCoachPreferences,type CoachPreferences} from '@/lib/weeklyCoach';
@@ -23,7 +23,6 @@ const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 export default function Program({values,demographics,details,onMeasurements,onNavigationRisk,guestEntries,revision:measurementRevision}:{guestEntries:Observation[];revision?:number;values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onScience:()=>void;onNavigationRisk?:(risk:boolean)=>void}){
  const {t:tr}=useTranslations();
 
- const [exploring,setExploring]=useState(false);
  const [goal,setGoal]=useState<ScenarioSelection|null>(null);
  const auth=useAuth(),owner=auth.user?.id??'guest',ownerRef=useRef(owner);ownerRef.current=owner;
  const mounted=useRef(true);useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;onNavigationRisk?.(false);};},[onNavigationRisk]);
@@ -42,7 +41,7 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   }catch(e){if(active)setError(e instanceof Error?e.message:'Unable to load your plan.');}}
   void load();return()=>{active=false;};
  },[owner,auth.ready,attempt,onNavigationRisk]);
- useEffect(()=>{setGoal(null);try{const raw=JSON.parse(localStorage.getItem(`top1-scenario-${owner}`)??'null');if(raw&&Number.isFinite(raw.modelTarget)&&Array.isArray(raw.targets)&&raw.targets.length<=12&&raw.targets.every((g:ScenarioSelection['targets'][number])=>g&&typeof g.name==='string'&&typeof g.unit==='string'&&Number.isFinite(g.target)&&Number.isFinite(g.current))){setGoal(raw);if(raw.gameVersion!==BENCHMARK_GAME_VERSION)setExploring(true);}}catch{}},[owner]);
+ useEffect(()=>{setGoal(null);try{const raw=JSON.parse(localStorage.getItem(`top1-scenario-${owner}`)??'null');if(raw&&Number.isFinite(raw.modelTarget)&&Array.isArray(raw.targets)&&raw.targets.length<=12&&raw.targets.every((g:ScenarioSelection['targets'][number])=>g&&typeof g.name==='string'&&typeof g.unit==='string'&&Number.isFinite(g.target)&&Number.isFinite(g.current))){setGoal(raw);}}catch{}},[owner]);
  function coachLabel(coach:ReturnType<typeof weeklyCoach>,kind:string,_name:string,_minutes:number){
   if(kind==='review')return tr('Review measurements and recovery; repeat a test only when ready');
   const prescription=trainingPrescription(coach),habit=prescription.habits.find(h=>h.metricId===kind);if(habit)return `${tr(habit.title)} · ${habit.minutes} ${tr('min')} · ${tr('daily')}`;
@@ -51,7 +50,7 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   return label+(exercise.perSide?` · ${tr('each side')}`:'')+(exercise.workingKg!==undefined?` · ${exercise.workingKg} kg`:'');
  }
  function chooseGoal(next:ScenarioSelection){
-  next={...next,preferences:preferences};setExploring(false);setGoal(next);try{localStorage.setItem(`top1-scenario-${owner}`,JSON.stringify(next));const preview=weeklyCoach(next,values,preferences,timeline,today);setPlan(appendCoachPlan(plan,preview,(kind,name,minutes)=>coachLabel(preview,kind,name,minutes),()=>crypto.randomUUID()));setNotice('Your program is ready. Review the days and save it.');}catch(e){setError(e instanceof Error?e.message:'The scenario could not be stored on this device.');}
+  next={...next,preferences:preferences};setGoal(next);try{localStorage.setItem(`top1-scenario-${owner}`,JSON.stringify(next));const preview=weeklyCoach(next,values,preferences,timeline,today);setPlan(appendCoachPlan(plan,preview,(kind,name,minutes)=>coachLabel(preview,kind,name,minutes),()=>crypto.randomUUID()));setNotice('Your program is ready. Review the days and save it.');}catch(e){setError(e instanceof Error?e.message:'The scenario could not be stored on this device.');}
   document.getElementById('weekly-plan')?.scrollIntoView({behavior:'smooth',block:'start'});
  }
  function addGoal(){if(!coach)return;try{setPlan(appendCoachPlan(plan,coach,(kind,name,minutes)=>coachLabel(coach,kind,name,minutes),()=>crypto.randomUUID()));setNotice('Your program is ready. Review the days and save it.');}catch(e){setError(e instanceof Error?e.message:'Check the scenario targets.');}}
@@ -70,7 +69,7 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   try{discardAcknowledgedDraft(localStorage,`top1-program-draft-${account}`,JSON.stringify(next));}catch{setNotice('Saved. Local draft cleanup is unavailable.');}return true;
  }catch(e){if(mounted.current&&ownerRef.current===account)setError(e instanceof Error?e.message:'Save failed; your draft is retained.');}finally{if(mounted.current&&ownerRef.current===account)setBusy(false);}}
  const progress=routineProgress(timeline,today),todays=scheduledTasks(timeline,today).filter(t=>t.days.includes(weekday));
- return <><section id="potential-scenarios" className="potential-first">{goal&&goal.gameVersion!==BENCHMARK_GAME_VERSION&&<p className="rank-change-note">{tr('Your saved routine is retained. Choose a new mission for the current metrics.')}</p>}{goal&&!exploring?<div className="active-mission-view"><PotentialHero values={values} demographics={demographics} targetTop={goal.targetTop??(goal.projectedTop?Number.parseFloat(goal.projectedTop):undefined)} targets={goal.targets} onAction={()=>document.getElementById('weekly-plan')?.scrollIntoView({behavior:'smooth',block:'start'})} actionLabel="Today’s quests" onOtherTargets={()=>setExploring(true)}/></div>:<Scenarios key={owner} initialGoal={ready?goal:null} values={values} demographics={demographics} details={details} onMeasurements={onMeasurements} onChoose={ready?chooseGoal:undefined}/>}</section>{(goal||plan.tasks.length>0)&&<section id="weekly-plan" className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly quests")}</h2></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
+ return <><section id="potential-scenarios" className="potential-first">{goal&&goal.gameVersion!==BENCHMARK_GAME_VERSION&&<p className="rank-change-note">{tr('Your saved routine is retained. Choose a new mission for the current metrics.')}</p>}<Scenarios key={owner} initialGoal={ready?goal:null} values={values} demographics={demographics} details={details} onMeasurements={onMeasurements} onChoose={ready?chooseGoal:undefined} renderPreview={next=>ready?<PotentialProgramPreview coach={weeklyCoach(next,values,preferences,timeline,today)}/>:undefined}/></section>{(goal||plan.tasks.length>0)&&<section id="weekly-plan" className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly quests")}</h2></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
  <div className="weekly-quest"><span className="quest-emblem" aria-hidden="true">✦</span><progress max={progress.target||1} value={progress.done} aria-label={tr('Weekly plan completion')}/><span>{tr(progress.target>0&&progress.done>=progress.target?'Quest board complete':progress.done?'Keep your momentum':'Your next step starts here')}</span></div>
 
  {!ready?<p role="status">{tr(error||'Loading your plan…')}</p>:<>

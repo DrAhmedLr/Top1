@@ -1,9 +1,6 @@
 'use client';
-import {useMemo,useState} from 'react';
-import {motion,useReducedMotion} from 'framer-motion';
-import {ArrowRight,Check} from 'lucide-react';
+import {useMemo,useState,type ReactNode} from 'react';
 import {useTranslations} from './providers/LocaleProvider';
-import {MetricIcon} from './MetricIcon';
 import PotentialHero from './PotentialHero';
 import {benchmarkGame} from '@/lib/benchmarkGame';
 import {gameScenario,gameRoutes,type GameRoute} from '@/lib/gameScenarios';
@@ -11,19 +8,18 @@ import {TOP_BAND_EDGES} from '@/lib/topBands';
 import type {Values,Demographics} from '@/lib/registry';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 import type {ScenarioSelection} from '@/lib/scenarioPlan';
-export default function Scenarios({values,demographics,onMeasurements,onChoose,initialGoal}:{values:Values;demographics:Demographics;details:MeasurementMetadata;initialGoal?:ScenarioSelection|null;onMeasurements:()=>void;onChoose?:(goal:ScenarioSelection)=>void}){
- const {t}=useTranslations(),reduced=useReducedMotion(),standing=benchmarkGame(values,demographics),current=standing.total;
- const nextTier=current?([...TOP_BAND_EDGES].reverse().find(n=>current==='65%+'||n<Number.parseFloat(current))??1):35;
- const [stage,setStage]=useState(1);
+export default function Scenarios({values,demographics,onMeasurements,onChoose,initialGoal,renderPreview}:{values:Values;demographics:Demographics;details:MeasurementMetadata;initialGoal?:ScenarioSelection|null;onMeasurements:()=>void;onChoose?:(goal:ScenarioSelection)=>void;renderPreview?:(goal:ScenarioSelection)=>ReactNode}){
+ const {t}=useTranslations(),current=benchmarkGame(values,demographics).total;
+ const nextTier=current?([...TOP_BAND_EDGES].reverse().find(n=>current==='65%+'||n<Number.parseFloat(current))??1):1;
  const [chosenTier,setTier]=useState<number|null>(null),[chosenRoute,setRoute]=useState<GameRoute|null>(null);
- const route=chosenRoute??(gameRoutes.includes(initialGoal?.route as GameRoute)?initialGoal!.route as GameRoute:'easier'),savedTier=chosenTier??initialGoal?.targetTop;
- const target=savedTier!==undefined&&savedTier!==null&&(current==='65%+'||current&&savedTier<Number.parseFloat(current))?savedTier:nextTier;
- const scenarios=useMemo(()=>gameRoutes.map(r=>gameScenario(values,demographics,target,r)),[values,demographics,target]),selected=scenarios.find(s=>s.route===route)!;
- if(!current)return <PotentialHero values={values} demographics={demographics} onAction={onMeasurements} actionLabel="Discover my tier"/>;
- return <div className="potential-flow"><div className="potential-steps">{['1 · Choose target','2 · Compare routes','3 · Build plan'].map((label,i)=><button key={label} aria-current={stage===i+1?'step':undefined} disabled={i+1>stage} onClick={()=>setStage(i+1)}>{t(label)}</button>)}</div>
- {stage===1&&<PotentialHero values={values} demographics={demographics} targetTop={target} targets={selected.goal.targets} onTargetChange={setTier} onAction={()=>setStage(2)} actionLabel="Compare routes"/>}
- {stage>1&&(!selected.eligibleCount?<section className="card"><p>{t('Record a physical performance test or a sleep habit measurement to build a program. Other measurements still contribute to your game standing.')}</p><button className="primary-button" onClick={onMeasurements}>{t('Record a measurement')}</button></section>:<>
- <div hidden={stage!==2}><div className="route-grid">{scenarios.map(s=><button className={`card route-card ${route===s.route?'selected':''}`} key={s.route} aria-pressed={route===s.route} onClick={()=>setRoute(s.route)}><span className="eyebrow">{t(s.route==='easier'?'FOCUSED':s.route==='balanced'?'BALANCED':'HIGHER EFFORT')}</span><h3>{t(s.route==='easier'?'One thing at a time':s.route==='balanced'?'Share the effort':'A broader challenge')}</h3><p>{t(s.route==='easier'?'Change one recorded test with the strongest model impact.':s.route==='balanced'?'Spread changes across up to two tests.':'Explore changes across up to three tests.')}</p><strong>{t('Top')} {s.top??'—'}</strong><small>{s.changes} {t('measurements to improve')}</small><span>{t(s.reached?'Reaches your chosen tier in this model':'Closest available route within the change limits')}</span>{route===s.route&&<Check size={18}/>}</button>)}</div>
- <button className="primary-button" onClick={()=>setStage(3)}>{t('Continue with this route')}</button></div>{stage===3&&<motion.section className="card route-details" key={`${route}-${target}`} initial={reduced?false:{opacity:0,y:12}} animate={{opacity:1,y:0}}><h3>{t('What would need to change')}</h3><div className="scenario-roadmap">{selected.goal.targets.map(g=><div key={g.id}><span className="metric-title"><MetricIcon id={g.id}/>{t(g.name)}</span><strong>{g.current} <ArrowRight size={14}/> {g.target} <small>{t(g.unit)}</small></strong></div>)}</div><p>{t('Changes are capped at 50% of the starting value, or five small steps for very low starting values. These are hypothetical measurements, not this week’s workload.')}</p><p>{t('Easier means fewer changed tests in this model, not a guarantee of easy or fast biological improvement. Actual training time depends on you.')}</p><button className="primary-button stitch-cta" disabled={!onChoose||!selected.goal.targets.length} onClick={()=>onChoose?.({...selected.goal,route:selected.route,targetTop:target,projectedTop:selected.top??undefined})}>{t(selected.goal.maintenance?'Generate a maintenance week':'Generate my weekly program')}<ArrowRight size={16}/></button>{!selected.reached&&<p>{t('This route does not reach the selected tier. Choose a closer tier or use these intermediate goals.')}</p>}</motion.section>}</>)}
- <details className="scenario-disclaimer"><summary>{t('How these scenarios work')}</summary><p>{t('Published references and game assumptions are different. No route optimizes lab results or thermal exposure. Weekly suggestions remain editable.')}</p></details></div>;
+ const route=chosenRoute??(gameRoutes.includes(initialGoal?.route as GameRoute)?initialGoal!.route as GameRoute:'easier'),wanted=chosenTier??initialGoal?.targetTop;
+ const target=wanted!==undefined&&wanted!==null&&TOP_BAND_EDGES.some(n=>n===wanted)&&(!current||current==='65%+'||wanted<=Number.parseFloat(current))?wanted:nextTier;
+ const scenarios=useMemo(()=>current?gameRoutes.map(r=>gameScenario(values,demographics,target,r)):[],[values,demographics,target,current]);
+ const selected=scenarios.find(s=>s.route===route),canGenerate=!!selected?.eligibleCount&&!!selected?.goal.targets.length;
+ const actionLabel=!current?'Discover my tier':!canGenerate?'Record a measurement':selected?.goal.maintenance?'Generate a maintenance week':'Generate my weekly program';
+ function generate(){if(!current||!canGenerate){onMeasurements();return;}if(selected&&onChoose)onChoose({...selected.goal,route:selected.route,targetTop:target,projectedTop:selected.top??undefined});}
+ return <div className="potential-flow">
+  <PotentialHero values={values} demographics={demographics} targetTop={target} targets={selected?.goal.targets} onTargetChange={setTier} onAction={generate} actionLabel={actionLabel} actionDisabled={!!current&&canGenerate&&!onChoose} route={route} routeOptions={canGenerate?scenarios:undefined} onRouteChange={setRoute} projectedTop={selected?.top} reached={selected?.reached} programPreview={canGenerate&&selected&&renderPreview?renderPreview(selected.goal):undefined}/>
+  <details className="scenario-disclaimer"><summary>{t('How these scenarios work')}</summary><p>{t('Published references and game assumptions are different. No route optimizes lab results or thermal exposure. Weekly suggestions remain editable.')}</p><p>{t('Changes are capped at 50% of the starting value, or five small steps for very low starting values. These are hypothetical measurements, not this week’s workload.')}</p><p>{t('Easier means fewer changed tests in this model, not a guarantee of easy or fast biological improvement. Actual training time depends on you.')}</p></details>
+ </div>;
 }

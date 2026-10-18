@@ -5314,5 +5314,17 @@
   "Settings": {
     "fr": "Paramètres",
     "ar": "الإعدادات"
+  },
+  "YOU CAN BE": {
+    "fr": "VOUS POUVEZ ÊTRE",
+    "ar": "يمكنك أن تكون"
+  },
+  "Here you are": {
+    "fr": "Vous êtes ici",
+    "ar": "أنت هنا"
+  },
+  "Preview": {
+    "fr": "Aperçu",
+    "ar": "معاينة"
   }
 }
