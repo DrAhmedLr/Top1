@@ -5310,5 +5310,9 @@
   "Enter kilograms and 1–10 repetitions; body weight comes from your profile.": {
     "fr": "Saisissez les kilogrammes et 1 à 10 répétitions ; le poids corporel vient de votre profil.",
     "ar": "أدخل الكيلوغرامات ومن 1 إلى 10 تكرارات؛ يُؤخذ وزن الجسم من ملفك الشخصي."
+  },
+  "Settings": {
+    "fr": "Paramètres",
+    "ar": "الإعدادات"
   }
 }
