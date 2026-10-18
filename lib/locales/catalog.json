@@ -3897,7 +3897,7 @@
   },
   "Add a measurement": {
     "fr": "Ajouter une mesure",
-    "ar": "إضافة قياس"
+    "ar": "أضف قياسًا"
   },
   "Add a measurement to begin.": {
     "fr": "Ajoutez une mesure pour commencer.",
@@ -5326,5 +5326,81 @@
   "Preview": {
     "fr": "Aperçu",
     "ar": "معاينة"
+  },
+  "Based on {count} of {total} metrics": {
+    "fr": "Basé sur {count} mesures sur {total}",
+    "ar": "بناءً على {count} من أصل {total} قياسًا"
+  },
+  "Easy Fixes": {
+    "fr": "Ajustements simples",
+    "ar": "تغييرات سهلة"
+  },
+  "Motivated": {
+    "fr": "Motivé",
+    "ar": "متحمس"
+  },
+  "Major Changes": {
+    "fr": "Grands changements",
+    "ar": "تغييرات كبيرة"
+  },
+  "Simple habits & home checks": {
+    "fr": "Habitudes simples et tests à domicile",
+    "ar": "عادات بسيطة وقياسات منزلية"
+  },
+  "Build fitness & consistency": {
+    "fr": "Forme et régularité",
+    "ar": "لياقة واستمرارية"
+  },
+  "Structured strength & performance": {
+    "fr": "Force et performance structurées",
+    "ar": "قوة وأداء بخطة منظمة"
+  },
+  "Start with a baseline": {
+    "fr": "Commencer par une mesure initiale",
+    "ar": "ابدأ بقياس أولي"
+  },
+  "Start these unmeasured areas with a baseline. Targets adapt after you record a result.": {
+    "fr": "Commencez ces domaines par une mesure initiale. Les objectifs s’adaptent après votre saisie.",
+    "ar": "ابدأ هذه الجوانب بقياس أولي. تتكيف الأهداف بعد تسجيل النتيجة."
+  },
+  "Record baseline": {
+    "fr": "Mesurer le point de départ",
+    "ar": "سجّل قياس البداية"
+  },
+  "Record baseline: {metric}": {
+    "fr": "Mesure initiale : {metric}",
+    "ar": "قياس أولي: {metric}"
+  },
+  "Choose a plan now. Record your baselines to personalize its targets.": {
+    "fr": "Choisissez un plan. Enregistrez vos mesures initiales pour personnaliser ses objectifs.",
+    "ar": "اختر خطة الآن. سجّل قياساتك الأولية لتخصيص أهدافها."
+  },
+  "Your full picture": {
+    "fr": "Votre vue complète",
+    "ar": "صورتك الكاملة"
+  },
+  "Build your full picture": {
+    "fr": "Complétez votre portrait",
+    "ar": "أكمل صورتك"
+  },
+  "All current metrics are recorded. Keep them up to date.": {
+    "fr": "Toutes les mesures sont renseignées. Gardez-les à jour.",
+    "ar": "تم تسجيل جميع القياسات الحالية. حافظ على تحديثها."
+  },
+  "Add measurements for a more complete picture. Your score may move up or down.": {
+    "fr": "Ajoutez des mesures pour une vue plus complète. Votre score peut monter ou descendre.",
+    "ar": "أضف قياسات لصورة أكمل. قد ترتفع نتيجتك أو تنخفض."
+  },
+  "metrics recorded": {
+    "fr": "mesures renseignées",
+    "ar": "قياسات مسجلة"
+  },
+  "Choose an area to complete": {
+    "fr": "Choisir un domaine à compléter",
+    "ar": "اختر جانبًا لإكماله"
+  },
+  "This area is complete. Choose another area to add a measurement.": {
+    "fr": "Ce domaine est complet. Choisissez-en un autre pour ajouter une mesure.",
+    "ar": "هذا الجانب مكتمل. اختر جانبًا آخر لإضافة قياس."
   }
 }

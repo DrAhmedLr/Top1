@@ -20,7 +20,7 @@ import {completedOn,dayInZone,emptyTimeline,normalizeTimeline,recordRoutine,rout
 import type {Values,Demographics} from '@/lib/registry';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-export default function Program({values,demographics,details,onMeasurements,onNavigationRisk,guestEntries,revision:measurementRevision}:{guestEntries:Observation[];revision?:number;values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onScience:()=>void;onNavigationRisk?:(risk:boolean)=>void}){
+export default function Program({values,demographics,details,onMeasurements,onRecordMetric,onNavigationRisk,guestEntries,revision:measurementRevision}:{guestEntries:Observation[];revision?:number;values:Values;demographics:Demographics;details:MeasurementMetadata;onMeasurements:()=>void;onRecordMetric?:(id:string)=>void;onScience:()=>void;onNavigationRisk?:(risk:boolean)=>void}){
  const {t:tr}=useTranslations();
 
  const [goal,setGoal]=useState<ScenarioSelection|null>(null);
@@ -43,6 +43,7 @@ export default function Program({values,demographics,details,onMeasurements,onNa
  },[owner,auth.ready,attempt,onNavigationRisk]);
  useEffect(()=>{setGoal(null);try{const raw=JSON.parse(localStorage.getItem(`top1-scenario-${owner}`)??'null');if(raw&&Number.isFinite(raw.modelTarget)&&Array.isArray(raw.targets)&&raw.targets.length<=12&&raw.targets.every((g:ScenarioSelection['targets'][number])=>g&&typeof g.name==='string'&&typeof g.unit==='string'&&Number.isFinite(g.target)&&Number.isFinite(g.current))){setGoal(raw);}}catch{}},[owner]);
  function coachLabel(coach:ReturnType<typeof weeklyCoach>,kind:string,_name:string,_minutes:number){
+  if(kind==='baseline')return tr('Record baseline: {metric}').replace('{metric}',tr(_name));
   if(kind==='review')return tr('Review measurements and recovery; repeat a test only when ready');
   const prescription=trainingPrescription(coach),habit=prescription.habits.find(h=>h.metricId===kind);if(habit)return `${tr(habit.title)} · ${habit.minutes} ${tr('min')} · ${tr('daily')}`;
   const exercise=prescription.exercises.find(e=>e.metricId===kind);if(!exercise)return tr('Review my routine');
@@ -69,7 +70,7 @@ export default function Program({values,demographics,details,onMeasurements,onNa
   try{discardAcknowledgedDraft(localStorage,`top1-program-draft-${account}`,JSON.stringify(next));}catch{setNotice('Saved. Local draft cleanup is unavailable.');}return true;
  }catch(e){if(mounted.current&&ownerRef.current===account)setError(e instanceof Error?e.message:'Save failed; your draft is retained.');}finally{if(mounted.current&&ownerRef.current===account)setBusy(false);}}
  const progress=routineProgress(timeline,today),todays=scheduledTasks(timeline,today).filter(t=>t.days.includes(weekday));
- return <><section id="potential-scenarios" className="potential-first">{goal&&goal.gameVersion!==BENCHMARK_GAME_VERSION&&<p className="rank-change-note">{tr('Your saved routine is retained. Choose a new mission for the current metrics.')}</p>}<Scenarios key={owner} initialGoal={ready?goal:null} values={values} demographics={demographics} details={details} onMeasurements={onMeasurements} onChoose={ready?chooseGoal:undefined} renderPreview={next=>ready?<PotentialProgramPreview coach={weeklyCoach(next,values,preferences,timeline,today)}/>:undefined}/></section>{(goal||plan.tasks.length>0)&&<section id="weekly-plan" className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly quests")}</h2></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
+ return <><section id="potential-scenarios" className="potential-first">{goal&&goal.gameVersion!==BENCHMARK_GAME_VERSION&&<p className="rank-change-note">{tr('Your saved routine is retained. Choose a new mission for the current metrics.')}</p>}<Scenarios key={owner} initialGoal={ready?goal:null} values={values} demographics={demographics} details={details} onMeasurements={onMeasurements} onRecordMetric={onRecordMetric} onChoose={ready?chooseGoal:undefined} renderPreview={next=>ready?<PotentialProgramPreview coach={weeklyCoach(next,values,preferences,timeline,today)}/>:undefined}/></section>{(goal||plan.tasks.length>0)&&<section id="weekly-plan" className="card weekly-program"><div className="card-heading"><div><h2>{tr("Your weekly quests")}</h2></div><strong>{progress.done}/{progress.due} {tr("due so far")}<small> · {progress.target} {tr("planned this week")}</small></strong></div>
  <div className="weekly-quest"><span className="quest-emblem" aria-hidden="true">✦</span><progress max={progress.target||1} value={progress.done} aria-label={tr('Weekly plan completion')}/><span>{tr(progress.target>0&&progress.done>=progress.target?'Quest board complete':progress.done?'Keep your momentum':'Your next step starts here')}</span></div>
 
  {!ready?<p role="status">{tr(error||'Loading your plan…')}</p>:<>
