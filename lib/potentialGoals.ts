@@ -4,7 +4,7 @@ import {benchmarkGame,metricGameEstimate} from './benchmarkGame';
 import {gameScenario} from './gameScenarios';
 import {TOP_BAND_EDGES} from './topBands';
 export type GoalBoardState={version:1;targetTop:number;ids:string[];targets:Record<string,number>};
-const homeFirst=['pushups','total_sleep','single_leg_balance','sit_to_stand','waist_height_ratio','rhr'];
+const homeFirst=['pushups','total_sleep','single_leg_balance','sit_to_stand','waist_height_ratio','rhr','hrv'];
 export function goalChoices(values:Values,d:Demographics,targetTop:number){
  const suggested=gameScenario(values,d,targetTop,'ambitious').goal.targets.map(g=>g.id);
  return [...new Set([...suggested,...activeMetrics.filter(m=>valid(m,values[m.id])).map(m=>m.id),...homeFirst,...activeMetrics.map(m=>m.id)])];

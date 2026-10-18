@@ -1,10 +1,10 @@
-# TOP1 metric review — 17 October 2026
+# TOP1 metric review — 18 October 2026
 
 ## Decision rule
 
 Keep a distinct, interpretable observation or reproducible performance test that fits a simple training platform. Remove redundant entries, ambiguous device scores, specialist clinical investigations and exposure totals from the active game. These are product decisions, not claims that the removed measurements are medically useless.
 
-**16 active optional measurements: 2 body markers, 12 performance tests, 2 recovery observations.** TOP1 tiers remain illustrative product benchmarks. A useful measurement does not automatically have a defensible world percentile. Missing data is never zero-filled.
+**17 active optional measurements: 2 body markers, 12 performance tests, 3 recovery observations.** TOP1 tiers remain illustrative product benchmarks. A useful measurement does not automatically have a defensible world percentile. Missing data is never zero-filled.
 
 ## Kept: individual decisions
 
@@ -27,6 +27,8 @@ Keep a distinct, interpretable observation or reproducible performance test that
 | Total sleep time | Understandable recovery habit, diary or consistent device | Seven-day average; longer is not endlessly better; duration is not sleep quality |
 | Resting heart rate | Real, inexpensive rested physiological trend | Moved to Recovery; influenced by medication, stress, illness and other factors; lower is not always better |
 
+| HRV (RMSSD) | Useful recovery trend with a consistent device and protocol | RMSSD in milliseconds; not SDNN, not a proprietary readiness score; a personal trend rather than a clinical target |
+
 ## Removed from active game: individual decisions
 
 | Metric | Reason for removal |
@@ -46,7 +48,6 @@ Keep a distinct, interpretable observation or reproducible performance test that
 | Peak expiratory flow | Useful respiratory assessment; reference equations and clinical context required; not general cardiovascular fitness |
 | Farmer’s carry | Real task, but current duration-only format omits consistent distance, speed, turning and implements; overlaps grip and loaded strength |
 | 1-minute heart-rate recovery | Real physiological measure, but workload, recovery posture and active/passive protocols materially affect results; too much setup for this simplified inventory |
-| HRV | Useful individual trend under consistent conditions; not a universal “higher is better” rank across people/devices |
 | Circadian regularity /100 | Regularity matters, but the existing number does not specify a reproducible computation. It is not automatically the research Sleep Regularity Index |
 | Sleep efficiency | Real asleep/time-in-bed ratio, but current device estimates and missing denominator/method make comparisons weak. Avoid encouraging reduced time in bed to chase a percentage |
 | Browser reaction time | Real task response plus screen/input latency; current setup cannot separate human performance from device differences |
@@ -70,4 +71,8 @@ Keep a distinct, interpretable observation or reproducible performance test that
 
 Archived values, metadata and observation histories remain stored and exportable. They disappear from entry, search, coverage, current ranking, badges and newly generated scenarios. Saved routines are retained; old scenario versions prompt a new mission. Historical signed summaries remain historical, with their original model version; a new current score can differ because the inventory changed.
 
-Game version: `3-focused-16`. Scientific model version: `6.3-focused16-experimental`. The scientific model still excludes context-only body/recovery readings from its capacity index. Game plateau credit is an illustrative product rule, not medical advice or a published world percentile.
+Game version: `4-recovery-17`. Scientific model version: `6.4-recovery17-experimental`. The scientific model still excludes context-only body/recovery readings from its capacity index. Game plateau credit is an illustrative product rule, not medical advice or a published world percentile.
+
+### HRV restored (18 October 2026)
+
+HRV is available again as an optional recovery observation: RMSSD in milliseconds, recorded with a consistent device, posture, time and recording duration. SDNN and proprietary readiness scores are not interchangeable with RMSSD. [Measurement guidance](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00213/full). It remains context-only in the scientific capacity model; its game placement is illustrative and is not a clinical target. Existing stored HRV records are retained.

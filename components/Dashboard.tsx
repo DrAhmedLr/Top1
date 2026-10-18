@@ -64,7 +64,7 @@ const measurementRows = [
   ['cmj', 'broad_jump', 'sprint_10m'],
   ['vo2_max', 'sit_to_stand', 'single_leg_balance'],
   ['body_fat', 'waist_height_ratio'],
-  ['total_sleep', 'rhr'],
+  ['total_sleep', 'rhr', 'hrv'],
 ];
 const fmt = (n: number, d = 1) => n.toFixed(d).replace(/\.0$/, '');
 function currentView(): View {
@@ -78,6 +78,16 @@ export default function Dashboard() {
 
   const auth = useAuth();
   const [view, setView] = useState<View>('overview');
+  const [navigationHidden,setNavigationHidden]=useState(false);
+  useEffect(()=>{
+    setNavigationHidden(false);let last=window.scrollY,pivot=last,direction=0;
+    const scroll=()=>{const y=Math.max(0,window.scrollY),next=Math.sign(y-last);
+      if(next&&next!==direction){pivot=last;direction=next;}
+      const headerEngaged=document.querySelector('.sidebar [aria-expanded="true"],.topbar [aria-expanded="true"],.sidebar :focus-visible,.topbar :focus-visible');
+      if(y<90||headerEngaged)setNavigationHidden(false);else if(direction>0&&y-pivot>18)setNavigationHidden(true);else if(direction<0&&pivot-y>8)setNavigationHidden(false);last=y;
+    };
+    window.addEventListener('scroll',scroll,{passive:true});return()=>window.removeEventListener('scroll',scroll);
+  },[view]);
   const [values, setValues] = useState<Values>({}), [demographics, setDemographics] = useState<Demographics>(defaults);
   const [details, setDetails] = useState<MeasurementMetadata>({}), [profileSetup, setProfileSetup] = useState(false), [loaded, setLoaded] = useState(false);
   const [privacyBusy,setPrivacyBusy]=useState(false);
@@ -200,19 +210,19 @@ export default function Dashboard() {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="540" viewBox="0 0 480 540"><rect width="480" height="540" rx="24" fill="#111827"/><g font-family="Arial"><text x="40" y="65" font-size="30" font-weight="bold" fill="#f3f4f6">TOP1</text><text x="40" y="100" font-size="13" fill="#9ca3af">PERSONAL SUMMARY · ILLUSTRATIVE GAME ESTIMATE</text><text x="40" y="173" font-size="52" fill="#f3f4f6">Top ${game.total}</text>${bars}<text x="40" y="425" font-size="13" fill="#9ca3af">${fmt(recordedCoverage(result.measured.length))}% coverage · ${result.measured.length}/${activeMetrics.length} measurements</text><text x="40" y="465" font-size="12" fill="#9ca3af">Not a health score, population rank or medical assessment.</text><text x="40" y="505" font-size="12" fill="#9ca3af">${new Date().toISOString().slice(0, 10)} · Generated on your device</text></g></svg>`;
     const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' })); const a = document.createElement('a'); a.href = url; a.download = 'TOP1-profile-summary.svg'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); setToast('Profile summary downloaded.');
   }
-  return <div className={`app-shell view-${view}`}>
+  return <div className={`app-shell view-${view}${navigationHidden?' navigation-hidden':''}`}>
     <a tabIndex={panel || proof || calculator || repeatMetric ? -1 : undefined} className="skip-link" href="#main-content">{tr("Skip to content")}</a>
 
-    <aside inert={panel || proof || calculator || repeatMetric ? true : undefined} className="sidebar" aria-label={tr("Main navigation")}>
+    <aside inert={panel || proof || calculator || repeatMetric ? true : undefined} className="sidebar" aria-label={tr("Main navigation")} onFocusCapture={()=>setNavigationHidden(false)}>
       <Link href="/" className="brand" onClick={e => { e.preventDefault(); go('overview'); }}><span className="protocol-mark"><i/><i/></span><span>{tr("TOP1")}</span></Link>
 
       <nav>{navigation.map(n => <a key={n.id} href={n.id === 'overview' ? '/' : '/?view=potential'} className={(view === n.id || n.id==='overview' && view==='progress') ? 'active' : ''} aria-current={(view === n.id || n.id==='overview' && view==='progress') ? 'page' : undefined} onClick={e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); go(n.id); }}><n.icon size={19}/><span>{tr(n.label)}</span>{(view === n.id || n.id==='overview' && view==='progress') && <span className="active-dot"/>}</a>)}</nav>
       <div className="header-account"><LanguageToggle/>{auth.user ? <button className="account-chip" aria-label={tr("My profile")} onClick={() => go('profile')}><span>{profileAccount===auth.user?.id&&username ? `@${username}` : tr('My profile')}</span><span className="avatar"><UserRound size={17}/></span></button> : <div className="auth-entry-actions"><Link className="header-login" href={authEntryPath('sign-in')}>{tr("Log in")}</Link></div>}</div>
     </aside>
-    <div inert={panel || proof || calculator || repeatMetric ? true : undefined} className="main-wrap"><header className="topbar"><div className="topbar-right"><LanguageToggle/>{auth.user ? <button className="mobile-profile-account icon-button" aria-label={tr("My profile")} onClick={() => go('profile')}><UserRound size={19}/></button> : <div className="auth-entry-actions"><Link className="header-login" href={authEntryPath('sign-in')}>{tr("Log in")}</Link></div>}</div></header>
+    <div inert={panel || proof || calculator || repeatMetric ? true : undefined} className="main-wrap"><header className="topbar" onFocusCapture={()=>setNavigationHidden(false)}><div className="topbar-right"><LanguageToggle/>{auth.user ? <button className="mobile-profile-account icon-button" aria-label={tr("My profile")} onClick={() => go('profile')}><UserRound size={19}/></button> : <div className="auth-entry-actions"><Link className="header-login" href={authEntryPath('sign-in')}>{tr("Log in")}</Link></div>}</div></header>
       <main id="main-content" className="workspace-main">
-        {auth.user&&view!=='scenarios'&&<div className="account-safety"><button className="text-link" disabled={privacyBusy} onClick={()=>void changeVisibility(false).catch(e=>setToast(e instanceof Error?e.message:'Privacy withdrawal failed. Retry.'))}>{tr(privacyBusy?'Withdrawing…':'Make my profile private')}</button></div>}
-        {canDisplayProfile&&!needsSetup&&view!=='scenarios'&&<div className="save-status" role="status">{auth.user&&<span>{tr(errors.length||!profileValid?'Inputs need attention':editingId?'Editing · leave this field to save':cloudSave.status==='saving'?'Saving…':cloudSave.unsaved?'Unsaved changes':cloudSave.status==='error'?'Save needs attention':'Saved to your account')}</span>}{auth.user&&cloudSave.unsaved&&<button className="text-link" disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save now")}</button>}</div>}
+        {auth.user&&view!=='scenarios'&&view!=='overview'&&<div className="account-safety"><button className="text-link" disabled={privacyBusy} onClick={()=>void changeVisibility(false).catch(e=>setToast(e instanceof Error?e.message:'Privacy withdrawal failed. Retry.'))}>{tr(privacyBusy?'Withdrawing…':'Make my profile private')}</button></div>}
+        {canDisplayProfile&&!needsSetup&&view!=='scenarios'&&(view!=='overview'||auth.user&&(errors.length>0||!profileValid||!!editingId||cloudSave.status==='saving'||cloudSave.unsaved||cloudSave.status==='error'))&&<div className="save-status" role="status">{auth.user&&<span>{tr(errors.length||!profileValid?'Inputs need attention':editingId?'Editing · leave this field to save':cloudSave.status==='saving'?'Saving…':cloudSave.unsaved?'Unsaved changes':cloudSave.status==='error'?'Save needs attention':'Saved to your account')}</span>}{auth.user&&cloudSave.unsaved&&<button className="text-link" disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save now")}</button>}</div>}
         {cloudSave.storageWarning&&<div className="cloud-error" role="status"><span>{tr(cloudSave.storageWarning)}</span><button className="text-link" onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button></div>}
         {localSaveError && !auth.user && <div className="cloud-error" role="alert"><span>{tr("Your changes are only in memory. Device storage is unavailable. Keep this page open or sign in to save.")}</span><Link href="/sign-in">{tr("Sign in")}</Link></div>}
         {auth.error && <div className="cloud-error" role="alert"><span>{tr(auth.error)}</span><button onClick={auth.retry}>{tr("Retry")}</button></div>}

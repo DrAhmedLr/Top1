@@ -5498,5 +5498,17 @@
   "View my goals": {
     "fr": "Voir mes objectifs",
     "ar": "عرض أهدافي"
+  },
+  "17 optional measurements. Retired records stay in your export and do not affect current ranks.": {
+    "fr": "17 mesures facultatives. Les anciennes mesures restent dans votre export sans modifier votre classement actuel.",
+    "ar": "17 قياسًا اختياريًا. تبقى القياسات المؤرشفة في ملف التصدير دون التأثير على تصنيفاتك الحالية."
+  },
+  "Heart rate variability (RMSSD)": {
+    "fr": "Variabilité cardiaque (RMSSD)",
+    "ar": "تباين معدل القلب (RMSSD)"
+  },
+  "Enter RMSSD in milliseconds from the same compatible device. Measure at a consistent time and posture after resting; use a consistent recording duration and compare your own trend. Do not mix RMSSD with SDNN or a wearable readiness score. Higher is not always better.": {
+    "fr": "Saisissez le RMSSD en millisecondes avec le même appareil compatible. Mesurez au repos, à heure et posture constantes, avec la même durée d’enregistrement. Suivez votre tendance personnelle. Ne confondez pas RMSSD, SDNN et score de préparation. Plus élevé ne signifie pas toujours meilleur.",
+    "ar": "أدخل RMSSD بالمللي ثانية باستخدام الجهاز المتوافق نفسه. قِس بعد الراحة وفي وقت ووضعية ومدة تسجيل ثابتة، وقارن اتجاهك الشخصي. لا تخلط RMSSD مع SDNN أو درجة الجاهزية. الارتفاع لا يعني دائمًا نتيجة أفضل."
   }
 }

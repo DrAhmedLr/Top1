@@ -81,7 +81,7 @@ const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map
 const assignments: Record<PillarId, readonly (readonly string[])[]> = {
   bodymarkers: [ ['body_fat','waist_height_ratio'], [], [] ],
   strength: [ ['sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','vo2_max'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','sprint_10m'] ],
-  recovery: [ ['total_sleep','rhr'], [], [] ],
+  recovery: [ ['total_sleep','rhr'], ['hrv'], [] ],
 };
 const additions: Row[] = [
  ['grip_combined','Combined handgrip strength','kg','Reference pending',1,'linear',0,1,0,240,'NHANES muscle strength protocol','Sum the best of three trials from each hand. This is distinct from single-hand grip.'],
@@ -95,6 +95,7 @@ const additions: Row[] = [
 ];
 const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:r[0]==='pushups'?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
 const specialProof: Record<string, Partial<Metric['proofData']>> = {
+ hrv:{study:'Laborde et al. 2017 · HRV measurement recommendations',url:'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00213/full',sampleSize:'Measurement guidance; no calibrated population ranking is loaded.',instructions:'Enter RMSSD in milliseconds from the same compatible device. Measure at a consistent time and posture after resting; use a consistent recording duration and compare your own trend. Do not mix RMSSD with SDNN or a wearable readiness score. Higher is not always better.'},
  rhr:{study:'American Heart Association · resting heart rate',url:'https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse',instructions:'Record a representative seven-day average while awake, rested and in the same posture. Medication, illness, stress and training affect this reading. Lower is not always better; the game plateau is a product choice, not a health target.'},
  cmj:{study:'Hoffmann et al. 2019 · CHMS jump-height Table 4',url:'https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002-eng.htm',sampleSize:'CHMS cycle 5; age/sex-specific Canadian population norms, ages 18–69 in TOP1. Exact Leonardo protocol required.',instructions:'Select the measurement protocol. Canadian comparison requires a Leonardo Mechanograph, arm swing and the highest of three valid jumps. Wall, app and hands-on-hips results receive only an illustrative game estimate.'},
  grip_strength:{study:'Tomkinson et al. · International grip norms · 2025',sampleSize:'2,405,863 adults from 69 countries and regions. Published smoothed, population-weighted norms; not a worldwide probability sample.',url:'https://doi.org/10.1016/j.jshs.2024.101014',instructions:'For the published comparison, use the international hydraulic seated protocol: both hands, three trials each, highest single result. Other grip protocols stay available for tracking; do not enter the sum of both hands here.'},
@@ -116,7 +117,7 @@ export const metrics: Metric[] = [...originalMetrics,...added].map(m=>{
  const pillar=assignment?.pillar ?? (m.id==='bp_systolic'?'bodymarkers':'strength');
  const count=assignments[pillar].flat().length;
  return {...m,pillar,tier:assignment?.tier??'tier2_standard',archived,weight:archived?0:1/count,scoringEligible:!archived&&m.scoringEligible,
-   name:m.id==='reaction_time'?'Reaction time':m.name,
+   name:m.id==='hrv'?'Heart rate variability (RMSSD)':m.id==='reaction_time'?'Reaction time':m.name,
    optimal:m.id==='sauna_minutes'?[60,90]:m.id==='cold_plunge_minutes'?[11,15]:m.optimal,
    proofData:{...m.proofData,...specialProof[m.id]},
  } as Metric;

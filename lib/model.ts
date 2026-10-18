@@ -1,5 +1,5 @@
 // The model version changes whenever scoring semantics or eligible inputs change.
-export const MODEL_VERSION = '6.3-focused16-experimental';
+export const MODEL_VERSION = '6.4-recovery17-experimental';
 // Prior V2-signed snapshots remain dated historical calculations, never current reassessments.
 export const SUPPORTED_SUMMARY_VERSIONS = new Set([MODEL_VERSION, '6.2-friend2022-experimental', '6.1-source-gated-experimental', '6.0-capacity-experimental', '5.1-protocol-experimental','5.0-triad-experimental']);
 export const TRACKING_ONLY_METRICS = new Set([
