@@ -40,6 +40,6 @@ test('CPET context round-trips in the persisted protocol; repeats require new re
  const repeat=repeatDetails(details.vo2_max,'2026-10-14T12:00:00Z');assert.equal(repeat.protocol?.peakRer,undefined);assert.equal(repeat.protocol?.referencePopulation,undefined);assert.equal(repeat.ageAtMeasurement,undefined);
 });
 test('calibration coverage cannot turn provisional parameters into validated population ranks',()=>{
- const inventory=calibrationInventory();assert.equal(inventory.length,16);assert.equal(inventory.filter(c=>c.status==='published-test-reference').length,3);assert.ok(inventory.every(c=>!c.populationCalibrated));
+ const inventory=calibrationInventory();assert.equal(inventory.length,17);assert.equal(inventory.filter(c=>c.status==='published-test-reference').length,3);assert.ok(inventory.every(c=>!c.populationCalibrated));
  const r=evaluate({vo2_max:45,pushups:30,sit_to_stand:20},d,details,{now});assert.equal(r.publishedReferenceCount,1);assert.equal(r.provisionalReferenceCount,2);assert.equal(r.ready,true);
 });

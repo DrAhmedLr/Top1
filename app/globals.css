@@ -558,3 +558,17 @@ body{background:#fff}.workspace-main{max-width:1440px}.card{box-shadow:0 6px 28p
 .goal-oriented-potential .standing-hero{position:sticky;top:95px;height:auto;min-height:690px}
 .goal-oriented-potential .standing-aura{pointer-events:none}
 @media(max-width:760px){.goal-oriented-potential .standing-hero{position:relative;top:auto;min-height:0}.objective-card{padding:14px}.objective-card-heading>.metric-title{font-size:12px}.goal-projection>strong{font-size:20px}.goal-projection{align-items:flex-start}}
+
+/* Category colors stay consistent across measurements, objectives and coverage. */
+:is(.objective-card,.measurement-card,.category-block,.coverage-category,.coverage-suggestions>button).bodymarkers{--card-tint:#d9f8e9;--card-end:#f5fff9;--card-edge:#b7e7d0;--card-accent:#047857}
+:is(.objective-card,.measurement-card,.category-block,.coverage-category,.coverage-suggestions>button).strength{--card-tint:#ffe0e5;--card-end:#fff7f8;--card-edge:#f5c4ce;--card-accent:#be123c}
+:is(.objective-card,.measurement-card,.category-block,.coverage-category,.coverage-suggestions>button).recovery{--card-tint:#dcecff;--card-end:#f6faff;--card-edge:#bdd7f5;--card-accent:#1d4ed8}
+:is(.objective-card,.measurement-card,.category-block,.coverage-category,.coverage-suggestions>button):is(.bodymarkers,.strength,.recovery){background:linear-gradient(125deg,var(--card-tint),var(--card-end) 82%);border-color:var(--card-edge)}
+.coverage-category[aria-pressed=true]{outline:2px solid var(--card-accent);outline-offset:2px}
+.coverage-category progress{accent-color:var(--card-accent)}
+/* Navigation clears the viewport while reading and returns on upward scroll. */
+.app-shell>.sidebar,.app-shell>.main-wrap>.topbar{transition:transform .2s ease}
+.navigation-hidden>.sidebar{transform:translateY(-110%);pointer-events:none}
+.navigation-hidden>.sidebar:has(:focus-visible){transform:none;pointer-events:auto}
+@media(max-width:760px){.app-shell>.main-wrap>.topbar{position:sticky;top:0;z-index:31}.navigation-hidden>.sidebar{transform:translateY(110%)}.navigation-hidden>.main-wrap>.topbar{transform:translateY(-110%);pointer-events:none}.navigation-hidden>.sidebar:has(:focus-visible),.navigation-hidden>.main-wrap>.topbar:has(:focus-visible){transform:none;pointer-events:auto}}
+@media(prefers-reduced-motion:reduce){.app-shell>.sidebar,.app-shell>.main-wrap>.topbar{transition:none}}

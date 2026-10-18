@@ -16,11 +16,11 @@ test('retired thermal inputs cannot affect rankings',()=>{const a=benchmarkGame(
 
 test('a recorded sprint can improve through a lower time without changing unrecorded inputs',()=>{const r=gameScenario({sprint_10m:2.5},d,35,'easier');assert.equal(r.eligibleCount,1);assert.equal(r.goal.targets[0].id,'sprint_10m');assert.ok(r.goal.targets[0].target<2.5);assert.ok(r.reached);});
 
-test('all 16 active metrics and every populated category can reach full game credit',()=>{
+test('all 17 active metrics and every populated category can reach full game credit',()=>{
  for(const sex of ['male','female','unselected'] as const)for(const age of [18,35,75,100]){
   const profile={age,sex},values:Record<string,number>={};
   for(const m of activeMetrics){let best=-Infinity;for(let i=0;i<=1000;i++){let x=m.min+(m.max-m.min)*i/1000;if(['pushups','sit_to_stand'].includes(m.id))x=Math.round(x);const r=metricGameEstimate(m.id,x,profile);if(r&&r.z>best){best=r.z;values[m.id]=x;}}assert.equal(best,3,m.id);}
-  const r=benchmarkGame(values,profile);assert.equal(r.total,'1%');assert.ok(Object.values(r.sections).every(s=>s==='1%'));assert.equal(r.rows.length,16);
+  const r=benchmarkGame(values,profile);assert.equal(r.total,'1%');assert.ok(Object.values(r.sections).every(s=>s==='1%'));assert.equal(r.rows.length,17);
  }
 });
 test('best-range sleep and resting heart rate do not drag down an elite snapshot',()=>{const a=benchmarkGame({pushups:100},d),b=benchmarkGame({pushups:100,total_sleep:480,rhr:55},d);assert.equal(a.total,'1%');assert.equal(b.total,'1%');assert.equal(metricGameEstimate('total_sleep',480,d)?.top,'1%');assert.equal(metricGameEstimate('rhr',55,d)?.top,'1%');assert.ok(metricGameEstimate('total_sleep',900,d)!.z<3);assert.ok(metricGameEstimate('rhr',25,d)!.z<3);});

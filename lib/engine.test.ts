@@ -6,10 +6,10 @@ const d:Demographics={age:35,sex:'male',weight:80,height:180};
 const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches' as const},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 const m=(id:string)=>metrics.find(m=>m.id===id)!;
 const near=(a:number,b:number,t=1e-6)=>assert.ok(Math.abs(a-b)<t,`${a} ≠ ${b}`);
-test('16 active measurements, normalized weights and preserved legacy inputs',()=>{
- assert.equal(activeMetrics.length,16);assert.equal(metrics.length,40);assert.equal(new Set(metrics.map(m=>m.id)).size,40);
+test('17 active measurements, normalized weights and preserved legacy inputs',()=>{
+ assert.equal(activeMetrics.length,17);assert.equal(metrics.length,40);assert.equal(new Set(metrics.map(m=>m.id)).size,40);
  for(const p of new Set(metrics.map(m=>m.pillar)))near(metrics.filter(m=>m.pillar===p).reduce((s,m)=>s+m.weight,0),1);
- assert.equal(activeMetrics.filter(m=>!m.scoringEligible).length,5);
+ assert.equal(activeMetrics.filter(m=>!m.scoringEligible).length,6);
 });
 test('missing/invalid entries cannot change the experimental index or measured coverage',()=>{
  const values={grip_strength:45,sit_to_stand:25,pushups:25};const a=evaluate(values,d),b=evaluate({...values,apob:undefined,lpa:NaN,cmj:-10},d);
@@ -87,7 +87,7 @@ test('legacy observations survive normalization but cannot enter triad scoring o
 });
 
 test('tier assignments follow the brief and omit no active metric',()=>{
- const expected={bodymarkers:[2,0,0],strength:[3,3,6],recovery:[2,0,0]};
+ const expected={bodymarkers:[2,0,0],strength:[3,3,6],recovery:[2,1,0]};
  for(const p of pillars)for(const [i,t] of accessibilityTiers.entries())assert.equal(activeMetrics.filter(m=>m.pillar===p.id&&m.tier===t.id).length,expected[p.id][i]);
  assert.equal(m('sauna_minutes').archived,true);assert.equal(m('thermal_hrv_rebound').archived,true);
  assert.equal(m('vo2_max').tier,'tier2_standard');
