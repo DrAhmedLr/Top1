@@ -40,11 +40,13 @@ export function weeklyCoach(goal:ScenarioSelection,values:Values,raw:CoachPrefer
  const unfinished=targets.filter(g=>!g.reached),selected=(unfinished.length?unfinished:targets).slice(0,2);
  const days=prefs.days.reduce<number[]>((kept,d)=>{if(!kept.length||d-kept[kept.length-1]>1)kept.push(d);return kept;},[]);
  if(days.length>1&&days[0]===1&&days.at(-1)===7)days.pop();
- return {prefs,adherence,ease,minutes,targets,selected,days,allReached:targets.length>0&&targets.every(g=>g.reached)};
+ const baselines=activeMetrics.filter(m=>Array.isArray(goal.baselineIds)&&goal.baselineIds.includes(m.id)&&!valid(m,values[m.id])).slice(0,3);
+ return {prefs,adherence,ease,minutes,targets,selected,baselines,days,allReached:targets.length>0&&targets.every(g=>g.reached)};
 }
 export function appendCoachPlan(plan:WeeklyPlan,coach:ReturnType<typeof weeklyCoach>,label:(kind:string,name:string,minutes:number)=>string,id:()=>string):WeeklyPlan{
- if(!coach.selected.length)throw new Error('Update your measurements or choose a new scenario first.');
+ if(!coach.selected.length&&!coach.baselines.length)throw new Error('Update your measurements or choose a new scenario first.');
  const tasks=coach.selected.map(g=>({id:`coach-${g.id}`,label:label(g.id,g.name,coach.selected.length>1?Math.max(5,Math.floor(coach.minutes/2)):coach.minutes).slice(0,160),days:g.kind==='habit'?[1,2,3,4,5,6,7]:coach.days,completed:plan.tasks.find(t=>t.id===`coach-${g.id}`)?.completed??[]}));
+ for(const m of coach.baselines)tasks.push({id:`coach-baseline-${m.id}`,label:label('baseline',m.name,0).slice(0,160),days:[1],completed:plan.tasks.find(t=>t.id===`coach-baseline-${m.id}`)?.completed??[]});
  tasks.push({id:'coach-review',label:label('review','',coach.minutes).slice(0,160),days:[7],completed:plan.tasks.find(t=>t.id==='coach-review')?.completed??[]});
  const preserved=plan.tasks.filter(t=>!t.id.startsWith('coach-'));
  if(preserved.length+tasks.length>8)throw new Error('Make room in your plan before adding scenario steps.');

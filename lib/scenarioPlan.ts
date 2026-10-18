@@ -1,5 +1,5 @@
 import type {WeeklyPlan,PlanTask} from './program';
-export interface ScenarioSelection{gameVersion?:string;maintenance?:boolean;route?:string;targetTop?:number;projectedTop?:string;preferences?:import('./weeklyCoach').CoachPreferences;modelTarget:number;targets:{id:string;name:string;unit:string;current:number;target:number}[]}
+export interface ScenarioSelection{baselineIds?:string[];gameVersion?:string;maintenance?:boolean;route?:string;targetTop?:number;projectedTop?:string;preferences?:import('./weeklyCoach').CoachPreferences;modelTarget:number;targets:{id:string;name:string;unit:string;current:number;target:number}[]}
 /** Add editable routine suggestions, never promise an adaptation rate or overwrite a plan. */
 export function addScenarioSteps(plan:WeeklyPlan,goal:ScenarioSelection,labels:(kind:'practice'|'retest'|'review',name:string,target:string)=>string,id:()=>string):WeeklyPlan{
  if(!Number.isFinite(goal.modelTarget)||goal.modelTarget<0||goal.modelTarget>100||!goal.targets.length)throw new Error('Choose an attainable scenario first.');
