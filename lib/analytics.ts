@@ -1,7 +1,7 @@
 'use client';
 import type {PostHog} from 'posthog-js';
 import {metrics} from './registry';
-export const analyticsViews=['overview','measurements','progress','scenarios','profile','methodology','sign-in','sign-up','forgot-password','reset-password','account-password','share','privacy'] as const;
+export const analyticsViews=['overview','measurements','progress','scenarios','profile','settings','methodology','sign-in','sign-up','forgot-password','reset-password','account-password','share','privacy'] as const;
 export type AnalyticsView=typeof analyticsViews[number];
 export const analyticsEvents=['app_viewed','onboarding_started','onboarding_completed','signup_requested','signup_confirmed','login_succeeded','recovery_requested','measurement_saved','measurement_cleared','profile_migrated','public_link_shared','simulator_used','program_saved','program_task_completed'] as const;
 export type AnalyticsEvent=typeof analyticsEvents[number];
