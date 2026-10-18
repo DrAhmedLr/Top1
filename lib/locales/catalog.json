@@ -5302,5 +5302,13 @@
   "Estimated one-rep max ÷ body weight": {
     "fr": "Maximum estimé sur une répétition ÷ poids du corps",
     "ar": "أقصى وزن مقدّر لتكرار واحد ÷ وزن الجسم"
+  },
+  "Stand beside a stable support. Lift one foot, find your balance, then close your eyes and start timing. Stop when the foot touches down, your eyes open or you need support. Use the same leg and setup each time.": {
+    "fr": "Tenez-vous près d’un appui stable. Levez un pied, trouvez votre équilibre, puis fermez les yeux et démarrez le chronomètre. Arrêtez lorsque le pied touche le sol, que vos yeux s’ouvrent ou qu’un appui devient nécessaire. Gardez la même jambe et les mêmes conditions.",
+    "ar": "قف قرب دعامة ثابتة. ارفع قدمًا وثبّت توازنك ثم أغلق عينيك وابدأ التوقيت. توقف عند لمس القدم للأرض أو فتح العينين أو الحاجة إلى دعم. استخدم نفس الساق والإعداد كل مرة."
+  },
+  "Enter kilograms and 1–10 repetitions; body weight comes from your profile.": {
+    "fr": "Saisissez les kilogrammes et 1 à 10 répétitions ; le poids corporel vient de votre profil.",
+    "ar": "أدخل الكيلوغرامات ومن 1 إلى 10 تكرارات؛ يُؤخذ وزن الجسم من ملفك الشخصي."
   }
 }
