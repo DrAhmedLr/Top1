@@ -520,3 +520,41 @@ body{background:#fff}.workspace-main{max-width:1440px}.card{box-shadow:0 6px 28p
 .potential-baselines .metric-title{font-size:12px;min-width:0}
 .potential-route-choices button small{display:block;font-size:9px;line-height:1.4;margin:5px 0;font-weight:400}
 @media(max-width:760px){.potential-coverage{padding:16px}.coverage-categories,.coverage-suggestions{grid-template-columns:1fr}.coverage-heading{align-items:flex-start}.coverage-heading h2{font-size:17px}.coverage-heading>strong{font-size:22px}.potential-route-choices button{padding:8px 5px}.potential-route-choices button>span{font-size:10px}.potential-baselines button{flex-wrap:wrap}}
+
+/* A goal board, independent of the stored weekly routine. */
+.goal-board-intro{font-size:12px;line-height:1.6;color:#64748b;margin:0 0 14px}
+.objective-grid{display:grid;gap:12px}
+.objective-card{padding:16px;border:1px solid #e2e8f0;border-radius:16px;background:linear-gradient(125deg,#f8faff,#fff);min-width:0}
+.objective-card.bodymarkers{background:linear-gradient(125deg,#effcf7,#fff);border-color:#d8efe4}
+.objective-card.recovery{background:linear-gradient(125deg,#f5f3ff,#fff);border-color:#e7dffe}
+.objective-card-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.objective-card-heading>.metric-title{font-size:13px;font-weight:650;color:#334155;min-width:0}
+.goal-change{display:flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid #ddd6fe;background:#fff;border-radius:8px;font-size:10px;color:#7547d8;cursor:pointer;flex-shrink:0}
+.objective-rating{display:flex;align-items:center;justify-content:space-between;margin-top:16px;color:#94a3b8}
+.objective-rating>span{font-size:10px;color:#64748b;display:grid;gap:4px}
+.objective-rating>span:last-child{text-align:end}
+.objective-rating strong{font-size:21px;line-height:1.2;color:#475569}
+.objective-rating>span:last-child strong{color:#7c3aed}
+.objective-values{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:11px;font-size:12px;color:#64748b}
+.objective-values>label{display:flex;align-items:center;gap:6px;min-width:0}
+.objective-values input{width:87px;min-height:34px;border:1px solid #d8ccf3;background:#fff;border-radius:8px;padding:6px 8px;text-align:center;font-size:14px;font-weight:700;color:#6d28d9}
+.objective-values small{font-size:10px;max-width:65px}
+.objective-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:10px;color:#64748b}
+.objective-card-footer>button{display:flex;gap:4px;align-items:center;background:none;border:0;padding:3px 0;color:#6d28d9;cursor:pointer;font-size:10px}
+.goal-achieved{display:flex;gap:4px;align-items:center;color:#047857}
+.goal-metric-picker{padding:12px;margin-top:12px;border:1px solid #ddd6fe;border-radius:10px;background:white;display:grid;gap:7px;font-size:11px;color:#64748b}
+.goal-metric-picker select{width:100%;max-width:100%;min-width:0;min-height:36px;border:1px solid #e2e8f0;border-radius:7px;background:#fff;padding:7px;color:#334155;font-size:12px}
+.goal-metric-picker>button{justify-self:start;border:0;background:none;color:#7c3aed;padding:4px 0;cursor:pointer;font-size:11px}
+.objective-baseline{padding-top:15px}
+.objective-baseline-badge{font-size:10px;color:#7c3aed;background:#ede9fe;border-radius:6px;padding:3px 6px}
+.objective-baseline h3{font-size:17px;margin:10px 0 5px;color:#334155}
+.objective-baseline p{font-size:11px;line-height:1.6;color:#64748b;margin:0 0 12px}
+.objective-baseline .secondary-button{font-size:11px;padding:8px 10px;min-height:34px}
+.goal-projection{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid #e2e8f0;padding-top:15px;margin-top:16px;color:#475569;font-size:12px}
+.goal-projection small{display:block;font-size:10px;color:#64748b;line-height:1.5;margin-top:4px;max-width:320px}
+.goal-projection>strong{font-size:23px;color:#7c3aed;white-space:nowrap}
+.goal-change:focus-visible,.goal-metric-picker button:focus-visible,.objective-card-footer button:focus-visible{outline:2px solid #8b5cf6;outline-offset:3px}
+.goal-oriented-potential .potential-dashboard{align-items:start}
+.goal-oriented-potential .standing-hero{position:sticky;top:95px;height:auto;min-height:690px}
+.goal-oriented-potential .standing-aura{pointer-events:none}
+@media(max-width:760px){.goal-oriented-potential .standing-hero{position:relative;top:auto;min-height:0}.objective-card{padding:14px}.objective-card-heading>.metric-title{font-size:12px}.goal-projection>strong{font-size:20px}.goal-projection{align-items:flex-start}}

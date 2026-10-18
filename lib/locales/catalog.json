@@ -5402,5 +5402,101 @@
   "This area is complete. Choose another area to add a measurement.": {
     "fr": "Ce domaine est complet. Choisissez-en un autre pour ajouter une mesure.",
     "ar": "هذا الجانب مكتمل. اختر جانبًا آخر لإضافة قياس."
+  },
+  "Your goals": {
+    "fr": "Vos objectifs",
+    "ar": "أهدافك"
+  },
+  "Loading your goals…": {
+    "fr": "Chargement de vos objectifs…",
+    "ar": "جارٍ تحميل أهدافك…"
+  },
+  "Change all goals": {
+    "fr": "Changer tous les objectifs",
+    "ar": "غيّر جميع الأهداف"
+  },
+  "Change goal: {metric}": {
+    "fr": "Changer l’objectif : {metric}",
+    "ar": "غيّر الهدف: {metric}"
+  },
+  "Change": {
+    "fr": "Changer",
+    "ar": "تغيير"
+  },
+  "Choose a different goal": {
+    "fr": "Choisir un autre objectif",
+    "ar": "اختر هدفًا آخر"
+  },
+  "Suggest another": {
+    "fr": "Proposer un autre",
+    "ar": "اقترح هدفًا آخر"
+  },
+  "Current": {
+    "fr": "Actuel",
+    "ar": "الحالي"
+  },
+  "Goal": {
+    "fr": "Objectif",
+    "ar": "الهدف"
+  },
+  "Target for {metric}": {
+    "fr": "Cible pour {metric}",
+    "ar": "الهدف لـ {metric}"
+  },
+  "Enter a valid target within the measurement range.": {
+    "fr": "Saisissez une cible valide dans la plage de mesure.",
+    "ar": "أدخل هدفًا صالحًا ضمن نطاق القياس."
+  },
+  "Goal reached · maintain it or change your target": {
+    "fr": "Objectif atteint · maintenez-le ou changez de cible",
+    "ar": "تحقق الهدف · حافظ عليه أو غيّر هدفك"
+  },
+  "Edit the target to make it yours": {
+    "fr": "Ajustez la cible selon votre objectif",
+    "ar": "عدّل القيمة لتناسب هدفك"
+  },
+  "Update result": {
+    "fr": "Actualiser le résultat",
+    "ar": "حدّث النتيجة"
+  },
+  "First objective": {
+    "fr": "Premier objectif",
+    "ar": "الهدف الأول"
+  },
+  "Find your starting point": {
+    "fr": "Trouvez votre point de départ",
+    "ar": "اكتشف نقطة بدايتك"
+  },
+  "Record this measurement to reveal your rating and set a personal target.": {
+    "fr": "Renseignez cette mesure pour découvrir votre classement et fixer une cible personnelle.",
+    "ar": "سجّل هذا القياس لمعرفة تصنيفك وتحديد هدف شخصي."
+  },
+  "Choose what you want to improve. Change any card or adjust its target.": {
+    "fr": "Choisissez ce que vous voulez améliorer. Changez une carte ou ajustez sa cible.",
+    "ar": "اختر ما تريد تحسينه. غيّر أي بطاقة أو عدّل هدفها."
+  },
+  "With these goals": {
+    "fr": "Avec ces objectifs",
+    "ar": "مع هذه الأهداف"
+  },
+  "Based on recorded metrics. New measurements may change this preview.": {
+    "fr": "Basé sur les mesures renseignées. De nouvelles mesures peuvent modifier cet aperçu.",
+    "ar": "بناءً على القياسات المسجلة. قد تغيّر القياسات الجديدة هذه المعاينة."
+  },
+  "Your goals could not be saved on this device.": {
+    "fr": "Vos objectifs n’ont pas pu être enregistrés sur cet appareil.",
+    "ar": "تعذر حفظ أهدافك على هذا الجهاز."
+  },
+  "How goals work": {
+    "fr": "Comment fonctionnent les objectifs",
+    "ar": "كيف تعمل الأهداف"
+  },
+  "Goals are editable what-if targets, not a training program or a promised timeline. Ratings use the game model, not a validated world rank. Unmeasured metrics stay out of the combined preview until you record them.": {
+    "fr": "Les objectifs sont des cibles hypothétiques modifiables, pas un programme d’entraînement ni un délai promis. Les classements utilisent le modèle du jeu, pas un classement mondial validé. Les mesures non renseignées restent exclues de l’aperçu global.",
+    "ar": "الأهداف قيم افتراضية قابلة للتعديل وليست برنامج تدريب أو وعدًا بمدة محددة. تعتمد التصنيفات على نموذج اللعبة وليست ترتيبًا عالميًا معتمدًا. تبقى القياسات غير المسجلة خارج المعاينة الإجمالية حتى تسجّلها."
+  },
+  "View my goals": {
+    "fr": "Voir mes objectifs",
+    "ar": "عرض أهدافي"
   }
 }
