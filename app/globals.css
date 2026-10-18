@@ -556,4 +556,5 @@ body{background:#fff}.workspace-main{max-width:1440px}.card{box-shadow:0 6px 28p
 .goal-change:focus-visible,.goal-metric-picker button:focus-visible,.objective-card-footer button:focus-visible{outline:2px solid #8b5cf6;outline-offset:3px}
 .goal-oriented-potential .potential-dashboard{align-items:start}
 .goal-oriented-potential .standing-hero{position:sticky;top:95px;height:auto;min-height:690px}
-@media(max-width:760px){.goal-oriented-potential .standing-hero{position:static;min-height:0}.objective-card{padding:14px}.objective-card-heading>.metric-title{font-size:12px}.goal-projection>strong{font-size:20px}.goal-projection{align-items:flex-start}}
+.goal-oriented-potential .standing-aura{pointer-events:none}
+@media(max-width:760px){.goal-oriented-potential .standing-hero{position:relative;top:auto;min-height:0}.objective-card{padding:14px}.objective-card-heading>.metric-title{font-size:12px}.goal-projection>strong{font-size:20px}.goal-projection{align-items:flex-start}}
