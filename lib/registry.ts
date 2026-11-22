@@ -5,6 +5,11 @@ export const pillars = [
   { id: 'recovery', name: 'Recovery', short: 'Recovery', weight: .24, color: '#3b82f6', description: 'Sleep duration and rested heart-rate observations.' },
 ] as const;
 export type PillarId = 'bodymarkers' | 'strength' | 'recovery';
+export const pillarNames = {
+  bodymarkers: 'Body markers',
+  strength: 'Strength & fitness',
+  recovery: 'Recovery',
+} satisfies Record<PillarId, string>;
 export type AccessibilityTier = 'tier1_everyday' | 'tier2_standard' | 'tier3_precision';
 export const accessibilityTiers = [
   {id:'tier1_everyday',name:'Everyday',label:'Tier 1 · Express / Everyday',description:'Simple observations and accessible tests.'},

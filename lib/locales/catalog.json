@@ -199,10 +199,6 @@
     "fr": "Indique ton poids lors du test (25 à 350 kg).",
     "ar": "سجّل وزن جسمك عند الاختبار (٢٥ إلى ٣٥٠ كغ)."
   },
-  "Your recorded tests are at their current top tier. Add another baseline or update a result.": {
-    "fr": "Vos tests enregistrés sont au meilleur palier actuel. Ajoutez une mesure ou actualisez un résultat.",
-    "ar": "اختباراتك المسجلة في أعلى مستوياتها الحالية. أضف قياسًا أو حدّث نتيجة."
-  },
   "Customize your goals": {
     "fr": "Personnaliser vos objectifs",
     "ar": "خصّص أهدافك"
@@ -450,10 +446,6 @@
   "Methods & evidence": {
     "fr": "Méthodes et sources",
     "ar": "المنهجية والأدلة"
-  },
-  "Download calculation report": {
-    "fr": "Télécharger le rapport de calcul",
-    "ar": "تنزيل تقرير الحساب"
   },
   "YOUR RECORDED DATA": {
     "fr": "VOS DONNÉES ENREGISTRÉES",
@@ -1775,10 +1767,6 @@
     "fr": "FRIEND 2022 · tableaux 2 et 3",
     "ar": "FRIEND 2022 · الجدولان 2 و3"
   },
-  "Protocol and population match are self-reported. This individual-test comparison does not validate the experimental composite.": {
-    "fr": "Le protocole et la compatibilité de population sont déclarés par l’utilisateur. Cette comparaison individuelle ne valide pas le composite expérimental.",
-    "ar": "البروتوكول والتوافق مع العينة مُبلّغ عنهما ذاتيًا. لا تعتمد هذه المقارنة الفردية المؤشر المركّب التجريبي."
-  },
   "Record a valid VO₂ measurement; leaving it blank is fine.": {
     "fr": "Enregistrez une mesure VO₂ valide ; vous pouvez aussi laisser ce champ vide.",
     "ar": "سجّل قياس VO₂ صالحًا؛ ويمكنك ترك الحقل فارغًا."
@@ -1794,26 +1782,6 @@
   "Above the published 90th-percentile threshold": {
     "fr": "Au-dessus du seuil publié du 90e percentile",
     "ar": "أعلى من عتبة الرتبة المئينية التسعين المنشورة"
-  },
-  "Your age & sex peer benchmark": {
-    "fr": "Votre référence selon l’âge et le sexe",
-    "ar": "مرجع أقرانك بحسب العمر والجنس"
-  },
-  "Peer percentile: pending calibration.": {
-    "fr": "Percentile parmi les pairs : calibration en attente.",
-    "ar": "الرتبة المئينية بين الأقران: بانتظار المعايرة."
-  },
-  "Compare physical performance with adults in the same age and reference-sex group. A representative peer reference measured with the same tests is not connected yet.": {
-    "fr": "Comparez les capacités physiques avec des adultes du même âge et sexe de référence. Une référence représentative utilisant les mêmes tests n’est pas encore connectée.",
-    "ar": "قارن الأداء البدني مع بالغين من العمر وجنس المرجع نفسيهما. لم يُربط بعد مرجع تمثيلي مقاس بالاختبارات نفسها."
-  },
-  "Review the proposed benchmark battery": {
-    "fr": "Voir la batterie de tests proposée",
-    "ar": "مراجعة مجموعة الاختبارات المقترحة"
-  },
-  "This battery measures selected physical capacities. It does not rate every aspect of human ability. All measurements remain optional; incomplete batteries do not receive a comparative rank. Absolute adult comparisons are separate from age/sex peer rankings.": {
-    "fr": "Cette batterie mesure certaines capacités physiques, pas toutes les aptitudes humaines. Toutes les mesures restent facultatives ; une batterie incomplète n’a pas de rang comparatif. Les comparaisons adultes absolues sont distinctes des rangs selon l’âge et le sexe.",
-    "ar": "تقيس هذه المجموعة قدرات بدنية محددة وليس كل جوانب القدرة البشرية. كل القياسات اختيارية، ولا يُمنح ترتيب مقارن للمجموعة غير المكتملة. المقارنات المطلقة للبالغين منفصلة عن ترتيب الأقران حسب العمر والجنس."
   },
   "Record a test": {
     "fr": "Enregistrer un test",
@@ -1867,14 +1835,6 @@
     "fr": "Aujourd’hui",
     "ar": "اليوم"
   },
-  "No actions scheduled today.": {
-    "fr": "Aucune action prévue aujourd’hui.",
-    "ar": "لا توجد أنشطة مجدولة اليوم."
-  },
-  "Save your routine before recording completions.": {
-    "fr": "Enregistrez votre routine avant de cocher les actions terminées.",
-    "ar": "احفظ روتينك قبل تسجيل الأنشطة المكتملة."
-  },
   "Edit your routine": {
     "fr": "Modifier votre routine",
     "ar": "تعديل روتينك"
@@ -1890,10 +1850,6 @@
   "New action": {
     "fr": "Nouvelle action",
     "ar": "نشاط جديد"
-  },
-  "An action you want to repeat": {
-    "fr": "Une action à répéter",
-    "ar": "نشاط تريد تكراره"
   },
   "Optional routine examples": {
     "fr": "Exemples facultatifs de routine",
@@ -1931,14 +1887,6 @@
     "fr": "Commencer le suivi daté",
     "ar": "بدء متابعة مؤرخة"
   },
-  "Start tracking from today. Earlier check-ins are retained; earlier schedules are unknown.": {
-    "fr": "Commencez le suivi aujourd’hui. Les suivis antérieurs sont conservés ; leurs programmes sont inconnus.",
-    "ar": "ابدأ المتابعة من اليوم. تُحفظ التسجيلات السابقة، وجداولها السابقة غير معروفة."
-  },
-  "Earlier schedule details were not recorded. Those days are excluded from adherence totals.": {
-    "fr": "Les programmes antérieurs n’étaient pas enregistrés. Ces jours sont exclus des totaux de suivi.",
-    "ar": "لم تُسجّل تفاصيل الجداول السابقة، لذلك تُستبعد أيامها من إجمالي الالتزام."
-  },
   "Routine history": {
     "fr": "Historique de routine",
     "ar": "سجل الروتين"
@@ -1950,18 +1898,6 @@
   "Unchecked": {
     "fr": "Non coché",
     "ar": "غير محدد"
-  },
-  "· retained legacy check-in": {
-    "fr": "· ancien suivi conservé",
-    "ar": "· تسجيل سابق محفوظ"
-  },
-  "No recorded check-ins yet.": {
-    "fr": "Aucun suivi enregistré pour le moment.",
-    "ar": "لا توجد تسجيلات متابعة بعد."
-  },
-  "Archived actions keep their history. The account export includes the complete timeline.": {
-    "fr": "Les actions archivées gardent leur historique. L’export du compte inclut la chronologie complète.",
-    "ar": "تحتفظ الأنشطة المؤرشفة بسجلها. يشمل تصدير الحساب التسلسل الزمني الكامل."
   },
   "Explore hypothetical scenarios": {
     "fr": "Explorer des scénarios hypothétiques",
@@ -2079,21 +2015,9 @@
     "fr": "Non sélectionné · suivi brut",
     "ar": "غير محدد · متابعة خام"
   },
-  "Three-pillar model chart. Missing scored data is shown at the center, not as a zero score.": {
-    "fr": "Graphique à trois piliers. Les données calculables manquantes sont placées au centre, sans compter comme zéro.",
-    "ar": "رسم بثلاثة محاور. تظهر البيانات الناقصة في المركز دون احتسابها بدرجة صفر."
-  },
   "Body markers, Strength and fitness, and Recovery": {
     "fr": "Marqueurs corporels, force et condition physique, récupération",
     "ar": "مؤشرات الجسم، والقوة واللياقة، والتعافي"
-  },
-  "Measurement accessibility tier": {
-    "fr": "Niveau d’accessibilité des mesures",
-    "ar": "مستوى سهولة القياس"
-  },
-  "Filtering never clears measurements or changes your score.": {
-    "fr": "Les filtres n’effacent pas vos mesures et ne changent pas votre indice.",
-    "ar": "التصفية لا تمسح القياسات ولا تغير نتيجتك."
   },
   "Your measurement history": {
     "fr": "Historique de vos mesures",
@@ -2191,10 +2115,6 @@
     "fr": "Votre prochain suivi",
     "ar": "متابعتك التالية"
   },
-  "Your chosen repeat interval": {
-    "fr": "Votre intervalle de suivi",
-    "ar": "فترة التكرار المختارة"
-  },
   "Every two weeks": {
     "fr": "Toutes les deux semaines",
     "ar": "كل أسبوعين"
@@ -2206,22 +2126,6 @@
   "Weekly": {
     "fr": "Chaque semaine",
     "ar": "أسبوعيًا"
-  },
-  "No dated observation yet.": {
-    "fr": "Aucune observation datée.",
-    "ar": "لا توجد قياسات مؤرخة بعد."
-  },
-  "Choose your first check-in": {
-    "fr": "Choisir votre premier suivi",
-    "ar": "اختر متابعتك الأولى"
-  },
-  "Choose a measurement that suits you. Skip tests you cannot perform; no value is filled for you.": {
-    "fr": "Choisissez une mesure adaptée. Ignorez les tests que vous ne pouvez pas réaliser ; aucune valeur n’est préremplie.",
-    "ar": "اختر قياسًا يناسبك. تجاوز الاختبارات التي لا يمكنك إجراؤها؛ لا تُملأ أي قيمة نيابة عنك."
-  },
-  "This preference stays in this browser; no notification is sent.": {
-    "fr": "Ce choix reste dans ce navigateur ; aucune notification n’est envoyée.",
-    "ar": "يبقى هذا التفضيل في المتصفح؛ لا يُرسل أي إشعار."
   },
   "LOOK A LITTLE CLOSER": {
     "fr": "REGARDEZ DE PLUS PRÈS",
@@ -3123,45 +3027,13 @@
     "fr": "Le stockage local est indisponible. Gardez la page ouverte pour conserver votre profil.",
     "ar": "تخزين الجهاز غير متاح. أبقِ الصفحة مفتوحة للاحتفاظ بملفك."
   },
-  "Draft storage is unavailable. Keep this page open.": {
-    "fr": "Le stockage des brouillons est indisponible. Gardez cette page ouverte.",
-    "ar": "تخزين المسودات غير متاح. أبقِ الصفحة مفتوحة."
-  },
-  "Save failed; your draft is retained.": {
-    "fr": "L’enregistrement a échoué ; votre brouillon est conservé.",
-    "ar": "فشل الحفظ؛ مسودتك محفوظة مؤقتًا."
-  },
-  "Routine saved. Schedule edits start tomorrow; earlier days keep their original schedule.": {
-    "fr": "Routine enregistrée. Les changements commencent demain ; les jours antérieurs gardent leur programme d’origine.",
-    "ar": "حُفظ الروتين. تبدأ التغييرات غدًا؛ وتحتفظ الأيام السابقة بجداولها الأصلية."
-  },
   "Check-in saved.": {
     "fr": "Suivi enregistré.",
     "ar": "حُفظت المتابعة."
   },
-  "Saved. Local draft cleanup is unavailable.": {
-    "fr": "Enregistré. Le nettoyage du brouillon local est indisponible.",
-    "ar": "تم الحفظ. تعذر تنظيف المسودة المحلية."
-  },
-  "Unsaved program draft restored. Review before saving.": {
-    "fr": "Brouillon de programme restauré. Vérifiez avant d’enregistrer.",
-    "ar": "استُعيدت مسودة برنامج غير محفوظة. راجعها قبل الحفظ."
-  },
-  "Unable to load your plan.": {
-    "fr": "Impossible de charger votre programme.",
-    "ar": "تعذر تحميل خطتك."
-  },
   "Unable to load older observations.": {
     "fr": "Impossible de charger les observations antérieures.",
     "ar": "تعذر تحميل القياسات السابقة."
-  },
-  "Check-in preference could not be loaded.": {
-    "fr": "Impossible de charger votre préférence de suivi.",
-    "ar": "تعذر تحميل تفضيل المتابعة."
-  },
-  "This preference could not be saved in this browser.": {
-    "fr": "Ce choix n’a pas pu être enregistré ici.",
-    "ar": "تعذر حفظ هذا التفضيل في المتصفح."
   },
   "Reviewed observation recorded.": {
     "fr": "Observation vérifiée enregistrée.",
@@ -3707,10 +3579,6 @@
     "fr": "Couverture des mesures",
     "ar": "تغطية القياسات"
   },
-  "This graph shows recorded data, not performance.": {
-    "fr": "Ce graphique montre les données enregistrées, pas la performance.",
-    "ar": "يعرض هذا الرسم البيانات المسجلة وليس الأداء."
-  },
   "Loading history…": {
     "fr": "Chargement de l’historique…",
     "ar": "جارٍ تحميل السجل…"
@@ -4019,10 +3887,6 @@
     "fr": "Compléter les détails du test",
     "ar": "أكمل تفاصيل الاختبار"
   },
-  "Published population norms; protocol match and measurements are self-reported. Brackets reflect the resolution of the source, not an exact world rank.": {
-    "fr": "Normes de population publiées ; protocole et mesures déclarés. Les tranches reflètent la précision de la source, pas un rang mondial exact.",
-    "ar": "معايير سكانية منشورة؛ توافق البروتوكول والقياسات مُبلّغ عنهما ذاتيًا. تعكس الفئات دقة المصدر وليست ترتيبًا عالميًا دقيقًا."
-  },
   "Use a hydraulic dynamometer seated, with elbow flexed, forearm neutral and handle adjusted to your hand. Test both hands three times each. Enter the highest single result in kg, not the sum of both hands. Record the test date and your age at that test.": {
     "fr": "Utilisez un dynamomètre hydraulique assis, coude fléchi, avant-bras neutre, poignée ajustée à la main. Testez chaque main trois fois. Entrez le meilleur résultat unique en kg, pas la somme des mains. Notez la date et votre âge au test.",
     "ar": "استخدم دينامومتر هيدروليكيًا أثناء الجلوس مع ثني المرفق ووضع الساعد محايدًا وضبط المقبض لليد. اختبر كل يد ثلاث مرات. أدخل أعلى نتيجة منفردة بالكيلوغرام وليس مجموع اليدين. سجّل التاريخ وعمرك عند الاختبار."
@@ -4143,10 +4007,6 @@
     "fr": "Votre scénario choisi",
     "ar": "السيناريو الذي اخترته"
   },
-  "Scenario target saved on this device.": {
-    "fr": "Objectif du scénario conservé sur cet appareil.",
-    "ar": "هدف السيناريو محفوظ على هذا الجهاز."
-  },
   "Targets describe a hypothetical result, not a promise for this week. Adjust sessions to your experience and circumstances.": {
     "fr": "Les objectifs décrivent un résultat hypothétique, sans promesse pour cette semaine. Adaptez les séances à votre expérience et situation.",
     "ar": "تصف الأهداف نتيجة افتراضية وليست وعدًا لهذا الأسبوع. عدّل الجلسات وفق خبرتك وظروفك."
@@ -4154,10 +4014,6 @@
   "Add scenario steps to my plan": {
     "fr": "Ajouter les étapes du scénario à mon programme",
     "ar": "أضف خطوات السيناريو إلى خطتي"
-  },
-  "Choose a scenario above to connect it to your weekly plan.": {
-    "fr": "Choisissez un scénario ci-dessus pour le relier à votre programme.",
-    "ar": "اختر سيناريو أعلاه لربطه بخطتك الأسبوعية."
   },
   "Small actions. Consistent check-ins. Your own pace.": {
     "fr": "Petites actions. Suivi régulier. À votre rythme.",
@@ -4190,10 +4046,6 @@
   "Scenario steps added. Review the days and save your plan.": {
     "fr": "Étapes ajoutées. Vérifiez les jours et enregistrez le programme.",
     "ar": "أُضيفت الخطوات. راجع الأيام واحفظ خطتك."
-  },
-  "The scenario could not be stored on this device.": {
-    "fr": "Le scénario n’a pas pu être stocké sur cet appareil.",
-    "ar": "تعذر حفظ السيناريو على هذا الجهاز."
   },
   "Choose an attainable scenario first.": {
     "fr": "Choisissez d’abord un scénario atteignable.",
@@ -4331,41 +4183,17 @@
     "fr": "Atteint votre palier dans ce modèle",
     "ar": "يصل إلى مستواك المختار في هذا النموذج"
   },
-  "Closest available route within the change limits": {
-    "fr": "Parcours le plus proche dans les limites du modèle",
-    "ar": "أقرب مسار متاح ضمن حدود التغيير"
-  },
   "What would need to change": {
     "fr": "Ce qui devrait changer",
     "ar": "ما الذي يحتاج إلى التحسين"
-  },
-  "Changes are capped at 50% of the starting value, or five small steps for very low starting values. These are hypothetical measurements, not this week’s workload.": {
-    "fr": "Les changements sont limités à 50 % du départ, ou cinq petits pas pour les valeurs très basses. Ce sont des mesures hypothétiques, pas la charge de cette semaine.",
-    "ar": "تُحد التحسينات بنسبة ٥٠٪ من البداية أو خمس خطوات صغيرة للقيم المنخفضة جدًا. هذه قياسات افتراضية وليست عبء تدريب هذا الأسبوع."
-  },
-  "Easier means fewer changed tests in this model, not a guarantee of easy or fast biological improvement. Actual training time depends on you.": {
-    "fr": "Plus simple signifie moins de tests modifiés dans ce modèle, sans garantir une amélioration facile ou rapide. La durée réelle dépend de vous.",
-    "ar": "الأسهل يعني تغيير اختبارات أقل في هذا النموذج، ولا يضمن تحسنًا بدنيًا سهلًا أو سريعًا. مدة التدريب الفعلية تعتمد عليك."
-  },
-  "Generate my weekly program": {
-    "fr": "Générer mon programme hebdomadaire",
-    "ar": "أنشئ برنامجي الأسبوعي"
   },
   "This route does not reach the selected tier. Choose a closer tier or use these intermediate goals.": {
     "fr": "Ce parcours n’atteint pas le palier choisi. Choisissez un palier plus proche ou ces objectifs intermédiaires.",
     "ar": "لا يصل هذا المسار إلى المستوى المختار. اختر مستوى أقرب أو استخدم هذه الأهداف المرحلية."
   },
-  "Published references and game assumptions are different. No route optimizes lab results or thermal exposure. Weekly suggestions remain editable.": {
-    "fr": "Les références publiées diffèrent des hypothèses ludiques. Aucun parcours n’optimise les analyses ou l’exposition thermique. Les suggestions restent modifiables.",
-    "ar": "تختلف المراجع المنشورة عن افتراضات اللعبة. لا يحسّن أي مسار التحاليل الطبية أو التعرض للحرارة والبرد. تبقى الاقتراحات قابلة للتعديل."
-  },
   "Find your tier, choose where to stand, compare routes and generate your weekly program.": {
     "fr": "Trouvez votre palier, choisissez votre objectif, comparez les parcours et créez votre programme.",
     "ar": "اكتشف مستواك، واختر هدفك، وقارن المسارات، ثم أنشئ برنامجك الأسبوعي."
-  },
-  "My available days · choose up to three": {
-    "fr": "Mes jours disponibles · trois au maximum",
-    "ar": "أيامي المتاحة · اختر ثلاثة كحد أقصى"
   },
   "Session time": {
     "fr": "Durée de séance",
@@ -4423,29 +4251,13 @@
     "fr": "Les jours consécutifs restent du repos pour espacer les séances exigeantes.",
     "ar": "تُترك الأيام المتتالية للراحة للفصل بين الحصص المجهدة."
   },
-  "Progress uses your latest recorded measurement, not checked boxes. Targets are hypothetical, with no promised completion date.": {
-    "fr": "La progression utilise votre dernière mesure, pas les cases cochées. Les objectifs sont hypothétiques, sans date promise.",
-    "ar": "يُحسب التقدم من أحدث قياس مسجل وليس من المهام المكتملة. الأهداف افتراضية دون موعد مضمون."
-  },
   "Warm up first. Stop for pain or unusual symptoms. Repeat demanding tests only when recovered; a weekly review does not require a maximum test.": {
     "fr": "Échauffez-vous. Arrêtez en cas de douleur ou symptôme inhabituel. Répétez les tests exigeants après récupération ; le bilan hebdomadaire n’exige pas de test maximal.",
     "ar": "ابدأ بالإحماء. توقف عند الألم أو الأعراض غير المعتادة. أعد الاختبارات المجهدة بعد التعافي؛ لا تتطلب المراجعة الأسبوعية اختبارًا أقصى."
   },
-  "Practice guidance & source": {
-    "fr": "Conseils de pratique et source",
-    "ar": "إرشادات التدريب والمصدر"
-  },
-  "Update my generated program": {
-    "fr": "Actualiser mon programme généré",
-    "ar": "حدّث برنامجي المقترح"
-  },
   "Scenario reached · choose your next goal": {
     "fr": "Objectif atteint · choisissez le suivant",
     "ar": "تحقق الهدف · اختر هدفك التالي"
-  },
-  "Your program is ready. Review the days and save it.": {
-    "fr": "Votre programme est prêt. Vérifiez les jours et enregistrez-le.",
-    "ar": "برنامجك جاهز. راجع الأيام ثم احفظه."
   },
   "Review measurements and recovery; repeat a test only when ready": {
     "fr": "Faire le bilan des mesures et de la récupération ; refaire un test quand prêt",
@@ -4539,10 +4351,6 @@
     "fr": "Chaque mesure reçoit une estimation selon les hypothèses explicites du produit. Les catégories font la moyenne de leurs mesures ; chaque catégorie renseignée a le même poids global. Les valeurs manquantes sont exclues.",
     "ar": "تحصل كل قيمة مسجلة على تقدير وفق افتراضات معلنة للمنصة. تُحسب الفئات بمتوسط قياساتها، ولكل فئة مسجلة وزن متساوٍ في التقدير العام. تُستبعد القيم غير المسجلة."
   },
-  "Published test bands appear where compatible references exist. Other rankings are illustrative benchmarks, not measured world ranks, health assessments or universal consensus. The downloadable scientific report uses a separate, stricter model.": {
-    "fr": "Les intervalles publiés apparaissent si les références sont compatibles. Les autres classements sont illustratifs, sans rang mondial mesuré, évaluation de santé ou consensus universel. Le rapport scientifique utilise un modèle distinct plus strict.",
-    "ar": "تظهر نطاقات الاختبارات المنشورة عند توافق المراجع. أما بقية الترتيبات فمعايير توضيحية، وليست ترتيبًا عالميًا مقاسًا أو تقييمًا صحيًا أو إجماعًا عالميًا. يستخدم التقرير العلمي نموذجًا منفصلًا أكثر صرامة."
-  },
   "Published evidence. Transparent game assumptions.": {
     "fr": "Des preuves publiées. Des hypothèses ludiques transparentes.",
     "ar": "أدلة منشورة وافتراضات توضيحية واضحة."
@@ -4598,10 +4406,6 @@
   "VO₂, grip strength, combined-hand grip and jump height have separate published test references. Protocol and age limits apply. The composite remains unvalidated.": {
     "fr": "VO₂, prise, prise combinée et hauteur de saut ont des références distinctes. Des limites de protocole et d’âge s’appliquent. Le score global reste non validé.",
     "ar": "لـ VO₂ والقبضة والقبضة المجمعة وارتفاع القفز مراجع مستقلة بشروط بروتوكول وعمر. التقدير العام غير مُثبت."
-  },
-  "This week focuses on up to two unfinished goals. Update your program after recording new measurements.": {
-    "fr": "Cette semaine cible jusqu’à deux objectifs en cours. Actualisez le programme après de nouvelles mesures.",
-    "ar": "يركز هذا الأسبوع على هدفين غير مكتملين كحد أقصى. حدّث برنامجك بعد تسجيل قياسات جديدة."
   },
   "Choose one to three days and a session length.": {
     "fr": "Choisissez un à trois jours et une durée de séance.",
@@ -4715,22 +4519,6 @@
     "fr": "Éviter sauts et course",
     "ar": "تجنّب القفز والجري"
   },
-  "Your comfortable working load (kg)": {
-    "fr": "Votre charge de travail confortable (kg)",
-    "ar": "وزن التدريب المريح لك (كغ)"
-  },
-  "Optional · chosen by you, not your maximum": {
-    "fr": "Facultatif · choisi par vous, pas votre maximum",
-    "ar": "اختياري · تختاره أنت وليس أقصى وزن لك"
-  },
-  "Detailed session preview": {
-    "fr": "Aperçu détaillé de la séance",
-    "ar": "معاينة الحصة بالتفصيل"
-  },
-  "Update the generated program, then save to apply this preview.": {
-    "fr": "Actualisez le programme généré, puis enregistrez pour appliquer cet aperçu.",
-    "ar": "حدّث البرنامج المقترح ثم احفظ لتطبيق هذه المعاينة."
-  },
   "Warm-up": {
     "fr": "Échauffement",
     "ar": "الإحماء"
@@ -4782,10 +4570,6 @@
   "Finish with easy movement and note how the session felt. Stop for pain or unusual symptoms.": {
     "fr": "Terminez par un mouvement facile et notez votre ressenti. Arrêtez en cas de douleur ou de symptôme inhabituel.",
     "ar": "اختم بحركة خفيفة وسجّل شعورك بعد الحصة. توقف عند الألم أو الأعراض غير المعتادة."
-  },
-  "This is focused practice for your chosen goals, not a complete assessment of your training needs. Session times include estimated work, rest and transitions.": {
-    "fr": "Cette pratique cible vos objectifs et ne constitue pas un bilan complet de vos besoins. Les durées incluent travail, repos et transitions estimés.",
-    "ar": "هذا تدريب موجه لأهدافك وليس تقييمًا كاملًا لاحتياجاتك التدريبية. تشمل المدة تقديرات العمل والراحة والانتقال بين التمارين."
   },
   "Training principles · ACSM": {
     "fr": "Principes d’entraînement · ACSM",
@@ -5011,14 +4795,6 @@
     "fr": "Après deux séances confortables, augmentez légèrement l’amplitude contrôlée sans lever le talon.",
     "ar": "بعد حصتين مريحتين زد مدى الحركة قليلًا دون رفع الكعب."
   },
-  "Generate a maintenance week": {
-    "fr": "Générer une semaine de maintien",
-    "ar": "أنشئ أسبوعًا للمحافظة على المستوى"
-  },
-  "Goals reached. Keep a manageable maintenance routine.": {
-    "fr": "Objectifs atteints. Gardez une routine de maintien réaliste.",
-    "ar": "تحققت الأهداف. حافظ على روتين مناسب للمحافظة على مستواك."
-  },
   "Maintain this comfortable workload. Reassess when your measurements or goals change.": {
     "fr": "Maintenez cette charge confortable. Réévaluez si vos mesures ou objectifs changent.",
     "ar": "حافظ على هذا العبء المريح. أعد التقييم عندما تتغير قياساتك أو أهدافك."
@@ -5050,10 +4826,6 @@
   "Routes can change recorded physical performance, short sleep duration and sleep regularity. Lab results and other readings stay fixed.": {
     "fr": "Les parcours peuvent modifier les performances, le sommeil court et sa régularité. Les analyses et autres mesures restent fixes.",
     "ar": "يمكن للمسارات تغيير الأداء البدني ومدة النوم القصيرة وانتظامه. تبقى التحاليل والقراءات الأخرى ثابتة."
-  },
-  "Record a physical performance test or a sleep habit measurement to build a program. Other measurements still contribute to your game standing.": {
-    "fr": "Enregistrez un test physique ou une mesure de sommeil pour créer un programme. Les autres mesures comptent toujours dans votre classement ludique.",
-    "ar": "سجّل اختبار أداء بدني أو قياسًا لعادات النوم لبناء برنامج. تبقى القياسات الأخرى ضمن ترتيبك التوضيحي."
   },
   "Evening wind-down and sleep diary": {
     "fr": "Retour au calme du soir et journal du sommeil",
@@ -5099,10 +4871,6 @@
     "fr": "Habitudes quotidiennes",
     "ar": "العادات اليومية"
   },
-  "Scoring has been updated. Choose a tier again to refresh this scenario; your saved actions are retained.": {
-    "fr": "Le calcul a été mis à jour. Choisissez à nouveau un palier pour actualiser ce scénario ; vos actions enregistrées sont conservées.",
-    "ar": "تم تحديث الحساب. اختر المستوى مجددًا لتحديث السيناريو؛ تبقى مهامك المحفوظة كما هي."
-  },
   "Routes change recorded physical performance and selected sleep habits. Programs use available days, session time, experience, equipment, movement preference, recovery and dated completion history. Completing actions does not prove improvement. No duration to a target is predicted.": {
     "fr": "Les parcours modifient les performances et certaines habitudes de sommeil. Les programmes utilisent jours, temps, expérience, matériel, préférences, récupération et historique daté. Cocher une action ne prouve pas une amélioration. Aucun délai n’est prédit.",
     "ar": "تغيّر المسارات الأداء البدني وبعض عادات النوم. تعتمد البرامج على الأيام والوقت والخبرة والمعدات وتفضيل الحركة والتعافي وسجل الإنجاز. إكمال المهام لا يثبت التحسن ولا يُحدد موعد للوصول."
@@ -5138,14 +4906,6 @@
   "Next milestone": {
     "fr": "Prochain palier",
     "ar": "المحطة التالية"
-  },
-  "Summit reached · keep your momentum": {
-    "fr": "Sommet atteint · gardez le rythme",
-    "ar": "وصلت إلى القمة · حافظ على زخمك"
-  },
-  "One measurement lights up your league": {
-    "fr": "Une mesure révèle votre ligue",
-    "ar": "قياس واحد يكشف مستواك"
   },
   "1 · Your starting league": {
     "fr": "1 · Votre ligue de départ",
@@ -5191,10 +4951,6 @@
     "fr": "Créer une carte à partager",
     "ar": "أنشئ بطاقة للمشاركة"
   },
-  "Choose what appears. No name or raw measurements are included. Downloading does not publish your card.": {
-    "fr": "Choisissez le contenu. Aucun nom ni mesure brute. Télécharger ne publie pas votre carte.",
-    "ar": "اختر ما يظهر. لا تتضمن البطاقة اسمًا أو قياسات خامًا. تنزيلها لا ينشرها."
-  },
   "Download rank card": {
     "fr": "Télécharger ma carte",
     "ar": "تنزيل بطاقة الترتيب"
@@ -5210,18 +4966,6 @@
   "Recorded change": {
     "fr": "Évolution enregistrée",
     "ar": "تغير مسجل"
-  },
-  "Progress history could not load. Your measurements are retained.": {
-    "fr": "Impossible de charger les progrès. Vos mesures sont conservées.",
-    "ar": "تعذر تحميل سجل التقدم. قياساتك محفوظة."
-  },
-  "Repeat a measurement with the same method and date it to reveal your progress and earn personal-best badges.": {
-    "fr": "Répétez une mesure avec la même méthode et une date pour voir vos progrès et vos records personnels.",
-    "ar": "كرر قياسًا بالطريقة نفسها وحدد تاريخه لإظهار تقدمك وكسب شارات أفضل النتائج."
-  },
-  "No comparable improvements recorded this week yet.": {
-    "fr": "Aucune amélioration comparable enregistrée cette semaine.",
-    "ar": "لم تُسجل تحسينات قابلة للمقارنة هذا الأسبوع بعد."
   },
   "Badges compare documented matching tests. Adding a measurement can change your global estimate without a performance improvement.": {
     "fr": "Les badges comparent des tests documentés compatibles. Ajouter une mesure peut modifier l’estimation globale sans amélioration de performance.",
@@ -5291,10 +5035,6 @@
     "fr": "Continuer avec ce parcours",
     "ar": "تابع بهذا المسار"
   },
-  "How these scenarios work": {
-    "fr": "Comment fonctionnent les scénarios",
-    "ar": "كيف تعمل هذه السيناريوهات"
-  },
   "Your active mission": {
     "fr": "Votre mission active",
     "ar": "مهمتك الحالية"
@@ -5307,10 +5047,6 @@
     "fr": "Explorer d’autres objectifs",
     "ar": "استكشف أهدافًا أخرى"
   },
-  "Adjust my training preferences": {
-    "fr": "Ajuster mes préférences",
-    "ar": "عدّل تفضيلات التدريب"
-  },
   "Your weekly recap": {
     "fr": "Votre bilan hebdomadaire",
     "ar": "ملخصك الأسبوعي"
@@ -5318,10 +5054,6 @@
   "quests completed this week": {
     "fr": "quêtes terminées cette semaine",
     "ar": "مهام مكتملة هذا الأسبوع"
-  },
-  "Next action: follow today’s quests, or record a result when ready.": {
-    "fr": "Prochaine action : suivez les quêtes du jour ou enregistrez un résultat lorsque vous êtes prêt.",
-    "ar": "الخطوة التالية: اتبع مهام اليوم، أو سجل نتيجة عندما تكون مستعدًا."
   },
   "Open my quest board": {
     "fr": "Ouvrir mes quêtes",
@@ -5343,21 +5075,9 @@
     "fr": "Résultats enregistrés modifiés",
     "ar": "تغيرت النتائج المسجلة"
   },
-  "Badges use available matching history. Adding a measurement can change your global estimate without a performance improvement.": {
-    "fr": "Les badges utilisent l’historique compatible disponible. Ajouter une mesure peut modifier l’estimation globale sans amélioration de performance.",
-    "ar": "تستخدم الشارات السجل المتوافق المتاح. إضافة قياس قد تغير تقديرك العام دون تحسن الأداء."
-  },
-  "Mission & training details": {
-    "fr": "Détails de la mission et du programme",
-    "ar": "تفاصيل المهمة والتدريب"
-  },
   "Routes can change recorded performance tests and short sleep duration. Body composition and resting heart rate stay fixed.": {
     "fr": "Les parcours modifient les tests de performance et le sommeil court. La composition corporelle et le pouls au repos restent fixes.",
     "ar": "تعدل المسارات اختبارات الأداء والنوم القصير. تبقى قياسات الجسم والنبض أثناء الراحة ثابتة."
-  },
-  "Your saved routine is retained. Choose a new mission for the current metrics.": {
-    "fr": "Votre routine est conservée. Choisissez une nouvelle mission pour les mesures actuelles.",
-    "ar": "روتينك المحفوظ باقٍ. اختر مهمة جديدة للقياسات الحالية."
   },
   "16 optional measurements. Retired records stay in your export and do not affect current ranks.": {
     "fr": "16 mesures facultatives. Les anciennes données restent dans votre export sans modifier les classements actuels.",
@@ -5683,10 +5403,6 @@
     "fr": "Commencer par une mesure initiale",
     "ar": "ابدأ بقياس أولي"
   },
-  "Start these unmeasured areas with a baseline. Targets adapt after you record a result.": {
-    "fr": "Commencez ces domaines par une mesure initiale. Les objectifs s’adaptent après votre saisie.",
-    "ar": "ابدأ هذه الجوانب بقياس أولي. تتكيف الأهداف بعد تسجيل النتيجة."
-  },
   "Record baseline": {
     "fr": "Mesurer le point de départ",
     "ar": "سجّل قياس البداية"
@@ -5694,10 +5410,6 @@
   "Record baseline: {metric}": {
     "fr": "Mesure initiale : {metric}",
     "ar": "قياس أولي: {metric}"
-  },
-  "Choose a plan now. Record your baselines to personalize its targets.": {
-    "fr": "Choisissez un plan. Enregistrez vos mesures initiales pour personnaliser ses objectifs.",
-    "ar": "اختر خطة الآن. سجّل قياساتك الأولية لتخصيص أهدافها."
   },
   "Your full picture": {
     "fr": "Votre vue complète",
@@ -5707,25 +5419,9 @@
     "fr": "Complétez votre portrait",
     "ar": "أكمل صورتك"
   },
-  "All current metrics are recorded. Keep them up to date.": {
-    "fr": "Toutes les mesures sont renseignées. Gardez-les à jour.",
-    "ar": "تم تسجيل جميع القياسات الحالية. حافظ على تحديثها."
-  },
-  "Add measurements for a more complete picture. Your score may move up or down.": {
-    "fr": "Ajoutez des mesures pour une vue plus complète. Votre score peut monter ou descendre.",
-    "ar": "أضف قياسات لصورة أكمل. قد ترتفع نتيجتك أو تنخفض."
-  },
   "metrics recorded": {
     "fr": "mesures renseignées",
     "ar": "قياسات مسجلة"
-  },
-  "Choose an area to complete": {
-    "fr": "Choisir un domaine à compléter",
-    "ar": "اختر جانبًا لإكماله"
-  },
-  "This area is complete. Choose another area to add a measurement.": {
-    "fr": "Ce domaine est complet. Choisissez-en un autre pour ajouter une mesure.",
-    "ar": "هذا الجانب مكتمل. اختر جانبًا آخر لإضافة قياس."
   },
   "Your goals": {
     "fr": "Vos objectifs",
@@ -5767,18 +5463,6 @@
     "fr": "Cible pour {metric}",
     "ar": "الهدف لـ {metric}"
   },
-  "Enter a valid target within the measurement range.": {
-    "fr": "Saisissez une cible valide dans la plage de mesure.",
-    "ar": "أدخل هدفًا صالحًا ضمن نطاق القياس."
-  },
-  "Goal reached · maintain it or change your target": {
-    "fr": "Objectif atteint · maintenez-le ou changez de cible",
-    "ar": "تحقق الهدف · حافظ عليه أو غيّر هدفك"
-  },
-  "Edit the target to make it yours": {
-    "fr": "Ajustez la cible selon votre objectif",
-    "ar": "عدّل القيمة لتناسب هدفك"
-  },
   "Update result": {
     "fr": "Actualiser le résultat",
     "ar": "حدّث النتيجة"
@@ -5791,33 +5475,13 @@
     "fr": "Trouvez votre point de départ",
     "ar": "اكتشف نقطة بدايتك"
   },
-  "Record this measurement to reveal your rating and set a personal target.": {
-    "fr": "Renseignez cette mesure pour découvrir votre classement et fixer une cible personnelle.",
-    "ar": "سجّل هذا القياس لمعرفة تصنيفك وتحديد هدف شخصي."
-  },
-  "Choose what you want to improve. Change any card or adjust its target.": {
-    "fr": "Choisissez ce que vous voulez améliorer. Changez une carte ou ajustez sa cible.",
-    "ar": "اختر ما تريد تحسينه. غيّر أي بطاقة أو عدّل هدفها."
-  },
   "With these goals": {
     "fr": "Avec ces objectifs",
     "ar": "مع هذه الأهداف"
   },
-  "Based on recorded metrics. New measurements may change this preview.": {
-    "fr": "Basé sur les mesures renseignées. De nouvelles mesures peuvent modifier cet aperçu.",
-    "ar": "بناءً على القياسات المسجلة. قد تغيّر القياسات الجديدة هذه المعاينة."
-  },
-  "Your goals could not be saved on this device.": {
-    "fr": "Vos objectifs n’ont pas pu être enregistrés sur cet appareil.",
-    "ar": "تعذر حفظ أهدافك على هذا الجهاز."
-  },
   "How goals work": {
     "fr": "Comment fonctionnent les objectifs",
     "ar": "كيف تعمل الأهداف"
-  },
-  "Goals are editable what-if targets, not a training program or a promised timeline. Ratings use the game model, not a validated world rank. Unmeasured metrics stay out of the combined preview until you record them.": {
-    "fr": "Les objectifs sont des cibles hypothétiques modifiables, pas un programme d’entraînement ni un délai promis. Les classements utilisent le modèle du jeu, pas un classement mondial validé. Les mesures non renseignées restent exclues de l’aperçu global.",
-    "ar": "الأهداف قيم افتراضية قابلة للتعديل وليست برنامج تدريب أو وعدًا بمدة محددة. تعتمد التصنيفات على نموذج اللعبة وليست ترتيبًا عالميًا معتمدًا. تبقى القياسات غير المسجلة خارج المعاينة الإجمالية حتى تسجّلها."
   },
   "View my goals": {
     "fr": "Voir mes objectifs",

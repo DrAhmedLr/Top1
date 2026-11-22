@@ -3,8 +3,7 @@ import {MetricIcon,CategoryIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import ScientificCalibration from './ScientificCalibration';
 import { ArrowUpRight } from 'lucide-react';
-import { activeMetrics, pillars, type Metric } from '@/lib/registry';
-import { pillarNames } from './Overview';
+import { activeMetrics, pillarNames, pillars, type Metric } from '@/lib/registry';
 
 export default function Methodology({ onEvidence }: { onEvidence: (metric: Metric) => void }) {
  const {t:tr}=useTranslations();
