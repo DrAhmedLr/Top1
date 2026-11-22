@@ -15,7 +15,6 @@ import {overallChangeForSave} from '@/lib/overallPerformance';
 import {challengeProgress} from '@/lib/challengeProgress';
 import {FIELD_BENCHMARK_METRICS} from '@/lib/fieldBenchmarks';
 import BenchmarkReference from './BenchmarkReference';
-import {pillarNames} from "./Overview";
 import {useTranslations} from '@/components/providers/LocaleProvider';
 
 import {run10kBenchmarks,formatRunTime} from '@/lib/run10kReference';
@@ -39,7 +38,7 @@ import { captureEvent,recordView } from '@/lib/analytics';
 import { normalizeValues, type ProfileState } from '@/lib/profile';
 import {GuestProfileConflictError,GuestProfileReadError,readGuestProfile,writeGuestProfile} from '@/lib/guestProfileStorage';
 import { reference, scoringEligibility, valid } from '@/lib/engine';
-import { activeMetrics, metrics, type Demographics, type Metric, type Values } from '@/lib/registry';
+import { activeMetrics, metrics, pillarNames, type Demographics, type Metric, type Values } from '@/lib/registry';
 import { getAgeBracket } from '@/lib/demographics';
 import { type MeasurementDetails, type MeasurementMetadata,normalizeMeasurementMetadata } from '@/lib/measurementMetadata';
 const ProfileEdit=dynamic(()=>import('./ProfileEdit'));

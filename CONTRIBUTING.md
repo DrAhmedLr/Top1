@@ -8,7 +8,9 @@ Use Node.js 24 and the pnpm version in package.json. Install with `pnpm install 
 
 For documentation-only changes, check the changed links, commands and product claims against their owning files. For code changes, run the tests for the affected behavior. When changing shared screens or mobile code, also follow the [mobile client checks](mobile/README.md).
 
-Before a web release, run `pnpm check:release`. It checks the application, encrypted-backup helper, isolated database migrations, types and production build. The [GitHub workflow](.github/workflows/checks.yml) specifies the checks run on pushes and pull requests.
+Before a web release, run `pnpm check:release`. It checks the application, encrypted-backup helper, isolated database migrations, types and production build.
+
+The [GitHub workflow](.github/workflows/checks.yml) runs on pull requests, merge queues, pushes to `main` and release tags. Documentation-only changes complete the `verify` check without installing dependencies. Mobile-only changes run `pnpm check:client` using placeholder public settings. Shared screens, libraries and assets trigger both the web and mobile checks.
 
 ## Product principles
 

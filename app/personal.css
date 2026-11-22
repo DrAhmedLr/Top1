@@ -5,7 +5,6 @@
 .personal-app .modal :is(input,select),.personal-app .potential-fields :is(input,select),.personal-app .baseline-plan-area select,.personal-app .baseline-journey .journey-profile select{background:var(--personal-dark);color:var(--personal-text);color-scheme:dark;border:1px solid #52657e;border-radius:10px;padding:12px;min-height:44px;width:100%;box-sizing:border-box}
 .personal-app .modal .primary-button,.personal-app .performance-shell .primary-button,.personal-app .baseline-journey .journey-next{background:var(--personal-green);color:var(--personal-dark);border-color:var(--personal-green);box-shadow:none}
 .personal-app .baseline-journey .journey-back,.personal-app .modal .secondary-button{background:var(--personal-dark);color:var(--personal-text);border:1px solid #52657e}
-.personal-app .resume-journey{background:transparent;color:var(--personal-green);border:1px solid #52657e;box-shadow:none;min-height:44px}
 .personal-app .optional-baseline{margin-block:20px}.personal-app .optional-baseline>summary{color:var(--personal-muted);padding-block:12px;cursor:pointer}
 .personal-app .potential-fields{display:grid;gap:16px;max-width:520px;padding:0;border:0;margin-block:20px}.potential-fields label{display:grid;gap:8px}.potential-actions{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.potential-workspace .performance-note:first-child{margin-top:0}
 .personal-app .performance-shell .test-comparison strong{color:var(--personal-text)}
