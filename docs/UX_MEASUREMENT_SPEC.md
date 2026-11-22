@@ -8,6 +8,8 @@ The dashboard records an `app_viewed` event when a distinct view opens. Measurem
 
 The adaptive planner lets users save plans and log sessions. Its view event measures visits. Measuring completed plans or sessions requires instrumenting successful writes and verifying those events with a synthetic journey. Signup requests and confirmations may occur in separate browsers. Their counts describe aggregate operations. [Adaptive planner](../components/AdaptiveProgram.tsx)
 
+If the collector is enabled, exclude staff and test sessions from usage reports. When comparing releases, use windows of equal length and report the dates, time zone and number of sessions for each window.
+
 ## Data minimization
 
 The event allowlist accepts enumerated views, sharing channels and known metric IDs as appropriate to each event. Measurement values, demographics, account identifiers, free text, URLs, queries and tokens stay outside event properties. Autocapture, session recording and person profiles stay disabled. Pending events are bounded and kept in memory. Analytics failures must leave saving available. [Event contract](../lib/analytics.ts) · [Allowlist tests](../lib/analytics.test.ts)
