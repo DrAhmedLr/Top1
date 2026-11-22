@@ -1,6 +1,14 @@
 import { LOCAL_PROFILE_KEYS, parseLocalProfile } from './profile';
+import {readGuestProfile} from './guestProfileStorage';
 export interface MigrationStorage { getItem(key:string):string|null; removeItem(key:string):void }
 export interface MigrationClient { rpc(name:'migrate_local_profile',args:Record<string,unknown>):PromiseLike<{error:{message:string}|null}> }
+export function guestImportOffer(read:(key:string)=>string|null){
+  try{
+    return {guest:readGuestProfile(read),error:''};
+  }catch{
+    return {guest:null,error:'Your account is loaded. The guest profile on this device could not be read for import.'};
+  }
+}
 export async function migrateLocalProfile(client:MigrationClient,storage:MigrationStorage,fingerprint:(raw:string)=>Promise<string>){
   let migrated=false;
   // Process each stored snapshot independently. A demo or invalid first key

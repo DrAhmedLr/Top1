@@ -1,6 +1,6 @@
 # Local-only reference exports and verification artifacts are not runtime assets.
-design/
 previews/
+output/
 docs/
 .next-dev/
 *.tsbuildinfo
@@ -9,3 +9,6 @@ docs/
 supabase/.temp/
 .pnpm-store/
 .git/
+
+# Native projects are built separately from the website.
+mobile/

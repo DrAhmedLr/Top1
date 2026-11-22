@@ -6,7 +6,9 @@ TOP1 is a guest-first performance tracker available in English, French and Arabi
 
 Use Node.js 24 and the pnpm version in package.json. Install with `pnpm install --frozen-lockfile`, configure your own `.env.local` from `.env.example`, then run `pnpm dev`. Never commit credentials, real account exports, personal measurements or private test fixtures.
 
-Run `pnpm check:release` before submitting a pull request. This checks the application, encrypted-backup helper, isolated database migrations, types and production build without modifying the live database.
+For documentation-only changes, check the changed links, commands and product claims against their owning files. For code changes, run the tests for the affected behavior. When changing shared screens or mobile code, also follow the [mobile client checks](mobile/README.md).
+
+Before a web release, run `pnpm check:release`. It checks the application, encrypted-backup helper, isolated database migrations, types and production build. The [GitHub workflow](.github/workflows/checks.yml) specifies the checks run on pushes and pull requests.
 
 ## Product principles
 

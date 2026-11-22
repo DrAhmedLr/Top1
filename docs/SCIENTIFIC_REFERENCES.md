@@ -2,7 +2,7 @@
 
 The composite remains an experimental product index. It has no validated population rank or clinical interpretation. Recorded coverage is not confidence. Other scored metric parameters remain product assumptions.
 
-## Current individual-test reference
+## Treadmill VO₂
 
 Version: `friend-2022-treadmill-rer1-v1`, introduced in model `6.2-friend2022-experimental`.
 
@@ -29,3 +29,9 @@ Table 2 absolute kilogram quantiles P5, P10, P20, P30, P40, P50, P60, P70, P80, 
 These are population-weighted, smoothed norms synthesized from studies using harmonized pseudo-data, not an individual-participant worldwide probability sample or a validated whole-body strength index. The reference protocol uses a hydraulic dynamometer, seated position, flexed elbow, neutral forearm, hand-adjusted handle, both hands, three attempts per hand, maximum single result. A summed combined-grip value and generic single-hand measurement cannot be substituted. Date, age at test, reference sex and compatible protocol must be documented; measurements and matching remain self-reported.
 
 Per-test comparisons work with one eligible measurement. They do not change the experimental composite's parameters or validate its population distribution. Unranked observations remain recorded and never become zero.
+
+## Canadian jump and archived two-hand grip
+
+The CHMS cycle 5 comparison uses adult age and sex groups, the documented test protocol and published P10, P50, P90 and P95 values. The active countermovement jump uses a Leonardo force plate and arm swing, with the best of three valid jumps after familiarization, for ages 18–69. The archived combined grip identity uses a standing Smedley III dynamometer and the sum of each hand’s best of two trials for ages 18–79. The [per-test inventory](PERFORMANCE_TEST_REFERENCES.md) identifies which comparisons are available in Ranking.
+
+Data adapted from Statistics Canada, *Normative-referenced percentile values for physical fitness among Canadians*, 16 October 2019, under the Statistics Canada Open Licence. Statistics Canada does not endorse this product. [Jump table](https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002/tbl/tbl04-eng.htm) · [Combined grip table](https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002/tbl/tbl01-eng.htm) · [Open Licence](https://www.statcan.gc.ca/en/terms-conditions/open-licence) · [Versioned extraction](../lib/canadianReference.ts)

@@ -10,8 +10,8 @@ export const exerciseModes=['treadmill','cycle','other'] as const;
 export type ExerciseMode=typeof exerciseModes[number];
 export interface MeasurementDetails { method?:MeasurementMethod; measuredAt?:string; source?:string; ageAtMeasurement?:number; exerciseMode?:ExerciseMode;protocol?:MeasurementProtocol;window?:ObservationWindow;derivation?:CalculationDerivation;invalidContext?:{message:string;original:unknown} }
 export type MeasurementMetadata=Record<string,MeasurementDetails>;
-export function authoritativeMeasurementDetails(values:Record<string,number|undefined>,input:unknown):MeasurementMetadata{
- const details=normalizeMeasurementMetadata(input);
+export function authoritativeMeasurementDetails(values:Record<string,number|undefined>,input:unknown,now?:number):MeasurementMetadata{
+ const details=normalizeMeasurementMetadata(input,{now});
  // Omitted context is explicitly unknown. The database's legacy preservation
  // rule must not make a saved observation differ from its signed calculation.
  for(const [id,value] of Object.entries(values))if(value!==undefined&&!details[id])details[id]={};

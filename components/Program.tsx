@@ -1,4 +1,5 @@
 'use client';
+import {accountReadOptions} from '@/lib/accountSession';
 import {MetricIcon} from './MetricIcon';
 import {useTranslations} from '@/components/providers/LocaleProvider';
 import {useEffect,useRef,useState} from 'react';
@@ -34,7 +35,7 @@ export default function Program({values,demographics,details,onMeasurements,onRe
   async function load(){try{
    let next=emptyPlan(),history=emptyTimeline(),rev=0,timeZone=Intl.DateTimeFormat().resolvedOptions().timeZone;
    if(owner==='guest'){const raw=localStorage.getItem('top1-program-guest');if(raw){const b=JSON.parse(raw);next=normalizePlan(b.plan??b);if(b.timeline)history=normalizeTimeline(b.timeline);timeZone=b.timeZone??timeZone;}}
-   else{const r=await fetch('/api/program',{cache:'no-store'}),b=await r.json();if(!r.ok)throw new Error(b.error);if(b.plan)next=normalizePlan(b.plan);history=normalizeTimeline(b.timeline??emptyTimeline());rev=b.revision;timeZone=b.timeZone??timeZone;}
+   else{const r=await fetch('/api/program',accountReadOptions(owner)),b=await r.json();if(!r.ok)throw new Error(b.error);if(b.plan)next=normalizePlan(b.plan);history=normalizeTimeline(b.timeline??emptyTimeline());rev=b.revision;timeZone=b.timeZone??timeZone;}
    if(!active)return;saved.current=JSON.stringify(next);savedPlan.current=next;let composer='';
    try{const draft=localStorage.getItem(`top1-program-draft-${owner}`);composer=localStorage.getItem(`top1-program-composer-${owner}`)??'';if(draft&&draft!==saved.current){next=normalizePlan(JSON.parse(draft),true);setNotice('Unsaved program draft restored. Review before saving.');}}catch{setError('Draft storage is unavailable. Keep this page open.');onNavigationRisk?.(true);}
    dayInZone(timeZone);setPlan(next);setTimeline(history);setZone(timeZone);setLabel(composer);setRevision(rev);setReadyOwner(owner);

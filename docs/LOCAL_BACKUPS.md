@@ -1,10 +1,10 @@
 # Encrypted local database backups
 
-This is an operator workflow for a free Supabase plan. It does not enable provider backups, PITR or leaked-password protection. A successful encryption test is not evidence that production recovery works.
+Use this workflow for operator-managed PostgreSQL archives. Provider backup coverage and point-in-time recovery depend on the hosted plan. Record the result of an isolated restore separately from an encryption check.
 
 ## Prerequisites
 
-- Node.js 24 and PostgreSQL client tools compatible with the source server (currently PostgreSQL 17). `pg_dump` must be available, or set `TOP1_PG_DUMP` to its absolute path.
+- Node.js 24 and PostgreSQL client tools compatible with the source server. `pg_dump` must be available, or set `TOP1_PG_DUMP` to its absolute path.
 - An owner-entered database connection in a private libpq service/password file outside this repository. Use a direct connection or the **session** pooler, not the transaction pooler. Set `PGSERVICE`/`PGSERVICEFILE`, or `PGHOST`, `PGPORT`, `PGUSER`, `PGDATABASE`, and `PGPASSFILE`. Do not put a password in shell arguments, source, this document, chat or logs. Password and service files should have mode 600. The tool requires TLS certificate/hostname verification.
 - A protected backup directory outside source control and cloud-synced public folders. The operator supplies absolute file paths. No backups or keys belong in GitHub, Vercel, CI artifacts or support mail.
 
@@ -38,4 +38,4 @@ Keep a separately protected copy of the key. Backups are unrecoverable if that k
 5. Reconcile Auth users and revoke restored sessions; inspect triggers and schedules before reopening access. Storage database rows do not include the underlying uploaded files. Database roles/passwords, Vault encryption roots, provider settings, service secrets, Edge Functions, DNS and application artifacts require their own restricted recovery inventory. Do not extract platform encryption keys or credentials into this repository.
 6. Remove the isolated copy and temporary plaintext through the approved cleanup process. Only an observed successful restoration closes recovery acceptance.
 
-Current acceptance: the cryptographic workflow and failure paths are tested with synthetic archives. A production dump and actual isolated restore still require the private database connection, client tools and approved destination.
+The cryptographic workflow and failure paths are tested with synthetic archives. A production dump and actual isolated restore still require the private database connection, client tools and approved destination.

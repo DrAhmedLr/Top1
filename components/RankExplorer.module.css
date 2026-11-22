@@ -1,0 +1,52 @@
+.explorer{
+ --rank-ink:#f5f8fd;--rank-dim:#aabacd;--rank-line:#344559;--rank-accent:#a8cfff;
+ width:100%;max-width:50rem;margin-inline:auto;color:var(--rank-ink);display:grid;gap:16px;min-width:0
+}
+.controls{display:grid;gap:6px}
+.title{font-size:clamp(2rem,7.5vw,3.4rem);letter-spacing:-.055em;line-height:1.1;color:var(--rank-ink);font-weight:650;margin:4px 0 2px}
+.selectLabel,.overline{font-size:.74rem;font-weight:600;line-height:1.4;color:var(--rank-dim)}
+.selectWrap{display:flex;align-items:center;position:relative;border:1px solid #3a4d62;border-radius:12px;background:#172433;color:var(--rank-ink)}
+.selectWrap>span{position:absolute;inset-inline-start:14px;pointer-events:none;display:grid;color:var(--rank-accent)}
+.selectWrap>svg{position:absolute;inset-inline-end:14px;pointer-events:none}
+.selectWrap select{appearance:none;color:inherit;background:transparent;border:0;width:100%;min-height:48px;padding:9px 41px;text-overflow:ellipsis;font:inherit;font-size:1rem;font-weight:600;line-height:1.45}
+.selectWrap select option,.selectWrap select optgroup{background:#162331;color:#fff}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:#132030;border:1px solid #2e4056;border-radius:11px;padding:3px}
+.modes button,.entry,.action{appearance:none;cursor:pointer;font:inherit;font-size:.84rem;font-weight:650;line-height:1.4}
+.modes button{background:transparent;border:0;color:#b5c6da;min-height:41px;padding:6px 10px;border-radius:8px}
+.modes button[aria-pressed=true]{background:#a8cfff;color:#14263b}
+.panel{padding:clamp(18px,4.7vw,31px);border:1px solid #31445a;border-radius:19px;background:radial-gradient(ellipse at 98% 5%,#27456355,transparent 60%),#172332;min-width:0}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rank-line);padding-bottom:18px}
+.raw{display:flex;align-items:baseline;gap:6px;font-size:clamp(1.65rem,6.6vw,2.35rem);line-height:1.2;letter-spacing:-.05em;font-variant-numeric:tabular-nums;margin-top:4px}
+.raw small{font-size:.8rem;color:#b8c9de;letter-spacing:0;line-height:1.4;font-weight:550}
+.entry{display:inline-flex;align-items:center;gap:6px;border:1px solid #456076;border-radius:8px;color:#e5effa;background:#223448;min-height:42px;padding:5px 12px}
+.entry:disabled,.action:disabled{opacity:.55;cursor:default}
+.ranking{padding:20px 0 4px}
+.ranking .overline{color:var(--rank-accent)}
+.ranking h3{margin:6px 0 7px;font-weight:610;font-family:inherit;letter-spacing:-.055em;line-height:1.1;overflow-wrap:anywhere;color:var(--rank-ink)}
+.ranking .rangeValue{font-size:clamp(2.05rem,8.5vw,3.7rem)}
+.ranking .noRank{font-size:clamp(1.6rem,6vw,2.55rem)}
+.ranking p,.cohort,.method p,.figure figcaption{font-size:.83rem;line-height:1.55;color:#bacae0;margin:0}
+.figure{margin:13px 0 0;min-width:0}
+.figure svg{display:block;width:100%;height:auto;max-height:240px;overflow:visible}
+.tick{font-family:inherit;font-size:9px;fill:#afbed1;font-variant-numeric:tabular-nums}
+.figure figcaption{font-size:.72rem;color:var(--rank-dim);margin-top:2px}
+.cohort{padding-top:12px;font-weight:600}
+.action,.source{display:inline-flex;align-items:center;gap:5px;min-height:44px;color:var(--rank-accent);background:transparent;border:0;padding:5px 0;text-decoration:none}
+.action{margin-top:6px}
+.goal{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;border:1px solid #425f7b;border-radius:10px;background:#1e3144;padding:9px 15px;color:var(--rank-accent);font:inherit;font-size:.86rem;font-weight:650;cursor:pointer}
+.method{border-top:1px solid var(--rank-line);margin:0}
+.method summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;min-height:44px;font-size:.8rem;font-weight:600}
+.method summary::-webkit-details-marker{display:none}
+.method summary svg:last-child{margin-inline-start:auto}
+.method[open] summary svg:last-child{transform:rotate(180deg)}
+.method p{margin:5px 0 9px}
+.source{font-size:.8rem;font-weight:600;text-underline-offset:3px}
+.explorer :is(button,select,summary,a):focus-visible{outline:2px solid var(--rank-accent);outline-offset:3px}
+:global([dir=rtl]) .ranking h3,:global([dir=rtl]) .raw,:global([dir=rtl]) .title{letter-spacing:normal}
+:global([dir=rtl]) .action svg,:global([dir=rtl]) .goal svg{transform:scaleX(-1)}
+@media(min-width:720px){.panel{padding:27px 32px}.ranking{padding-top:23px}.figure{margin-top:15px}}
+
+.explorer .title{margin-block-start:0}
+.controls{margin-top:4px}.selectLabel{font-weight:650;color:#d2deec}
+.explorer .method{border-color:#34465a;color:#b8c8dd}
+.explorer .method summary,.explorer .source{color:#b8d9ff}

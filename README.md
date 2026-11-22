@@ -1,34 +1,19 @@
 # TOP1.Fit
 
-Source for https://top1.fit — a Next.js/TypeScript measurement tracker with optional experimental capacity comparisons.
+This source tree implements a mobile performance journal and adaptive training planner. Home opens the next action. Measurements keeps 36 tests and observations in six categories. Program connects a target and deadline with scheduled sessions, actual exercise and a conditional forecast. Ranking shows the basis of each comparison. See the [product scope](docs/PRODUCT_FOCUS.md).
 
-## Scientific interpretation
+A guest journal stays on the device. Account data uses owner-scoped measurement and training APIs. Each observation preserves its entered value, available protocol and dates. A result without a known test date displays the save date. The interface supports English, French and Arabic.
 
-All measurements are optional. Missing entries never count as zero. Clinical markers and recovery habits remain tracking-only. Other capacity model parameters remain product assumptions; the composite has not been independently calibrated as a population rank.
+The [mobile player journey](docs/TOP1_PLAYER_JOURNEY.md) follows a 5 km and a dead hang through the first two saves. Each of the [13 performance tests](docs/PERFORMANCE_GAME_RULES.md) has its own age, bodyweight and reference-sex rules. The overall game percentage updates as new tests are logged and shows how many areas it covers. Functional and personal observations have separate places in the [36-measure inventory](docs/RANKING_METRIC_DECISIONS.md).
 
-The individual VO2 comparison uses a frozen FRIEND 2022 direct-treadmill CPET reference for supported sex/age cohorts, requiring documented test age/date, peak RER and a self-reported match to its inclusion criteria. Published threshold intervals are displayed without inventing exact percentiles or extrapolated top-one-percent claims. See [scientific references](docs/SCIENTIFIC_REFERENCES.md).
+## Development
 
-## Development and checks
+Use Node.js 24 and the pnpm version in `package.json`. Install with `pnpm install --frozen-lockfile`, configure `.env.local` from `.env.example`, then run `pnpm dev`. See the [contribution guide](CONTRIBUTING.md) for checks appropriate to each change.
 
-Use Node.js 24 and the pnpm version pinned in package.json. Copy .env.example to .env.local and configure your own services. Keep credentials and environment files outside Git.
+The published website uses the Vercel project `top1body-beta` and Supabase project `uyivfmmiwehfkcemjvmh`. The [21 November production audit](docs/AUDIT_2026_11_21.md) records the exact deployment and journeys verified on that date. Use the [operations runbook](docs/OPERATIONS_RUNBOOK.md) to match a later deployment to its source.
 
-```sh
-pnpm install --frozen-lockfile
-pnpm dev
-pnpm check:release
-node scripts/smoke-live.mjs
-```
+The [benchmark contract](docs/BENCHMARK_CONTRACT.md) defines the ranking calculation. The [published references](docs/PERFORMANCE_TEST_REFERENCES.md) document which tests support a cohort comparison. See also [training storage](docs/TRAINING_CONTRACT.md) and [localization](docs/LOCALIZATION.md).
 
-The release gate runs application tests, isolated PostgreSQL ownership/migration checks, TypeScript and a production build. It does not modify production data or establish clinical validity. GitHub Actions runs release checks on pushes and pull requests. Public health checks run on a schedule after the workflow reaches the default branch.
+## Native mobile client
 
-Profiles are private by default. Public summaries require explicit owner publication. Current-session and recent-session checks protect sensitive actions. Account acceptance needs an owner-authorized disposable account; credentials, session material, health data and private test fixtures must not enter logs or GitHub artifacts.
-
-Support: drahmedlr@gmail.com. Do not email passwords or laboratory reports.
-
-## Languages and display bands
-
-English, French and Arabic are available from the language control beside account access. Arabic uses a right-to-left layout. The default experience is guest-first; an account is optional for saving across devices.
-
-Reference results use asymmetric display bands, constrained by the precision of the source data. No global composite rank or unsupported Top 1% claim is inferred. See [language and bracket behavior](docs/LOCALIZATION.md).
-
-Application source is available under the [MIT license](LICENSE). Research sources, reference data and third-party packages retain their own terms. See [contribution guidance](CONTRIBUTING.md).
+Android/iOS source and packaged shared screens live in [mobile/](mobile/README.md). Native build/signing and device acceptance remain pending. See [mobile release status](docs/MOBILE_RELEASE.md) and [sync/account verification](docs/SYNC_AND_ACCOUNT_VERIFICATION.md).

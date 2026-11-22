@@ -47,7 +47,8 @@ export function empiricalBenchmark(a:CalibrationArtifact,values:Record<string,nu
  };
  const score=composite(values),reference=a.validation.map(row=>({...row,values:{composite:composite(row.values)}}));
  const rank=weightedCDF(score,reference,r=>r.values.composite);
- if(100*rank.lower>a.validatedPercentileCeiling)return {available:false as const,score,reason:'This result exceeds the validated resolution of the reference tail. No precise percentile is reported.'};
+ const sampleCeiling=100*(1-1/a.effectiveSampleSize);
+ if(100*rank.lower>Math.min(a.validatedPercentileCeiling,sampleCeiling)+1e-10||rank.lower===1)return {available:false as const,score,reason:'This result exceeds the validated resolution of the reference tail. No precise percentile is reported.'};
  const lowerBand=a.confidenceBands.filter(b=>b.score<=score).at(-1),upperBand=a.confidenceBands.find(b=>b.score>=score);
  const lower=lowerBand?.lower??0,upper=upperBand?.upper??1;
  if(lower>rank.lower+1e-9||upper<rank.lower-1e-9)throw new Error('The uncertainty envelope does not match the supplied joint reference.');

@@ -6,10 +6,10 @@ const d:Demographics={age:35,sex:'male',weight:80,height:180};
 const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches' as const},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 const m=(id:string)=>metrics.find(m=>m.id===id)!;
 const near=(a:number,b:number,t=1e-6)=>assert.ok(Math.abs(a-b)<t,`${a} ≠ ${b}`);
-test('17 active measurements, normalized weights and preserved legacy inputs',()=>{
- assert.equal(activeMetrics.length,17);assert.equal(metrics.length,40);assert.equal(new Set(metrics.map(m=>m.id)).size,40);
+test('21 active measurements, normalized weights and preserved legacy inputs',()=>{
+ assert.equal(activeMetrics.length,36);assert.equal(metrics.length,46);assert.equal(new Set(metrics.map(m=>m.id)).size,46);
  for(const p of new Set(metrics.map(m=>m.pillar)))near(metrics.filter(m=>m.pillar===p).reduce((s,m)=>s+m.weight,0),1);
- assert.equal(activeMetrics.filter(m=>!m.scoringEligible).length,6);
+ assert.equal(activeMetrics.filter(m=>!m.scoringEligible).length,25);
 });
 test('missing/invalid entries cannot change the experimental index or measured coverage',()=>{
  const values={grip_strength:45,sit_to_stand:25,pushups:25};const a=evaluate(values,d),b=evaluate({...values,apob:undefined,lpa:NaN,cmj:-10},d);
@@ -18,7 +18,7 @@ test('missing/invalid entries cannot change the experimental index or measured c
 });
 test('tracking-only biomarkers and extreme vital signs never boost a score',()=>{
  const values={sit_to_stand:25,grip_strength:45,pushups:25};const a=evaluate(values,d),b=evaluate({...values,bp_systolic:70,rhr:25,hba1c:3,body_fat:8,apob:1},d);
- near(a.modelScore,b.modelScore);assert.equal(b.measured.length,5);assert.equal(b.trackingOnly.length,2);
+ near(a.modelScore,b.modelScore);assert.equal(b.measured.length,8);assert.equal(b.trackingOnly.length,5);
  for(const id of ['bp_systolic','rhr','hba1c','body_fat','apob'])assert.throws(()=>score(m(id),m(id).min,d),/tracking-only/);
 });
 test('weighted means preserve a common metric scale without metric-count inflation',()=>{
@@ -79,18 +79,18 @@ test('triad dynamically renormalizes active pillar weights without clinical ince
  assert.equal(a.domains.bodymarkers,undefined);
  near(pillars.reduce((sum,p)=>sum+p.weight,0),1);
  const b=evaluate({pushups:20,sit_to_stand:26,total_sleep:420,sauna_minutes:75,cold_plunge_minutes:13,thermal_hrv_rebound:2,fasting_glucose:85,waist_height_ratio:.45},d);
- near(a.modelScore,b.modelScore);assert.equal(b.trackingOnly.length,2);
+ near(a.modelScore,b.modelScore);assert.equal(b.trackingOnly.length,3);
 });
 test('legacy observations survive normalization but cannot enter triad scoring or coverage',()=>{
- const a=evaluate({pushups:20,sit_to_stand:26,total_sleep:420},d),b=evaluate({pushups:20,sit_to_stand:26,total_sleep:420,bp_systolic:115,ankle_dorsiflexion:40},d);
+ const a=evaluate({pushups:20,sit_to_stand:26,total_sleep:420},d),b=evaluate({pushups:20,sit_to_stand:26,total_sleep:420,sauna_minutes:60,ankle_dorsiflexion:40},d);
  near(a.completeness,b.completeness);near(a.modelScore,b.modelScore);assert.equal(b.measured.length,3);
 });
 
 test('tier assignments follow the brief and omit no active metric',()=>{
- const expected={bodymarkers:[2,0,0],strength:[3,3,6],recovery:[2,1,0]};
+ const expected={bodymarkers:[0,2,11],strength:[3,10,3],recovery:[2,1,4]};
  for(const p of pillars)for(const [i,t] of accessibilityTiers.entries())assert.equal(activeMetrics.filter(m=>m.pillar===p.id&&m.tier===t.id).length,expected[p.id][i]);
  assert.equal(m('sauna_minutes').archived,true);assert.equal(m('thermal_hrv_rebound').archived,true);
- assert.equal(m('vo2_max').tier,'tier2_standard');
+ assert.equal(m('vo2_max').tier,'tier3_precision');
 });
 
 test('scenario sandbox can preview one eligible input without unlocking a saved assessment',()=>{const values={pushups:25},d={age:35,sex:'male' as const},result=evaluate(values,d);assert.equal(result.ready,false);assert.equal(simulate(values,d,result.modelScore+1,'Balanced').reason,'insufficient-data');const preview=simulate(values,d,result.modelScore+1,'Balanced',{}, {allowPartial:true});assert.equal(preview.reason,'reached');assert.ok(preview.targets.pushups!>25);assert.equal(evaluate(values,d).ready,false);assert.deepEqual(values,{pushups:25});});

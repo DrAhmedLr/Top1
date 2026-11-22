@@ -1,4 +1,5 @@
 'use client';
+import {accountReadOptions} from '@/lib/accountSession';
 import {useEffect,useState} from 'react';
 import {useAuth} from './providers/AuthProvider';
 import {useTranslations} from './providers/LocaleProvider';
@@ -11,8 +12,8 @@ const pillarNames={bodymarkers:'Body markers',strength:'Strength & fitness',reco
 export default function JourneyProgress({values,demographics,guestEntries,revision,onRecord,weekly=false}:{values:Values;demographics:Demographics;guestEntries:Observation[];revision?:number;weekly?:boolean;onRecord:()=>void}){
  const {t}=useTranslations(),auth=useAuth(),[historyOwner,setHistoryOwner]=useState(''),[history,setHistory]=useState<Observation[]>([]),[error,setError]=useState(false),[sharing,setSharing]=useState(false),[selected,setSelected]=useState<string[]>([]);
  const game=benchmarkGame(values,demographics),ids=game.rows.map(r=>r.id).sort().join(',');
- useEffect(()=>{let active=true;setHistory([]);setHistoryOwner('');setError(false);if(!auth.ready)return;if(!auth.user){setHistory(guestEntries);setHistoryOwner('guest');return;}const controller=new AbortController();
- Promise.all(ids?ids.split(',').map(async id=>{const r=await fetch(`/api/history?metric=${encodeURIComponent(id)}`,{cache:'no-store',signal:controller.signal});if(!r.ok)throw Error();const b=await r.json();return [...(b.entries??[]),...(b.comparison??[])];}):[]).then(groups=>{if(active){setHistory([...new Map(groups.flat().map(e=>[e.id,e])).values()] as Observation[]);setHistoryOwner(auth.user!.id);}}).catch(()=>{if(active)setError(true);});return()=>{active=false;controller.abort();};
+ useEffect(()=>{let active=true;setHistory([]);setHistoryOwner('');setError(false);if(!auth.ready)return;if(!auth.user){setHistory(guestEntries);setHistoryOwner('guest');return;}const owner=auth.user.id,controller=new AbortController();
+ Promise.all(ids?ids.split(',').map(async id=>{const r=await fetch(`/api/history?metric=${encodeURIComponent(id)}`,accountReadOptions(owner,controller.signal));if(!r.ok)throw Error();const b=await r.json();return [...(b.entries??[]),...(b.comparison??[])];}):[]).then(groups=>{if(active){setHistory([...new Map(groups.flat().map(e=>[e.id,e])).values()] as Observation[]);setHistoryOwner(auth.user!.id);}}).catch(()=>{if(active)setError(true);});return()=>{active=false;controller.abort();};
  },[auth.ready,auth.user?.id,ids,revision,guestEntries]);
  const monday=new Date();monday.setDate(monday.getDate()-((monday.getDay()+6)%7));monday.setHours(0,0,0,0);
  const changes=journeyChanges(historyOwner===(auth.user?.id??'guest')?history:[],values,demographics).filter(c=>!weekly||c.improved&&Date.parse(c.date)>=monday.getTime());

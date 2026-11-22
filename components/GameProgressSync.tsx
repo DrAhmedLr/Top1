@@ -1,0 +1,11 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {gameKey,parseGame,mergeGame} from '@/lib/gameProgress';
+import {useTranslations} from './providers/LocaleProvider';
+export default function GameProgressSync({owner}:{owner:string}){
+ const {locale}=useTranslations();const [state,setState]=useState<'syncing'|'saved'|'pending'>('syncing');
+ useEffect(()=>{if(owner==='guest')return;let alive=true,busy=false,again=false;const controller=new AbortController();let timer:ReturnType<typeof setTimeout>|undefined;
+ const sync=async()=>{if(!alive)return;if(busy){again=true;return;}if(!navigator.onLine){setState('pending');return;}busy=true;again=false;setState('syncing');try{const local=parseGame(localStorage.getItem(gameKey(owner)));const r=await fetch('/api/game',{method:'POST',headers:{'Content-Type':'application/json','x-profile-user':owner},body:JSON.stringify(local),signal:controller.signal});if(!r.ok)throw new Error('sync');const raw=await r.json();if(raw?.version!==1||!raw.days)throw new Error('response');if(!alive)return;const latest=parseGame(localStorage.getItem(gameKey(owner)));localStorage.setItem(gameKey(owner),JSON.stringify(mergeGame(latest,parseGame(JSON.stringify(raw)))));window.dispatchEvent(new Event('top1-game-synced'));setState('saved');}catch{if(alive)setState('pending');}finally{busy=false;if(alive){clearTimeout(timer);timer=setTimeout(()=>void sync(),again?100:60000);}}};
+ const trigger=()=>void sync();void sync();window.addEventListener('online',trigger);window.addEventListener('focus',trigger);window.addEventListener('top1-game-updated',trigger);return()=>{alive=false;controller.abort();clearTimeout(timer);window.removeEventListener('online',trigger);window.removeEventListener('focus',trigger);window.removeEventListener('top1-game-updated',trigger);};},[owner]);
+ if(owner==='guest')return null;const labels={syncing:['Syncing game progress…','Synchronisation du jeu…','جارٍ مزامنة تقدم اللعبة…'],saved:['Game progress synced','Progression du jeu synchronisée','تمت مزامنة تقدم اللعبة'],pending:['Game progress kept on this device. Sync will retry.','Progression conservée ici. Nouvelle tentative de synchronisation prévue.','تقدم اللعبة محفوظ على الجهاز. ستتم إعادة المزامنة.']};return <p className="game-sync-status" role="status">{labels[state][locale==='fr'?1:locale==='ar'?2:0]}</p>;
+}

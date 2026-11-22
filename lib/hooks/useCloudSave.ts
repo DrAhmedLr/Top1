@@ -1,4 +1,5 @@
 'use client';
+import {accountReadOptions} from '../accountSession';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {useAuth} from '@/components/providers/AuthProvider';
 import {captureEvent} from '../analytics';
@@ -27,10 +28,12 @@ export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,
  },[owner,auth.cloud,auth.loading,cancelPending]);
  const baseline=saved&&saved.owner===owner?saved.profile:auth.cloud;
  const unsaved=!!owner&&!!baseline&&profileFingerprint(profile)!==profileFingerprint(baseline);
- const save=useCallback((next:ProfileState,options?:{visibilityIntent:boolean})=>{
+ const save=useCallback((next:ProfileState,options?:{visibilityIntent?:boolean;retainFailedEntry?:boolean})=>{
   latestDraftFingerprint.current=profileFingerprint(next);const userId=owner;if(!userId)return Promise.reject(new Error('Sign in to save.'));
+  let attempted:ProfileState|undefined;
   return queue.current.enqueue(userId,next,async payload=>{
    if(currentOwner.current!==userId)throw new SupersededSave();
+   attempted=payload;
    setStatus('saving');setError('');
    try{if(latestDraftFingerprint.current===profileFingerprint(next))localStorage.setItem(draftKey(userId),serializeDraft(payload,userId));}catch{setStorageWarning('Browser draft storage is unavailable. Cloud saving still works; keep this page open until saved, or download your draft.');}
    const response=await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json','X-Profile-User':userId},body:JSON.stringify({...payload,visibilityIntent:options?.visibilityIntent,values:normalizeValues(payload.values)})});
@@ -43,7 +46,15 @@ export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,
    // Cleanup failure must not turn an acknowledged cloud save into a failed save.
    try{const stored=parseDraft(localStorage.getItem(draftKey(userId)),userId);if(stored&&profileFingerprint(stored)===profileFingerprint(next))localStorage.removeItem(draftKey(userId));}catch{setError('Profile saved. Local draft cleanup is unavailable.');}
    return storedProfile;
-  }).catch(e=>{if(currentOwner.current===userId&&!(e instanceof SupersededSave)){setConflict(!!e.conflict);setError(e instanceof Error?e.message:'Sync failed. Your draft is retained.');setStatus('error');}throw e;});
+  }).catch(e=>{
+   if(currentOwner.current===userId&&!(e instanceof SupersededSave)){
+    // The focused editor commits its value to the dashboard only after acknowledgment.
+    // Review the submitted entry if the request fails, including while storage is unavailable.
+    if(options?.retainFailedEntry&&attempted)setDraft(attempted);
+    setConflict(!!e?.conflict);setError(e instanceof Error?e.message:'Sync failed. Your draft is retained.');setStatus('error');
+   }
+   throw e;
+  });
  },[owner]);
  useEffect(()=>{
   if(!enabled||!owner||!auth.cloud||checkedOwner!==owner||draft)return;
@@ -58,7 +69,7 @@ export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,
   const response=await fetch('/api/profile/private',{method:'POST',headers:{'X-Profile-User':userId}}),body=await response.json();
   if(!response.ok)throw new Error(body.error);if(currentOwner.current!==userId)throw new SupersededSave();
   const source=(checkedOwner===userId?draft:null)??(retainWorking?profile:null);const working=source?{...source,isPublic:false}:null;
-  const refreshed=await fetch('/api/profile',{cache:'no-store'}),loaded=await refreshed.json();
+  const refreshed=await fetch('/api/profile',accountReadOptions(userId)),loaded=await refreshed.json();
   if(currentOwner.current!==userId)throw new SupersededSave();
   if(!refreshed.ok){if(baseline)setSaved({owner:userId,profile:{...baseline,isPublic:false,revision:body.revision}});setError('Profile is private. Reload the latest saved profile before saving edits.');return;}
   const latest=loaded.profile as ProfileState;queue.current.adopt(userId,latest.revision??body.revision);lastStored.current=latest;setSaved({owner:userId,profile:latest});
@@ -67,7 +78,7 @@ export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,
   try{if(retained)localStorage.setItem(draftKey(userId),serializeDraft(retained,userId));}catch{setStorageWarning('Profile is private. Unsaved edits remain in memory; download a draft before closing.');}
  }
 
- function restoreDraft(){if(!draft||!auth.cloud)return null;cancelPending();setReviewing(true);setDraft(null);return {...draft,isPublic:baseline?.isPublic??auth.cloud.isPublic,revision:queue.current.currentRevision(owner!)};}
+ function restoreDraft(){if(!draft||!auth.cloud||conflict)return null;cancelPending();setReviewing(true);setDraft(null);setError('');return {...draft,isPublic:baseline?.isPublic??auth.cloud.isPublic,revision:queue.current.currentRevision(owner!)};}
  function discardDraft(){cancelPending();queue.current.invalidate();try{if(owner)localStorage.removeItem(draftKey(owner));}catch{setError('Local draft cleanup is unavailable.');return;}setDraft(null);setReviewing(false);setConflict(false);setStatus('saved');setError('');}
  return {draftReady:!owner||checkedOwner===owner,status,error,storageWarning,withdraw,conflict,unsaved,draft:checkedOwner===owner?draft:null,reviewing:checkedOwner===owner&&reviewing,restoreDraft,discardDraft,saved:saved&&saved.owner===owner?saved.profile:null,save,cancelPending};
 }

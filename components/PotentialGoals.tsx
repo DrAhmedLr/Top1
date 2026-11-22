@@ -42,9 +42,9 @@ export default function PotentialGoals({values,demographics,owner,onRecordMetric
  function refresh(){update({ids:rotateGoals(ids,choices),targets:{}});}
  function replace(slot:number,id:string){const nextIds=[...ids];nextIds[slot]=id;const nextTargets={...targets};delete nextTargets[ids[slot]];delete nextTargets[id];update({ids:nextIds,targets:nextTargets});}
  return <div className="potential-flow goal-oriented-potential">
-  <div className="dashboard-summary stitch-dashboard potential-dashboard">
+  <div className="dashboard-summary potential-dashboard">
    <StandingHero potential top={current} empty={!current} recordedCount={standing.rows.length} selectedTier={targetTop} onChooseTier={tier=>update({targetTop:tier,targets:{}})} onAction={refresh} actionLabel="Change all goals" actionDisabled={!ready}/>
-   <div className="dashboard-right"><section className="recorded-data-card stitch-recorded goal-board" aria-label={t('Your goals')}>
+   <div className="dashboard-right"><section className="recorded-data-card goal-board" aria-label={t('Your goals')}>
     <div className="card-heading"><h2>{t('Your goals')}</h2><strong className="potential-target-top">{t('Top')} <bdi>{targetTop}%</bdi></strong></div>
     <p className="goal-board-intro">{t('Choose what you want to improve. Change any card or adjust its target.')}</p>
     <div className="objective-grid">{ids.map((id,i)=>{const goal=objectiveFor(id,values,demographics,targetTop,targets[id]);return goal?<ObjectiveCard key={i} goal={goal} choices={choices.filter(choice=>choice===id||!ids.includes(choice))} onReplace={choice=>replace(i,choice)} onTarget={n=>update({targets:{...targets,[id]:n}})} onRecord={()=>onRecordMetric(id)}/>:null;})}</div>

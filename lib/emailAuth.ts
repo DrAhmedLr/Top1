@@ -22,6 +22,10 @@ export function validatePassword(password:string,confirmation:string){
 export function authCallbackUrl(origin:string,next='/'){
  const url=new URL('/auth/callback',origin);url.searchParams.set('next',safeNextPath(next));return url.toString();
 }
+export function emailConfirmationUrl(origin:string,next='/'){
+ return authCallbackUrl(origin,next);
+}
+export function needsEmailConfirmation(error:unknown){return !!error&&typeof error==='object'&&'code' in error&&error.code==='email_not_confirmed';}
 export function authErrorMessage(error:unknown){
  const code=error&&typeof error==='object'&&'code' in error?String(error.code):'';
  if(code==='invalid_credentials')return 'The email or password is incorrect.';
@@ -42,7 +46,7 @@ export async function submitEmailAuth(auth:SupabaseClient['auth'],mode:EmailAuth
  }
  if(mode==='sign-up'){
   validatePassword(password,confirmation);
-  const {data,error}=await auth.signUp({email,password,options:{emailRedirectTo:authCallbackUrl(origin,next)}});if(error)throw error;
+  const {data,error}=await auth.signUp({email,password,options:{emailRedirectTo:emailConfirmationUrl(origin,next)}});if(error)throw error;
   return {signedIn:!!data.session,message:data.session?'Your account is ready.':'Check your inbox to confirm your email before signing in. If you already have an account, sign in instead.'};
  }
  if(!password)throw new Error('Enter your password.');
@@ -50,7 +54,7 @@ export async function submitEmailAuth(auth:SupabaseClient['auth'],mode:EmailAuth
  return {signedIn:true,message:'Signed in.'};
 }
 export async function resendConfirmation(auth:SupabaseClient['auth'],emailInput:string,origin:string,next='/'){
- const {error}=await auth.resend({type:'signup',email:normalizeEmail(emailInput),options:{emailRedirectTo:authCallbackUrl(origin,next)}});if(error)throw error;
+ const {error}=await auth.resend({type:'signup',email:normalizeEmail(emailInput),options:{emailRedirectTo:emailConfirmationUrl(origin,next)}});if(error)throw error;
  return 'If confirmation is needed, a new email has been sent. Check your inbox and spam folder.';
 }
 export function hasRecentRecovery(claims:unknown,now=Date.now()){

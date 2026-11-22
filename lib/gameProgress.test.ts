@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {emptyGame,reward,gameSummary,parseGame,mergeGame} from './gameProgress';
+test('daily rewards are idempotent across repeated saves and reloads',()=>{const first=reward(emptyGame(),'test','2026-11-08');assert.equal(first.xp,20);const reload=parseGame(JSON.stringify(first.log));assert.equal(reward(reload,'test','2026-11-08').xp,0);const check=reward(reload,'check','2026-11-08');assert.equal(gameSummary(check.log).xp,30);assert.equal(gameSummary(check.log).activeDays,1);assert.equal(gameSummary(reward(check.log,'check','2026-11-09').log).activeDays,2);});
+test('malformed local progress does not grant XP',()=>{assert.deepEqual(parseGame('broken'),emptyGame());assert.equal(gameSummary(parseGame('{"version":1,"days":{"bad":{"test":true},"2026-11-08":{"test":"yes"}}}')).xp,0);});
+test('missing a day does not erase earned progress',()=>{let log=emptyGame();for(const day of ['2026-11-01','2026-11-03','2026-11-08','2026-11-10','2026-11-11'])log=reward(log,'test',day).log;assert.deepEqual(gameSummary(log),{xp:100,level:2,progress:0,activeDays:5,testDays:5});});
+
+test("merging devices preserves independent awards without duplication",()=>{const a=reward(emptyGame(),"test","2026-11-01").log,b=reward(emptyGame(),"check","2026-11-01").log;assert.equal(gameSummary(mergeGame(a,b)).xp,30);assert.deepEqual(mergeGame(mergeGame(a,b),a),mergeGame(a,b));});

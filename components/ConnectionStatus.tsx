@@ -1,0 +1,4 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {useTranslations} from './providers/LocaleProvider';
+export default function ConnectionStatus(){const [offline,setOffline]=useState(false);const {locale}=useTranslations();useEffect(()=>{const update=()=>setOffline(!navigator.onLine);update();window.addEventListener('online',update);window.addEventListener('offline',update);return()=>{window.removeEventListener('online',update);window.removeEventListener('offline',update);};},[]);return offline?<p className="connection-status" role="status">{locale==='fr'?'Hors connexion. Garde cette page ouverte. Les sauvegardes du compte nécessitent Internet.':locale==='ar'?'أنت غير متصل. أبقِ الصفحة مفتوحة. حفظ الحساب يحتاج إلى الإنترنت.':'You’re offline. Keep this page open. Account saves need an internet connection.'}</p>:null;}

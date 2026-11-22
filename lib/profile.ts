@@ -47,10 +47,10 @@ export function parsePublicSummary(input: unknown): PublicSummary | null {
   if(Object.keys(s.domains).some(id=>!pillars.some(p=>p.id===id)))return null;
   const domains: PublicSummary['domains']={};
   for(const p of pillars) if(s.domains[p.id]!==undefined){if(!Number.isFinite(s.domains[p.id])||s.domains[p.id]! < -3||s.domains[p.id]! > 3)return null;domains[p.id]=s.domains[p.id];}
-  if(domains.bodymarkers!==undefined||s.modelVersion===MODEL_VERSION&&domains.recovery!==undefined)return null;
+  if(![MODEL_VERSION,'6.7-field21-experimental','6.6-run19-experimental','6.5-markers18-experimental'].includes(s.modelVersion)&&domains.bodymarkers!==undefined||s.modelVersion===MODEL_VERSION&&domains.recovery!==undefined)return null;
   const active=pillars.filter(p=>domains[p.id]!==undefined),weight=active.reduce((sum,p)=>sum+p.weight,0);
   const expectedZ=weight?active.reduce((sum,p)=>sum+p.weight*domains[p.id]!,0)/weight:0;
-  if(active.length>s.scoredCount||(s.scoredCount>0&&!active.length)||Math.abs(s.z-expectedZ)>1e-9||Math.abs(s.modelScore-toModelScore(s.z))>1e-9||s.ready!==(s.scoredCount>=3&&active.length>=(s.modelVersion===MODEL_VERSION?1:2)))return null;
+  if(active.length>s.scoredCount||(s.scoredCount>0&&!active.length)||Math.abs(s.z-expectedZ)>1e-9||Math.abs(s.modelScore-toModelScore(s.z))>1e-9||s.ready!==(s.scoredCount>=3&&active.length>=([MODEL_VERSION,'6.7-field21-experimental','6.6-run19-experimental','6.5-markers18-experimental','6.4-recovery17-experimental'].includes(s.modelVersion)?1:2)))return null;
   return {modelVersion:s.modelVersion,scoredCount:s.scoredCount,ready:s.ready,modelScore:s.modelScore,completeness:s.completeness,z:s.z,domains,measured:s.measured};
 }
 export function safeNextPath(next: string | null): string {

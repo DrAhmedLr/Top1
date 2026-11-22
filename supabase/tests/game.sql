@@ -1,0 +1,12 @@
+begin;
+insert into auth.users(id,email) values('10000000-0000-4000-8000-000000000091','game-owner@example.invalid'),('10000000-0000-4000-8000-000000000092','game-other@example.invalid');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"10000000-0000-4000-8000-000000000091","role":"authenticated"}',true);
+select public.sync_game_progress('{"2026-11-01":{"test":true}}');
+select public.sync_game_progress('{"2026-11-01":{"check":true,"test":false}}');
+do $$begin if not exists(select 1 from public.game_days where check_in and test_done) or (select count(*) from public.game_days)<>1 then raise exception 'Game merge is not idempotent';end if;end$$;
+select set_config('request.jwt.claims','{"sub":"10000000-0000-4000-8000-000000000092","role":"authenticated"}',true);
+do $$begin if exists(select 1 from public.game_days) then raise exception 'Other account sees game progress';end if;end$$;
+reset role;
+do $$begin if has_table_privilege('anon','public.game_days','select') or has_table_privilege('authenticated','public.game_days','truncate') then raise exception 'Excess game table privilege';end if;end$$;
+rollback;

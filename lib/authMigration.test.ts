@@ -1,10 +1,21 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {migrateLocalProfile,type MigrationStorage} from './authMigration';
+import {guestImportOffer,migrateLocalProfile,type MigrationStorage} from './authMigration';
 import {parseLocalProfile,normalizeDemographics,normalizeValues,normalizeUsername,buildPublicSummary,parsePublicSummary,safeNextPath} from './profile';
 import {radarPoints} from './radar';
 const raw=JSON.stringify({demographics:{age:32,sex:'female',weight:60,height:165},values:{rhr:55,vo2_max:42,body_fat:19},demo:false});
 function storage(entries:Record<string,string>):MigrationStorage & {data:Map<string,string>}{const data=new Map(Object.entries(entries));return {data,getItem:key=>data.get(key)??null,removeItem:key=>{data.delete(key);}};}
+test('guest import discovery is optional when loading an account with unavailable or unreadable local data',()=>{
+ const corrupt=storage({'top1-profile-v2':'unreadable'});
+ for(const read of [corrupt.getItem,()=>{throw new Error('Storage unavailable');}]){
+  const offer=guestImportOffer(read);
+  assert.equal(offer.guest,null);
+  assert.ok(offer.error);
+ }
+ assert.equal(corrupt.data.get('top1-profile-v2'),'unreadable');
+ const legacy=storage({'top1-profile-v2':'{"demo":true}','top1-profile-v1':raw});
+ assert.equal(guestImportOffer(legacy.getItem).guest?.values.rhr,55);
+});
 test('actual V2 key and shape migrate in one RPC before cleanup',async()=>{
  const local=storage({'top1-profile-v2':raw,'top1-profile-v1':raw});let calls=0;
  await migrateLocalProfile({rpc:async(name,args)=>{calls++;assert.equal(name,'migrate_local_profile');if(calls===1)assert.ok(local.data.has('top1-profile-v2'));assert.deepEqual(args.p_metrics,{rhr:55,vo2_max:42,body_fat:19});return {error:null};}},local,async()=> 'stable-import-id');

@@ -8,6 +8,7 @@ export default function LocaleProvider({initialLocale,children}:{initialLocale:L
  const setLocale=useCallback((next:Locale)=>{
   updateLocale(next);document.documentElement.lang=next;document.documentElement.dir=localeDirection(next);
   document.cookie=`${LOCALE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol==='https:'?'; Secure':''}`;
+  if(process.env.NEXT_PUBLIC_NATIVE_APP==='1')localStorage.setItem('top1-mobile-locale',next);
   router.refresh();
  },[router]);
  const value=useMemo(()=>({locale,t:(message:string|undefined|null)=>translate(locale,message),setLocale}),[locale,setLocale]);

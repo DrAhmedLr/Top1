@@ -1,11 +1,30 @@
 import {activeMetrics,type Values,type Demographics} from './registry';
 import {comparableDelta,type Observation} from './history';
 import {metricGameEstimate,benchmarkGame} from './benchmarkGame';
+import {performanceTier} from './performanceTiers';
+import {performanceGamePercent} from './performanceRules';
+import {COMPETITIVE_CHALLENGE_METRICS} from './competitiveMetrics';
+import {performanceProfileAtTest} from './performanceContext';
 export function journeyChanges(entries:Observation[],values:Values,d:Demographics){
  return activeMetrics.flatMap(m=>{const history=entries.filter(e=>e.metricId===m.id),delta=comparableDelta(history);if(!delta||delta.latest.value!==values[m.id])return [];
- const before=metricGameEstimate(m.id,delta.previous.value!,d),after=metricGameEstimate(m.id,delta.latest.value!,d);if(!before||!after)return [];
- const older=history.filter(e=>!e.cleared&&e.id!==delta.latest.id&&e.measuredAt&&Date.parse(e.measuredAt)<Date.parse(delta.latest.measuredAt!)).flatMap(e=>{const pair=comparableDelta([e,delta.latest]);return pair?[metricGameEstimate(m.id,e.value!,d)?.z??Infinity]:[];});
- return [{id:m.id,name:m.name,unit:m.id==='total_sleep'?'h/night':m.unit,previous:delta.previous.value!/(m.id==='total_sleep'?60:1),current:delta.latest.value!/(m.id==='total_sleep'?60:1),previousTop:before.top,top:after.top,improved:after.z>before.z,personalBest:after.z>before.z&&older.length>0&&older.every(z=>after.z>z),date:delta.latest.measuredAt!}];});
+ const observedScore=(entry:Observation)=>{
+  if(!COMPETITIVE_CHALLENGE_METRICS.has(m.id)){
+   const estimate=metricGameEstimate(m.id,entry.value!,d);
+   return estimate&&{top:estimate.top,score:estimate.z};
+  }
+  const savedAge=entry.referenceContext?.profileAgeAtEntry;
+  const savedSex=entry.referenceContext?.referenceSexAtEntry;
+  const profile=performanceProfileAtTest({
+   age:typeof savedAge==='number'?savedAge:undefined,
+   sex:savedSex==='male'||savedSex==='female'?savedSex:'unselected',
+  },entry);
+  const percent=performanceGamePercent(m.id,entry.value!,profile);
+  // Comparable raw improvements can set records even beyond the final game tier.
+  return percent===null?null:{top:performanceTier(percent),score:m.polarity*entry.value!};
+ };
+ const before=observedScore(delta.previous),after=observedScore(delta.latest);if(!before||!after)return [];
+ const older=history.filter(e=>!e.cleared&&e.id!==delta.latest.id&&e.measuredAt&&Date.parse(e.measuredAt)<Date.parse(delta.latest.measuredAt!)).flatMap(e=>{const pair=comparableDelta([e,delta.latest]);return pair?[observedScore(e)?.score??Infinity]:[];});
+ return [{id:m.id,name:m.name,unit:m.id==='total_sleep'?'h/night':m.unit,previous:delta.previous.value!/(m.id==='total_sleep'?60:1),current:delta.latest.value!/(m.id==='total_sleep'?60:1),previousTop:before.top,top:after.top,improved:after.score>before.score,personalBest:after.score>before.score&&older.length>0&&older.every(score=>after.score>score),date:delta.latest.measuredAt!}];});
 }
 export function rankChangeReason(before:Values,after:Values,d:Demographics){
  const keys=(v:Values)=>benchmarkGame(v,d).rows.map(r=>r.id).sort().join(',');return keys(before)!==keys(after)?'Measurements added or removed':'Recorded results changed';

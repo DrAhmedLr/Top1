@@ -28,7 +28,7 @@ export function scoringEligibility(m:Metric,d:Demographics,details:MeasurementMe
   const context=details[m.id]??{};
   try{normalizeMeasurementMetadata({[m.id]:context},{now});}catch{return {status:'invalid-context',reason:'The method or date needs correction before this observation can enter the model.'};}
   if(m.id==='vo2_max'){
-    if(context.method!=='direct_cpet'||context.exerciseMode!=='treadmill')return {status:'protocol-required',reason:'The published reference requires direct treadmill CPET. Cycle tests, estimates and unknown modalities remain tracking only.'};
+    if(context.method!=='direct_cpet'||context.exerciseMode!=='treadmill'||context.derivation?.formula==='cooper_v1')return {status:'protocol-required',reason:'The published reference requires direct treadmill CPET. Cycle tests, estimates and unknown modalities remain tracking only.'};
     if(!context.measuredAt||context.protocol?.id!=='cpet_treadmill_v1'||!protocolComplete(m.id,context.protocol))return {status:'protocol-required',reason:'The FRIEND reference requires a dated direct treadmill CPET report, peak RER ≥ 1.0, and confirmed match to its population (no known cardiovascular disease or COPD). Unknown or unmatched context remains tracking only.'};
     const age=context.ageAtMeasurement;
     if(!Number.isInteger(age)||age!<20||age!>89)return {status:'unsupported-cohort',reason:'Record a test age of 20–89 for the supported treadmill cohort.'};

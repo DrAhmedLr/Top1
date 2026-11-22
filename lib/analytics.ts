@@ -1,9 +1,9 @@
 'use client';
 import type {PostHog} from 'posthog-js';
 import {metrics} from './registry';
-export const analyticsViews=['overview','measurements','progress','scenarios','profile','settings','methodology','sign-in','sign-up','forgot-password','reset-password','account-password','share','privacy'] as const;
+export const analyticsViews=['journey','overview','ranking','program','measurements','progress','scenarios','profile','settings','methodology','labs','sign-in','sign-up','forgot-password','reset-password','account-password','share','privacy'] as const;
 export type AnalyticsView=typeof analyticsViews[number];
-export const analyticsEvents=['app_viewed','onboarding_started','onboarding_completed','signup_requested','signup_confirmed','login_succeeded','recovery_requested','measurement_saved','measurement_cleared','profile_migrated','public_link_shared','simulator_used','program_saved','program_task_completed'] as const;
+export const analyticsEvents=['journey_recommendation_shown','journey_basics_started','journey_basics_saved','journey_recommendation_skipped','game_quest_started','game_checkin_completed','game_reward_earned','game_library_opened','app_viewed','onboarding_started','onboarding_completed','journey_started','journey_result_saved','journey_reveal_viewed','journey_challenge_chosen','journey_retest_completed','signup_requested','signup_confirmed','login_succeeded','recovery_requested','measurement_saved','measurement_cleared','profile_migrated','public_link_shared','simulator_used','program_saved','program_task_completed'] as const;
 export type AnalyticsEvent=typeof analyticsEvents[number];
 let analytics:PostHog|null=null,lastView:AnalyticsView|undefined;
 const pending:Array<{event:AnalyticsEvent;properties:Record<string,string>}>=[];
@@ -11,7 +11,7 @@ const configured=!!process.env.NEXT_PUBLIC_POSTHOG_KEY;
 export function safeEventProperties(event:AnalyticsEvent,input:Record<string,unknown>={}){
  const out:Record<string,string>={};
  if(event==='app_viewed'&&analyticsViews.includes(input.view as AnalyticsView))out.view=String(input.view);
- if(['measurement_saved','measurement_cleared','simulator_used'].includes(event)&&metrics.some(m=>m.id===input.metric_id))out.metric_id=String(input.metric_id);
+ if(['journey_result_saved','journey_recommendation_shown','journey_recommendation_skipped','measurement_saved','measurement_cleared','simulator_used'].includes(event)&&metrics.some(m=>m.id===input.metric_id))out.metric_id=String(input.metric_id);
  if(event==='public_link_shared'&&['clipboard','x'].includes(String(input.channel)))out.channel=String(input.channel);
  if(['program_saved','program_task_completed'].includes(event)&&['consistency','strength','recovery'].includes(String(input.focus)))out.focus=String(input.focus);
  return out;

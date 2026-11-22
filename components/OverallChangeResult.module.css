@@ -1,0 +1,21 @@
+.change {
+  color: #f2f6fb;
+  text-align: start;
+  align-self: stretch;
+  border-radius: 16px;
+  background: var(--game-surface, #182331);
+  border: 1px solid var(--game-line, #344256);
+  padding: 14px 16px;
+}
+.title { font-size: .78rem; font-weight: 650; color: var(--game-muted,#bac8da); }
+.numbers { display:flex; gap: 10px; align-items:center; flex-wrap:wrap; line-height:1.1; margin-block:7px; }
+.numbers strong { color: var(--game-accent,#90c4ff); font-size: clamp(1.42rem,5.5vw,2.1rem); font-weight:650; letter-spacing:-.04em; }
+.previous { color:var(--game-muted,#aab9cd); font-size:1.05rem; }
+.numbers svg { color:var(--game-muted,#aab9cd); }
+:global([dir="rtl"]) .numbers svg { transform:scaleX(-1); }
+.status { font-size:.76rem; color:var(--game-muted,#aab9cd); }
+
+.first{display:flex;align-items:baseline;gap:4px 8px;flex-wrap:wrap;text-align:start;padding-block:9px;color:var(--game-text,#f5f8fd)}
+.first .numbers{margin:0}
+.first .numbers strong{font-size:.9rem;letter-spacing:0}
+.first .status{margin-inline-start:auto}

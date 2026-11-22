@@ -1,3 +1,4 @@
+import {validApiOrigin} from '@/lib/nativeApi';
 import {normalizePublicFields,disclosedDemographics,readPublicFields} from '@/lib/sharing';
 import {currentAccount} from '@/lib/accountSession';
 import { signSummary } from '@/lib/summarySignature';
@@ -8,10 +9,10 @@ import { getSupabaseServer } from '@/lib/supabaseServer';
 import { emptyProfile,normalizeDemographics,normalizeValues,normalizeUsername,buildPublicSummary } from '@/lib/profile';
 export const dynamic='force-dynamic';
 const reply=(body:unknown,status=200)=>NextResponse.json(body,{status,headers:{'Cache-Control':'private, no-store'}});
-export async function GET(){
+export async function GET(req:Request){
   const client=await getSupabaseServer();
   if(!client)return reply({error:'Cloud storage is not configured.'},503);
-  const user=await currentAccount(client);
+  const user=await currentAccount(client,req);
   if(!user||user.is_anonymous)return reply({error:'Sign in to access your profile.'},401);
   const {data,error}=await client.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(error)return reply({error:'Unable to load profile.'},500);
@@ -21,8 +22,8 @@ export async function GET(){
   return reply({profile:{demographics:{age:data.age,sex:data.sex,...(data.weight_kg==null?{}:{weight:Number(data.weight_kg)}),...(data.height_cm==null?{}:{height:Number(data.height_cm)})},values:normalizeValues(measurements.values),measurementDetails:normalizeMeasurementMetadata(measurements.details,{legacy:true}),publicFields:readPublicFields(data.public_summary?.publicFields,data.is_public),username:data.username??'',isPublic:data.is_public,revision:Number(data.revision),ageRecordedAt:data.age_recorded_at??undefined}});
 }
 export async function POST(request:NextRequest){
-  // Cookie-authenticated writes only accept same-origin browser requests.
-  if(request.headers.get('origin')!==request.nextUrl.origin)return reply({error:'Invalid request origin.'},403);
+  // Web writes are same-origin; native writes require an explicit bearer identity.
+  if(!validApiOrigin(request))return reply({error:'Invalid request origin.'},403);
   if(Number(request.headers.get('content-length')??0)>65536)return reply({error:'Profile payload too large.'},413);
   const client=await getSupabaseServer();
   if(!client)return reply({error:'Cloud storage is not configured.'},503);

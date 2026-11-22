@@ -1,7 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { getSupabaseServer } from '@/lib/supabaseServer';
 import { safeNextPath } from '@/lib/profile';
+import {getTranslations} from '@/lib/localeServer';
+import {confirmationPage} from '@/lib/emailConfirmation';
 export async function GET(request:NextRequest){
+  if(request.nextUrl.searchParams.has('token_hash'))return confirmationPage(request.nextUrl,(await getTranslations()).locale);
   const code=request.nextUrl.searchParams.get('code');
   const client=await getSupabaseServer();
   if(code&&client){

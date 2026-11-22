@@ -8,7 +8,7 @@ const d:Demographics={age:25,sex:'male',weight:80,height:180};
 const near=(a:number,b:number)=>assert.ok(Math.abs(a-b)<1e-6);
 const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 test('all model cells are finite, but only VO2 parameters are source-grounded',()=>{
- assert.equal(Object.keys(demographicLookup).length,38);
+ assert.equal(Object.keys(demographicLookup).length,40);
  for(const m of metrics)for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){
   if(!demographicLookup[m.id]){assert.equal(m.scoringEligible,false);continue;}
   const norm=demographicLookup[m.id][sex][bracket];assert.ok(Number.isFinite(norm.mean)&&norm.stdDev>0);
@@ -39,7 +39,7 @@ test('legacy correlations retain directional semantics but are not used by aggre
 });
 test('full raw-data coverage is independent of scoring eligibility and does not establish confidence',()=>{
  const values:Values=Object.fromEntries(metrics.map(m=>[m.id,valid(m,m.mean)?m.mean:(m.min+m.max)/2]));
- for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,17);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<38);assert.ok(Number.isFinite(result.z));}
+ for(const sex of ['male','female'] as const)for(const bracket of ageBrackets){const result=evaluate(values,{...d,sex,age:Number.parseInt(bracket,10)},details);near(result.completeness,100);assert.equal(result.measured.length,36);assert.equal(result.coverageTier,'High');assert.ok(result.scoredCount<38);assert.ok(Number.isFinite(result.z));}
 });
 
 test('the 80–89 published cell is distinct from the UI 70+ group',()=>{

@@ -1,14 +1,38 @@
 import {activeMetrics,type Values,type Demographics,type PillarId} from './registry';
-import {valid,clamp} from './engine';
+import {valid,clamp,inverseCdf} from './engine';
 import {getMetricCohortNorm} from './demographics';
+import {run10kPercent} from './run10kReference';
+import {TOP_BAND_EDGES} from './topBands';
+import {fieldBenchmarkPercent} from './fieldBenchmarks';
 import {illustrativeTop} from './gameStanding';
-export const BENCHMARK_GAME_VERSION='4-recovery-17';
-export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['sprint_10m','total_sleep']);
+import {performanceTier} from './performanceTiers';
+import {PERFORMANCE_RULES,PERFORMANCE_RULES_VERSION,performanceGamePercent} from './performanceRules';
+export const BENCHMARK_GAME_VERSION='12-performance-v3';
+export function metricGameVersion(id:string){return Object.hasOwn(PERFORMANCE_RULES,id)?PERFORMANCE_RULES_VERSION+'/'+id:'10-three-levels';}
+export const CONTEXT_GAME_METRICS=new Set(['apob','lpa','fasting_insulin','hscrp','hba1c','homocysteine','cystatin_c','ggt','fasting_glucose','bp_systolic','hrr_1min','zone2_power','sleep_efficiency','circadian_regularity','reaction_time']);
+export const EXTRA_TRAINABLE_GAME_METRICS=new Set(['total_sleep']);
 /** Entertainment layer only. These anchors are product assumptions, not
  * population norms, clinical targets or a universal scientific consensus.
  * Never used in the scientific engine, signed reports or training optimizer. */
 export function metricGameEstimate(id:string,value:number,d:Demographics){
+ if(!Object.hasOwn(PERFORMANCE_RULES,id))return metricGameEstimateV10(id,value,d);
+ const modelTopPercent=performanceGamePercent(id,value,d);
+ if(modelTopPercent===null)return null;
+ // Older aggregate/scenario consumers expect a standardized value in [-3,3].
+ // Current individual challenges use the full practical ladder down to 0.01%.
+ const rawZ=-inverseCdf(Math.min(1-1e-12,modelTopPercent/100));
+ return {z:clamp(rawZ+1e-9,-3,3),rawZ,ceiling:3,top:performanceTier(modelTopPercent),modelTopPercent};
+}
+
+/** Frozen scorer used by the versioned four-area pilot. */
+export function metricGameEstimateV10(id:string,value:number,d:Demographics){
+ if(CONTEXT_GAME_METRICS.has(id))return null;
  const m=activeMetrics.find(m=>m.id===id);if(!m||!valid(m,value))return null;
+ // Evaluate exactly the value that survives a profile save and reload.
+ value=Number(value.toFixed(3));
+ const fieldPercent=fieldBenchmarkPercent(id,value,d);
+ if(fieldPercent!==null){const p=fieldPercent,z=p<=1?3:clamp(inverseCdf(1-Math.min(99.9,p)/100)+1e-9,-3,3);return {z,top:p>65?'65%+':`${TOP_BAND_EDGES.find(edge=>edge>=p-1e-8)??65}%`,ceiling:3,rawZ:z};}
+ if(id==='run_10k'){const p=run10kPercent(value,d),z=p<=1?3:clamp(inverseCdf(1-Math.min(99.9,p)/100)+1e-9,-3,3);return {z,top:p>65?'65%+':`${TOP_BAND_EDGES.find(edge=>edge>=p-1e-8)??65}%`,ceiling:3,rawZ:z};}
  let mean=m.mean,sd=m.sd;
  try{const r=getMetricCohortNorm(id,d);mean=r.mean;sd=r.stdDev;}catch{}
  const overrides:Record<string,[number,number]>={grip_combined:[d.sex==='female'?56:95,20],sprint_10m:[2.2,.35],waist_height_ratio:[.5,.08],fasting_glucose:[95,15]};

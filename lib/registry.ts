@@ -15,6 +15,8 @@ export type Demographics = { age: number; sex: 'male' | 'female' | 'unselected';
 export type Values = Record<string, number | undefined>;
 export type Metric = { id: string; name: string; pillar: PillarId; tier: AccessibilityTier; archived?:boolean; unit: string; target: string; polarity: 1 | -1; scoringType: 'linear' | 'skewed' | 'bounded'; mean: number; sd: number; min: number; max: number; optimal?: [number,number]; lms?: { L:number; M:number; S:number }; weight: number; easiestPathPriority: number; scenarioChangePerStep: number; scoringEligible: boolean; proofData: { study: string; sampleSize: string; rationale: string; instructions: string; url: string }; protocol: string };
 type Row = [string,string,string,string,1|-1,Metric['scoringType'],number,number,number,number,string,string];
+/** Fixed TOP1 game targets for tests with a maintenance level. */
+export const maintenanceTargets:Readonly<Partial<Record<string,number>>>={sit_to_stand:36,single_leg_balance:45};
 const data: Record<string, Row[]> = {
   biomarkers: [
     ['apob','Apolipoprotein B','mg/dL','< 48',-1,'skewed',95,25,1,300,'NHANES / ESC–EAS','Atherogenic particle density'],
@@ -36,7 +38,7 @@ const data: Record<string, Row[]> = {
     ['bp_systolic','Systolic blood pressure','mmHg','< 106',-1,'linear',122,15,70,240,'Framingham Heart Study','Resting arterial pressure'],
   ],
   body_comp: [
-    ['body_fat','Body fat','%','8–10.5',-1,'bounded',23,7,3,60,'NHANES DEXA','Relative fat and lean mass'],
+    ['body_fat','Body fat','%','Interpret by method and individual context',-1,'bounded',23,7,3,60,'NHANES DEXA','Relative fat and lean mass'],
     ['visceral_fat','Visceral fat area','cm²','< 15',-1,'skewed',85,45,1,500,'CT / DEXA imaging cohorts','Intra-abdominal adiposity'],
   ],
   strength_mobility: [
@@ -48,14 +50,14 @@ const data: Record<string, Row[]> = {
     ['bench_1rm','Bench press','× BW','≥ 1.65',1,'linear',.8,.3,.1,3,'NSCA pressing standards','Upper-body pressing strength'],
     ['pullup_1rm','Weighted pull-up','× BW added','≥ 1.05',1,'linear',.2,.25,0,2,'Street lifting datasets','Vertical pulling force'],
     ['farmers_carry',"Farmer’s carry (total load 1× BW)",'s','≥ 120',1,'linear',45,25,1,300,'Functional work capacity norms','Loaded grip and trunk endurance'],
-    ['sit_to_stand','30-second sit-to-stand','reps','≥ 36',1,'linear',20,6,0,60,'Rikli & Jones','Functional lower-body endurance'],
+    ['sit_to_stand','30-second sit-to-stand','reps',`≥ ${maintenanceTargets.sit_to_stand}`,1,'linear',20,6,0,60,'Rikli & Jones','Functional lower-body endurance'],
     ['ankle_dorsiflexion','Ankle dorsiflexion','°','≥ 48',1,'linear',32,8,1,70,'Weight-bearing lunge test datasets','Ankle range of motion'],
   ],
   recovery_somnology: [
     ['total_sleep','Total sleep time','min','≥ 420 regularly; individual needs vary',1,'bounded',405,60,120,900,'Sleep Research Society','Restorative sleep duration'],
     ['sleep_efficiency','Sleep efficiency','%','≥ 96',1,'linear',85,6,30,100,'Polysomnography continuity norms','Time asleep relative to time in bed'],
     ['circadian_regularity','Circadian regularity','/ 100','≥ 92',1,'linear',65,15,0,100,'Wearable sleep timing indices','Consistency of sleep timing'],
-    ['single_leg_balance','Eyes-closed single-leg balance','s','≥ 45',1,'linear',15,10,0,180,'Age-matched balance norms','Vestibular and proprioceptive control'],
+    ['single_leg_balance','Eyes-closed single-leg balance','s',`≥ ${maintenanceTargets.single_leg_balance}`,1,'linear',15,10,0,180,'Age-matched balance norms','Vestibular and proprioceptive control'],
     ['reaction_time','Simple visual reaction time','ms','≤ 175',-1,'linear',300,60,100,1000,'Human Benchmark','Simple visual response with device/input latency'],
   ],
 };
@@ -69,7 +71,7 @@ const sources: Partial<Record<string,string>> = {
   hrr_1min:'https://doi.org/10.1056/NEJM199910283411804',
 };
 const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map(r => ({
-  id:r[0],name:r[1],pillar,unit:r[2],target:r[0]==='body_fat'?'Interpret by method and individual context':r[0]==='rhr'?'Rested personal trend; lower is not always better':r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],weight:1/rows.length,
+  id:r[0],name:r[1],pillar,unit:r[2],target:r[0]==='rhr'?'Rested personal trend; lower is not always better':r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],weight:1/rows.length,
   optimal:r[0]==='total_sleep'?[420,540] as [number,number]:undefined,
   easiestPathPriority:['total_sleep','circadian_regularity','fasting_insulin','ankle_dorsiflexion'].includes(r[0])?1:3,
   scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),
@@ -78,23 +80,46 @@ const originalMetrics = Object.entries(data).flatMap(([pillar,rows]) => rows.map
   protocol:r[0]==='lpa'?'Discuss inherited risk with your clinician. Lifestyle changes generally do not lower Lp(a).':pillar==='biomarkers'?'Confirm the measurement and review it with a clinician before choosing an intervention.':pillar==='cardiovascular'?'Build a consistent aerobic base, then reassess with the same test protocol.':pillar==='strength_mobility'?'Practice progressive strength and mobility work with consistent technique.':pillar==='recovery_somnology'?'Keep a consistent sleep opportunity and track a 7-day average.':'Track comparable measurements over time; assess targets individually.',
 })));
 
+export const bloodMetricIds = ['apob','lpa','fasting_insulin','hscrp','hba1c','homocysteine','cystatin_c','ggt','fasting_glucose'];
 const assignments: Record<PillarId, readonly (readonly string[])[]> = {
-  bodymarkers: [ ['body_fat','waist_height_ratio'], [], [] ],
-  strength: [ ['sit_to_stand','pushups','single_leg_balance'], ['bench_1rm','grip_strength','vo2_max'], ['squat_1rm','deadlift_1rm','pullup_1rm','cmj','broad_jump','sprint_10m'] ],
-  recovery: [ ['total_sleep','rhr'], ['hrv'], [] ],
+  bodymarkers: [ [], ['waist_height_ratio','bp_systolic'], ['body_fat','vo2_max',...bloodMetricIds] ],
+  strength: [ ['pushups','sit_to_stand','single_leg_balance'], ['pullups','dips','dead_hang','bench_1rm','squat_1rm','deadlift_1rm','pullup_1rm','broad_jump','run_5k','sprint_400m'], ['grip_strength','cmj','zone2_power'] ],
+  recovery: [ ['total_sleep','rhr'], ['hrr_1min'], ['hrv','sleep_efficiency','circadian_regularity','reaction_time'] ],
 };
 const additions: Row[] = [
+ ['run_5k','5 km run','min','TOP1 challenge standard',-1,'linear',30,8,12,180,'TOP1 performance challenge','Elapsed time over a measured five-kilometre course'],
+ ['pullups','Strict pull-up repetitions','reps','Community benchmark estimate',1,'linear',10,5,0,100,'Lockie et al. 2022 · firefighter trainee pull-up test','Body-weight vertical pulling endurance; distinct from a weighted one-rep maximum'],
+ ['sprint_400m','400-metre sprint','s','Benchmark estimate',-1,'linear',90,20,40,600,'Lombardo & Deaner 2014 · sprint performance','Elapsed time over a measured 400-metre course'],
+ ['dead_hang','Dead hang','s','Benchmark estimate',1,'linear',45,20,0,1200,'Dead-hanging endurance research','Straight-arm two-hand bar-hang duration; grip endurance relative to body weight'],
+ ['run_10k','10 km run','min','Race-finisher reference',-1,'linear',62.13,15,26,180,'RunRepeat race-results analysis','Time to complete ten kilometres on a measured course'],
+ ['dips','Dips','reps','Illustrative anchor ≥ 25',1,'linear',10,7,0,100,'No calibrated cohort loaded','Upper-body pushing endurance with consistent parallel-bar technique'],
  ['grip_combined','Combined handgrip strength','kg','Reference pending',1,'linear',0,1,0,240,'NHANES muscle strength protocol','Sum the best of three trials from each hand. This is distinct from single-hand grip.'],
  ['sprint_10m','10-metre sprint','s','Reference pending',-1,'linear',0,1,1,30,'Electronic-gate sprint protocol','Acceleration over ten metres; electronic and hand-timed measurements are not interchangeable.'],
  ['waist_height_ratio','Waist-to-height ratio','ratio','Context required',-1,'linear',.5,.08,.2,1.5,'No calibrated cohort loaded','Waist circumference divided by height in the same units'],
  ['fasting_glucose','Fasting glucose','mg/dL','Context required',-1,'linear',95,15,20,600,'Laboratory glucose','Fasting plasma glucose; clinical interpretation requires individual context'],
- ['pushups','Strict push-up repetitions','reps','Illustrative anchor ≥ 40',1,'linear',20,10,0,150,'No calibrated cohort loaded','Upper-body muscular endurance under a standardized strict technique'],
+ ['pushups','Strict push-up repetitions','reps','Profile-adjusted TOP1 push-up model',1,'linear',20,10,0,150,'No calibrated cohort loaded','Upper-body muscular endurance under a standardized strict technique'],
  ['sauna_minutes','Weekly sauna duration','min/week','Tracking only',1,'bounded',75,30,0,600,'Finnish KIHD sauna cohort','Heat exposure duration; exposure time alone does not establish benefit or safety'],
  ['cold_plunge_minutes','Weekly cold plunge duration','min/week','Tracking only',1,'bounded',13,5,0,120,'Winter-swimming thermogenesis study','Cold exposure duration; temperature, acclimatization and session pattern matter'],
  ['thermal_hrv_rebound','Post-thermal HRV rebound ratio','ratio','Tracking only',1,'linear',1,.2,.01,10,'No validated rebound reference','Post-exposure RMSSD divided by matched pre-exposure RMSSD'],
 ];
-const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:r[0]==='pushups'?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
+const added: Omit<Metric,'pillar'|'tier'|'weight'>[] = additions.map(r=>({id:r[0],name:r[1],unit:r[2],target:r[3],polarity:r[4],scoringType:r[5],mean:r[6],sd:r[7],min:r[8],max:r[9],easiestPathPriority:r[0]==='pushups'?1:3,scoringEligible:!TRACKING_ONLY_METRICS.has(r[0]),scenarioChangePerStep:r[0]==='pushups'?.025:0,proofData:{study:r[10],sampleSize:'No study-derived quantitative reference distribution is loaded.',rationale:r[11],instructions:'Record the observation in the stated units using the same protocol.',url:''},protocol:['pushups','dips'].includes(r[0])?'Use consistent strict technique and stop when form cannot be maintained.':'Log comparable observations; do not increase exposure to chase a score.'}));
 const specialProof: Record<string, Partial<Metric['proofData']>> = {
+ body_fat:{
+  study:'Kelly et al. · NHANES DXA body composition',
+  url:'https://doi.org/10.1371/journal.pone.0007038',
+  sampleSize:'This study describes DXA measurements in the US NHANES survey. TOP1 records body fat for personal tracking only.',
+  instructions:'Record the percentage and the measurement method. Compare readings taken with the same method and device.',
+ },
+ run_5k:{
+  study:'Hurst & Board · Repeatability of 5 km race times',
+  url:'https://doi.org/10.1080/1091367X.2016.1233421',
+  sampleSize:'Fifteen endurance runners completed two outdoor 5 km races. The study assessed repeatability. TOP1 sets its own game tiers.',
+  instructions:'Record the total elapsed time for a measured 5 km course in minutes and seconds. Use the same terrain and timing method for retests.',
+ },
+ pullups:{study:'Lockie et al. 2022 · firefighter trainee pull-up percentiles',url:'https://doi.org/10.3390/su14116548',sampleSize:'269 firefighter trainees (238 men, 31 women) from six classes in one department. Table 4 places 21–28 repetitions in the 90th–100th percentile band within this combined cohort. It does not establish a global Top 1% cutoff.',instructions:'Hang at full arm extension. Pull your chin above the bar, then return to straight arms. Count consecutive reps without swinging or assistance. Stop when form breaks.'},
+ sprint_400m:{study:'Lombardo & Deaner 2014 · PeerJ 445',url:'https://doi.org/10.7717/peerj.445',sampleSize:'The paper estimated 400 m benchmarks from 50 m norms for 15-year-old Australian schoolchildren: 95th-percentile performance of 61.6 s for boys and 67.8 s for girls. These are extrapolations, not measured adult 400 m percentiles or a global Top 1% threshold.',instructions:'Use a measured 400 m track and a standing start. Record total elapsed seconds. Keep hand-timed and automatically timed results in separate series.'},
+ dead_hang:{study:'Comparative Effects of Core Versus Forearm Training on Pull-Up Repetition Performance in Physically Inactive Males',url:'https://pmc.ncbi.nlm.nih.gov/articles/PMC12736907/',sampleSize:'Thirty physically inactive male university students, mean age 21, in an eight-week training study. Dead-hang group means at baseline were 40.4–47.2 s. This small intervention study supports measuring hanging endurance, not population percentiles. A 120-second hang has no established global Top 1% cutoff.',instructions:'Use a fixed bar, closed overhand grip and straight elbows. Time until release or foot support. Keep bar, grip width and chalk use consistent. Stop if painful.'},
+ run_10k:{study:'RunRepeat · race-finisher comparisons (updated March 2024)',url:'https://runrepeat.com/how-do-you-masure-up-the-runners-percentile-calculator',sampleSize:'The analysis covers 35 million results across distances; the 10 km subset size is not stated. Race finishers are not the general population.',instructions:'Record elapsed time for a complete, measured 10 km course as minutes:seconds. Use comparable terrain and timing. Top 1% is a published cutoff; 2.5% and 5% tiers are interpolated estimates between published 1% and 10% cutoffs. No age adjustment. This is a race-results comparison, not a peer-reviewed population norm.'},
  hrv:{study:'Laborde et al. 2017 · HRV measurement recommendations',url:'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00213/full',sampleSize:'Measurement guidance; no calibrated population ranking is loaded.',instructions:'Enter RMSSD in milliseconds from the same compatible device. Measure at a consistent time and posture after resting; use a consistent recording duration and compare your own trend. Do not mix RMSSD with SDNN or a wearable readiness score. Higher is not always better.'},
  rhr:{study:'American Heart Association · resting heart rate',url:'https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse',instructions:'Record a representative seven-day average while awake, rested and in the same posture. Medication, illness, stress and training affect this reading. Lower is not always better; the game plateau is a product choice, not a health target.'},
  cmj:{study:'Hoffmann et al. 2019 · CHMS jump-height Table 4',url:'https://www150.statcan.gc.ca/n1/pub/82-003-x/2019010/article/00002-eng.htm',sampleSize:'CHMS cycle 5; age/sex-specific Canadian population norms, ages 18–69 in TOP1. Exact Leonardo protocol required.',instructions:'Select the measurement protocol. Canadian comparison requires a Leonardo Mechanograph, arm swing and the highest of three valid jumps. Wall, app and hands-on-hips results receive only an illustrative game estimate.'},
@@ -108,6 +133,7 @@ const specialProof: Record<string, Partial<Metric['proofData']>> = {
  thermal_hrv_rebound:{instructions:'Divide post-exposure RMSSD by pre-exposure RMSSD measured with the same device, posture, recording length and timing. Do not mix SDNN and RMSSD. No validated recovery or optimal ratio is established.'},
  waist_height_ratio:{study:'NICE NG246 · central adiposity assessment',url:'https://www.nice.org.uk/guidance/ng246/chapter/Identifying-and-assessing-overweight-obesity-and-central-adiposity',instructions:'Measure waist and height in the same units, then divide waist by height. Keep anatomical site and technique consistent. This is a body-composition observation; its game tier is not a clinical assessment.'},
  fasting_glucose:{instructions:'Enter a fasting laboratory plasma glucose result in mg/dL. Do not enter mmol/L; multiply mmol/L by 18.0182 first. Follow laboratory fasting instructions and review results clinically.'},
+ dips:{instructions:'Count unassisted parallel-bar dips with a controlled descent to a comfortable, repeatable depth and full elbow extension. Keep the same technique, avoid swinging, and stop at form failure or discomfort. Bench dips and assisted dips are different tests.',study:'Standardized personal tracking; illustrative game anchor only',url:'',sampleSize:'No calibrated population distribution is loaded.'},
  pushups:{instructions:'Count consecutive strict repetitions with a straight trunk, consistent depth and full elbow extension. Stop at form failure. Knee, incline and strict variants are not interchangeable.'},
  reaction_time:{instructions:'Choose the actual simple or choice-reaction protocol, use the same task and device, and record multiple trials. These protocols are not interchangeable. Browser/device latency is not independently calibrated; results remain tracking-only.'},
 };
@@ -117,6 +143,7 @@ export const metrics: Metric[] = [...originalMetrics,...added].map(m=>{
  const pillar=assignment?.pillar ?? (m.id==='bp_systolic'?'bodymarkers':'strength');
  const count=assignments[pillar].flat().length;
  return {...m,pillar,tier:assignment?.tier??'tier2_standard',archived,weight:archived?0:1/count,scoringEligible:!archived&&m.scoringEligible,
+   target:bloodMetricIds.includes(m.id)?'Lab result · clinician interpretation':m.target,
    name:m.id==='hrv'?'Heart rate variability (RMSSD)':m.id==='reaction_time'?'Reaction time':m.name,
    optimal:m.id==='sauna_minutes'?[60,90]:m.id==='cold_plunge_minutes'?[11,15]:m.optimal,
    proofData:{...m.proofData,...specialProof[m.id]},

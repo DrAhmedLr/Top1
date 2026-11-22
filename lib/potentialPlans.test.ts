@@ -8,18 +8,18 @@ import {emptyTimeline} from './routineHistory';
 import {emptyPlan,normalizePlan} from './program';
 const d={age:35,sex:'male' as const,weight:80,height:180};
 test('three plans offer distinct unmeasured baselines without creating score values',()=>{
- const values={total_sleep:480,rhr:NaN,apob:90};
+ const values={total_sleep:480,rhr:NaN,sauna_minutes:90};
  const groups=gameRoutes.map(route=>missingPlanMetrics(values,d,route));
  assert.deepEqual(groups[0].map(m=>m.id),['rhr','waist_height_ratio','single_leg_balance']);
  assert.ok(groups[1].some(m=>m.id==='pushups'));
  assert.ok(groups[2].some(m=>m.id==='bench_1rm'));
  assert.equal(new Set(groups.flat().map(m=>m.id)).size,9);
- assert.deepEqual(Object.keys(values),['total_sleep','rhr','apob']);
+ assert.deepEqual(Object.keys(values),['total_sleep','rhr','sauna_minutes']);
  const complete=Object.fromEntries(activeMetrics.map(m=>[m.id,(m.min+m.max)/2]));
  for(const route of gameRoutes)assert.equal(missingPlanMetrics(complete,d,route).length,0);
 });
 test('baseline-only plans save valid actions, preserve manual tasks, and filter recorded or retired baselines',()=>{
- const coach=weeklyCoach({modelTarget:50,targets:[],baselineIds:['pushups','apob','total_sleep','rhr','pushups']},{total_sleep:480},defaultCoachPreferences(),emptyTimeline(),'2026-10-18');
+ const coach=weeklyCoach({modelTarget:50,targets:[],baselineIds:['pushups','sauna_minutes','total_sleep','rhr','pushups']},{total_sleep:480},defaultCoachPreferences(),emptyTimeline(),'2026-10-18');
  assert.deepEqual(coach.baselines.map(m=>m.id).sort(),['pushups','rhr']);
  assert.equal(coach.targets.length,0);
  const plan=emptyPlan();plan.tasks=[{id:'manual',label:'Personal habit',days:[3],completed:[]}];

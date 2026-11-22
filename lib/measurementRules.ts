@@ -1,6 +1,6 @@
 import type {MeasurementDetails,MeasurementMethod} from './measurementMetadata';
 import {normalizeTimestamp} from './timestamp';
-export const countMetrics=new Set(['pushups','sit_to_stand']);
+export const countMetrics=new Set(['pushups','pullups','dips','sit_to_stand']);
 export const labMetrics=new Set(['apob','lpa','fasting_insulin','hscrp','hba1c','homocysteine','cystatin_c','ggt','fasting_glucose']);
 export function allowedMethods(id:string):MeasurementMethod[]{
  if(labMetrics.has(id))return ['lab'];
@@ -19,3 +19,11 @@ export function observationAge(id:string,d:MeasurementDetails,now=Date.now()){
  const reviewAfter=labMetrics.has(id)?180:['total_sleep','sleep_efficiency','circadian_regularity','sauna_minutes','cold_plunge_minutes'].includes(id)?14:30;
  return {label:days>reviewAfter?`Older observation · ${days} days ago`:`Measured ${days===0?'today':`${days} days ago`}`,older:days>reviewAfter,reviewAfter};
 }
+
+export const measurementMethodLabels: Record<MeasurementMethod, string> = {
+  manual: 'Manual observation', lab: 'Laboratory test', direct_cpet: 'Direct CPET',
+  cooper_estimate: 'Cooper run estimate', wearable_estimate: 'Wearable estimate',
+  dynamometer_single_hand: 'Single-hand dynamometer', dexa: 'DEXA scan',
+  skinfold_estimate: 'Skinfold estimate', direct_1rm: 'Measured one-rep max',
+  epley_estimate: 'Estimated one-rep max (Epley)', device: 'Device measurement',
+};

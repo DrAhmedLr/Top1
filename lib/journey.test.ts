@@ -16,6 +16,17 @@ test('rank explanations distinguish coverage changes from result changes',()=>{
  assert.equal(rankChangeReason({pushups:20},{pushups:25},d),'Recorded results changed');
  assert.equal(rankChangeReason({pushups:20},{pushups:20,total_sleep:450},d),'Measurements added or removed');
 });
+
+test('elite push-up rep gains remain visible using test-day ranking context',()=>{
+ const history=[observation('a',148,'2026-10-14T12:00:00Z'),observation('b',149,'2026-10-15T12:00:00Z')].map(entry=>({
+  ...entry,ageAtMeasurement:30,protocol:{id:'strict_pushups_v1',bodyWeightKg:75,referenceSex:'male' as const},
+ }));
+ const change=journeyChanges(history,{pushups:149},{age:70,weight:110,sex:'female'})[0];
+ assert.equal(change.previousTop,'0.01%');
+ assert.equal(change.top,'0.01%');
+ assert.equal(change.personalBest,true);
+ assert.equal(change.improved,true);
+});
 test('share SVG escapes selected labels and includes the illustrative disclosure',()=>{
  const svg=rankCardSvg('My rank','Top 5%','Elite','Illustrative estimate · not a world rank',[{name:'<script> & test',top:'Top 10%'}]);
  assert.ok(svg.includes('&lt;script&gt; &amp; test'));assert.ok(!svg.includes('<script>'));assert.ok(svg.includes('not a world rank'));assert.ok(!svg.includes('pushups'));

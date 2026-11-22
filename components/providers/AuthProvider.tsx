@@ -13,6 +13,8 @@ export default function AuthProvider({children}:{children:ReactNode}){
   const migration=useAuthMigration(user?.id);
   useEffect(()=>{
     if(!client){setReady(true);return;}
+    // A genuinely new guest has no identity to restore. Existing sessions still wait for auth.
+    try { const stored=Object.keys(localStorage).some(key=>/^sb-.*-auth-token/.test(key));const cookie=/(?:^|;\s*)sb-[^=]*auth-token/.test(document.cookie);if(process.env.NEXT_PUBLIC_NATIVE_APP!=='1'&&!stored&&!cookie&&!location.hash.includes('access_token')&&!location.search.includes('code='))setReady(true); } catch { /* Let auth initialize when browser storage is inaccessible. */ }
     const {data}=client.auth.onAuthStateChange((_event,session)=>{setUser(session?.user&&!session.user.is_anonymous?session.user:null);setReady(true);});
     return()=>data.subscription.unsubscribe();
   },[client]);

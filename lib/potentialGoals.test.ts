@@ -4,9 +4,22 @@ import {goalChoices,rotateGoals,normalizeGoalBoard,objectiveFor,goalProjection} 
 import {benchmarkGame} from './benchmarkGame';
 import {activeMetrics} from './registry';
 const d={age:35,sex:'male' as const,weight:80,height:180};
+test('a custom elite push-up target requires completing its actual reps',()=>{
+ const profile={age:30,weight:75,sex:'male' as const};
+ assert.equal(objectiveFor('pushups',{pushups:134},profile,1,149)?.achieved,false);
+ assert.equal(objectiveFor('pushups',{pushups:149},profile,1,149)?.achieved,true);
+});
+test('unsupported targets are unavailable, never falsely achieved',()=>{
+ for(const [id,current] of Object.entries({run_5k:30,pullups:5,dead_hang:30,sprint_400m:90,dips:5})){
+  const goal=objectiveFor(id,{[id]:current},d,1)!;
+  assert.equal(goal.achieved,false,id);assert.equal(goal.target,undefined,id);assert.equal(goal.targetTop,null,id);
+ }
+ assert.equal(objectiveFor('run_5k',{run_5k:20},d,1)!.achieved,true);
+ assert.equal(objectiveFor('pullups',{pullups:5},d,1,10)!.target,10);
+});
 test('goal refresh cycles all active metrics, while changing one preserves the other cards',()=>{
- const choices=goalChoices({pushups:20},d,1);assert.equal(new Set(choices).size,17);assert.ok(choices.every(id=>activeMetrics.some(m=>m.id===id)));
- let ids=choices.slice(0,3);const seen=new Set(ids);for(let i=0;i<8;i++){const next=rotateGoals(ids,choices);assert.equal(next.length,3);assert.equal(new Set(next).size,3);assert.ok(next.every(id=>!ids.includes(id)));ids=next;ids.forEach(id=>seen.add(id));}assert.equal(seen.size,17);
+ const choices=goalChoices({pushups:20},d,1);assert.equal(new Set(choices).size,21);assert.ok(choices.every(id=>activeMetrics.some(m=>m.id===id)));
+ let ids=choices.slice(0,3);const seen=new Set(ids);for(let i=0;i<8;i++){const next=rotateGoals(ids,choices);assert.equal(next.length,3);assert.equal(new Set(next).size,3);assert.ok(next.every(id=>!ids.includes(id)));ids=next;ids.forEach(id=>seen.add(id));}assert.equal(seen.size,21);
  const single=rotateGoals(ids,choices,1);assert.equal(single[0],ids[0]);assert.equal(single[2],ids[2]);assert.notEqual(single[1],ids[1]);assert.equal(new Set(single).size,3);
 });
 test('unmeasured objectives reveal no invented value or rank and do not enter global projections',()=>{

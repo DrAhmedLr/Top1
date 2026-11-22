@@ -1,0 +1,9 @@
+{
+ "appId":"fit.top1.app",
+ "appName":"TOP1",
+ "webDir":"www",
+ "backgroundColor":"#080e14",
+ "loggingBehavior":"debug",
+ "android":{"allowMixedContent":false,"webContentsDebuggingEnabled":false},
+ "ios":{"contentInset":"automatic","preferredContentMode":"mobile"}
+}

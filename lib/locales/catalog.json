@@ -1,4 +1,324 @@
 {
+  "TOP1 game tiers describe performance on the app’s scale. Published studies provide comparison ranges for single-hand grip, countermovement jump and direct treadmill VO₂ tests. Each range describes people tested under the study protocol.": {
+    "fr": "Les paliers du jeu TOP1 situent ta performance sur le barème de l’application. Des études publient des intervalles de comparaison pour la poigne d’une main, le saut avec contre-mouvement et le VO₂ mesuré directement sur tapis. Chaque intervalle décrit les participants testés selon le protocole de l’étude.",
+    "ar": "تحدّد مستويات لعبة TOP1 موقع أدائك على مقياس التطبيق. وتتيح دراسات منشورة نطاقات للمقارنة في اختبارات قوة قبضة اليد الواحدة والقفز بالحركة العكسية وقياس استهلاك الأكسجين مباشرة على جهاز الجري. يصف كل نطاق المشاركين الذين أُجري عليهم الاختبار وفق بروتوكول الدراسة."
+  },
+  "The saved four-area pilot uses its original rule. Its overall tier is the weakest qualifying result across push, pull, lower body and endurance.": {
+    "fr": "Le bilan historique à quatre domaines conserve sa règle initiale. Son palier global correspond au résultat admissible le plus faible en poussée, tirage, bas du corps ou endurance.",
+    "ar": "يحتفظ التقييم التجريبي السابق بمجالاته الأربعة وقاعدته الأصلية. يُحدَّد مستواه الإجمالي بأضعف نتيجة مستوفية للشروط في الدفع والسحب والجزء السفلي من الجسم والتحمّل."
+  },
+  "Four-area pilot": {
+    "fr": "Bilan historique à quatre domaines",
+    "ar": "التقييم التجريبي في أربعة مجالات"
+  },
+  "A TOP1 game tier is a milestone on the app’s scale. A published comparison places a result within a named study cohort.": {
+    "fr": "Un palier du jeu TOP1 est une étape sur le barème de l’application. Une comparaison publiée situe un résultat parmi les participants d’une étude identifiée.",
+    "ar": "مستوى لعبة TOP1 هو مرحلة على مقياس التطبيق. أما المقارنة المنشورة فتضع النتيجة ضمن مجموعة المشاركين في دراسة محددة."
+  },
+  "Published cohort comparisons cover direct treadmill VO₂, single-hand grip strength and countermovement jump height. Eligibility depends on the test protocol, equipment, age and reference sex.": {
+    "fr": "Les comparaisons publiées portent sur le VO₂ mesuré directement sur tapis, la poigne d’une main et la hauteur du saut avec contre-mouvement. Le protocole, le matériel, l’âge et le sexe de référence déterminent l’admissibilité.",
+    "ar": "تغطي المقارنات المنشورة استهلاك الأكسجين المقاس مباشرة على جهاز الجري وقوة قبضة اليد الواحدة وارتفاع القفز بالحركة العكسية. تعتمد أهلية المقارنة على بروتوكول الاختبار والمعدات والعمر والجنس المرجعي."
+  },
+  "Thirteen performance tests have TOP1 game tiers. The next target is the smallest recordable improvement that reaches a higher tier. The highest game tier is Top 1%.": {
+    "fr": "Treize tests de performance ont des paliers de jeu TOP1. La cible suivante correspond à la plus petite amélioration saisissable qui permet de monter de palier. Le palier le plus élevé est le Top 1 %.",
+    "ar": "تضم لعبة TOP1 ثلاثة عشر اختبار أداء لها مستويات. الهدف التالي هو أصغر تحسّن يمكن تسجيله للوصول إلى مستوى أعلى. وأعلى مستوى في اللعبة هو أعلى ١٪."
+  },
+  "Three active tests have published cohort references. A separate historical reference covers combined-hand grip strength. The overall index has no validated population reference.": {
+    "fr": "Trois tests actifs disposent de références de cohorte publiées. Une référence historique distincte porte sur la force de préhension combinée des deux mains. L’indice global reste sans référence de population validée.",
+    "ar": "لثلاثة اختبارات نشطة مراجع منشورة لمجموعات الدراسة. ويخصّ مرجع تاريخي منفصل قوة القبضة في اليدين معًا. لا يتوفر للمؤشر الإجمالي مرجع سكاني معتمَد."
+  },
+  "No published test reference": {
+    "fr": "Aucune référence publiée pour ce test",
+    "ar": "لا يتوفر مرجع منشور لهذا الاختبار"
+  },
+  "TOP1 game tier": {
+    "fr": "Palier du jeu TOP1",
+    "ar": "مستوى لعبة TOP1"
+  },
+  "TOP1 benchmark estimate": {
+    "fr": "Estimation selon le barème TOP1",
+    "ar": "تقدير وفق سلم TOP1"
+  },
+  "Reload": {
+    "fr": "Recharger",
+    "ar": "إعادة التحميل"
+  },
+  "History could not be saved in this browser. Keep the page open.": {
+    "fr": "Impossible de sauvegarder ton historique dans ce navigateur. Garde la page ouverte.",
+    "ar": "تعذّر حفظ السجل في هذا المتصفح. أبقِ الصفحة مفتوحة."
+  },
+  "Stored history could not be read. Your records have been retained.": {
+    "fr": "Impossible de lire ton historique. Les données enregistrées sont conservées.",
+    "ar": "تعذّرت قراءة السجل. ما زالت قياساتك محفوظة."
+  },
+  "Your guest profile changed in another tab. Reload before saving.": {
+    "fr": "Ton profil invité a changé dans un autre onglet. Recharge la page avant de réessayer.",
+    "ar": "تغيّر ملف الضيف في تبويب آخر. أعد تحميل الصفحة قبل الحفظ."
+  },
+  "Your account is loaded. The guest profile on this device could not be read for import.": {
+    "fr": "Ton compte est chargé. Impossible de lire le profil invité sur cet appareil pour l’importer.",
+    "ar": "تم تحميل حسابك. تعذّرت قراءة ملف الضيف على هذا الجهاز لاستيراده."
+  },
+  "Dips": {
+    "fr": "Dips",
+    "ar": "تمرين المتوازي"
+  },
+  "Save profile": {
+    "fr": "Enregistrer le profil",
+    "ar": "حفظ الملف"
+  },
+  "Resolve pending training changes before deleting data.": {
+    "fr": "Résous les modifications d’entraînement en attente avant de supprimer les données.",
+    "ar": "عالج تغييرات التدريب المعلقة قبل حذف البيانات."
+  },
+  "Stored training could not be read. It has been retained.": {
+    "fr": "Impossible de lire l’entraînement local. Il a été conservé.",
+    "ar": "تعذّرت قراءة التدريب المخزن. تم الاحتفاظ به."
+  },
+  "Structured training": {
+    "fr": "Entraînement structuré",
+    "ar": "التدريب المنظم"
+  },
+  "All measurements and structured training": {
+    "fr": "Toutes les mesures et l’entraînement structuré",
+    "ar": "جميع القياسات والتدريب المنظم"
+  },
+  "Structured training deleted. Measurements and legacy routine history are retained.": {
+    "fr": "Entraînement structuré supprimé. Les mesures et l’ancien historique de routine sont conservés.",
+    "ar": "تم حذف التدريب المنظم. تبقى القياسات وسجلات الروتين السابقة محفوظة."
+  },
+  "This permanently deletes structured programs, workout sessions and their correction history. Measurements and legacy routines are retained.": {
+    "fr": "Cette action supprime définitivement les programmes structurés, les séances et leurs corrections. Les mesures et anciennes routines sont conservées.",
+    "ar": "يؤدي هذا إلى حذف البرامج المنظمة وجلسات التدريب وسجل تصحيحاتها نهائيًا. تبقى القياسات والروتينات السابقة محفوظة."
+  },
+  "This permanently deletes the chosen history, including current measurements and structured training when all history is selected. Public sharing is disabled and derived assessment summaries are removed.": {
+    "fr": "Cette action supprime définitivement l’historique choisi, y compris les mesures actuelles et l’entraînement structuré si tout l’historique est sélectionné. Le partage public est désactivé et les évaluations dérivées sont supprimées.",
+    "ar": "يؤدي هذا إلى حذف السجل المختار نهائيًا، بما فيه القياسات الحالية والتدريب المنظم عند اختيار السجل بالكامل. يتم إيقاف المشاركة العامة وحذف ملخصات التقييم المشتقة."
+  },
+  "Bodyweight history deleted. Current profile weight and fitness history are retained.": {
+    "fr": "Historique du poids supprimé. Le poids du profil actuel et l’historique des performances sont conservés.",
+    "ar": "تم حذف سجل الوزن. يبقى وزن الملف الشخصي الحالي وسجل الأداء محفوظين."
+  },
+  "This permanently deletes dated bodyweight entries and their correction history. Current profile weight and fitness records are retained.": {
+    "fr": "Cette action supprime définitivement les pesées datées et leurs corrections. Le poids du profil actuel et les performances sont conservés.",
+    "ar": "يؤدي هذا إلى حذف قياسات الوزن المؤرخة وسجل تصحيحاتها نهائيًا. يبقى وزن الملف الشخصي الحالي وسجلات الأداء محفوظين."
+  },
+  "Enter a valid weight.": {
+    "fr": "Saisis un poids valide.",
+    "ar": "أدخل وزنًا صالحًا."
+  },
+  "Weight must be 25–350 kg or its equivalent in pounds.": {
+    "fr": "Le poids doit être compris entre 25 et 350 kg, ou l’équivalent en livres.",
+    "ar": "يجب أن يكون الوزن بين 25 و350 كغ أو ما يعادله بالرطل."
+  },
+  "Choose a valid time zone.": {
+    "fr": "Choisis un fuseau horaire valide.",
+    "ar": "اختر منطقة زمنية صالحة."
+  },
+  "This entry changed. Reload it before editing.": {
+    "fr": "Cette entrée a changé. Recharge-la avant de la modifier.",
+    "ar": "تغير هذا السجل. أعد تحميله قبل تعديله."
+  },
+  "Unable to load weight history.": {
+    "fr": "Impossible de charger les pesées.",
+    "ar": "تعذّر تحميل سجل الوزن."
+  },
+  "Unable to save this weight change.": {
+    "fr": "Impossible d’enregistrer ce changement de poids.",
+    "ar": "تعذّر حفظ هذا التغيير في الوزن."
+  },
+  "History loaded, but this browser could not cache it.": {
+    "fr": "Historique chargé, mais le navigateur n’a pas pu le mettre en cache.",
+    "ar": "تم تحميل السجل لكن تعذّر تخزينه مؤقتًا في المتصفح."
+  },
+  "Weight saved to your account, but local caching failed.": {
+    "fr": "Poids enregistré sur ton compte, mais la copie locale a échoué.",
+    "ar": "حُفظ الوزن في حسابك لكن تعذّر حفظ النسخة المحلية."
+  },
+  "Weight sync failed. Retry when connected.": {
+    "fr": "Synchronisation du poids impossible. Réessaie une fois connecté.",
+    "ar": "تعذّرت مزامنة الوزن. أعد المحاولة عند الاتصال."
+  },
+  "Resolve the pending change before recording another.": {
+    "fr": "Résous la modification en attente avant d’en ajouter une autre.",
+    "ar": "عالج التغيير المعلق قبل تسجيل تغيير آخر."
+  },
+  "Resolve pending changes first.": {
+    "fr": "Résous d’abord les modifications en attente.",
+    "ar": "عالج التغييرات المعلقة أولًا."
+  },
+  "Weight import did not finish. Your browser records are retained.": {
+    "fr": "L’import n’a pas abouti. Les pesées locales sont conservées.",
+    "ar": "لم يكتمل الاستيراد. تبقى سجلات المتصفح محفوظة."
+  },
+  "Stored weight history could not be read. It has been retained.": {
+    "fr": "Les pesées enregistrées sont illisibles. Elles ont été conservées.",
+    "ar": "تعذّرت قراءة سجل الوزن المخزن، وقد تم الاحتفاظ به."
+  },
+  "Pending weights could not be read. They have been retained.": {
+    "fr": "Les pesées en attente sont illisibles. Elles ont été conservées.",
+    "ar": "تعذّرت قراءة قياسات الوزن المعلقة، وقد تم الاحتفاظ بها."
+  },
+  "Unable to load the complete history summary.": {
+    "fr": "Impossible de charger le résumé complet de l’historique.",
+    "ar": "تعذّر تحميل ملخص السجل الكامل."
+  },
+  "Barbell bench · paused": {
+    "fr": "Développé couché à la barre · avec pause",
+    "ar": "ضغط الصدر بالبار · مع توقف"
+  },
+  "Barbell bench · touch and go": {
+    "fr": "Développé couché à la barre · sans pause",
+    "ar": "ضغط الصدر بالبار · دون توقف"
+  },
+  "Barbell squat · hip crease at or below knee": {
+    "fr": "Squat à la barre · hanche au niveau du genou ou plus bas",
+    "ar": "قرفصاء بالبار · الورك عند مستوى الركبة أو أسفلها"
+  },
+  "Weighted overhand pull-up · full range": {
+    "fr": "Traction lestée en pronation · amplitude complète",
+    "ar": "سحب علوي بوزن إضافي · مدى كامل"
+  },
+  "Measured outdoor 5 km · device timed": {
+    "fr": "5 km en extérieur mesurés · chrono par appareil",
+    "ar": "٥ كم في الهواء الطلق · توقيت بجهاز"
+  },
+  "Measured outdoor 5 km · hand timed": {
+    "fr": "5 km en extérieur mesurés · chrono manuel",
+    "ar": "٥ كم في الهواء الطلق · توقيت يدوي"
+  },
+  "Treadmill 5 km": {
+    "fr": "5 km sur tapis",
+    "ar": "٥ كم على جهاز المشي"
+  },
+  "Body weight at test (kg)": {
+    "fr": "Poids lors du test (kg)",
+    "ar": "وزن الجسم عند الاختبار (كغ)"
+  },
+  "Record body weight at the test (25–350 kg).": {
+    "fr": "Indique ton poids lors du test (25 à 350 kg).",
+    "ar": "سجّل وزن جسمك عند الاختبار (٢٥ إلى ٣٥٠ كغ)."
+  },
+  "Your recorded tests are at their current top tier. Add another baseline or update a result.": {
+    "fr": "Vos tests enregistrés sont au meilleur palier actuel. Ajoutez une mesure ou actualisez un résultat.",
+    "ar": "اختباراتك المسجلة في أعلى مستوياتها الحالية. أضف قياسًا أو حدّث نتيجة."
+  },
+  "Customize your goals": {
+    "fr": "Personnaliser vos objectifs",
+    "ar": "خصّص أهدافك"
+  },
+  "Next tier": {
+    "fr": "Prochain palier",
+    "ar": "المستوى التالي"
+  },
+  "Start with a few simple measurements.": {
+    "fr": "Commencez par quelques mesures simples.",
+    "ar": "ابدأ ببعض القياسات البسيطة."
+  },
+  "Nearby game targets from your recorded tests.": {
+    "fr": "Des objectifs proches selon vos tests enregistrés.",
+    "ar": "أهداف قريبة في اللعبة بناءً على اختباراتك المسجلة."
+  },
+  "More potential.": {
+    "fr": "Plus de potentiel.",
+    "ar": "إمكانات أكبر."
+  },
+  "Small steps.": {
+    "fr": "De petits pas.",
+    "ar": "خطوات بسيطة."
+  },
+  "Required": {
+    "fr": "Obligatoire",
+    "ar": "مطلوب"
+  },
+  "Continue": {
+    "fr": "Continuer",
+    "ar": "متابعة"
+  },
+  "Skip": {
+    "fr": "Passer",
+    "ar": "تخطّ"
+  },
+  "Save & finish later": {
+    "fr": "Enregistrer et terminer plus tard",
+    "ar": "احفظ وأكمل لاحقًا"
+  },
+  "Reveal my level": {
+    "fr": "Voir mon niveau",
+    "ar": "اكتشف مستواي"
+  },
+  "Enter your current result. An estimate is fine for the game; skip it if you don’t know.": {
+    "fr": "Indiquez votre résultat actuel. Une estimation convient pour le jeu ; passez si vous ne savez pas.",
+    "ar": "أدخل نتيجتك الحالية. يمكنك التقدير في اللعبة أو التخطي إن لم تعرف."
+  },
+  "Your details set the context. Every measurement is optional.": {
+    "fr": "Vos informations donnent le contexte. Chaque mesure est facultative.",
+    "ar": "بياناتك تحدد السياق. كل قياس اختياري."
+  },
+  "Let’s start with you.": {
+    "fr": "Commençons par vous.",
+    "ar": "لنبدأ بك."
+  },
+  "Test progress": {
+    "fr": "Progression du test",
+    "ar": "تقدم الاختبار"
+  },
+  "Your benchmark": {
+    "fr": "Votre benchmark",
+    "ar": "اختبار قدراتك"
+  },
+  "Your body. One benchmark. Your next level.": {
+    "fr": "Votre corps. Un benchmark. Votre prochain niveau.",
+    "ar": "جسمك. معيار واحد. مستواك التالي."
+  },
+  "Update your level": {
+    "fr": "Actualiser mon niveau",
+    "ar": "حدّث مستواك"
+  },
+  "Continue your test": {
+    "fr": "Continuer le test",
+    "ar": "تابع اختبارك"
+  },
+  "Know your level": {
+    "fr": "Découvrez votre niveau",
+    "ar": "اعرف مستواك"
+  },
+  "human potential.": {
+    "fr": "potentiel humain.",
+    "ar": "إمكاناتك البشرية."
+  },
+  "Discover your": {
+    "fr": "Découvrez votre",
+    "ar": "اكتشف"
+  },
+  "THE HUMAN BENCHMARK": {
+    "fr": "LE BENCHMARK HUMAIN",
+    "ar": "معيار القدرات البشرية"
+  },
+  "Toward this target": {
+    "fr": "Vers cet objectif",
+    "ar": "نحو هذا الهدف"
+  },
+  "Next target": {
+    "fr": "Prochain objectif",
+    "ar": "الهدف التالي"
+  },
+  "Choose a test": {
+    "fr": "Choisir un test",
+    "ar": "اختر اختبارًا"
+  },
+  "Exit recording": {
+    "fr": "Quitter le mode vidéo",
+    "ar": "إنهاء وضع التصوير"
+  },
+  "Recording mode": {
+    "fr": "Mode vidéo",
+    "ar": "وضع التصوير"
+  },
+  "Target reached": {
+    "fr": "Objectif atteint",
+    "ar": "تم تحقيق الهدف"
+  },
   "Language": {
     "fr": "Langue",
     "ar": "اللغة"
@@ -1958,6 +2278,10 @@
   "Required for this ratio": {
     "fr": "Requis pour ce ratio",
     "ar": "مطلوب لهذه النسبة"
+  },
+  "Use current date and time": {
+    "fr": "Utiliser la date et l’heure actuelles",
+    "ar": "استخدم التاريخ والوقت الحاليين"
   },
   "Age at test": {
     "fr": "Âge lors du test",
@@ -5307,9 +5631,9 @@
     "fr": "Tenez-vous près d’un appui stable. Levez un pied, trouvez votre équilibre, puis fermez les yeux et démarrez le chronomètre. Arrêtez lorsque le pied touche le sol, que vos yeux s’ouvrent ou qu’un appui devient nécessaire. Gardez la même jambe et les mêmes conditions.",
     "ar": "قف قرب دعامة ثابتة. ارفع قدمًا وثبّت توازنك ثم أغلق عينيك وابدأ التوقيت. توقف عند لمس القدم للأرض أو فتح العينين أو الحاجة إلى دعم. استخدم نفس الساق والإعداد كل مرة."
   },
-  "Enter kilograms and 1–10 repetitions; body weight comes from your profile.": {
-    "fr": "Saisissez les kilogrammes et 1 à 10 répétitions ; le poids corporel vient de votre profil.",
-    "ar": "أدخل الكيلوغرامات ومن 1 إلى 10 تكرارات؛ يُؤخذ وزن الجسم من ملفك الشخصي."
+  "Enter kilograms and 1–10 repetitions with the matching body weight.": {
+    "fr": "Saisis les kilogrammes et 1 à 10 répétitions avec le poids corporel correspondant.",
+    "ar": "أدخل الحمل بالكيلوغرام و١ إلى ١٠ تكرارات مع وزن الجسم الموافق للاختبار."
   },
   "Settings": {
     "fr": "Paramètres",
@@ -5510,5 +5834,393 @@
   "Enter RMSSD in milliseconds from the same compatible device. Measure at a consistent time and posture after resting; use a consistent recording duration and compare your own trend. Do not mix RMSSD with SDNN or a wearable readiness score. Higher is not always better.": {
     "fr": "Saisissez le RMSSD en millisecondes avec le même appareil compatible. Mesurez au repos, à heure et posture constantes, avec la même durée d’enregistrement. Suivez votre tendance personnelle. Ne confondez pas RMSSD, SDNN et score de préparation. Plus élevé ne signifie pas toujours meilleur.",
     "ar": "أدخل RMSSD بالمللي ثانية باستخدام الجهاز المتوافق نفسه. قِس بعد الراحة وفي وقت ووضعية ومدة تسجيل ثابتة، وقارن اتجاهك الشخصي. لا تخلط RMSSD مع SDNN أو درجة الجاهزية. الارتفاع لا يعني دائمًا نتيجة أفضل."
+  },
+  "Estimated max": {
+    "fr": "Maximum estimé",
+    "ar": "الحد الأقصى التقديري"
+  },
+  "Weightlifting": {
+    "fr": "Musculation",
+    "ar": "رفع الأثقال"
+  },
+  "Timed tests": {
+    "fr": "Tests chronométrés",
+    "ar": "اختبارات زمنية"
+  },
+  "Jumps & grip": {
+    "fr": "Sauts et préhension",
+    "ar": "القفزات والقبضة"
+  },
+  "Reps": {
+    "fr": "Rép.",
+    "ar": "التكرارات"
+  },
+  "10 km run": {
+    "fr": "Course de 10 km",
+    "ar": "جري 10 كم"
+  },
+  "10 km race-finisher benchmarks": {
+    "fr": "Repères des arrivants sur 10 km",
+    "ar": "معايير المشاركين الذين أتموا سباق 10 كم"
+  },
+  "Published cutoff": {
+    "fr": "Seuil publié",
+    "ar": "حد منشور"
+  },
+  "Interpolated estimate": {
+    "fr": "Estimation interpolée",
+    "ar": "تقدير بالاستيفاء"
+  },
+  "Strict pull-up repetitions": {
+    "fr": "Tractions strictes",
+    "ar": "تكرارات العقلة الصارمة"
+  },
+  "400-metre sprint": {
+    "fr": "Sprint de 400 mètres",
+    "ar": "عدو 400 متر"
+  },
+  "Dead hang": {
+    "fr": "Suspension à la barre",
+    "ar": "التعلق بالعارضة"
+  },
+  "No global percentile": {
+    "fr": "Aucun percentile mondial",
+    "ar": "لا توجد رتبة مئوية عالمية"
+  },
+  "Strict overhand pull-ups · full range, no kipping": {
+    "fr": "Tractions en pronation · amplitude complète, sans élan",
+    "ar": "عقلة بقبضة علوية · مدى كامل دون تأرجح"
+  },
+  "Fixed bar · straight arms, closed overhand grip": {
+    "fr": "Barre fixe · bras tendus, prise en pronation fermée",
+    "ar": "عارضة ثابتة · ذراعان ممدودتان وقبضة علوية مغلقة"
+  },
+  "400 metres · standing start, hand timed": {
+    "fr": "400 mètres · départ debout, chronométrage manuel",
+    "ar": "400 متر · انطلاق واقف وتوقيت يدوي"
+  },
+  "400 metres · standing start, automatic timing": {
+    "fr": "400 mètres · départ debout, chronométrage automatique",
+    "ar": "400 متر · انطلاق واقف وتوقيت آلي"
+  },
+  "Count strict body-weight pull-ups: straight arms, chin above the bar, no swinging. A weighted pull-up is a separate test.": {
+    "fr": "Comptez les tractions strictes au poids du corps : bras tendus, menton au-dessus de la barre, sans élan. Les tractions lestées sont un autre test.",
+    "ar": "احسب تكرارات العقلة بوزن الجسم: ذراعان ممدودتان والذقن فوق العارضة دون تأرجح. العقلة بأوزان اختبار منفصل."
+  },
+  "Run one measured 400-metre lap after warming up. Enter total seconds using the same start and timing method each time.": {
+    "fr": "Après échauffement, courez 400 mètres mesurés. Saisissez le total en secondes avec le même départ et le même chronométrage.",
+    "ar": "بعد الإحماء، اجرِ مسافة 400 متر مقاسة. أدخل الزمن بالثواني مع استخدام طريقة الانطلاق والتوقيت نفسها كل مرة."
+  },
+  "Hang from a fixed bar with straight arms, thumbs around the bar and feet clear. Enter seconds; stop at release, foot support or pain.": {
+    "fr": "Suspendez-vous à une barre fixe, bras tendus, pouces autour de la barre et pieds décollés. Comptez les secondes jusqu’au lâcher, à l’appui des pieds ou à une douleur.",
+    "ar": "تعلق بعارضة ثابتة بذراعين ممدودتين والإبهامين حول العارضة والقدمين معلقتين. أدخل الثواني؛ توقف عند الإفلات أو ملامسة القدمين للدعم أو الشعور بألم."
+  },
+  "Body-weight vertical pulling endurance; distinct from a weighted one-rep maximum": {
+    "fr": "Endurance de traction au poids du corps, distincte du maximum lesté sur une répétition",
+    "ar": "تحمل السحب العمودي بوزن الجسم، وهو مختلف عن أقصى وزن لتكرار واحد"
+  },
+  "Elapsed time over a measured 400-metre course": {
+    "fr": "Temps écoulé sur un parcours mesuré de 400 mètres",
+    "ar": "الزمن المستغرق لمسافة مقاسة تبلغ 400 متر"
+  },
+  "Straight-arm two-hand bar-hang duration; grip endurance relative to body weight": {
+    "fr": "Durée de suspension à deux mains, bras tendus ; endurance de préhension relative au poids du corps",
+    "ar": "مدة التعلق بالعارضة باليدين والذراعين ممدودتين؛ تحمل القبضة نسبة إلى وزن الجسم"
+  },
+  "Lockie et al. 2022 · firefighter trainee pull-up percentiles": {
+    "fr": "Lockie et al. 2022 · percentiles de tractions chez des élèves pompiers",
+    "ar": "Lockie وآخرون 2022 · رتب العقلة لدى متدربي الإطفاء"
+  },
+  "Lombardo & Deaner 2014 · PeerJ 445": {
+    "fr": "Lombardo et Deaner 2014 · PeerJ 445",
+    "ar": "Lombardo وDeaner 2014 · PeerJ 445"
+  },
+  "Comparative Effects of Core Versus Forearm Training on Pull-Up Repetition Performance in Physically Inactive Males": {
+    "fr": "Étude comparative des entraînements du tronc et des avant-bras sur les tractions chez des hommes inactifs",
+    "ar": "دراسة مقارنة لتدريب الجذع والساعد على تكرارات العقلة لدى رجال غير نشطين بدنيًا"
+  },
+  "269 firefighter trainees (238 men, 31 women) from six classes in one department. Table 4 places 21–28 repetitions in the 90th–100th percentile band within this combined cohort. It does not establish a global Top 1% cutoff.": {
+    "fr": "269 élèves pompiers (238 hommes, 31 femmes), répartis en six promotions d’un seul service. Le tableau 4 situe 21–28 tractions dans la bande du 90e au 100e percentile de cet échantillon mixte. Cela ne définit pas un seuil mondial Top 1 %.",
+    "ar": "269 متدرب إطفاء (238 رجلاً و31 امرأة) من ست دفعات في إدارة واحدة. يضع الجدول 4 عدد 21–28 تكرارًا ضمن نطاق الرتبة المئوية 90–100 في هذه العينة المختلطة. لا يحدد ذلك أفضل 1% عالميًا."
+  },
+  "Use an unassisted overhand grip, about shoulder width. Start with straight arms; raise your chin above the bar, then return to full elbow extension. Count consecutive clean repetitions without kipping or swinging. Stop at form failure; keep grip and technique consistent. These cohort bands are context only: no global rank or contribution to the overall score is assigned.": {
+    "fr": "Utilisez une prise en pronation sans assistance, environ à largeur d’épaules. Partez bras tendus, montez le menton au-dessus de la barre et revenez en extension complète. Comptez les répétitions propres consécutives, sans élan. Arrêtez à la perte de forme et gardez la même prise et technique. Ces bandes de cohorte servent uniquement de contexte : aucun rang mondial ni contribution au score global.",
+    "ar": "استخدم قبضة علوية دون مساعدة بعرض الكتفين تقريبًا. ابدأ بذراعين ممدودتين، وارفع الذقن فوق العارضة ثم عد إلى مد المرفقين بالكامل. احسب التكرارات الصحيحة المتتالية دون تأرجح. توقف عند فقدان التقنية وحافظ على القبضة والطريقة نفسها. نطاقات العينة للسياق فقط ولا تمنح رتبة عالمية أو تساهم في النتيجة الإجمالية."
+  },
+  "The paper estimated 400 m benchmarks from 50 m norms for 15-year-old Australian schoolchildren: 95th-percentile performance of 61.6 s for boys and 67.8 s for girls. These are extrapolations, not measured adult 400 m percentiles or a global Top 1% threshold.": {
+    "fr": "L’article estime des repères sur 400 m à partir de normes sur 50 m chez des écoliers australiens de 15 ans : 61,6 s pour les garçons et 67,8 s pour les filles au 95e percentile de performance. Ce sont des extrapolations, pas des percentiles mesurés chez l’adulte ni un seuil mondial Top 1 %.",
+    "ar": "قدرت الدراسة معايير 400 متر انطلاقًا من معايير 50 متر لتلاميذ أستراليين بعمر 15 سنة: 61.6 ثانية للفتيان و67.8 ثانية للفتيات عند الرتبة المئوية 95 للأداء. هذه استقراءات وليست رتبًا مقاسة للبالغين أو حدًا لأفضل 1% عالميًا."
+  },
+  "Warm up and use a measured 400-metre track, a consistent standing start and the same timing method. Enter total elapsed seconds (60 means one minute). Hand timing and automatic timing are not interchangeable. A sub-60-second run is not assigned a world percentile. This test tracks your result without contributing to the overall score.": {
+    "fr": "Échauffez-vous puis utilisez une piste mesurée de 400 mètres, le même départ debout et la même méthode de chronométrage. Entrez le total en secondes (60 pour une minute). Les chronométrages manuel et automatique ne sont pas interchangeables. Un temps inférieur à 60 secondes ne reçoit pas de percentile mondial. Ce test suit votre résultat sans contribuer au score global.",
+    "ar": "قم بالإحماء واستخدم مضمارًا مقاسًا لمسافة 400 متر مع انطلاق واقف وطريقة توقيت ثابتة. أدخل مجموع الثواني (60 تعني دقيقة). لا تخلط بين التوقيت اليدوي والآلي. لا يمنح زمن أقل من 60 ثانية رتبة عالمية. يتتبع الاختبار نتيجتك دون المساهمة في النتيجة الإجمالية."
+  },
+  "Thirty physically inactive male university students, mean age 21, in an eight-week training study. Dead-hang group means at baseline were 40.4–47.2 s. This small intervention study supports measuring hanging endurance, not population percentiles. A 120-second hang has no established global Top 1% cutoff.": {
+    "fr": "Trente étudiants hommes physiquement inactifs, âgés en moyenne de 21 ans, dans une étude d’entraînement de huit semaines. Les moyennes initiales des groupes étaient de 40,4–47,2 s. Cette petite étude soutient la mesure de l’endurance en suspension, pas des percentiles de population. Aucun seuil mondial Top 1 % n’est établi pour 120 secondes.",
+    "ar": "ثلاثون طالبًا غير نشط بدنيًا بمتوسط عمر 21 سنة في دراسة تدريبية لثمانية أسابيع. تراوحت متوسطات المجموعات قبل التدريب بين 40.4 و47.2 ثانية. تدعم الدراسة الصغيرة قياس تحمل التعلق وليس رتب السكان. لا يوجد حد مثبت لأفضل 1% عالميًا عند 120 ثانية."
+  },
+  "Use a fixed horizontal bar and a closed overhand grip, with thumbs wrapped around it. Start with straight elbows and both feet clear of a stable step. Time until release or foot support; avoid swinging and straps. Keep the bar, grip width and chalk use consistent. Stop if painful. Record seconds. No global rank or contribution to the overall score is assigned.": {
+    "fr": "Utilisez une barre horizontale fixe, en pronation, les pouces autour de la barre. Débutez coudes tendus, pieds au-dessus d’une marche stable. Chronométrez jusqu’au lâcher ou à l’appui des pieds, sans élan ni sangles. Gardez la même barre, largeur de prise et utilisation de magnésie. Arrêtez en cas de douleur. Notez les secondes. Aucun rang mondial ni contribution au score global.",
+    "ar": "استخدم عارضة أفقية ثابتة بقبضة علوية مغلقة والإبهامين حولها. ابدأ بمرفقين ممدودين والقدمين فوق منصة ثابتة دون لمسها. احسب الزمن حتى الإفلات أو استناد القدمين دون تأرجح أو أحزمة. حافظ على العارضة وعرض القبضة واستخدام الطباشير نفسه. توقف عند الألم. سجل الثواني. لا تمنح رتبة عالمية ولا تساهم في النتيجة الإجمالية."
+  },
+  "Benchmark basis": {
+    "fr": "Base du classement",
+    "ar": "أساس التقدير"
+  },
+  "Displayed percentages are benchmark estimates, not verified world ranks. Published test comparisons and the scientific capacity score remain separate.": {
+    "fr": "Les pourcentages affichés sont des estimations de référence, pas des rangs mondiaux vérifiés. Les comparaisons publiées et le score scientifique restent distincts.",
+    "ar": "النسب المعروضة تقديرات مرجعية وليست رتبًا عالمية مؤكدة. تبقى المقارنات المنشورة ونتيجة القدرة العلمية منفصلتين."
+  },
+  "TOP1 benchmark assumptions": {
+    "fr": "Hypothèses de référence TOP1",
+    "ar": "افتراضات TOP1 المرجعية"
+  },
+  "Community benchmark estimate": {
+    "fr": "Estimation de référence communautaire",
+    "ar": "تقدير مرجعي مجتمعي"
+  },
+  "TOP1 scale · same thresholds for everyone": {
+    "fr": "Échelle TOP1 · mêmes seuils pour tous",
+    "ar": "مقياس TOP1 · الحدود نفسها للجميع"
+  },
+  "Neutral reference · equal blend of male and female anchors": {
+    "fr": "Référence neutre · moyenne des repères hommes et femmes",
+    "ar": "مرجع محايد · مزج متساوٍ لمعايير الرجال والنساء"
+  },
+  "Male lifter community · no age adjustment": {
+    "fr": "Communauté de pratiquants hommes · sans correction d’âge",
+    "ar": "مجتمع ممارسي القوة الرجال · دون تعديل للعمر"
+  },
+  "Female lifter community · no age adjustment": {
+    "fr": "Communauté de pratiquantes · sans correction d’âge",
+    "ar": "مجتمع ممارسات القوة · دون تعديل للعمر"
+  },
+  "Male runner community · age-adjusted estimate": {
+    "fr": "Communauté de coureurs hommes · estimation selon l’âge",
+    "ar": "مجتمع العدائين الرجال · تقدير حسب العمر"
+  },
+  "Female runner community · age-adjusted estimate": {
+    "fr": "Communauté de coureuses · estimation selon l’âge",
+    "ar": "مجتمع العداءات · تقدير حسب العمر"
+  },
+  "TOP1 assumption": {
+    "fr": "Hypothèse TOP1",
+    "ar": "افتراض TOP1"
+  },
+  "Modelled threshold": {
+    "fr": "Seuil modélisé",
+    "ar": "حد مقدّر بالنموذج"
+  },
+  "Read the benchmark source": {
+    "fr": "Lire la source du classement",
+    "ar": "اقرأ مصدر المعيار"
+  },
+  "TOP1 sets 45 s at Top 50%, 120 s at Top 5% and 180 s at Top 1%. These are product assumptions informed by small hanging studies, not measured population percentiles. No age or sex adjustment.": {
+    "fr": "TOP1 fixe 45 s au Top 50 %, 120 s au Top 5 % et 180 s au Top 1 %. Ce sont des hypothèses du produit éclairées par de petites études de suspension, pas des percentiles mesurés dans la population. Aucune correction d’âge ou de sexe.",
+    "ar": "يحدد TOP1 مدة 45 ثانية لأفضل 50%، و120 ثانية لأفضل 5%، و180 ثانية لأفضل 1%. هذه افتراضات للمنتج مستأنسة بدراسات تعلق صغيرة وليست رتبًا مئوية مقاسة للسكان. دون تعديل للعمر أو الجنس."
+  },
+  "Source ability levels map to Top 95%, 80%, 50%, 20% and 5%. TOP1 interpolates between anchors and extrapolates the upper tail to Top 1%. These self-selected communities are not the world population. Pull-ups have no age or body-weight adjustment; 400 m ages interpolate between selected source rows and clamp outside 20–90. An unspecified sex uses an equal blend, not an observed mixed cohort.": {
+    "fr": "Les niveaux de la source correspondent au Top 95 %, 80 %, 50 %, 20 % et 5 %. TOP1 interpole entre les repères et extrapole jusqu’au Top 1 %. Ces communautés volontaires ne représentent pas la population mondiale. Les tractions ne sont pas corrigées pour l’âge ou le poids ; le 400 m interpole entre certaines lignes d’âge et reste borné à 20–90 ans. Sans sexe choisi, une moyenne égale est utilisée, pas une cohorte mixte observée.",
+    "ar": "تقابل مستويات المصدر أفضل 95% و80% و50% و20% و5%. يستوفي TOP1 القيم بين المعايير ويستقرئ الطرف الأعلى إلى أفضل 1%. هذه المجتمعات المختارة ذاتيًا لا تمثل سكان العالم. العقلة دون تعديل للعمر أو الوزن؛ ويستوفي 400 متر بين صفوف عمرية مختارة مع حصر العمر بين 20 و90. عند عدم تحديد الجنس يُستخدم مزج متساوٍ وليس عينة مختلطة مقاسة."
+  },
+  "Race-finisher cutoffs with interpolated estimates; not a general-population comparison.": {
+    "fr": "Seuils de finisseurs de courses avec estimations interpolées ; pas une comparaison avec la population générale.",
+    "ar": "حدود لمن أنهوا السباقات مع تقديرات مستوفاة؛ وليست مقارنة بعامة السكان."
+  },
+  "The game uses provisional model anchors. A contextual source does not validate the displayed percentage. The source, measurement protocol and scientific eligibility are listed below.": {
+    "fr": "Le jeu utilise des repères provisoires. Une source de contexte ne valide pas le pourcentage affiché. La source, le protocole et les conditions du score scientifique figurent ci-dessous.",
+    "ar": "تستخدم اللعبة معايير نموذجية مؤقتة. المصدر السياقي لا يثبت النسبة المعروضة. ستجد المصدر وبروتوكول القياس وشروط النتيجة العلمية أدناه."
+  },
+  "Scientific score": {
+    "fr": "Score scientifique",
+    "ar": "النتيجة العلمية"
+  },
+  "Benchmark percentages affect your dashboard rank. This measurement stays outside the separate scientific capacity score.": {
+    "fr": "Les pourcentages de référence influencent le classement du tableau de bord. Cette mesure reste exclue du score scientifique distinct.",
+    "ar": "تؤثر النسب المرجعية على ترتيب لوحة المتابعة. يبقى هذا القياس خارج نتيجة القدرة العلمية المنفصلة."
+  },
+  "Use an unassisted overhand grip, about shoulder width. Start with straight arms; raise your chin above the bar, then return to full elbow extension. Count consecutive clean repetitions without kipping or swinging. Stop at form failure; keep grip and technique consistent. TOP1 also displays a community-based benchmark estimate, distinct from this firefighter cohort and not a world rank.": {
+    "fr": "Utilisez une prise en pronation sans assistance, environ à largeur d’épaules. Partez bras tendus, montez le menton au-dessus de la barre et revenez en extension complète. Comptez les répétitions propres consécutives, sans élan. Arrêtez à la perte de forme et gardez la même prise et technique. TOP1 affiche également une estimation de référence illustrative, sans rang mondial vérifié.",
+    "ar": "استخدم قبضة علوية دون مساعدة بعرض الكتفين تقريبًا. ابدأ بذراعين ممدودتين، وارفع الذقن فوق العارضة ثم عد إلى مد المرفقين بالكامل. احسب التكرارات الصحيحة المتتالية دون تأرجح. توقف عند فقدان التقنية وحافظ على القبضة والطريقة نفسها. يعرض TOP1 أيضًا تقديرًا مرجعيًا توضيحيًا وليس رتبة عالمية مؤكدة."
+  },
+  "Warm up and use a measured 400-metre track, a consistent standing start and the same timing method. Enter total elapsed seconds (60 means one minute). Hand timing and automatic timing are not interchangeable. A sub-60-second run is not assigned a world percentile. TOP1 also displays a community-based benchmark estimate, not a world percentile.": {
+    "fr": "Échauffez-vous puis utilisez une piste mesurée de 400 mètres, le même départ debout et la même méthode de chronométrage. Entrez le total en secondes (60 pour une minute). Les chronométrages manuel et automatique ne sont pas interchangeables. Un temps inférieur à 60 secondes ne reçoit pas de percentile mondial. TOP1 affiche également une estimation de référence illustrative, sans rang mondial vérifié.",
+    "ar": "قم بالإحماء واستخدم مضمارًا مقاسًا لمسافة 400 متر مع انطلاق واقف وطريقة توقيت ثابتة. أدخل مجموع الثواني (60 تعني دقيقة). لا تخلط بين التوقيت اليدوي والآلي. لا يمنح زمن أقل من 60 ثانية رتبة عالمية. يعرض TOP1 أيضًا تقديرًا مرجعيًا توضيحيًا وليس رتبة عالمية مؤكدة."
+  },
+  "Use a fixed horizontal bar and a closed overhand grip, with thumbs wrapped around it. Start with straight elbows and both feet clear of a stable step. Time until release or foot support; avoid swinging and straps. Keep the bar, grip width and chalk use consistent. Stop if painful. Record seconds. TOP1 also displays an illustrative benchmark based on explicit product assumptions, not a world rank.": {
+    "fr": "Utilisez une barre horizontale fixe, en pronation, les pouces autour de la barre. Débutez coudes tendus, pieds au-dessus d’une marche stable. Chronométrez jusqu’au lâcher ou à l’appui des pieds, sans élan ni sangles. Gardez la même barre, largeur de prise et utilisation de magnésie. Arrêtez en cas de douleur. Notez les secondes. TOP1 affiche également une estimation de référence illustrative, sans rang mondial vérifié.",
+    "ar": "استخدم عارضة أفقية ثابتة بقبضة علوية مغلقة والإبهامين حولها. ابدأ بمرفقين ممدودين والقدمين فوق منصة ثابتة دون لمسها. احسب الزمن حتى الإفلات أو استناد القدمين دون تأرجح أو أحزمة. حافظ على العارضة وعرض القبضة واستخدام الطباشير نفسه. توقف عند الألم. سجل الثواني. يعرض TOP1 أيضًا تقديرًا مرجعيًا توضيحيًا وليس رتبة عالمية مؤكدة."
+  },
+  "Measures": {
+    "fr": "Mesures",
+    "ar": "المقاييس"
+  },
+  "Forum views differ: a sub-60-second 400 m is often treated as a strong recreational milestone, while trained sprinters judge it against much faster times. No thread establishes a global Top 10%. TOP1 retains a cohort-based estimate that depends on age and reference sex.": {
+    "fr": "Les avis divergent : moins de 60 s est un bon jalon de loisir, sans consensus sur un Top 10 % mondial. TOP1 conserve une estimation selon la cohorte, l’âge et le sexe de référence.",
+    "ar": "تختلف الآراء: أقل من 60 ثانية إنجاز جيد للهواة دون إثبات أفضل 10% عالمياً. يحتفظ TOP1 بتقدير حسب العينة والعمر والجنس."
+  },
+  "Running forums commonly discuss sub-20-minute 5 km and sub-40-minute 10 km milestones. A 20-minute 10 km would beat the 26:11 track world record. TOP1 uses actual 10 km race-finisher references, not the 5 km milestone.": {
+    "fr": "Les forums distinguent le 5 km sous 20 minutes du 10 km sous 40 minutes. Un 10 km en 20 minutes battrait le record sur piste de 26:11. TOP1 conserve les références de finisseurs de 10 km.",
+    "ar": "تميز المنتديات بين 5 كم تحت 20 دقيقة و10 كم تحت 40 دقيقة. زمن 20 دقيقة لعشرة كم يتجاوز الرقم العالمي 26:11. يحتفظ TOP1 بمراجع سباقات 10 كم."
+  },
+  "Community perspective": {
+    "fr": "Avis de la communauté",
+    "ar": "آراء المجتمع"
+  },
+  "Forum opinions provide context, not population calibration.": {
+    "fr": "Les forums donnent du contexte, pas un percentile de population.",
+    "ar": "آراء المنتديات سياق وليست إحصاءات سكانية."
+  },
+  "TOP1 challenge standard": {
+    "fr": "Standard de défi TOP1",
+    "ar": "معيار تحدي TOP1"
+  },
+  "Fixed TOP1 scale · no age or sex adjustment": {
+    "fr": "Échelle TOP1 fixe · sans correction d’âge ou de sexe",
+    "ar": "مقياس TOP1 ثابت دون تعديل للعمر أو الجنس"
+  },
+  "TOP1 challenge scale: 60 s = Top 7.5%, 57 s = Top 5%, 54 s = Top 2.5%, 50 s = Top 1%. These are product-defined difficulty tiers, not observed population percentiles. Faster times receive higher game credit.": {
+    "fr": "Échelle du défi TOP1 : 60 s = Top 7,5 %, 57 s = Top 5 %, 54 s = Top 2,5 %, 50 s = Top 1 %. Ces niveaux de difficulté sont définis par le produit et ne sont pas des percentiles de population mesurés.",
+    "ar": "مقياس تحدي TOP1: 60 ثانية لأفضل 7.5% و57 لأفضل 5% و54 لأفضل 2.5% و50 لأفضل 1%. هذه مستويات صعوبة للمنتج وليست رتباً سكانية مقاسة."
+  },
+  "TOP1 challenge scale: 17% body fat or below = Top 1%. Lower values receive no additional credit. This is a game rule, not a health target, an athletic-performance measurement or a population percentile. Appropriate body-fat ranges differ by sex and measurement method. This rule does not enter the scientific capacity score.": {
+    "fr": "Règle du défi TOP1 : 17 % de masse grasse ou moins = Top 1 %. Descendre davantage ne rapporte pas de points supplémentaires. C’est une règle du jeu, pas un objectif de santé, une mesure de performance athlétique ou un percentile de population. Les plages adaptées dépendent du sexe et de la méthode. Aucun effet sur le score scientifique.",
+    "ar": "قاعدة تحدي TOP1: دهون الجسم 17% أو أقل تعطي أفضل 1% دون نقاط إضافية للانخفاض أكثر. هذه قاعدة لعبة وليست هدفاً صحياً أو قياس أداء رياضي أو رتبة سكانية. تختلف النطاقات المناسبة حسب الجنس وطريقة القياس. لا تؤثر القاعدة على النتيجة العلمية."
+  },
+  "5 km run": {
+    "fr": "Course de 5 km",
+    "ar": "جري 5 كم"
+  },
+  "Elapsed time over a measured five-kilometre course": {
+    "fr": "Temps sur un parcours mesuré de cinq kilomètres",
+    "ar": "الزمن لمسافة مقاسة تبلغ خمسة كيلومترات"
+  },
+  "The sub-20-minute 5 km milestone is common in recreational running discussions. TOP1 assigns it to its Top 1% challenge tier as a product decision, not an observed world percentile. No age or sex adjustment.": {
+    "fr": "Le 5 km sous 20 minutes est un jalon courant chez les coureurs amateurs. TOP1 lui attribue le palier Top 1 % par choix du produit, sans prétendre à un percentile mondial mesuré. Sans correction d’âge ou de sexe.",
+    "ar": "خمسة كم تحت عشرين دقيقة إنجاز شائع بين الهواة. يمنحه TOP1 مستوى أفضل 1% كقاعدة للمنتج وليس رتبة عالمية مقاسة. دون تعديل للعمر أو الجنس."
+  },
+  "TOP1 challenge scale: 20:00 for 5 km = Top 1%, 21:00 = Top 2.5%, 22:30 = Top 5%, 25:00 = Top 10%. These are product-defined difficulty tiers, not observed world percentiles. Old 10 km results are preserved separately.": {
+    "fr": "Échelle du défi TOP1 : 20:00 sur 5 km = Top 1 %, 21:00 = Top 2,5 %, 22:30 = Top 5 %, 25:00 = Top 10 %. Ces paliers de difficulté sont définis par le produit, pas mesurés dans la population mondiale. Les anciennes mesures sur 10 km restent séparées.",
+    "ar": "مقياس تحدي TOP1 لخمسة كم: 20:00 لأفضل 1%، و21:00 لأفضل 2.5%، و22:30 لأفضل 5%، و25:00 لأفضل 10%. هذه مستويات صعوبة يحددها المنتج وليست رتباً عالمية مقاسة. تبقى نتائج عشرة كم محفوظة منفصلة."
+  },
+  "Your next challenge": {
+    "fr": "Votre prochain défi",
+    "ar": "تحديك التالي"
+  },
+  "Start challenge": {
+    "fr": "Commencer le défi",
+    "ar": "ابدأ التحدي"
+  },
+  "Profile complete": {
+    "fr": "Profil complété",
+    "ar": "اكتمال الملف"
+  },
+  "Start Basics": {
+    "fr": "Commencer les bases",
+    "ar": "ابدأ الأساسيات"
+  },
+  "Your levels": {
+    "fr": "Vos niveaux",
+    "ar": "مستوياتك"
+  },
+  "Explore features": {
+    "fr": "Explorer les fonctionnalités",
+    "ar": "استكشف الميزات"
+  },
+  "Connect wearables": {
+    "fr": "Connecter vos appareils",
+    "ar": "ربط الأجهزة القابلة للارتداء"
+  },
+  "Program builder": {
+    "fr": "Créateur de programme",
+    "ar": "صانع البرامج"
+  },
+  "Progress insights": {
+    "fr": "Suivi des progrès",
+    "ar": "متابعة التقدم"
+  },
+  "Leaderboards": {
+    "fr": "Classements",
+    "ar": "لوحات الترتيب"
+  },
+  "Community challenges": {
+    "fr": "Défis communautaires",
+    "ar": "تحديات المجتمع"
+  },
+  "Performance passport": {
+    "fr": "Passeport de performance",
+    "ar": "جواز الأداء"
+  },
+  "Coming soon": {
+    "fr": "Bientôt disponible",
+    "ar": "قريبًا"
+  },
+  "Basics": {
+    "fr": "Les bases",
+    "ar": "الأساسيات"
+  },
+  "Equipped": {
+    "fr": "Équipé",
+    "ar": "بالأدوات"
+  },
+  "Advanced": {
+    "fr": "Avancé",
+    "ar": "المتقدم"
+  },
+  "Warm up and use a measured 400-metre track, a consistent standing start and the same timing method. Enter total elapsed seconds (60 means one minute). Hand timing and automatic timing are not interchangeable. A sub-60-second run is not assigned a world percentile. TOP1 uses a separate profile-adjusted game scale.": {
+    "fr": "Échauffe-toi et utilise une piste mesurée de 400 m. Garde le même départ debout et la même méthode de chronométrage. Saisis le temps total en secondes. Le jeu applique son propre barème personnalisé.",
+    "ar": "قم بالإحماء واستخدم مضمارًا محدد المسافة بطول ٤٠٠ متر، مع نفس وضعية الانطلاق وطريقة التوقيت. أدخل إجمالي الوقت بالثواني. تستخدم اللعبة مقياسًا خاصًا يتكيّف مع بياناتك."
+  },
+  "Hang at full arm extension. Pull your chin above the bar, then return to straight arms. Count consecutive reps without swinging or assistance. Stop when form breaks.": {
+    "fr": "Pars bras tendus, en pronation. Monte le menton au-dessus de la barre puis reviens bras tendus. Compte les répétitions consécutives sans élan ni assistance. Arrête dès que la forme se dégrade.",
+    "ar": "ابدأ بذراعين ممدودتين وقبضة علوية. ارفع ذقنك فوق العارضة ثم عُد إلى مد الذراعين. احسب التكرارات المتتالية من دون تأرجح أو مساعدة، وتوقف عند اختلال الأداء."
+  },
+  "Use a measured 400 m track and a standing start. Record total elapsed seconds. Keep hand-timed and automatically timed results in separate series.": {
+    "fr": "Utilise une piste mesurée de 400 m et un départ debout. Saisis le temps total en secondes. Conserve des séries distinctes pour le chronométrage manuel et automatique.",
+    "ar": "استخدم مضمارًا مقاسًا بطول ٤٠٠ متر وانطلق واقفًا. سجّل الوقت الكلي بالثواني. احتفظ بسجل منفصل للتوقيت اليدوي والتلقائي."
+  },
+  "Use a fixed bar, closed overhand grip and straight elbows. Time until release or foot support. Keep bar, grip width and chalk use consistent. Stop if painful.": {
+    "fr": "Utilise une barre fixe, les coudes tendus et une prise fermée en pronation. Chronomètre jusqu’au lâcher ou à l’appui des pieds. Garde la même barre, prise et utilisation de magnésie. Arrête en cas de douleur.",
+    "ar": "استخدم عارضة ثابتة وقبضة علوية مغلقة مع مد المرفقين. احسب الوقت حتى تفلت العارضة أو تستند بقدميك. ثبّت العارضة وعرض القبضة واستخدام الطباشير، وتوقف إذا شعرت بألم."
+  },
+  "Your overall rank": {
+    "fr": "Votre classement global",
+    "ar": "ترتيبك الإجمالي"
+  },
+  "Push, pull, lower body and running each carry equal weight once logged. Your rank shows how many areas you have tested.": {
+    "fr": "Poussée, tirage, bas du corps et course ont le même poids dès leur première mesure. Votre classement indique combien de domaines vous avez testés.",
+    "ar": "لكل مجال تسجّله الوزن نفسه في الترتيب الإجمالي: الدفع والسحب والجزء السفلي من الجسم والجري. ويظهر عدد المجالات التي اختبرتها."
+  },
+  "Each of the 13 performance tests has its own scale and profile adjustments. Your next target is the smallest result that earns the next tier. The final tier is Top 0.01% or better.": {
+    "fr": "Chacun des 13 tests de performance a son barème et ses ajustements selon le profil. Votre prochaine cible est le résultat minimum pour franchir un palier. Le dernier palier est le Top 0,01 % ou mieux.",
+    "ar": "لكل اختبار من اختبارات الأداء الثلاثة عشر مقياس وتعديلات خاصة بملفك. هدفك التالي هو أقل تحسّن يوصلك إلى المستوى المقبل. المستوى الأخير هو أعلى ‎0.01%‎ أو أفضل."
+  },
+  "Choose a target and a date. Your schedule sets the sessions. As you log sessions and repeat the same test, the app can estimate your chances from your own history.": {
+    "fr": "Choisissez une cible et une date. Votre disponibilité détermine les séances. En enregistrant vos séances et en répétant le même test, vous permettez à l’application d’estimer vos chances à partir de votre historique.",
+    "ar": "اختر هدفًا وتاريخًا. تُوزَّع جلساتك حسب جدولك. ومع تسجيل الجلسات وتكرار الاختبار نفسه، يمكن للتطبيق تقدير فرص بلوغ الهدف من سجلّك الشخصي."
+  },
+  "Kelly et al. · NHANES DXA body composition": {
+    "fr": "Kelly et al. · Composition corporelle par DXA dans NHANES",
+    "ar": "كيلي وزملاؤه · قياس تركيب الجسم بتقنية DXA في مسح NHANES"
+  },
+  "This study describes DXA measurements in the US NHANES survey. TOP1 records body fat for personal tracking only.": {
+    "fr": "Cette étude décrit les mesures par DXA de l’enquête américaine NHANES. Dans TOP1, la masse grasse sert uniquement au suivi personnel.",
+    "ar": "تصف هذه الدراسة قياسات DXA في مسح NHANES الأمريكي. يسجّل TOP1 نسبة الدهون في الجسم للمتابعة الشخصية فقط."
+  },
+  "Record the percentage and the measurement method. Compare readings taken with the same method and device.": {
+    "fr": "Note le pourcentage et la méthode de mesure. Compare les résultats obtenus avec la même méthode et le même appareil.",
+    "ar": "سجّل النسبة المئوية وطريقة القياس. قارن القراءات المأخوذة بالطريقة نفسها وبالجهاز نفسه."
+  },
+  "Hurst & Board · Repeatability of 5 km race times": {
+    "fr": "Hurst et Board · Répétabilité des chronos sur 5 km",
+    "ar": "هيرست وبورد · قابلية تكرار نتائج سباق ٥ كم"
+  },
+  "Fifteen endurance runners completed two outdoor 5 km races. The study assessed repeatability. TOP1 sets its own game tiers.": {
+    "fr": "Quinze coureurs d’endurance ont couru deux fois un 5 km en plein air. L’étude a évalué la répétabilité des chronos. TOP1 définit ses propres paliers de jeu.",
+    "ar": "شارك خمسة عشر عدّاء تحمّل في سباقين لمسافة ٥ كم في الهواء الطلق. درست الورقة مدى تقارب الأزمنة عند تكرار السباق. يحدّد TOP1 مستويات اللعبة بنفسه."
+  },
+  "Record the total elapsed time for a measured 5 km course in minutes and seconds. Use the same terrain and timing method for retests.": {
+    "fr": "Saisis le temps total écoulé en minutes et secondes sur un parcours mesuré de 5 km. Garde le même type de terrain et le même mode de chronométrage pour les prochains essais.",
+    "ar": "سجّل الزمن الإجمالي بالدقائق والثواني على مسار محدّد الطول يبلغ ٥ كم. استخدم نوع الأرضية وطريقة التوقيت نفسيهما عند إعادة الاختبار."
   }
 }

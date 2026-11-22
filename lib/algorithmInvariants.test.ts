@@ -20,7 +20,7 @@ test('every active metric and cohort remains finite, bounded and a convex aggreg
   for(const selector of ['min','mean','midpoint','max'] as const){
    const values=Object.fromEntries(activeMetrics.map(m=>[m.id,selector==='midpoint'?(m.min+m.max)/2:m[selector]])),result=evaluate(values,profile,details,{now});
    assert.ok(Number.isFinite(result.z)&&result.z>=-3&&result.z<=3);assert.ok(result.modelScore>=5&&result.modelScore<=95);
-   assert.equal(result.domains.bodymarkers,undefined);
+   const vo2=result.submitted.find(s=>s.metric.id==='vo2_max');if(vo2)near(result.domains.bodymarkers!,vo2.z);else assert.equal(result.domains.bodymarkers,undefined);
    near(result.submitted.reduce((sum,s)=>sum+s.effectiveWeight,0),1);
    near(result.submitted.reduce((sum,s)=>sum+s.contribution,0),result.z);
    assert.ok(result.z>=Math.min(...result.submitted.map(s=>s.z))-1e-9&&result.z<=Math.max(...result.submitted.map(s=>s.z))+1e-9);
