@@ -9,7 +9,8 @@ import PasswordForm from '@/components/PasswordForm';
 import AuthProvider from '@/components/providers/AuthProvider';
 import LocaleProvider from '@/components/providers/LocaleProvider';
 import InteractionProvider from '@/components/providers/InteractionProvider';
-import {normalizeLocale} from '@/lib/i18n';
+import {localePreference,NATIVE_LOCALE_KEY,normalizeLocale} from '@/lib/i18n';
+import UsageAnalyticsProvider from '@/components/providers/UsageAnalyticsProvider';
 import {appView} from '@/lib/appViews';
 import {authModeFromQuery} from '@/lib/emailAuth';
 import {nativeApiFetch} from '@/lib/nativeTransport';
@@ -33,13 +34,16 @@ function MobileApp(){
   const click=(event:MouseEvent)=>{const link=(event.target as Element).closest('a');if(!link||link.download)return;const url=new URL(link.href,location.href);if(url.protocol==='https:'&&url.origin!==location.origin){event.preventDefault();void Browser.open({url:url.toString()}).catch(()=>setError('Unable to open this link.'));}};
   document.addEventListener('click',click);const handles:Promise<{remove:()=>Promise<void>}>[]=[];
   if(Capacitor.isNativePlatform()){
-   handles.push(App.addListener('appStateChange',({isActive})=>{const client=getSupabaseClient();if(isActive){client?.auth.startAutoRefresh();window.dispatchEvent(new Event('focus'));}else client?.auth.stopAutoRefresh();}));
+   handles.push(App.addListener('appStateChange',({isActive})=>{window.dispatchEvent(new Event(isActive?'top1-native-active':'top1-native-inactive'));const client=getSupabaseClient();if(isActive){client?.auth.startAutoRefresh();window.dispatchEvent(new Event('focus'));}else client?.auth.stopAutoRefresh();}));
    handles.push(App.addListener('backButton',({canGoBack})=>{if(canGoBack)history.back();else if(location.pathname!=='/'||location.search)navigate('/');else void App.exitApp();}));
   }
   return()=>{restoreDownloads();document.removeEventListener('click',click);handles.forEach(async h=>(await h).remove());};
  },[]);
- const locale=normalizeLocale(localStorage.getItem('top1-mobile-locale'));
- useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';},[]);
- return <LocaleProvider initialLocale={locale}><InteractionProvider><AuthProvider>{error&&<p role="alert">{error}</p>}<Screens/></AuthProvider></InteractionProvider></LocaleProvider>;
+ const [preference]=useState(()=>{
+  try{return localePreference(localStorage.getItem(NATIVE_LOCALE_KEY));}
+  catch{return 'device' as const;}
+ });
+ const locale=preference==='device'?normalizeLocale(navigator.language):preference;
+ return <LocaleProvider initialLocale={locale} initialPreference={preference}><InteractionProvider><AuthProvider>{error&&<p role="alert">{error}</p>}<UsageAnalyticsProvider><Screens/></UsageAnalyticsProvider></AuthProvider></InteractionProvider></LocaleProvider>;
 }
 createRoot(document.getElementById('root')!).render(<MobileApp/>);

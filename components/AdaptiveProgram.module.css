@@ -35,3 +35,127 @@
 .scheduleDetails summary span{font-weight:600}
 .scheduleDetails summary small{margin-inline-start:.65rem;color:var(--program-dim)}
 .scheduleDetails>div{padding-block:8px 14px}
+
+.opportunities{display:grid;gap:8px;list-style:none;margin:16px 0 0;padding:0}
+.opportunities button{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:5px 12px;text-align:start;color:var(--program-ink);background:#1c2d40;border:1px solid #3a5067;border-radius:12px;padding:13px;font:inherit;cursor:pointer}
+.opportunities button:hover{border-color:var(--program-bright)}.opportunities button>svg:first-child{grid-row:span 2;color:var(--program-bright)}
+.opportunities button>span{display:grid;gap:3px;grid-column:2}.opportunities button>bdi{grid-column:2;color:var(--program-bright);font-size:.86rem}
+.opportunities button>svg:last-child{grid-column:3;grid-row:1/3}
+.programWeek{border-top:1px solid #34475c}.programWeek strong{font-weight:650}
+.programWeek ol{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:8px}
+.programWeek li{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;border-inline-start:2px solid #6e98c1;background:#192a3d;padding:10px 12px;font-size:.85rem;line-height:1.45}
+.programWeek time{color:var(--program-bright)}.programWeek li span{color:var(--program-dim)}
+.goal fieldset.pair{padding:0;margin:0;border:0}[dir=rtl] .opportunities button>svg:last-child{transform:scaleX(-1)}
+@media(max-width:420px){.goal fieldset.pair{grid-template-columns:1fr}}
+.weekPager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-block:16px 8px}.weekPager span{font-weight:650}
+.weekPager button{min-width:44px}.programWeek p{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px}
+[dir=rtl] .weekPager svg,[dir=rtl] .planner>.link svg{transform:scaleX(-1)}
+.preparation{margin:0 0 12px}.programWeek .preparation p{display:block;margin:.3rem 0;font-size:.8rem}.preparation b{color:var(--program-ink)}
+
+.goalEvidence{display:grid;gap:14px;min-width:0}
+.outcomeRow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 14px}
+.planner .outcome{display:inline-block;width:fit-content;margin:0;padding:5px 10px;border:1px solid #536b86;border-radius:7px;color:var(--program-bright);font-weight:650}
+.planner .outcome[data-status=reached]{color:#a0e2c4;border-color:#527e6d}
+.resultFacts{margin:0;display:grid;gap:8px}
+.resultFacts>div{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px 12px}
+.resultFacts dt{color:var(--program-dim);font-size:.85rem}
+.resultFacts dd{margin:0;font-weight:610;overflow-wrap:anywhere}
+.attendance{border-block-start:1px solid #34475c;padding-block-start:14px}
+.attendance>div{display:flex;justify-content:space-between;gap:12px}
+.attendance h4,.finalRetest h4{font-size:1rem;font-weight:650}
+.attendance progress{display:block;appearance:none;width:100%;height:6px;margin-block:8px;border:0;border-radius:8px;overflow:hidden;background:#34475c}
+.attendance progress::-webkit-progress-bar{background:#34475c}
+.attendance progress::-webkit-progress-value{background:var(--program-bright)}
+.attendance progress::-moz-progress-bar{background:var(--program-bright)}
+.finalRetest{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:#1c2d40;border-radius:10px;padding:12px}
+.finalRetest>svg{margin-top:4px;color:var(--program-bright)}
+.finalRetest button{grid-column:2;justify-self:start}
+.pastGoal{padding-block:5px;border-block-start:1px solid #34475c}
+.pastGoal>summary{cursor:pointer;min-height:48px;align-content:center;font-weight:600}
+.pastGoal>summary span{display:inline-grid;gap:2px;vertical-align:middle}
+.pastGoal>summary small{color:var(--program-dim);font-weight:500}
+.pastGoal .goalEvidence{margin-block:14px}
+.planner .learningOptIn{display:flex;align-items:center;gap:10px;min-height:44px;font-weight:650;cursor:pointer}
+.planner .learningOptIn input{inline-size:20px;block-size:20px;min-height:0;flex:none;accent-color:var(--program-bright)}
+[dir=rtl] .finalRetest button svg{transform:scaleX(-1)}
+
+/* Grouped goals and training calendar */
+.goalChoices {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:8px}
+.goalChoices button {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;text-align:start;padding:10px 12px;min-height:52px;background:#182838;color:var(--program-ink);border:1px solid #354b61;border-radius:10px;line-height:1.3}
+.goalChoices button:hover,.goalChoices button[aria-pressed=true] {border-color:var(--program-bright)}
+.goalChoices button[aria-pressed=true] {background:#284158}
+.goalChoices button>span,.targetRow,.calendarExercise,.checkExercise {display:grid;gap:4px;min-width:0}
+.goalChoices small,.targetSummary,.targetRow>small,.checkExercise>small,.calendarExercise>small,.groupNumbers small {color:var(--program-dim)}
+.legend {font-size:1.16rem;font-weight:650;float:inline-start;margin-bottom:4px}
+.legend+p {clear:both}
+.targetRow {position:relative;display:block;border:0;border-block-start:1px solid #35495e;margin-block:10px 2px;padding-block:12px 4px}
+.targetRow legend {float:inline-start;margin-inline-end:12px;font-weight:650}
+.targetSummary {clear:both;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px 12px;margin:3px 0 10px}
+.targetSummary strong {color:var(--program-bright);font-size:1.35rem;line-height:1.2;letter-spacing:-.04em}
+.targetRow>small {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:5px}
+.groupNumbers {display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 8px}
+.groupNumbers>div {display:grid;gap:4px}
+.groupNumbers bdi {font-weight:670;font-size:clamp(1.3rem,4vw,2rem);letter-spacing:-.03em}
+.groupNumbers>div:last-child>strong {color:var(--program-bright)}
+.goalNav {display:flex;flex-wrap:wrap;gap:6px}
+.goalNav button,.checkModes .choice {border:1px solid #425972;border-radius:9px;min-height:40px;padding:6px 12px;color:var(--program-dim)}
+.goalNav button[aria-pressed=true],.checkModes .choice[aria-pressed=true] {color:#16283b;background:var(--program-bright);border-color:transparent}
+.calendarPager,.checkModes {display:flex;align-items:center;gap:8px}
+.calendarPager {justify-content:space-between;direction:inherit}
+.calendarPager strong {text-align:center}
+.calendarPager .icon {margin:0;width:38px}
+[dir=rtl] .calendarPager svg {transform:scaleX(-1)}
+.calendarStrip {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;animation:calendarEnter .18s ease-out}
+.calendarStrip button {display:grid;justify-items:center;align-content:center;gap:3px;min-width:0;min-height:66px;border:1px solid #35495e;border-radius:10px;background:#182838;color:var(--program-ink)}
+.calendarStrip button[aria-pressed=true] {border-color:var(--program-bright);background:#2b455f}
+.calendarStrip button[aria-current=date] b {text-decoration:underline;text-underline-offset:3px}
+.calendarStrip small {color:var(--program-dim);line-height:1}
+.calendarStrip i {width:5px;height:5px;background:transparent;border-radius:50%}
+.calendarStrip [data-session=true] i {background:var(--program-bright)}
+.calendarStrip [data-done=true] i {background:#8dd4ab}
+.dayDetails {display:grid;gap:10px;animation:calendarEnter .18s ease-out}
+.dayDetails>h3 {margin-top:4px}
+.calendarExercise,.checkExercise {padding:8px 0;border-block-start:1px solid #34475b}
+.calendarExercise>span {color:var(--program-bright)}
+.dayDetails .primary {width:fit-content}
+.checkIn {display:grid;gap:10px;border:0;padding:0;margin:0}
+.checkIn legend {font-weight:650}
+.checkModes {flex-wrap:wrap}
+.checkModes .choice {min-width:0}
+.doseInputs {display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:7px}
+@keyframes calendarEnter {from {opacity:.6;transform:translateY(4px)}to {opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.calendarStrip,.dayDetails {animation:none}}
+@media(max-width:450px){.calendarStrip {gap:3px}.calendarStrip button {border-radius:7px;min-height:55px}.goalNav button {padding:5px 9px;font-size:.86rem}.calendarPager strong {font-size:.85rem}}
+.planner .replace {display:flex;align-items:center;gap:8px}
+.planner .replace input {inline-size:18px;block-size:18px;min-height:0;width:18px;accent-color:var(--program-bright)}
+.loggedDose {display:grid;gap:2px;border-inline-start:2px solid #83baaa;padding-inline-start:8px;font-size:.85rem}
+.datePicker {border:0;margin:8px 0;padding:0}
+.datePicker legend {font-weight:600;font-size:.9rem;margin:0 0 5px}
+.dateChoices {display:flex;gap:6px;flex-wrap:wrap}
+.planner .dateOption {position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1 1 90px;min-width:0;max-width:15rem;gap:2px;min-height:49px;border:1px solid #3b5167;border-radius:9px;background:#192a3d;color:var(--program-ink);padding:7px 10px;cursor:pointer;transition:background-color .16s,border-color .16s,transform .16s}
+.dateOption>span {display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.dateOption bdi {color:var(--program-bright);font-weight:650}
+.dateOption small {font-size:.73rem;color:var(--program-dim)}
+.planner .dateOption[data-selected=true] {background:#2b465f;border-color:var(--program-bright);transform:translateY(-1px)}
+.planner .dateOption input {position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.planner .dateOption:focus-within {outline:2px solid var(--program-bright);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.planner .dateOption {transition:none}.planner .dateOption[data-selected=true] {transform:none}}
+.bundleChoices {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr));gap:8px}
+.bundleChoices button {display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:start;border:1px solid #3d556d;border-radius:12px;background:#203449;color:var(--program-ink);padding:13px}
+.bundleChoices button[aria-pressed=true] {border-color:var(--program-bright);background:#2b465e}
+.bundleChoices button>span {display:grid;gap:3px}
+.bundleChoices small {font-weight:450;color:var(--program-dim)}
+.manage {display:grid;gap:10px}
+.manage>.secondary {justify-self:start}
+.stopConfirm {display:grid;gap:6px;margin-block:8px}
+.danger {min-height:42px;padding:8px 13px;color:#ffe0df;background:#622e38;border-radius:9px}
+.progressSummary {display:grid;gap:5px}.progressSummary>small {display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap;color:var(--program-dim)}
+.liveProgress {width:100%;height:7px;overflow:hidden;border-radius:8px;background:#35485d}
+.liveProgress span {display:block;width:100%;height:100%;transform-origin:left;background:var(--program-bright);transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+[dir=rtl] .liveProgress span {transform-origin:right}
+.recentPace {display:grid;gap:2px;margin-top:10px}
+.recentPace>div {display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.recentPace bdi {font-variant-numeric:tabular-nums}
+.recentPace>div>bdi {color:var(--program-bright);font-size:1.5rem;font-weight:680}
+.recentPace>p,.recentPace>div>span {color:var(--program-dim);font-size:.85rem}
+@media(prefers-reduced-motion:reduce){.liveProgress span {transition:none}}

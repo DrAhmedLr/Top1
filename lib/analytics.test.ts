@@ -1,4 +1,24 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {safeEventProperties,setAnalyticsClient,captureEvent,recordView} from './analytics';
-test('event properties reject physiological values, identity, URLs, tokens and free-text actions',()=>{assert.deepEqual(safeEventProperties('measurement_saved',{metric_id:'pushups',value:60,age:32,email:'private@example.test',username:'name',url:'https://x/?token=secret',action:'Private action'}),{metric_id:'pushups'});assert.deepEqual(safeEventProperties('app_viewed',{view:'/?token=secret'}),{});assert.deepEqual(safeEventProperties('public_link_shared',{channel:'clipboard',task:'private'}),{channel:'clipboard'});});
-test('explicit query-view navigation produces one safe event per distinct view',()=>{const events:unknown[]=[];setAnalyticsClient({capture:(...args:unknown[])=>events.push(args)} as any);recordView('measurements');recordView('measurements');recordView('progress');captureEvent('signup_requested',{email:'private'});assert.deepEqual(events,[['app_viewed',{view:'measurements'}],['app_viewed',{view:'progress'}],['signup_requested',{}]]);setAnalyticsClient(null);});
-test('adaptive events contain only approved metric IDs, never body measurements',()=>{assert.deepEqual(safeEventProperties('journey_basics_saved',{height:170,weight:70,age:30}),{});assert.deepEqual(safeEventProperties('journey_recommendation_shown',{metric_id:'total_sleep',value:480}),{metric_id:'total_sleep'});});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {captureEvent,recordView,setAnalyticsClient,safeEventProperties} from './analytics';
+
+test('only an enumerated screen can accompany a usage event', () => {
+  assert.deepEqual(safeEventProperties('measurement_saved', {metric_id:'pushups',value:60,age:32,email:'private@example.test'}), {});
+  assert.deepEqual(safeEventProperties('app_viewed', {view:'/?token=secret'}), {});
+  assert.deepEqual(safeEventProperties('app_viewed', {view:'program',country:'MA'}), {view:'program'});
+});
+
+test('events before opt-in are dropped, repeated screens deduplicate, and withdrawal stops capture', () => {
+  const events: unknown[] = [];
+  recordView('overview');
+  captureEvent('goal_saved');
+  setAnalyticsClient({capture: (...args) => events.push(args)});
+  recordView('overview');
+  recordView('overview');
+  recordView('measurements');
+  captureEvent('workout_logged', {amount:42});
+  captureEvent('app_viewed', {view:'/admin?secret=1'});
+  setAnalyticsClient(null);
+  captureEvent('goal_saved');
+  assert.deepEqual(events, [['app_viewed',{view:'overview'}],['app_viewed',{view:'measurements'}],['workout_logged',{}]]);
+});

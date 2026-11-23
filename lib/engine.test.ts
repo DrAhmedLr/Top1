@@ -6,7 +6,7 @@ const d:Demographics={age:35,sex:'male',weight:80,height:180};
 const details={vo2_max:{method:'direct_cpet' as const,exerciseMode:'treadmill' as const,protocol:{id:'cpet_treadmill_v1',peakRer:1.1,referencePopulation:'matches' as const},measuredAt:'2026-10-12T12:00:00Z',ageAtMeasurement:35},grip_strength:{method:'dynamometer_single_hand' as const}};
 const m=(id:string)=>metrics.find(m=>m.id===id)!;
 const near=(a:number,b:number,t=1e-6)=>assert.ok(Math.abs(a-b)<t,`${a} ≠ ${b}`);
-test('21 active measurements, normalized weights and preserved legacy inputs',()=>{
+test('36 active measurements, normalized weights and preserved legacy inputs',()=>{
  assert.equal(activeMetrics.length,36);assert.equal(metrics.length,46);assert.equal(new Set(metrics.map(m=>m.id)).size,46);
  for(const p of new Set(metrics.map(m=>m.pillar)))near(metrics.filter(m=>m.pillar===p).reduce((s,m)=>s+m.weight,0),1);
  assert.equal(activeMetrics.filter(m=>!m.scoringEligible).length,25);

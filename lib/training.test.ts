@@ -19,3 +19,35 @@ test('reviewed import retains guest history and can replay after an interrupted 
 test('purge during offline retry retains the queued command for review instead of recreating data',async()=>{const local=storage();let epoch=0,fail=true;const transport:TrainingTransport={read:async()=>({epoch,counter:epoch,events:[],next:null}),write:async m=>{if(fail)throw new Error('Offline');return appendTraining([],m,epoch,now).at(-1)!;},import:async()=>{}};const repo=trainingRepository(local,'a',transport);await repo.refresh();await assert.rejects(()=>repo.put(mutation(program)));epoch=1;fail=false;await assert.rejects(()=>repo.retry(),/cleared/);assert.equal(repo.read().pending.length,1);assert.equal(repo.read().events.length,0);});
 test('an interrupted multi-batch import replays receipts and finishes without duplicates',async()=>{const local=storage(),guest=trainingRepository(local,'guest');for(let i=0;i<25;i++)await guest.put(mutation(program,0,100+i,200+i));let server:ReturnType<typeof appendTraining>=[],first=true;const transport:TrainingTransport={read:async()=>({epoch:0,counter:server.length,events:server,next:null}),write:async()=>{throw 0;},import:async changes=>{for(const change of changes)server=appendTraining(server,change,0,now,'guest-import');if(first){first=false;throw new Error('Lost batch response');}}};const repo=trainingRepository(local,'a',transport);await assert.rejects(()=>repo.importGuest(true));assert.equal(server.length,20);await repo.importGuest(true);assert.equal(server.length,25);assert.equal(guest.read().events.length,25);});
 test('mixed history pages cannot replace a coherent cached ledger',async()=>{const local=storage();const original=trainingRepository(local,'a');await original.put(mutation(program));let calls=0;const transport:TrainingTransport={read:async()=>++calls===1?{epoch:0,counter:1,events:[],next:1}:{epoch:0,counter:2,events:[],next:null},write:async()=>{throw 0;},import:async()=>{}};const repo=trainingRepository(local,'a',transport);await assert.rejects(()=>repo.refresh(),/changed during loading/);assert.equal(repo.read().events.length,1);});
+
+test('guest grouped goals are saved in one envelope and a stale member rolls the group back',async()=>{
+ const local=storage(),repo=trainingRepository(local,'guest');
+ const two=[mutation(program,0,201,101),mutation(program,0,202,102)];
+ await repo.putMany(two);
+ assert.equal(repo.read().counter,2);
+ await assert.rejects(()=>repo.putMany([mutation(program,0,203,103),mutation(program,0,204,101)]),/changed elsewhere/);
+ assert.deepEqual(repo.read().events.map(e=>e.id),two.map(e=>e.id));
+});
+
+test('lost batch response can be retried after reload without duplicating either goal',async()=>{
+ const local=storage();
+ let server:ReturnType<typeof appendTraining>=[];
+ let loseResponse=true;
+ const calls:{ids:string[],counter:number}[]=[];
+ const transport:TrainingTransport={
+   read:async()=>({epoch:0,counter:server.length,events:server,next:null}),
+   write:async()=>{throw Error('Unexpected singleton');},import:async()=>{},
+   writeMany:async(changes,counter)=>{
+     calls.push({ids:changes.map(c=>c.requestId),counter});
+     for(const c of changes) server=appendTraining(server,c,0);
+     if(loseResponse){loseResponse=false;throw Error('Connection lost');}
+     return changes.map(c=>server.find(e=>e.requestId===c.requestId)!);
+   }
+ };
+ const repo=trainingRepository(local,'account',transport);
+ await assert.rejects(()=>repo.putMany([mutation(program,0,301,201),mutation(program,0,302,202)]),/Connection lost/);
+ assert.equal(repo.read().pending.length,2);repo.dispose();
+ const reopened=trainingRepository(local,'account',transport);
+ await reopened.refresh();await reopened.retry();
+ assert.deepEqual(calls[0],calls[1]);assert.equal(server.length,2);assert.equal(reopened.read().pending.length,0);
+});

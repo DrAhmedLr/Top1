@@ -1,9 +1,10 @@
 import {PGlite} from '@electric-sql/pglite';
 import {readFile,readdir} from 'node:fs/promises';
+import {testAccountInsights} from './test-account-insights.mts';
 const db=new PGlite();
 try {
  await db.exec(`create schema auth; create schema extensions; create role anon; create role authenticated;
- create table auth.users(id uuid primary key,email text);
+ create table auth.users(id uuid primary key,email text,created_at timestamptz default now(),email_confirmed_at timestamptz,is_anonymous boolean default false);
  create table auth.sessions(id uuid primary key,user_id uuid references auth.users(id)on delete cascade,created_at timestamptz default now());
  create function auth.create_fixture_session()returns trigger language plpgsql as $$begin insert into auth.sessions(id,user_id)values(NEW.id,NEW.id);return NEW;end$$;
  create trigger fixture_session after insert on auth.users for each row execute function auth.create_fixture_session();
@@ -29,5 +30,11 @@ try {
  await db.exec(await readFile('supabase/tests/bodyweight.sql','utf8'));
  await db.exec(await readFile('supabase/tests/training.sql','utf8'));
  await db.exec(await readFile('supabase/tests/personal-workspace.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/usage-analytics.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/forecast-learning.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/customer-journey.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/admin-goal-report.sql','utf8'));
+ await testAccountInsights(db);
+ console.log('Two isolated accounts, independent sessions, saved workouts, stale writes, and three-checkpoint forecasts passed.');
  console.log('PostgreSQL migrations, RLS, history, metadata, and revision conflict checks passed.');
 } finally {await db.close();}

@@ -6,7 +6,7 @@ import { useEffect,useState,type FormEvent } from 'react';
 import Link from 'next/link';
 import { Activity,ArrowRight,ShieldCheck,Eye,EyeOff } from 'lucide-react';
 import { motion,useReducedMotion } from 'framer-motion';
-import { authErrorMessage,needsEmailConfirmation,MIN_PASSWORD_LENGTH,resendConfirmation,submitEmailAuth,type EmailAuthMode } from '@/lib/emailAuth';
+import { authErrorMessage,needsEmailConfirmation,MIN_PASSWORD_LENGTH,PASSWORD_LENGTH_HINT,resendConfirmation,submitEmailAuth,type EmailAuthMode } from '@/lib/emailAuth';
 import {captureEvent,recordView} from '@/lib/analytics';
 import { safeNextPath } from '@/lib/profile';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -19,9 +19,9 @@ export default function SignInForm({initialMode,initialNext}:{initialMode:EmailA
  const client=getSupabaseClient(),reduced=useReducedMotion(),auth=useAuth();
  useEffect(()=>{const params=new URLSearchParams(window.location.search);if(params.has('error'))setError('The confirmation or recovery link could not be completed. Request a new email.');if(params.has('passwordUpdated'))setMessage('Your password has been updated. Sign in with your new password.');},[]);
  useEffect(()=>{if(!resendAfter)return;const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[resendAfter]);
- useEffect(()=>{if(auth.ready&&auth.user)assignApp(safeNextPath(new URLSearchParams(window.location.search).get('next')));},[auth.ready,auth.user]);
+ useEffect(()=>{if(auth.ready&&auth.user&&mode!=='forgot-password')assignApp(safeNextPath(new URLSearchParams(window.location.search).get('next')));},[auth.ready,auth.user,mode]);
  useEffect(()=>{recordView(mode);},[mode]);
- const next=()=>initialNext;
+ const next=()=>safeNextPath(initialNext);
  function changeMode(value:EmailAuthMode){setMode(value);setPassword('');setConfirmation('');setError('');setMessage('');setVisible(false);setNeedsConfirmation(false);const url=new URL(window.location.href);url.searchParams.set('mode',value);window.history.replaceState(null,'',url);}
  async function submit(event:FormEvent){
   event.preventDefault();if(!client||busy||(mode==='forgot-password'&&Date.now()<resendAfter))return;setBusy(true);setError('');setMessage('');
@@ -41,7 +41,7 @@ export default function SignInForm({initialMode,initialNext}:{initialMode:EmailA
   {error&&message&&mode==='sign-up'&&<p className="field-error" role="alert">{tr(error)}</p>}
   {!(message&&mode==='sign-up')&&<form className="email-auth-form" onSubmit={event=>void submit(event)}>
    <label htmlFor="auth-email">{tr("Email")}<input id="auth-email" type="email" autoComplete="email" required maxLength={254} value={email} disabled={busy} onChange={event=>setEmail(event.target.value)} autoCapitalize="none" spellCheck={false}/></label>
-   {mode!=='forgot-password'&&<><label htmlFor="auth-password">{tr("Password")}<div className="password-input"><input id="auth-password" type={visible?'text':'password'} autoComplete={mode==='sign-up'?'new-password':'current-password'} required minLength={mode==='sign-up'?MIN_PASSWORD_LENGTH:undefined} maxLength={mode==='sign-up'?128:undefined} value={password} disabled={busy} onChange={event=>setPassword(event.target.value)}/><button type="button" aria-label={tr(visible?'Hide password':'Show password')} onClick={()=>setVisible(value=>!value)}>{visible?<EyeOff size={18}/>:<Eye size={18}/>}</button></div></label>{mode==='sign-up'&&<><small>{tr("At least ")}{MIN_PASSWORD_LENGTH} {tr("characters.")}</small></>}</>}
+   {mode!=='forgot-password'&&<><label htmlFor="auth-password">{tr("Password")}<div className="password-input"><input id="auth-password" type={visible?'text':'password'} autoComplete={mode==='sign-up'?'new-password':'current-password'} required minLength={mode==='sign-up'?MIN_PASSWORD_LENGTH:undefined} maxLength={mode==='sign-up'?128:undefined} value={password} disabled={busy} onChange={event=>setPassword(event.target.value)}/><button type="button" aria-label={tr(visible?'Hide password':'Show password')} onClick={()=>setVisible(value=>!value)}>{visible?<EyeOff size={18}/>:<Eye size={18}/>}</button></div></label>{mode==='sign-up'&&<><small>{tr(PASSWORD_LENGTH_HINT)}</small></>}</>}
    {error&&<p className="field-error" role="alert">{tr(error)}</p>}{message&&<p className="auth-success" role="status">{tr(message)}</p>}
    <button className="primary-button auth-submit" type="submit" disabled={!client||busy||(mode==='forgot-password'&&remaining>0)}>{tr(busy?'Please wait…':mode==='sign-up'?'Join TOP1':mode==='forgot-password'?remaining>0?`Send again in ${remaining}s`:'Send reset link':'Log in')}<ArrowRight size={18}/></button>
   </form>}

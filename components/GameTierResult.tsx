@@ -20,7 +20,7 @@ export function gameTierLabel(tier:string, locale:Locale){
  return (locale==='ar'?'أعلى ':'Top ')+percent+suffix;
 }
 
-export default function GameTierResult({metric,progress,snapshot,onCreateGoal,disabled}:{metric:Metric;progress:ChallengeProgress;snapshot?:PerformanceProfile;onCreateGoal?:CreateTierGoal;disabled?:boolean}){
+export default function GameTierResult({metric,progress,snapshot,onCreateGoal,disabled,showPyramid=true}:{showPyramid?:boolean;metric:Metric;progress:ChallengeProgress;snapshot?:PerformanceProfile;onCreateGoal?:CreateTierGoal;disabled?:boolean}){
  const {locale,t}=useTranslations();
  const l=(en:string,fr:string,ar:string)=>locale==='fr'?fr:locale==='ar'?ar:en;
  const number=new Intl.NumberFormat(locale,{maximumFractionDigits:3});
@@ -50,7 +50,7 @@ export default function GameTierResult({metric,progress,snapshot,onCreateGoal,di
   ? [number.format(minutes)+' '+l('min','min','د'),remainingSeconds?number.format(remainingSeconds)+' '+deltaUnit:''].filter(Boolean).join(' ')
   : number.format(difference)+' '+deltaUnit;
  return <section className={css.card} aria-label={l('TOP1 game tier','Palier de jeu TOP1','مستوى لعبة TOP1')}>
-  <div className={css.now}><div><span className={css.label}>{l('Test game position','Position du test dans le jeu','ترتيب الاختبار في اللعبة')}</span><strong><bdi>{gameTierLabel(model===undefined?progress.tier:String(model)+'%',locale)}</bdi></strong></div>{model!==undefined&&<PerformancePyramid percent={model}/>}</div>
+  <div className={css.now}><div><span className={css.label}>{l('Test game position','Position du test dans le jeu','ترتيب الاختبار في اللعبة')}</span><strong><bdi>{gameTierLabel(model===undefined?progress.tier:String(model)+'%',locale)}</bdi></strong></div>{showPyramid&&model!==undefined&&<PerformancePyramid percent={model}/>}</div>
   {next?<div className={css.next}>
    <div className={css.nextHeading}><span>{l('Next tier','Prochain palier','المستوى التالي')}</span><bdi>{gameTierLabel(next.tier,locale)}</bdi></div>
    <div className={css.target}><bdi dir={run?'ltr':undefined}>{run?entryRaw(metric,next.value):number.format(next.value)}</bdi> <small>{run?l('min:sec','min:s','د:ث'):unitFor(next.value)}</small></div>

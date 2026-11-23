@@ -7,6 +7,22 @@ do $$declare m jsonb:='{"version": 1, "kind": "program", "id": "20000000-0000-40
  saved jsonb; w jsonb; change jsonb; result jsonb;begin
  saved:=public.write_training(m);perform public.write_training(m);
  if (select count(*) from public.training_events)<>1 then raise exception 'Training retry duplicated program';end if;
+ declare b jsonb; c jsonb; r jsonb;begin
+  b:=m||jsonb_build_object('id',gen_random_uuid(),'requestId',gen_random_uuid());
+  c:=m||jsonb_build_object('id',gen_random_uuid(),'requestId',gen_random_uuid());
+  begin
+    perform public.write_training_batch(jsonb_build_array(b,c||'{"expectedRevision":4}'),1);
+    raise exception 'Partial stale batch accepted';
+  exception when sqlstate 'PT409' then null; end;
+  if (select count(*) from public.training_events)<>1 then raise exception 'Partial batch persisted';end if;
+  r:=public.write_training_batch(jsonb_build_array(b,c),1);
+  if jsonb_array_length(r)<>2 or public.write_training_batch(jsonb_build_array(b,c),1)<>r then raise exception 'Lost-response batch duplicated'; end if;
+  begin
+    perform public.write_training_batch(jsonb_build_array(m||jsonb_build_object('id',gen_random_uuid(),'requestId',gen_random_uuid())),1);
+    raise exception 'Concurrent batch allowed obsolete ledger head';
+  exception when sqlstate 'PT409' then null; end;
+  raise exception using errcode='PT001';
+ exception when sqlstate 'PT001' then null; end;
  begin perform public.write_training(jsonb_set(m,'{data,name}','"Different"'));raise exception 'Altered retry accepted';exception when sqlstate 'PT409' then null;end;
  begin perform public.write_training(jsonb_set(m,'{requestId}',to_jsonb(gen_random_uuid()::text)));raise exception 'Stale revision accepted';exception when sqlstate 'PT409' then null;end;
  if private.valid_training_document('program',(m->'data')-'name') or private.valid_training_document('program',jsonb_set(m->'data','{sessions,0,exercises,0,sets,0,reps}','-1')) then raise exception 'Malformed plan accepted';end if;

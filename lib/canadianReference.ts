@@ -31,5 +31,6 @@ export function canadianComparison(id:'cmj'|'grip_combined',values:Values,d:Demo
  const p=ctx.protocol,expected=id==='cmj'?CANADIAN_JUMP_PROTOCOL:CANADIAN_GRIP_PROTOCOL;
  if(ctx.method!=='device'||p?.id!==expected||!p.equipment||p.trials!==(id==='cmj'?3:2)||id==='grip_combined'&&p.hand!=='both')return {available:false as const,reason:'Confirm the Canadian reference protocol in measurement details.'};
  const index=age!<20?0:1+Math.floor((age!-20)/5),row=canadianQuantiles[id][d.sex][index],ageMin=index===0?18:20+5*(index-1),ageMax=index===0?19:ageMin+4;
- return {available:true as const,band:topBandForThresholds(Number(value!.toFixed(3)),[10,50,90,95].map((percentile,i)=>({percentile,value:row[i]})))!,source:CANADIAN_SOURCE,referenceVersion:CANADIAN_REFERENCE_VERSION,ageMin,ageMax,sex:d.sex};
+ const thresholds=[10,50,90,95].map((percentile,i)=>({percentile,value:row[i]}));
+ return {available:true as const,thresholds,band:topBandForThresholds(Number(value!.toFixed(3)),thresholds)!,source:CANADIAN_SOURCE,referenceVersion:CANADIAN_REFERENCE_VERSION,ageMin,ageMax,sex:d.sex};
 }

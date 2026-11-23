@@ -7,7 +7,8 @@ import {historyChanges} from '../history';
 import {normalizeValues,type ProfileState} from '../profile';
 import {draftKey,parseDraft,profileFingerprint,serializeDraft} from '../drafts';
 import {ProfileSaveQueue,SupersededSave} from '../profileSaveQueue';
-export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,retainWorking=true){
+import {watchWorkspace} from '../workspaceSync';
+export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,retainWorking=true,onRemote?:(latest:ProfileState)=>void){
  const auth=useAuth(),owner=auth.user?.id;
  const [status,setStatus]=useState<'local'|'saving'|'saved'|'error'>('local'),[error,setError]=useState(''),[conflict,setConflict]=useState(false);
  const [storageWarning,setStorageWarning]=useState('');
@@ -28,6 +29,29 @@ export function useCloudSave(profile:ProfileState,enabled:boolean,editing=false,
  },[owner,auth.cloud,auth.loading,cancelPending]);
  const baseline=saved&&saved.owner===owner?saved.profile:auth.cloud;
  const unsaved=!!owner&&!!baseline&&profileFingerprint(profile)!==profileFingerprint(baseline);
+ const idleRefresh=useRef<typeof onRemote>(undefined);
+ idleRefresh.current=checkedOwner===owner&&!auth.loading&&!!auth.cloud&&!draft&&!editing&&!reviewing&&!conflict&&!unsaved&&status!=='saving'&&status!=='error'?onRemote:undefined;
+ useEffect(()=>{
+  if(!owner)return;
+  const controller=new AbortController();
+  let reading=false;
+  const stop=watchWorkspace(async()=>{
+   if(reading||!idleRefresh.current)return;
+   reading=true;
+   try{
+    await queue.current.refresh(owner,()=>!controller.signal.aborted&&currentOwner.current===owner&&!!idleRefresh.current,async revision=>{
+     const response=await fetch('/api/profile?since='+revision,accountReadOptions(owner,AbortSignal.timeout(15000)));
+     if(!response.ok)return null;
+     const body=await response.json();
+     return body.profile??null;
+    },latest=>{
+     lastStored.current=latest;setSaved({owner,profile:latest});setStatus('saved');idleRefresh.current?.(latest);
+    });
+   }catch{/* Keep the current profile offline and retry on the next foreground check. */}
+   finally{reading=false;}
+  },window,document,30000);
+  return ()=>{controller.abort();stop();};
+ },[owner]);
  const save=useCallback((next:ProfileState,options?:{visibilityIntent?:boolean;retainFailedEntry?:boolean})=>{
   latestDraftFingerprint.current=profileFingerprint(next);const userId=owner;if(!userId)return Promise.reject(new Error('Sign in to save.'));
   let attempted:ProfileState|undefined;

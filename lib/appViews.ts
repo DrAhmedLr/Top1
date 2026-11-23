@@ -1,5 +1,5 @@
 export type AppView = 'overview' | 'potential' | 'performance' | 'ranking' | 'progress' | 'profile' | 'settings' | 'methodology' | 'labs';
-export const primaryViews = ['overview', 'performance', 'potential', 'ranking'] as const;
+export const primaryViews = ['overview', 'performance', 'potential', 'profile'] as const;
 
 export const viewTitles = {
   overview: ['Home', 'Accueil', 'الرئيسية'],

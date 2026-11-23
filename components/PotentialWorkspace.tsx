@@ -2,6 +2,7 @@
 import {useState,type FormEvent} from 'react';
 import {useWorkspaceEditor} from '@/lib/hooks/useWorkspaceEditor';
 import {activeMetrics,type Values} from '@/lib/registry';
+import {captureEvent} from '@/lib/analytics';
 import {valid} from '@/lib/engine';
 import {formatRunTime} from '@/lib/run10kReference';
 import {useTranslations} from './providers/LocaleProvider';
@@ -25,7 +26,7 @@ export default function PotentialWorkspace({state,selectedMetric,values,details,
   const data=new FormData(event.currentTarget);let next:Goal;
   try{next=createPersonalGoal(metric.id,String(data.get('target')??''),String(data.get('date')??''),values);}catch{setError(local('Choose an improving target within the test range and a future date.','Choisis une cible de progression valide et une date future.','اختر هدفًا صالحًا للتحسن وتاريخًا مستقبليًا.'));return;}
   next={...next,baselineDetails:details[metric.id],context:editor.data.context};
-  if(await state.save({...editor.data,goal:next},editor.revision,'goal'))setError('');
+  if(await state.save({...editor.data,goal:next},editor.revision,'goal')){captureEvent('goal_saved');setError('');}
  }
  return <div className="potential-workspace">
   <section className="performance-note"><h2>{local('What do you want to improve?','Que veux-tu améliorer ?','ما الذي تريد تحسينه؟')}</h2><p>{local('Choose a result, set your target, then track it with the same test.','Choisis un résultat, fixe ta cible et suis-la avec le même test.','اختر نتيجة وحدد هدفك وتابعه بالاختبار نفسه.')}</p>

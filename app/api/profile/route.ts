@@ -3,6 +3,7 @@ import {normalizePublicFields,disclosedDemographics,readPublicFields} from '@/li
 import {currentAccount} from '@/lib/accountSession';
 import { signSummary } from '@/lib/summarySignature';
 import {saveVisibility} from '@/lib/profileSaveQueue';
+import {reconcileAfterGoalWrite} from '@/lib/goalTrackingServer';
 import { normalizeMeasurementMetadata,authoritativeMeasurementDetails } from '@/lib/measurementMetadata';
 import { NextResponse, type NextRequest } from 'next/server';
 import { getSupabaseServer } from '@/lib/supabaseServer';
@@ -16,6 +17,7 @@ export async function GET(req:Request){
   if(!user||user.is_anonymous)return reply({error:'Sign in to access your profile.'},401);
   const {data,error}=await client.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(error)return reply({error:'Unable to load profile.'},500);
+  if(new URL(req.url).searchParams.get('since')===String(data?.revision??0))return reply({unchanged:true});
   if(!data)return reply({profile:emptyProfile});
   const {data:measurements,error:logError}=await client.rpc('read_current_measurements');
   if(logError)return reply({error:'Unable to load measurements.'},500);
@@ -46,7 +48,7 @@ export async function POST(request:NextRequest){
     const summary=await signSummary({...buildPublicSummary(profile),publicFields},username||user.id,disclosedDemographics(demographics,publicFields));
     const {data:revision,error}=await client.rpc('save_profile',{p_demographics:demographics,p_metrics:values,p_username:username||null,p_is_public:isPublic,p_summary:summary,p_details:measurementDetails,p_expected_revision:input.revision});
     if(error)return reply({error:error.code==='23505'?'That username is already taken.':['40001','PT409'].includes(error.code)?'This profile changed on another device. Reload before saving.':'Unable to save your profile. Please retry.',conflict:['40001','PT409'].includes(error.code)},['23505','40001','PT409'].includes(error.code)?409:500);
-    const {data:ageStamp}=await client.from('profiles').select('age_recorded_at').eq('id',user.id).maybeSingle();
+    const [{data:ageStamp}]=await Promise.all([client.from('profiles').select('age_recorded_at').eq('id',user.id).maybeSingle(),reconcileAfterGoalWrite(client,user.id)]);
     return reply({profile:{...profile,revision:Number(revision),ageRecordedAt:ageStamp?.age_recorded_at??undefined}});
   }catch(error){return reply({error:error instanceof Error?error.message:'Invalid profile.'},400);}
 }

@@ -10,6 +10,7 @@ export class ProfileSaveQueue {
   private owner?:string;
   private revision=0;
   private generation=0;
+  private writes=0;
   private pending:Promise<unknown>=Promise.resolve();
   adopt(owner:string,revision:number){
     if(this.owner===owner&&revision<this.revision)return false;
@@ -18,7 +19,19 @@ export class ProfileSaveQueue {
   }
   invalidate(){this.generation++;}
   currentRevision(owner:string){return this.owner===owner?this.revision:0;}
+  async refresh(owner:string,canReplace:()=>boolean,read:(revision:number)=>Promise<ProfileState|null>,apply:(profile:ProfileState)=>void){
+    const generation=this.generation;
+    const safe=()=>this.owner===owner&&this.generation===generation&&this.writes===0&&canReplace();
+    if(!safe())return;
+    const latest=await read(this.revision);
+    const revision=latest?.revision;
+    if(latest&&typeof revision==='number'&&Number.isSafeInteger(revision)&&revision>this.revision&&safe()){
+      this.adopt(owner,revision);
+      apply(latest);
+    }
+  }
   enqueue(owner:string,profile:ProfileState,write:(profile:ProfileState)=>Promise<ProfileState>){
+    this.writes++;
     const generation=this.generation;
     const current=()=>this.owner===owner&&this.generation===generation;
     const job=this.pending.catch(()=>{}).then(async()=>{
@@ -30,8 +43,9 @@ export class ProfileSaveQueue {
         return saved;
       }catch(error){if(current())this.invalidate();throw error;}
     });
-    this.pending=job;
-    return job;
+    const complete=job.finally(()=>{this.writes--;});
+    this.pending=complete;
+    return complete;
   }
 }
 

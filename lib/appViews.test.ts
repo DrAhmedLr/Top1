@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {appView, primaryViews, viewHref} from './appViews';
 
-test('the home, measurement, program and ranking destinations round trip', () => {
-  assert.deepEqual(primaryViews,['overview','performance','potential','ranking']);
+test('the home, measurement, program and profile destinations round trip', () => {
+  assert.deepEqual(primaryViews,['overview','performance','potential','profile']);
   for (const view of primaryViews) {
     assert.equal(appView(new URL(viewHref(view), 'https://top1.fit').searchParams), view);
   }

@@ -3,7 +3,7 @@ import {useId,useMemo,useState} from 'react';
 import {ArrowUpRight,ChevronDown,ChevronRight,ExternalLink,SlidersHorizontal} from 'lucide-react';
 import {entryRaw,entryUnit} from '@/lib/focusedEntry';
 import {goalMetrics} from '@/lib/adaptiveProgram';
-import {inverseCdf,valid} from '@/lib/engine';
+import {valid} from '@/lib/engine';
 import type {Observation} from '@/lib/history';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 import {measurementTrack,performanceOrder} from '@/lib/performanceCatalog';
@@ -11,7 +11,8 @@ import {COMPETITIVE_CHALLENGE_METRICS} from '@/lib/competitiveMetrics';
 import {challengeBand,personalPosition,referenceRank} from '@/lib/rankExplorer';
 import {usePrivateMetricHistory} from '@/lib/hooks/usePrivateMetricHistory';
 import {maintenanceTargets,type Demographics,type Values} from '@/lib/registry';
-import type {TopBand} from '@/lib/topBands';
+import RankCurve from './RankCurve';
+import {referenceChart} from '@/lib/homePresentation';
 import {useTranslations} from './providers/LocaleProvider';
 import {MetricIcon} from './MetricIcon';
 import {performanceProfileAtTest} from '@/lib/performanceContext';
@@ -30,36 +31,6 @@ const selectionGroups=[
  {names:['Bounded comparisons','Comparaisons plafonnées','مقارنات محدودة'],metrics:performanceOrder.filter(m=>measurementTrack(m.id)==='capped')},
  {names:['Personal tracking','Suivi personnel','المتابعة الشخصية'],metrics:performanceOrder.filter(m=>measurementTrack(m.id)==='journal')},
 ];
-const left=18,right=342,bottom=111;
-const chartX=(z:number)=>left+(right-left)*(z+3.2)/6.4;
-const chartY=(z:number)=>bottom-88*Math.exp(-z*z/2);
-const curve=Array.from({length:129},(_,i)=>{const z=-3.2+i/20;return (i?'L':'M')+chartX(z).toFixed(2)+' '+chartY(z).toFixed(2);}).join(' ');
-function percentileX(p:number){
- if(p<=0)return left;
- if(p>=100)return right;
- return chartX(Math.max(-3.2,Math.min(3.2,inverseCdf(p/100))));
-}
-
-function RankCurve({band,percentile,caption,axisLabels}:{band?:TopBand|null;percentile?:number;caption:string;axisLabels:string[]}){
- const clip=useId(),fill=useId();
- const start=band?percentileX(100-band.to):null,end=band?percentileX(100-band.from):null;
- const point=percentile===undefined?null:percentileX(percentile);
- return <figure className={css.figure}>
-  <svg viewBox="0 0 360 141" role="img" aria-label={caption} preserveAspectRatio="xMidYMid meet" direction="ltr">
-   <defs><clipPath id={clip}><path d={curve+' L342 111 H18 Z'}/></clipPath>
-    <linearGradient id={fill} x1="0" x2="0" y1="0" y2="1" gradientUnits="objectBoundingBox"><stop stopColor="#9ac7ff" stopOpacity=".27"/><stop offset="1" stopColor="#9ac7ff" stopOpacity=".02"/></linearGradient>
-   </defs>
-   {[43,77,bottom].map(y=><line key={y} x1={left} x2={right} y1={y} y2={y} stroke="#384c65" strokeDasharray={y===bottom?undefined:'2 5'}/>)}
-   {[10,50,90].map(p=><line key={p} x1={percentileX(p)} x2={percentileX(p)} y1="12" y2={bottom+4} stroke="#384c65" strokeDasharray="2 5"/>)}
-   <path d={curve+' L342 111 H18 Z'} fill={band||point!==null?'url(#'+fill+')':'#233347'}/>
-   {start!==null&&end!==null&&<g><rect x={start} width={Math.max(1,end-start)} y="13" height={bottom-13} fill="#9ac7ff" opacity=".08"/><rect x={start} width={Math.max(1,end-start)} y="10" height={bottom-10} fill="#9ac7ff" opacity=".72" clipPath={'url(#'+clip+')'}/><path d={'M'+start+' 106 V115 H'+end+' V106'} fill="none" stroke="#9ac7ff" strokeWidth="2"/></g>}
-   <path d={curve} fill="none" stroke={band||point!==null?'#9ac7ff':'#8c9baa'} strokeWidth="2.5"/>
-   {point!==null&&<g><line x1={point} x2={point} y1="12" y2={bottom} stroke="#9ac7ff" strokeWidth="2" strokeDasharray="3 3"/><circle cx={point} cy={chartY((point-left)/(right-left)*6.4-3.2)} r="4.5" fill="#9ac7ff" stroke="#101b28" strokeWidth="2"/></g>}
-   {[10,50,90].map((p,i)=><text className={css.tick} key={p} x={percentileX(p)} y="134" textAnchor="middle" direction="ltr">{axisLabels[i]}</text>)}
-  </svg><figcaption>{caption}</figcaption>
- </figure>;
-}
-
 export default function RankExplorer({values,details,profile,metricId,onSelect,onRecord,onHistory,onGoal,onCreateGoal,disabled,owner='guest',guestEntries=noEntries,revision=0}:RankExplorerProps){
  const {locale,t}=useTranslations(),l=(en:string,fr:string,ar:string)=>locale==='fr'?fr:locale==='ar'?ar:en;
  const uid=useId(),[chosen,setChosen]=useState(''),[mode,setMode]=useState<'reference'|'personal'>('reference');
@@ -80,7 +51,8 @@ export default function RankExplorer({values,details,profile,metricId,onSelect,o
  const result=mode==='reference'?bandText??challengeText:activePersonal?percent(personal.percentile):undefined;
  const isHealth=evidence.kind==='tracking'||id==='zone2_power';
  const suggestPersonal=mode==='reference'&&!published&&!challenge&&value!==undefined;
- const showCurve=mode==='personal'?activePersonal:!!published;
+ const chart=referenceChart(assessed);
+ const showCurve=mode==='personal'?activePersonal:chart?.kind==='curve';
  const pLabel=l('Personal percentile','Percentile personnel','المئين الشخصي');
  const modeLabel=mode==='personal'?pLabel:published?l('Published cohort','Cohorte publiée','عينة منشورة'):challenge?l('TOP1 challenge tier','Palier du défi TOP1','مستوى تحدّي TOP1'):l('Reference','Référence','المرجع');
  const noRank=mode==='reference'&&isHealth?l('Personal tracking','Suivi personnel','متابعة شخصية'):value===undefined?l('No result yet','Aucun résultat','لا توجد نتيجة بعد'):l('No rank available','Rang indisponible','لا توجد مرتبة متاحة');
@@ -113,7 +85,7 @@ export default function RankExplorer({values,details,profile,metricId,onSelect,o
    <div className={css.topline}><div><span className={css.overline}>{l('Current result','Résultat actuel','النتيجة الحالية')}</span><strong className={css.raw}><bdi>{raw}</bdi>{value!==undefined&&<small> {t(entryUnit(metric))}</small>}</strong></div>
     {onRecord&&<button className={css.entry} type="button" disabled={disabled} onClick={()=>onRecord(id)}>{l('Log result','Saisir','تسجيل')}<ArrowUpRight size={15}/></button>}
    </div>
-   {showTier&&<GameTierResult metric={metric} progress={showTier} snapshot={performanceProfileAtTest(profile,context)} onCreateGoal={onCreateGoal} disabled={disabled}/>}
+   {showTier&&<GameTierResult showPyramid={chart?.kind==='pyramid'} metric={metric} progress={showTier} snapshot={performanceProfileAtTest(profile,context)} onCreateGoal={onCreateGoal} disabled={disabled}/>}
    {showMaintenance&&<BoundedTestResult metric={metric} value={value}/>}
    {!showMaintenance&&(!showTier||published)&&<div className={css.ranking}><span className={css.overline}>{modeLabel}</span><h3 className={result?css.rangeValue:css.noRank} dir="auto">{result??(loading?'…':noRank)}</h3><p>{description}</p></div>}
    {showCurve&&<RankCurve band={mode==='reference'?band:null} percentile={activePersonal?personal.percentile:undefined} caption={caption} axisLabels={['P10','P50','P90']}/>}
