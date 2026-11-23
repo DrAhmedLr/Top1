@@ -1,6 +1,6 @@
 # TOP1.Fit
 
-This source tree implements a mobile performance journal and adaptive training planner. Home opens the next action. Measurements keeps 36 tests and observations in six categories. Program connects a target and deadline with scheduled sessions, actual exercise and a conditional forecast. Ranking shows the basis of each comparison. See the [product scope](docs/PRODUCT_FOCUS.md).
+TOP1 is a performance journal and training planner with four main screens. Home shows the selected goal or latest result. Measurements records 36 tests and observations in six categories. Program schedules one or more goals around the athlete’s available sessions. My profile opens the measurement history, rankings, language preferences and account settings. See the [product scope](docs/PRODUCT_FOCUS.md).
 
 A guest journal stays on the device. Account data uses owner-scoped measurement and training APIs. Each observation preserves its entered value, available protocol and dates. A result without a known test date displays the save date. The interface supports English, French and Arabic.
 

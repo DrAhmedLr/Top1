@@ -1,1 +1,11 @@
 body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:none}input,textarea,select{font-size:16px}.performance-nav{padding-bottom:env(safe-area-inset-bottom)}
+
+/* Keep the native tab bar on larger phones in landscape and on tablets. */
+@media (min-width:741px) {
+ .training-shell .training-header {display:contents}
+ .training-shell .training-header .training-brand {display:none}
+ .training-shell .training-header .training-nav {position:fixed;inset-inline:0;bottom:0;max-width:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:4px max(8px,env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:#111b29;border-top:1px solid #334052;z-index:40}
+ .training-shell .training-header .training-nav a {display:flex;flex-direction:column;min-height:52px;gap:3px;padding:4px;font-size:12px}
+ .training-shell .training-header .training-nav a svg {display:block}
+ .personal-app .training-shell.performance-shell>main {padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+}

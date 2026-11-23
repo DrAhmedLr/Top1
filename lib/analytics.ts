@@ -1,20 +1,39 @@
 'use client';
-import type {PostHog} from 'posthog-js';
-import {metrics} from './registry';
-export const analyticsViews=['journey','overview','ranking','program','measurements','progress','scenarios','profile','settings','methodology','labs','sign-in','sign-up','forgot-password','reset-password','account-password','share','privacy'] as const;
-export type AnalyticsView=typeof analyticsViews[number];
-export const analyticsEvents=['journey_recommendation_shown','journey_basics_started','journey_basics_saved','journey_recommendation_skipped','game_quest_started','game_checkin_completed','game_reward_earned','game_library_opened','app_viewed','onboarding_started','onboarding_completed','journey_started','journey_result_saved','journey_reveal_viewed','journey_challenge_chosen','journey_retest_completed','signup_requested','signup_confirmed','login_succeeded','recovery_requested','measurement_saved','measurement_cleared','profile_migrated','public_link_shared','simulator_used'] as const;
-export type AnalyticsEvent=typeof analyticsEvents[number];
-let analytics:PostHog|null=null,lastView:AnalyticsView|undefined;
-const pending:Array<{event:AnalyticsEvent;properties:Record<string,string>}>=[];
-const configured=!!process.env.NEXT_PUBLIC_POSTHOG_KEY;
-export function safeEventProperties(event:AnalyticsEvent,input:Record<string,unknown>={}){
- const out:Record<string,string>={};
- if(event==='app_viewed'&&analyticsViews.includes(input.view as AnalyticsView))out.view=String(input.view);
- if(['journey_result_saved','journey_recommendation_shown','journey_recommendation_skipped','measurement_saved','measurement_cleared','simulator_used'].includes(event)&&metrics.some(m=>m.id===input.metric_id))out.metric_id=String(input.metric_id);
- if(event==='public_link_shared'&&['clipboard','x'].includes(String(input.channel)))out.channel=String(input.channel);
- return out;
+
+import {analyticsEvents, analyticsViews, type AnalyticsEvent, type AnalyticsView, type JourneyAction} from './analyticsVocabulary';
+export {analyticsEvents, analyticsViews, type AnalyticsEvent, type AnalyticsView, type JourneyAction} from './analyticsVocabulary';
+
+
+type Collector = {capture: (event: AnalyticsEvent, properties: {view?: AnalyticsView}) => void};
+type JourneyCollector = {view: (view: AnalyticsView) => void; action: (event: JourneyAction, metric?: string) => void};
+let journey: JourneyCollector | null = null;
+export function setJourneyClient(client: JourneyCollector | null) { journey = client; }
+export function recordJourneyAction(event: JourneyAction, metric?: string) { journey?.action(event, metric); }
+let collector: Collector | null = null;
+let lastView: AnalyticsView | undefined;
+
+export function safeEventProperties(event: AnalyticsEvent, input: Record<string, unknown> = {}): {view?: AnalyticsView} {
+  if (event === 'app_viewed' && analyticsViews.includes(input.view as AnalyticsView)) return {view: input.view as AnalyticsView};
+  return {};
 }
-export function setAnalyticsClient(client:PostHog|null){analytics=client;if(client)while(pending.length){const e=pending.shift()!;client.capture(e.event,e.properties);}}
-export function captureEvent(event:AnalyticsEvent,input:Record<string,unknown>={}){if(!analyticsEvents.includes(event))return;const properties=safeEventProperties(event,input);if(analytics)analytics.capture(event,properties);else if(configured&&pending.length<100)pending.push({event,properties});}
-export function recordView(view:AnalyticsView){if(view===lastView)return;lastView=view;captureEvent('app_viewed',{view});}
+
+export function setAnalyticsClient(client: Collector | null) {
+  collector = client;
+  lastView = undefined;
+}
+
+export function captureEvent(event: AnalyticsEvent, input: Record<string, unknown> = {}) {
+  if (!analyticsEvents.includes(event)) return;
+  if (event !== 'app_viewed') recordJourneyAction(event, typeof input.metric_id === 'string' ? input.metric_id : undefined);
+  if (!collector) return;
+  const properties = safeEventProperties(event, input);
+  if (event !== 'app_viewed' || properties.view) collector.capture(event, properties);
+}
+
+export function recordView(view: AnalyticsView) {
+  if (!analyticsViews.includes(view)) return;
+  journey?.view(view);
+  if (!collector || view === lastView) return;
+  lastView = view;
+  captureEvent('app_viewed', {view});
+}

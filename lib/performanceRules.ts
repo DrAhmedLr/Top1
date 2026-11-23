@@ -78,6 +78,15 @@ export const PERFORMANCE_RULES:Readonly<Record<string,PerformanceRule|undefined>
 
 const metricsById=new Map(activeMetrics.map(metric=>[metric.id,metric]));
 
+export function performanceAdjustment(rule:PerformanceRule,{age,weight,sex}:PerformanceProfile){
+  const ageFactor=1+rule.agePerYear*clamp((age??rule.ageStart)-rule.ageStart,0,40);
+  const kg=weight??75;
+  const weightDeviation=clamp(kg-clamp(kg,rule.weightNeutralMin??65,85),-30,30);
+  const massFactor=1+weightDeviation*rule.weightPerKg;
+  const sexFactor=sex==='female'?rule.femaleFactor:1;
+  return {ageFactor,massFactor,sexFactor,factor:ageFactor*massFactor*sexFactor};
+}
+
 export function performanceGamePercent(id:string,value:number|undefined,profile:PerformanceProfile={}):number|null{
   const rule=Object.hasOwn(PERFORMANCE_RULES,id)?PERFORMANCE_RULES[id]:undefined;
   const metric=metricsById.get(id);
@@ -86,10 +95,7 @@ export function performanceGamePercent(id:string,value:number|undefined,profile:
   if(age!==undefined&&(!Number.isInteger(age)||age<18||age>120))return null;
   if(weight!==undefined&&(!Number.isFinite(weight)||weight<25||weight>350))return null;
   if(sex!==undefined&&sex!=='male'&&sex!=='female'&&sex!=='unselected')return null;
-  const ageFactor=1+rule.agePerYear*clamp((age??rule.ageStart)-rule.ageStart,0,40);
-  const kg=weight??75;
-  const weightDeviation=clamp(kg-clamp(kg,rule.weightNeutralMin??65,85),-30,30);
-  const factor=ageFactor*(1+weightDeviation*rule.weightPerKg)*(sex==='female'?rule.femaleFactor:1);
+  const {factor}=performanceAdjustment(rule,profile);
   const saved=Number(value.toFixed(3));
   const adjusted=metric.polarity===1?saved*factor:saved/factor;
   const anchors=rule.anchors;

@@ -1,4 +1,5 @@
 'use client';
+import {ladderKey} from '@/lib/profileLadder';
 import {homeShortcutKey} from '@/lib/homeShortcut';
 import {trainingKey} from '@/lib/trainingStorage';
 import {weightBrowserKeys} from '@/lib/hooks/useBodyweight';
@@ -7,7 +8,7 @@ import {useTranslations} from '@/components/providers/LocaleProvider';
 import {useRef,useState} from 'react';
 import {LOCAL_PROFILE_KEYS} from '@/lib/profile';
 import Modal from './Modal';
-const keys=['top1-workspace-form-v1:guest:goal','top1-workspace-form-v1:guest:context','top1-workspace-v1:guest','top1-workspace-draft-v1:guest','top1-potential-v1:guest',homeShortcutKey('guest'),trainingKey('guest'),...weightBrowserKeys('guest'),baselineStorageKey('guest'),'top1-session-draft:guest','top1-adaptive-v1:guest','top1-game-v1:guest',...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-journey-v1:guest','top1-walk-pilot:guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest','top1-favorites-guest','top1-scenario-guest'];
+const keys=['top1-workspace-form-v1:guest:goal','top1-workspace-form-v1:guest:context','top1-workspace-v1:guest','top1-workspace-draft-v1:guest','top1-potential-v1:guest',homeShortcutKey('guest'),ladderKey('guest'),trainingKey('guest'),...weightBrowserKeys('guest'),baselineStorageKey('guest'),'top1-session-draft:guest','top1-adaptive-v1:guest','top1-game-v1:guest',...LOCAL_PROFILE_KEYS,'top1-history-guest','top1-journey-v1:guest','top1-walk-pilot:guest','top1-program-guest','top1-program-draft-guest','top1-program-composer-guest','top1-checkin-guest','top1-favorites-guest','top1-scenario-guest'];
 export default function BrowserDataControls({onCleared}:{onCleared:()=>void}){
  const {t:tr}=useTranslations();
 

@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { safeNextPath } from './profile';
 export type EmailAuthMode='sign-in'|'sign-up'|'forgot-password';
-export const MIN_PASSWORD_LENGTH=12;
+export const MIN_PASSWORD_LENGTH=8;
+export const PASSWORD_LENGTH_HINT=`Use at least ${MIN_PASSWORD_LENGTH} characters.`;
 export function authEntryPath(mode: EmailAuthMode, next='/') {
  const params = new URLSearchParams({mode,next:safeNextPath(next)});
  return `/sign-in?${params}`;
@@ -15,7 +16,7 @@ export function normalizeEmail(input:string){
  return email;
 }
 export function validatePassword(password:string,confirmation:string){
- if(password.length<MIN_PASSWORD_LENGTH)throw new Error(`Use at least ${MIN_PASSWORD_LENGTH} characters for your password.`);
+ if(password.length<MIN_PASSWORD_LENGTH)throw new Error(PASSWORD_LENGTH_HINT);
  if(password.length>128)throw new Error('Use a password of 128 characters or fewer.');
  if(password!==confirmation)throw new Error('The passwords do not match.');
 }

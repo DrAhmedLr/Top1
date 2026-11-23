@@ -1,5 +1,5 @@
 import {metrics,type Values} from './registry';
-import {countMetrics} from './measurementRules';
+import {valid} from './engine';
 import {normalizeMeasurementMetadata,type MeasurementMetadata,type MeasurementMethod,type ExerciseMode} from './measurementMetadata';
 import {protocolOptions,protocolComplete,protocolKey,type MeasurementProtocol,type ObservationWindow} from './protocols';
 import type {CalculationDerivation} from './derivations';
@@ -10,7 +10,17 @@ export function absoluteLiftChange(previous:Observation,latest:Observation){
  const a=previous.derivation,b=latest.derivation;if(!a||!b||a.formula!==b.formula||!['epley_ratio_v1','pullup_ratio_v1'].includes(a.formula))return null;
  try{const absolute=(d:CalculationDerivation)=>d.formula==='pullup_ratio_v1'?epley(d.inputs[0]+d.bodyWeightKg!,d.inputs[1]):epley(d.inputs[0],d.inputs[1]);return {changeKg:absolute(b)-absolute(a),kind:a.formula==='pullup_ratio_v1'?'estimated total system load':'estimated lifted load'};}catch{return null;}
 }
-function usable(o:Observation,now:number){const metric=metrics.find(m=>m.id===o.metricId);if(!metric||!o.method||!o.measuredAt||!Number.isFinite(o.value)||o.value!<metric.min||o.value!>metric.max||countMetrics.has(o.metricId)&&!Number.isInteger(o.value)||protocolOptions[o.metricId]&&!protocolComplete(o.metricId,o.protocol))return false;try{normalizeMeasurementMetadata({[o.metricId]:{method:o.method,measuredAt:o.measuredAt,exerciseMode:o.exerciseMode,protocol:o.protocol,window:o.window}},{now});return o.metricId!=='vo2_max'||o.method!=='direct_cpet'||!!o.exerciseMode;}catch{return false;}}
+type TestContext=Pick<Observation,'metricId'|'value'|'method'|'measuredAt'|'exerciseMode'|'protocol'|'window'>;
+export function comparableTest(test:TestContext,now=Date.now()) {
+ const {metricId,value,method,measuredAt,exerciseMode,protocol,window}=test;
+ const metric=metrics.find(item=>item.id===metricId);
+ if(!metric||!method||!measuredAt||!valid(metric,value??undefined))return false;
+ if(protocolOptions[metricId]&&!protocolComplete(metricId,protocol))return false;
+ try {
+  normalizeMeasurementMetadata({[metricId]:{method,measuredAt,exerciseMode,protocol,window}},{now});
+  return metricId!=='vo2_max'||method!=='direct_cpet'||!!exerciseMode;
+ } catch {return false;}
+}
 function newestSave(a:Observation,b:Observation){
  return (b.sequence??0)-(a.sequence??0)||Date.parse(b.recordedAt)-Date.parse(a.recordedAt)||b.id.localeCompare(a.id);
 }
@@ -25,18 +35,18 @@ export function comparableDelta(entries:Observation[],now=Date.now()){
 }
 function comparisonFrom(observations:Observation[],now:number){
  const latest=observations[0];
- if(!latest||!usable(latest,now))return null;
- const previous=observations.slice(1).find(o=>usable(o,now)&&o.metricId===latest.metricId&&o.method===latest.method&&o.exerciseMode===latest.exerciseMode&&protocolKey(o.protocol)===protocolKey(latest.protocol)&&windowKey(o.window)===windowKey(latest.window)&&(!latest.window||!o.window||Date.parse(o.window.end)<=Date.parse(latest.window.start))&&Date.parse(o.measuredAt!)<Date.parse(latest.measuredAt!));
+ if(!latest||!comparableTest(latest,now))return null;
+ const previous=observations.slice(1).find(o=>comparableTest(o,now)&&o.metricId===latest.metricId&&o.method===latest.method&&o.exerciseMode===latest.exerciseMode&&protocolKey(o.protocol)===protocolKey(latest.protocol)&&windowKey(o.window)===windowKey(latest.window)&&(!latest.window||!o.window||Date.parse(o.window.end)<=Date.parse(latest.window.start))&&Date.parse(o.measuredAt!)<Date.parse(latest.measuredAt!));
  return previous?{change:latest.value!-previous.value!,previous,latest}:null;
 }
 export function personalBest(entries:Observation[],reference:Observation|undefined,now=Date.now()){
- if(!reference||!usable(reference,now))return undefined;
+ if(!reference||!comparableTest(reference,now))return undefined;
  const metric=metrics.find(m=>m.id===reference.metricId);
  if(metric?.pillar!=='strength'||metric.scoringType==='bounded')return undefined;
  const setup=(entry:Observation)=>JSON.stringify([entry.method,entry.exerciseMode,protocolKey(entry.protocol),windowKey(entry.window)]);
  const referenceSetup=setup(reference);
  return entries.reduce((best,entry)=>{
-  if(entry.metricId!==reference.metricId||entry.cleared||!usable(entry,now)||setup(entry)!==referenceSetup)return best;
+  if(entry.metricId!==reference.metricId||entry.cleared||!comparableTest(entry,now)||setup(entry)!==referenceSetup)return best;
   return (entry.value!-best.value!)*metric.polarity>0?entry:best;
  },reference);
 }

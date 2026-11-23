@@ -60,3 +60,16 @@
 @media(max-width:380px){.training-home{gap:19px}.th-hero{padding:17px;grid-template-columns:minmax(0,1fr) 67px;gap:14px 8px}.th-actions{margin-top:14px}.th-areas{gap:7px 11px}.th-areas span{font-size:10px}.th-quick-grid{gap:6px}.training-home .th-quick-test{padding:12px 9px}.th-quick-test>svg{display:none}}
 @media(min-width:650px){.th-quick-test>svg{width:17px;height:17px;inset-inline-end:13px;inset-block-start:14px}.training-home .th-quick-test{padding:20px;min-height:135px}.th-feed-split{grid-template-columns:1fr 1fr}.th-shortcut{grid-column:1/-1}.th-quick-grid{gap:13px}.th-areas{gap:25px}.th-areas span{font-size:13px}.th-hero{grid-template-columns:minmax(0,1fr) 145px}}
 @media(prefers-reduced-motion:reduce){.training-home *{transition:none!important}}
+.th-comparison{min-width:0;--rank-dim:#c3d1e3}
+.th-comparison>span,.th-comparison>strong{display:block}
+.th-comparison>span{color:#c3d1e3;font-size:12px;line-height:1.45}
+.th-comparison>strong{color:#e6f5ff;font-size:clamp(19px,3vw,27px);line-height:1.2;margin-top:3px}
+.th-comparison .performance-pyramid{width:100%;max-width:160px;height:auto;display:block;margin-top:8px}
+@media(max-width:550px){.th-hero:has(.th-comparison){grid-template-columns:1fr}.th-comparison{border-block-start:1px solid #7294b33f;padding-block-start:12px}.th-comparison[data-chart=pyramid]{display:grid;grid-template-columns:minmax(0,1fr) 115px;align-items:center;column-gap:8px}.th-comparison[data-chart=pyramid] .performance-pyramid{grid-column:2;grid-row:1/3;margin:0}.th-comparison figure{max-width:340px;margin-inline:auto}}
+.training-home .th-hero-copy>.th-forecast{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 7px}
+.th-forecast strong{color:#c4e6ff;font-size:22px;line-height:1.15}
+.th-forecast span{max-width:32ch}
+.th-areas>strong{flex-basis:100%;font-size:13px;color:#e2edfa;font-weight:620}
+
+.th-goal-switch {display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;font-size:.82rem}
+.th-goal-switch select {max-width:100%;padding:.45rem .7rem;border:1px solid currentColor;border-radius:.65rem;background:var(--background,#111827);color:inherit;font:inherit}

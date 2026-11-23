@@ -2,6 +2,7 @@
 import {usePersonalWorkspace} from '@/lib/hooks/usePersonalWorkspace';
 import PerformanceBoard from './PerformanceBoard';
 import TrainingHome from './TrainingHome';
+import type {RegionalCalendar} from '@/lib/regionalCalendar';
 import HomePreferences from './HomePreferences';
 import {homeShortcutKey,useHomeShortcut} from '@/lib/homeShortcut';
 import {useRecentMeasurements} from '@/lib/hooks/useRecentMeasurements';
@@ -23,17 +24,15 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Activity, ArrowRight, ArrowUpRight, CircleHelp, Download, History, Lock, UserRound, X } from 'lucide-react';
+import { Activity, ArrowRight, ArrowUpRight, CircleHelp, Lock, UserRound, X } from 'lucide-react';
 import { useAuth } from './providers/AuthProvider';
 import {minimalPublicFields,type PublicFields} from '@/lib/sharing';
 const RepeatObservation=dynamic(()=>import('./RepeatObservation'));
 
-import {repeatDetails} from '@/lib/observationPresentation';
 const AccountDataControls=dynamic(()=>import('./AccountDataControls'));
 import BrowserDataControls from './BrowserDataControls';
 import {useGuestHistory} from '@/lib/hooks/useGuestHistory';
 import { useCloudSave } from '@/lib/hooks/useCloudSave';
-import {calculationReport} from '@/lib/calculationReport';
 import { captureEvent,recordView } from '@/lib/analytics';
 import { normalizeValues, type ProfileState } from '@/lib/profile';
 import {GuestProfileConflictError,GuestProfileReadError,readGuestProfile,writeGuestProfile} from '@/lib/guestProfileStorage';
@@ -46,15 +45,18 @@ const CloudProfileControls=dynamic(()=>import('./CloudProfileControls'));
 import GameProgressSync from './GameProgressSync';
 import ConnectionStatus from './ConnectionStatus';
 import PerformanceShell from './PerformanceShell';
+import ProfileMenu from './ProfileMenu';
+const ProfileLadder=dynamic(()=>import('./ProfileLadder'));
+import {ladderKey} from '@/lib/profileLadder';
+import UsageAnalyticsSettings from './UsageAnalyticsSettings';
 import {appView, viewHref, viewTitles, type AppView as View} from '@/lib/appViews';
-import BenchmarkJourney from './BenchmarkJourney';
 import {clearCheckpoint,migrateCheckpoint} from '@/lib/journeyProgress';
 import MetricEditor from './MetricEditor';
 import Modal from './Modal';
+import {GuestImportPrompt,GuestImportReview} from './GuestProfileImport';
 const Onboarding=dynamic(()=>import('./Onboarding'));
 const Methodology=dynamic(()=>import('./Methodology'));
 const MetricCalculator=dynamic(()=>import('./MetricCalculator'));
-import BaselineProfile from './BaselineProfile';
 import {baselineStorageKey} from '@/lib/balancedBaseline';
 import {trainingKey} from '@/lib/trainingStorage';
 import {useBodyweight,weightBrowserKeys} from '@/lib/hooks/useBodyweight';
@@ -66,7 +68,7 @@ const defaults: Demographics = { age: 32, sex: 'male', weight: 78, height: 180 }
 const fmt = (n: number, d = 1) => n.toFixed(d).replace(/\.0$/, '');
 const validHistoryMetric = (id: string | null) => (id==='bodyweight'||metrics.some(metric=>metric.id===id)) ? id! : 'pushups';
 
-export default function Dashboard({initialView='overview',initialMetric=null}:{initialView?:View;initialMetric?:string|null}) {
+export default function Dashboard({initialView='overview',initialMetric=null,initialCalendar}:{initialView?:View;initialMetric?:string|null;initialCalendar?:RegionalCalendar|null}) {
  const {t:tr,locale}=useTranslations();
  const local=(en:string,fr:string,ar:string)=>locale==='fr'?fr:locale==='ar'?ar:en;
 
@@ -88,6 +90,7 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
   const [guestProfileUnreadable,setGuestProfileUnreadable]=useState(false);
   const [localSaveError, setLocalSaveError] = useState(false);
   const [focusOpen,setFocusOpen]=useState(false);
+  const [repeatGoalUnit,setRepeatGoalUnit]=useState<'metric'|'kg'>();
   const [repeatMetric,setRepeatMetric]=useState<string|null>(null);
   const [entryFromTracker,setEntryFromTracker]=useState<string>();
   const repeatSaving=useRef(false);
@@ -96,10 +99,7 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
   useEffect(()=>{setContextErrors({});setEditingId(null);setProfileValid(true);},[auth.user?.id]);
   const [historyMetric,setHistoryMetric]=useState(()=>validHistoryMetric(initialMetric));
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [panel, setPanel] = useState<'onboarding' | 'journey' | 'reset' | 'import' | 'leave' | null>(null), [proof, setProof] = useState<Metric | null>(null), [calculator, setCalculator] = useState<Metric | null>(null), [toast, setToast] = useState('');
-  const [quickStarter,setQuickStarter]=useState<string|undefined>();
-  const [journeyLevel,setJourneyLevel]=useState<number>();
-  const [journeyMetric,setJourneyMetric]=useState<string|undefined>();
+  const [panel, setPanel] = useState<'onboarding' | 'reset' | 'import' | 'leave' | null>(null), [proof, setProof] = useState<Metric | null>(null), [calculator, setCalculator] = useState<Metric | null>(null), [toast, setToast] = useState('');
   const [leaveDestination,setLeaveDestination]=useState<{view:View;metric?:string;aim?:boolean}>({view:'overview'});
   const [editorEpoch,setEditorEpoch]=useState(0),[leaveUnfinished,setLeaveUnfinished]=useState(false);
   const unfinishedRef=useRef(false),lastValidEditor=useRef<{owner:string;profile:ProfileState}|undefined>(undefined);
@@ -180,7 +180,8 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
   unfinishedRef.current=errors.length>0||!profileValid;
   useEffect(()=>{const ownsProfile=loaded&&auth.ready&&(auth.user?profileAccount===auth.user.id&&!auth.loading&&!!auth.cloud:profileAccount===null);if(ownsProfile&&!needsSetup&&errors.length===0&&profileValid)lastValidEditor.current={owner:auth.user?.id??'guest',profile:cloudProfile};},[cloudProfile,needsSetup,errors.length,profileValid,auth.user,auth.ready,auth.loading,auth.cloud,profileAccount,loaded]);
   const ownsCurrentProfile=loaded&&auth.ready&&(auth.user?profileAccount===auth.user.id&&!auth.loading&&!!auth.cloud:profileAccount===null);
-  const cloudSave = useCloudSave(cloudProfile, loaded && !needsSetup && profileAccount === auth.user?.id && errors.length === 0 && profileValid, false,ownsCurrentProfile&&!needsSetup);
+  const allowRemoteProfile=ownsCurrentProfile&&!panel&&!focusOpen&&!editingId&&!repeatMetric&&!calculator&&!privacyBusy&&errors.length===0&&profileValid;
+  const cloudSave = useCloudSave(cloudProfile, loaded && !needsSetup && profileAccount === auth.user?.id && errors.length === 0 && profileValid, false,ownsCurrentProfile&&!needsSetup,allowRemoteProfile?applyProfile:undefined);
   useEffect(()=>{if(cloudSave.saved)setIsPublic(cloudSave.saved.isPublic);},[cloudSave.saved]);
   const canDisplayProfile=ownsCurrentProfile;
   const recoverGuest=canDisplayProfile&&!auth.user&&guestProfileUnreadable;
@@ -252,16 +253,11 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
     const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,profile},null,2)],{type:'application/json'}));
     const link=document.createElement('a');link.href=url;link.download='TOP1-unsaved-profile.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
-  function downloadCalculationReport(){
-    if(needsSetup)return;
-    const url=URL.createObjectURL(new Blob([JSON.stringify(calculationReport(cloudProfile),null,2)],{type:'application/json'}));
-    const link=document.createElement('a');link.href=url;link.download='TOP1-calculation-report.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  }
   const blocked = !!(focusOpen || panel || proof || calculator || repeatMetric);
   const owner=auth.user?.id??'guest';
   const home=useHomeShortcut(owner);
   const training=useAdaptiveTraining(owner,canDisplayProfile&&!recoverGuest);
-  const recent=useRecentMeasurements(auth.user?.id,view==='overview'&&canDisplayProfile,cloudSave.saved?.revision??auth.cloud?.revision);
+  const recent=useRecentMeasurements(auth.user?.id,(view==='overview'||view==='potential')&&canDisplayProfile,cloudSave.saved?.revision??auth.cloud?.revision);
   function openEntry(id?:string) {
     go('performance');
     if(id&&activeMetrics.some(metric=>metric.id===id))setEntryFromTracker(id);
@@ -288,9 +284,10 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
       .sort((a,b)=>(details[b.id]?.measuredAt??'').localeCompare(details[a.id]?.measuredAt??''))[0]?.id??'run_5k';
   const firstRecorded=activeMetrics.find(metric=>valid(metric,values[metric.id]))?.id??'pushups';
   const openHistory=(id=firstRecorded)=>go('progress',false,id);
-  function recordFromTracker(id:string) {
+  function recordFromTracker(id:string,goalUnit?:'metric'|'kg') {
     if(recordingDisabled)return;
-    if(needsSetup||values[id]===undefined){
+    setRepeatGoalUnit(goalUnit);
+    if(!goalUnit&&(needsSetup||values[id]===undefined)){
       go('performance');
       setEntryFromTracker(id);
       return;
@@ -316,9 +313,29 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
     }
     setDemographics(profile);setValues(nextValues);setDetails(nextDetails);setProfileSetup(true);
   }
+  async function confirmGuestImport(){
+    try{
+      const profile=await auth.importGuest();
+      if(profile){
+        if(auth.user){
+          migrateCheckpoint(auth.user.id);
+          try{
+            if(auth.guest)importedBaselineChoices(localStorage,auth.user.id,auth.guest,profile);
+            window.dispatchEvent(new Event('top1-baseline-updated'));
+          }catch{setToast('Results imported. Review your baseline selections in Performance.');}
+        }
+        setValues(profile.values);
+        setDetails(profile.measurementDetails??{});
+        setDemographics(profile.demographics);
+        setUsername(profile.username);
+        setProfileSetup((profile.revision??0)>0);
+      }
+      setPanel(null);
+    }catch{ /* The migration hook keeps the explanation in the review dialog. */ }
+  }
   const showAdditional=view==='labs';
   return <div className={`app-shell glass-site personal-app view-${view}`}>
-    <PerformanceShell view={view} blocked={blocked} signedIn={!!auth.user} onNavigate={go}>
+    <PerformanceShell view={view} blocked={blocked} onNavigate={go}>
         {auth.user&&view==='settings'&&<div className="account-safety"><button className="text-link" disabled={privacyBusy} onClick={()=>void changeVisibility(false).catch(e=>setToast(e instanceof Error?e.message:'Privacy withdrawal failed. Retry.'))}>{tr(privacyBusy?'Withdrawing…':'Make my profile private')}</button></div>}
 
         {cloudSave.storageWarning&&<div className="cloud-error" role="status"><span>{tr(cloudSave.storageWarning)}</span><button className="text-link" onClick={()=>downloadDraft(cloudSave.draft??cloudProfile)}>{tr("Download draft")}</button></div>}
@@ -333,27 +350,27 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
           {view!=='settings'&&<button onClick={()=>go('settings')}>{tr('Browser data')}</button>}
         </div>}
         {auth.error && <div className="cloud-error" role="alert"><span>{tr(auth.error)}</span><button onClick={auth.retry}>{tr("Retry")}</button></div>}
-        {auth.guest && <div className="cloud-error"><span>{tr("A guest profile is available in this browser. Review it before importing into your account.")}</span><button onClick={()=>{panelTrigger.current=document.activeElement as HTMLElement;setPanel('import');}}>{tr("Review import")}</button><button onClick={auth.dismissGuest}>{tr("Keep separate")}</button></div>}
+        {auth.guest&&<GuestImportPrompt importing={auth.importing} onKeepSeparate={auth.dismissGuest} onReview={trigger=>{panelTrigger.current=trigger;setPanel('import');}}/>}
         {canDisplayProfile&&cloudSave.draft && <div className="cloud-error" role="status"><span>{tr("An unsaved draft is available")}{tr(cloudSave.draft.revision!==auth.cloud?.revision?' from an older profile revision':'')}{tr(". Review it before saving.")}</span><button disabled={cloudSave.status==='saving'||cloudSave.conflict} onClick={()=>{const p=cloudSave.restoreDraft();if(p){applyProfile(p);setProfileSetup(true);}}}>{tr("Review draft")}</button><button onClick={()=>downloadDraft(cloudSave.draft!)}>{tr("Download draft")}</button><button disabled={cloudSave.status==='saving'} onClick={keepSavedProfile}>{tr("Keep saved profile")}</button></div>}
         {canDisplayProfile&&cloudSave.reviewing && <div className="cloud-error" role="status"><span>{tr("Reviewing your retained draft. It has not overwritten the saved profile.")}</span><button disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save reviewed draft")}</button><button onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button><button disabled={cloudSave.status==='saving'} onClick={keepSavedProfile}>{tr("Discard draft")}</button></div>}
         {canDisplayProfile&&cloudSave.error && <div className="cloud-error" role="alert"><span>{tr(cloudSave.error)}</span>{(cloudSave.conflict||!cloudSave.draft&&!cloudSave.reviewing)&&<button disabled={!cloudSave.conflict&&(errors.length>0||!profileValid)} onClick={() => cloudSave.conflict ? auth.retry() : void cloudSave.save(cloudProfile).catch(() => {})}>{tr(cloudSave.conflict ? 'Review latest profile' : 'Retry save')}</button>}{!cloudSave.draft&&!cloudSave.reviewing&&<button onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button>}</div>}
         {view==='overview'&&<>
-          <TrainingHome key={owner} owner={owner} profile={canDisplayProfile&&!recoverGuest&&!needsSetup?demographics:undefined} revision={cloudSave.saved?.revision??auth.cloud?.revision??0}
+          <TrainingHome initialCalendar={initialCalendar} key={owner} owner={owner} profile={canDisplayProfile&&!recoverGuest&&!needsSetup?demographics:undefined} revision={cloudSave.saved?.revision??auth.cloud?.revision??0}
             values={canDisplayProfile&&!recoverGuest?values:{}} details={canDisplayProfile&&!recoverGuest?details:{}}
             workspace={canDisplayProfile&&!recoverGuest?personalWorkspace.data:undefined}
             trainingEvents={canDisplayProfile&&!recoverGuest&&training.ready?training.ledger.events:undefined}
             observations={canDisplayProfile&&!recoverGuest?(auth.user?recent.entries:guestHistory.entries):[]}
             shortcut={canDisplayProfile&&!recoverGuest?home.shortcut:undefined}
             onRank={id=>{if(canDisplayProfile)home.update({last:'rank'});go('ranking',false,id??firstRecorded);}}
-            onLog={id=>{if(canDisplayProfile)home.update({last:'log'});openEntry(canDisplayProfile&&recordingDisabled?undefined:id);}}
-            onProgram={()=>{if(canDisplayProfile)home.update({last:'program'});go('potential');}}
+            onLog={(id,goalUnit)=>{if(canDisplayProfile)home.update({last:'log'});if(id&&!recordingDisabled)recordFromTracker(id,goalUnit);else openEntry(id);}}
+            onProgram={metric=>{if(canDisplayProfile)home.update({last:'program'});go('potential',false,metric);}}
             onHistory={id=>{if(canDisplayProfile)home.update({last:'history'});openHistory(id);}}/>
           {canDisplayProfile&&training.error&&<p className="training-notice" role="status">{local('Your training journal could not be refreshed.','Ton journal d’entraînement n’a pas pu être actualisé.','تعذّر تحديث سجل تدريبك.')} <button onClick={()=>void training.refresh()}>{tr('Retry')}</button></p>}
           {canDisplayProfile&&recent.error&&<p className="training-notice" role="status">{local('Recent entries could not be loaded.','Le journal récent est indisponible.','تعذّر تحميل السجلات الأخيرة.')} <button onClick={recent.retry}>{tr('Retry')}</button></p>}
         </>}
         {canDisplayProfile?<>
         <ConnectionStatus/><GameProgressSync key={`game:${auth.user?.id??'guest'}`} owner={auth.user?.id??'guest'}/>
-        {view==='potential'&&!recoverGuest&&<AdaptiveProgram key={owner+':'+(programMetric??'')+':'+(tierTarget??'')} initialMetric={programMetric} initialTarget={tierTarget} onTierHandled={finishTierGoal} training={training} measurementRevision={cloudSave.saved?.revision??auth.cloud?.revision??0} owner={owner} values={values} details={details} guestEntries={guestHistory.entries} workspace={personalWorkspace} onRecord={recordFromTracker}/>}
+        {view==='potential'&&!recoverGuest&&<AdaptiveProgram key={owner+':'+(programMetric??'')+':'+(tierTarget??'')} initialMetric={programMetric} initialTarget={tierTarget} profile={needsSetup?undefined:demographics} onTierHandled={finishTierGoal} training={training} measurementRevision={cloudSave.saved?.revision??auth.cloud?.revision??0} owner={owner} values={values} details={details} guestEntries={guestHistory.entries} workspace={personalWorkspace} recommendationEntries={auth.user?recent.entries:guestHistory.entries} onBrowse={()=>go('performance')} onRecord={recordFromTracker}/>}
         {view==='ranking'&&!recoverGuest&&<RankExplorer key={owner} owner={owner} guestEntries={guestHistory.entries} revision={cloudSave.saved?.revision??auth.cloud?.revision}
           values={values} details={details} profile={needsSetup?undefined:demographics} metricId={selectedRank}
           onSelect={selectRankMetric} onCreateGoal={openNextTierGoal} onGoal={id=>go('potential',false,id)} onHistory={openHistory} onRecord={recordFromTracker} disabled={recordingDisabled}/>}
@@ -361,18 +378,18 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
 
         {guestHistory.error&&<p className="field-error" role="alert">{tr(guestHistory.error)}</p>}
         {view==='progress'&&!recoverGuest&&<Progress key={auth.user?.id??'guest'} metricId={historyMetric} onSelect={selectHistoryMetric} guestEntries={guestHistory.entries} values={values} revision={cloudSave.saved?.revision??auth.cloud?.revision} onRecord={recordFromTracker} disabled={recordingDisabled} weights={weights} profileWeight={needsSetup?undefined:demographics.weight} onSettings={()=>go('settings')}/>}
-        {view === 'profile' && <><div className="profile-grid"><div><section className="card profile-card"><div className="card-heading"><div><h2>{tr("About you")}</h2>{(cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)&&Date.now()-Date.parse((cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)!)>365*86400000&&<p>{tr("Review your age: it was last recorded over a year ago.")}</p>}</div><UserRound size={21}/></div>{profileSetup ? <fieldset disabled={!editable}><ProfileEdit key={`${auth.user?.id??'guest'}:${editorEpoch}`} profile={demographics} onChange={setDemographics} onValidityChange={setProfileValid}/></fieldset> : <p className="drawer-description">{tr("Add your basics to get started.")}</p>}{needsSetup && <button className="primary-button" disabled={!editable} onClick={start}>{tr("Create my profile ")}<ArrowRight size={16}/></button>}</section></div><div><HomePreferences choice={home.choice} onChange={home.update} error={home.error}/><TrainingPreferences state={personalWorkspace}/><section className="profile-tracker"><History size={21} aria-hidden="true"/><h2>{local('Measurement history','Historique des mesures','سجل القياسات')}</h2><button className="tracker-link" onClick={()=>openHistory()}>{local('Open my tracker','Ouvrir mon suivi','فتح سجل قياساتي')} <ArrowRight size={15}/></button></section><section className="profile-settings-link"><button className="text-link" onClick={()=>go('settings')}>{local('Settings and privacy','Paramètres et confidentialité','الإعدادات والخصوصية')} <ArrowRight size={14}/></button></section><section className="performance-note"><h2>{local('Connections','Connexions','الاتصالات')}</h2><p>{local('Wearables · Coming soon','Objets connectés · Bientôt','الأجهزة القابلة للارتداء · قريبًا')}</p></section>{!auth.user && !needsSetup && <section className="card reset-card"><h3>{tr("Start over on this device")}</h3><p>{tr("Replace your local profile with a new one. Export your summary first if you want to keep it.")}</p><button className="text-link" disabled={!editable} onClick={() => { panelTrigger.current = document.activeElement as HTMLElement; setPanel('reset'); }}>{tr("Reset local profile ")}<ArrowRight size={14}/></button></section>}</div></div></>}
-        {view === 'settings' && <>{!auth.user&&<BrowserDataControls onCleared={()=>{expectedGuestProfile.current=null;setGuestConflict(false);setGuestProfileUnreadable(false);setLocalSaveError(false);guestHistory.resetBaseline();lastValidEditor.current=undefined;setContextErrors({});setProfileValid(true);setValues({});setDetails({});setUsername('');setIsPublic(false);setDemographics(defaults);setProfileSetup(false);setEditorEpoch(n=>n+1);setPanel('onboarding');}}/>}<AccountDataControls revision={cloudSave.saved?.revision??auth.cloud?.revision??0} canChange={!weights.pending.length&&!weights.busy&&editable&&!cloudSave.unsaved&&cloudSave.status!=='saving'&&!cloudSave.draft&&!cloudSave.reviewing&&errors.length===0&&profileValid} onPurged={p=>{cloudSave.cancelPending();cloudSave.discardDraft();applyProfile(p);auth.retry();}}/><section className="card account-card"><div className="card-heading"><div><h2>{tr("Account & sharing")}</h2></div><Lock size={21}/></div><CloudProfileControls publicFields={publicFields} onPublicFields={setPublicFields} username={username} onUsernameChange={next => { if (editable) setUsername(next); }} isPublic={isPublic} shareUsername={(cloudSave.saved??auth.cloud)?.isPublic ? (cloudSave.saved??auth.cloud)?.username : undefined} onVisibilityChange={changeVisibility} canWithdraw={!!auth.user&&canDisplayProfile} canShare={!needsSetup && !!auth.cloud && editable && errors.length === 0&&profileValid&&!cloudSave.draft&&!cloudSave.reviewing&&!cloudSave.conflict} onNotice={setToast}/></section></>}
+        {view === 'profile' && <><div className="profile-grid"><div><ProfileMenu key={owner} owner={auth.user?.id} onSettings={()=>go('settings')} onRanking={()=>go('ranking',false,firstRecorded)} onHistory={()=>openHistory()}/><ProfileLadder key={owner} owner={owner} profile={cloudProfile}/><section className="card profile-card"><div className="card-heading"><div><h2>{tr("About you")}</h2>{(cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)&&Date.now()-Date.parse((cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)!)>365*86400000&&<p>{tr("Review your age: it was last recorded over a year ago.")}</p>}</div><UserRound size={21}/></div>{profileSetup ? <fieldset disabled={!editable}><ProfileEdit key={`${auth.user?.id??'guest'}:${editorEpoch}`} profile={demographics} onChange={setDemographics} onValidityChange={setProfileValid}/></fieldset> : <p className="drawer-description">{tr("Add your basics to get started.")}</p>}{needsSetup && <button className="primary-button" disabled={!editable} onClick={start}>{tr("Create my profile ")}<ArrowRight size={16}/></button>}</section></div><div><HomePreferences choice={home.choice} onChange={home.update} error={home.error}/><TrainingPreferences state={personalWorkspace}/><section className="performance-note"><h2>{local('Connections','Connexions','الاتصالات')}</h2><p>{local('Wearables · Coming soon','Objets connectés · Bientôt','الأجهزة القابلة للارتداء · قريبًا')}</p></section>{!auth.user && !needsSetup && <section className="card reset-card"><h3>{tr("Start over on this device")}</h3><p>{tr("Replace your local profile with a new one. Export your summary first if you want to keep it.")}</p><button className="text-link" disabled={!editable} onClick={() => { panelTrigger.current = document.activeElement as HTMLElement; setPanel('reset'); }}>{tr("Reset local profile ")}<ArrowRight size={14}/></button></section>}</div></div></>}
+        {view === 'settings' && <><UsageAnalyticsSettings/>{!auth.user&&<BrowserDataControls onCleared={()=>{expectedGuestProfile.current=null;setGuestConflict(false);setGuestProfileUnreadable(false);setLocalSaveError(false);guestHistory.resetBaseline();lastValidEditor.current=undefined;setContextErrors({});setProfileValid(true);setValues({});setDetails({});setUsername('');setIsPublic(false);setDemographics(defaults);setProfileSetup(false);setEditorEpoch(n=>n+1);setPanel('onboarding');}}/>}<AccountDataControls revision={cloudSave.saved?.revision??auth.cloud?.revision??0} canChange={!weights.pending.length&&!weights.busy&&editable&&!cloudSave.unsaved&&cloudSave.status!=='saving'&&!cloudSave.draft&&!cloudSave.reviewing&&errors.length===0&&profileValid} onPurged={p=>{cloudSave.cancelPending();cloudSave.discardDraft();applyProfile(p);auth.retry();}}/><section className="card account-card"><div className="card-heading"><div><h2>{tr("Account & sharing")}</h2></div><Lock size={21}/></div><CloudProfileControls publicFields={publicFields} onPublicFields={setPublicFields} username={username} onUsernameChange={next => { if (editable) setUsername(next); }} isPublic={isPublic} shareUsername={(cloudSave.saved??auth.cloud)?.isPublic ? (cloudSave.saved??auth.cloud)?.username : undefined} onVisibilityChange={changeVisibility} canWithdraw={!!auth.user&&canDisplayProfile} canShare={!needsSetup && !!auth.cloud && editable && errors.length === 0&&profileValid&&!cloudSave.draft&&!cloudSave.reviewing&&!cloudSave.conflict} onNotice={setToast}/></section></>}
         {view === 'methodology' && <Methodology onEvidence={showEvidence}/>}
         {view!=='performance'&&<footer className="page-footer"><span><Activity size={15}/><strong>TOP1%</strong></span><div><Link href="/about">{tr("About TOP1")}</Link><span>·</span><button onClick={() => go('methodology')}>{tr("Methodology")}</button><span>·</span><Link href="/privacy">{tr("Privacy")}</Link><span>·</span><a href={SUPPORT_HREF}>{tr("Support")}</a></div></footer>}
         </>:view!=='overview'&&<p className="dashboard-startup" role="status">{tr(auth.error?'Your account could not be loaded. Retry above before making changes.':'Loading your profile…')}</p>}
     </PerformanceShell>
     {toast && <div className="toast" role="status"><CircleHelp size={17}/><span>{tr(toast)}</span><button className="icon-button" aria-label={tr("Dismiss notification")} onClick={() => setToast('')}><X size={16}/></button></div>}
-    {repeatMetric&&canDisplayProfile&&<Modal safetyAction={privacyAction} title={tr("Record a new observation")} returnFocus={panelTrigger.current} onClose={()=>{if(!repeatSaving.current)setRepeatMetric(null);}}><RepeatObservation key={repeatMetric} metric={activeMetrics.find(m=>m.id===repeatMetric)!} value={values[repeatMetric]!} details={details[repeatMetric]??{}} demographics={demographics} onDone={()=>setRepeatMetric(null)} onFinish={async(value,context)=>{
+    {repeatMetric&&canDisplayProfile&&<Modal safetyAction={privacyAction} title={tr("Record a new observation")} returnFocus={panelTrigger.current} onClose={()=>{if(!repeatSaving.current)setRepeatMetric(null);}}><RepeatObservation key={repeatMetric} metric={activeMetrics.find(m=>m.id===repeatMetric)!} value={values[repeatMetric]} details={details[repeatMetric]??{}} goalUnit={repeatGoalUnit} demographics={needsSetup?undefined:demographics} onDone={()=>setRepeatMetric(null)} onFinish={async(value,context,person)=>{
       repeatSaving.current=true;
       try {
-        const change=overallChangeForSave(repeatMetric,value,context,values,details,demographics);
-        await saveMetric(repeatMetric,value,context,demographics);
+        const change=overallChangeForSave(repeatMetric,value,context,values,details,needsSetup?undefined:demographics,person);
+        await saveMetric(repeatMetric,value,context,person);
         if(!change){setRepeatMetric(null);setToast('Reviewed observation recorded.');}
         return change;
       }
@@ -380,10 +397,10 @@ export default function Dashboard({initialView='overview',initialMetric=null}:{i
     }}/></Modal>}
 
     {panel==='leave'&&<Modal safetyAction={privacyAction} title={tr("Leave without saving?")} returnFocus={panelTrigger.current} onClose={()=>setPanel(null)}><p>{tr(leaveUnfinished?'Some inputs are unfinished or invalid. Discard those inputs before leaving this view, or keep editing.':'Your routine changes could not be stored. Leaving may lose them.')}</p><button className="secondary-button" onClick={()=>setPanel(null)}>{tr("Keep working")}</button><button className="primary-button" onClick={()=>{if(leaveUnfinished){const saved=lastValidEditor.current;if(saved?.owner===(auth.user?.id??'guest'))applyProfile(saved.profile);else if(auth.cloud)applyProfile(cloudSave.saved??auth.cloud);}setPanel(null);go(leaveDestination.view,true,leaveDestination.metric,leaveDestination.aim);}}>{tr(leaveUnfinished?'Discard unfinished inputs and leave':'Leave without saving')}</button></Modal>}
-    {panel==='import' && auth.guest && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr("Review guest import")} onClose={()=>setPanel(null)}><p>{Object.keys(auth.guest.values).length} {tr("observations from this browser profile. Existing account measurements and basics take priority.")}</p><p>{tr("Import only if this is your data. Guest measurements are removed from this browser only after a successful, verified import.")}</p><button className="primary-button" disabled={auth.importing} onClick={()=>void auth.importGuest().then(p=>{if(p){if(auth.user){migrateCheckpoint(auth.user.id);try{if(auth.guest)importedBaselineChoices(localStorage,auth.user.id,auth.guest,p);window.dispatchEvent(new Event('top1-baseline-updated'));}catch{setToast('Results imported. Review your baseline selections in Performance.');}}setValues(p.values);setDetails(p.measurementDetails??{});setDemographics(p.demographics);setUsername(p.username);setProfileSetup((p.revision??0)>0);}setPanel(null);}).catch(()=>{})}>{tr(auth.importing?'Importing…':'Import into my account')}</button>{auth.error&&<p role="alert">{tr(auth.error)}</p>}</Modal>}
-    {canDisplayProfile&&panel==='journey'&&<Modal title={tr('Your benchmark')} returnFocus={panelTrigger.current} wide closeOnBackdrop={false} onClose={()=>setPanel(null)}><BenchmarkJourney owner={auth.user?.id??'guest'} loadUnit={personalWorkspace.data.context.loadUnit} initialLevel={journeyLevel} initialMetric={journeyMetric} key={auth.user?.id??'guest'} initialProfile={needsSetup?undefined:demographics} initialValues={values} initialDetails={details} onSave={(profile,nextValues,nextDetails)=>{if(!editable)return;setDemographics(profile);setValues(nextValues);setDetails(nextDetails);setProfileSetup(true);}} onHistory={id=>{setPanel(null);openHistory(id);}} onFinish={()=>setPanel(null)} onBrowse={()=>{setPanel(null);go('performance');}}/></Modal>}
-    {canDisplayProfile&&panel === 'onboarding' && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr(needsSetup ? 'Welcome to TOP1' : 'Your starting point')} closeOnBackdrop={false} wide onClose={() => setPanel(null)}><Onboarding basicsOnly initialStarter={quickStarter} initialProfile={needsSetup ? undefined : demographics} initialValues={needsSetup ? {} : values} initialDetails={needsSetup ? {} : details} onFinish={finishSetup}/></Modal>}
-    {canDisplayProfile&&panel === 'reset' && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr("Reset this local profile?")} onClose={() => setPanel(null)}><p className="modal-description">{local("This removes this guest profile and its measurement history from this browser.", "Cette action efface ce profil invité et son historique de mesures dans ce navigateur.", "سيُحذف ملف الضيف هذا وسجل قياساته من هذا المتصفح.")}</p><div className="modal-actions"><button className="secondary-button" onClick={() => setPanel(null)}>{tr("Keep my profile")}</button><button className="primary-button" onClick={() => { if (editable && !auth.user) { try { ['top1-workspace-form-v1:guest:goal','top1-workspace-form-v1:guest:context','top1-workspace-v1:guest','top1-workspace-draft-v1:guest','top1-potential-v1:guest',homeShortcutKey('guest'),trainingKey('guest'),...weightBrowserKeys('guest'),baselineStorageKey('guest'),'top1-session-draft:guest','top1-adaptive-v1:guest','top1-game-v1:guest','top1-history-guest','top1-profile-v2','top1_profile_v2','top1-profile-v1'].forEach(key => localStorage.removeItem(key));window.dispatchEvent(new Event('top1-workspace-reset')); } catch { setLocalSaveError(true); return; } clearCheckpoint('guest'); expectedGuestProfile.current=null;setGuestConflict(false);guestHistory.resetBaseline(); setGuestProfileUnreadable(false); setLocalSaveError(false); setValues({}); setDetails({}); setDemographics(defaults); setUsername(''); setIsPublic(false); setProfileSetup(false); setPanel('onboarding'); } }}>{tr("Reset & start again")}</button></div></Modal>}
+    {panel==='import'&&auth.guest&&<GuestImportReview count={Object.keys(auth.guest.values).length} importing={auth.importing} error={auth.error}
+      safetyAction={privacyAction} returnFocus={panelTrigger.current} onCancel={()=>setPanel(null)} onImport={()=>void confirmGuestImport()}/>}
+    {canDisplayProfile&&panel === 'onboarding' && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr(needsSetup ? 'Welcome to TOP1' : 'Your starting point')} closeOnBackdrop={false} wide onClose={() => setPanel(null)}><Onboarding basicsOnly initialProfile={needsSetup ? undefined : demographics} initialValues={needsSetup ? {} : values} initialDetails={needsSetup ? {} : details} onFinish={finishSetup}/></Modal>}
+    {canDisplayProfile&&panel === 'reset' && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr("Reset this local profile?")} onClose={() => setPanel(null)}><p className="modal-description">{local("This removes this guest profile and its measurement history from this browser.", "Cette action efface ce profil invité et son historique de mesures dans ce navigateur.", "سيُحذف ملف الضيف هذا وسجل قياساته من هذا المتصفح.")}</p><div className="modal-actions"><button className="secondary-button" onClick={() => setPanel(null)}>{tr("Keep my profile")}</button><button className="primary-button" onClick={() => { if (editable && !auth.user) { try { ['top1-workspace-form-v1:guest:goal','top1-workspace-form-v1:guest:context','top1-workspace-v1:guest','top1-workspace-draft-v1:guest','top1-potential-v1:guest',homeShortcutKey('guest'),ladderKey('guest'),trainingKey('guest'),...weightBrowserKeys('guest'),baselineStorageKey('guest'),'top1-session-draft:guest','top1-adaptive-v1:guest','top1-game-v1:guest','top1-history-guest','top1-profile-v2','top1_profile_v2','top1-profile-v1'].forEach(key => localStorage.removeItem(key));window.dispatchEvent(new Event('top1-workspace-reset')); } catch { setLocalSaveError(true); return; } clearCheckpoint('guest'); expectedGuestProfile.current=null;setGuestConflict(false);guestHistory.resetBaseline(); setGuestProfileUnreadable(false); setLocalSaveError(false); setValues({}); setDetails({}); setDemographics(defaults); setUsername(''); setIsPublic(false); setProfileSetup(false); setPanel('onboarding'); } }}>{tr("Reset & start again")}</button></div></Modal>}
     {canDisplayProfile&&proof && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr(proof.name)} onClose={() => setProof(null)}><span className="eyebrow">{tr(pillarNames[proof.pillar])}</span><p className="modal-description">{tr(proof.proofData.rationale)}</p><div className="proof-block"><h3>{tr("How to measure")}</h3><p>{tr(proof.proofData.instructions)}</p></div><div className="proof-block"><h3>{tr("Evidence & reference")}</h3><p>{tr(proof.proofData.study)}</p><p>{tr(proof.proofData.sampleSize)}</p>{proof.proofData.url && <a className="text-link" href={proof.proofData.url} target="_blank" rel="noreferrer">{tr("Read the source ")}<ArrowUpRight size={15}/></a>}</div><BenchmarkReference metric={proof} demographics={demographics}/>{proof.id!=='body_fat'&&<div className="proof-block"><h3>{tr(FIELD_BENCHMARK_METRICS.has(proof.id)?'Scientific score':'How TOP1 uses it')}</h3><p>{tr(FIELD_BENCHMARK_METRICS.has(proof.id)?'Benchmark percentages affect your dashboard rank. This measurement stays outside the separate scientific capacity score.':!profileSetup ? 'Complete your profile to see the reference for your own age and biological sex. Most references remain provisional product assumptions.' : scoringEligibility(proof,demographics,details).status!=='eligible' ? scoringEligibility(proof,demographics,details).reason : `Experimental reference for ${reference(proof, demographics, details).cohortLabel??getAgeBracket(demographics.age)} · ${demographics.sex}. Mean ${fmt(reference(proof, demographics, details).mean, 2)}, standard deviation ${fmt(reference(proof, demographics, details).sd, 2)}. ${reference(proof, demographics, details).provenance === 'published' ? 'FRIEND 2022 direct treadmill CPET reference; explicit treadmill modality and a recorded test age of 20–89 are required.' : 'These reference parameters are provisional product assumptions.'}`)}</p></div>}{proof.id==='run_10k'&&<div className="proof-block"><h3>{tr('10 km race-finisher benchmarks')}</h3><div className="running-reference-tiers">{run10kBenchmarks(demographics).tiers.map(tier=><div key={tier.percent}><strong>{tier.estimated?'≈ ':''}{tr('Top')} {tier.percent}%</strong><bdi>{formatRunTime(Math.floor(tier.minutes*60)/60)}</bdi><small>{tr(tier.estimated?'Interpolated estimate':'Published cutoff')}</small></div>)}</div></div>}<MetricEditor detailsOnly metric={proof} value={values[proof.id]} details={details[proof.id]} demographics={demographics} onValue={changeValue} onDetails={changeDetails} onEvidence={showEvidence} onCalculate={showCalculator} readOnly={needsSetup||!editable} onContextError={(id,error)=>setContextErrors(e=>({...e,[id]:error}))}/><div className="science-note"><CircleHelp size={18}/><p>{tr("Study associations do not establish a universal target or population rank.")}</p></div></Modal>}
     {canDisplayProfile&&calculator && <Modal safetyAction={privacyAction} returnFocus={panelTrigger.current} title={tr(calculator.id === 'vo2_max' ? 'Cooper run estimate' : calculator.id === 'body_fat' ? 'Skinfold estimate' : 'One-rep max estimate')} onClose={() => setCalculator(null)}>{needsSetup ? <><p className="modal-description">{tr("Create a personal profile before saving a calculated measurement.")}</p><button className="primary-button" disabled={!editable} onClick={() => { setCalculator(null); start(); }}>{tr("Create my profile ")}<ArrowRight size={16}/></button></> : <MetricCalculator metric={calculator} demographics={demographics} onUse={(value, context) => { if (!editable) return; setValues(v => ({ ...v, [calculator.id]: value })); setDetails(d => ({ ...d, [calculator.id]: context })); setCalculator(null); setToast(`${calculator.name} estimate added.`); }}/>}</Modal>}
   </div>;

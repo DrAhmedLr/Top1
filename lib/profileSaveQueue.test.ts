@@ -33,6 +33,29 @@ test('discarding a draft invalidates its pending saves',async()=>{
 test('an older cloud snapshot cannot replace an acknowledged revision',async()=>{
  const q=new ProfileSaveQueue();q.adopt('a',1);await q.enqueue('a',profile(20),async p=>({...p,revision:2}));assert.equal(q.adopt('a',1),false);assert.equal(q.currentRevision('a'),2);
 });
+test('foreground refresh adopts newer saved results only while the same clean account is idle',async()=>{
+ const queue=new ProfileSaveQueue();
+ queue.adopt('first',1);
+ const applied:number[]=[];
+ const adopt=(p:ProfileState)=>{applied.push(p.revision!);};
+ let idle=true;
+ const waiting=deferred();
+ const reading=queue.refresh('first',()=>idle,()=>waiting.promise,adopt);
+ idle=false;waiting.resolve({...profile(35),revision:2});await reading;
+ assert.deepEqual(applied,[]);
+ idle=true;
+ await queue.refresh('first',()=>idle,async current=>{assert.equal(current,1);return {...profile(35),revision:2};},adopt);
+ await queue.refresh('first',()=>idle,async()=>({...profile(20),revision:1}),adopt);
+ assert.deepEqual(applied,[2]);
+ const writing=deferred();
+ const save=queue.enqueue('first',profile(36),()=>writing.promise);
+ await queue.refresh('first',()=>true,async()=>assert.fail('Do not poll over a pending save'),adopt);
+ writing.resolve({...profile(36),revision:3});await save;
+ const switched=deferred();
+ const detached=queue.refresh('first',()=>true,()=>switched.promise,adopt);
+ queue.adopt('second',0);switched.resolve({...profile(40),revision:4});await detached;
+ assert.deepEqual(applied,[2]);assert.equal(queue.currentRevision('second'),0);
+});
 test('metric autosaves cannot restore revoked visibility from stale captured state',async()=>{
  const q=new ProfileSaveQueue();q.adopt('a',1);let publicState=true,rev=1;
  const write=(intent?:boolean)=>async(p:ProfileState)=>{publicState=saveVisibility(publicState,p.isPublic,intent);return {...p,isPublic:publicState,revision:++rev};};

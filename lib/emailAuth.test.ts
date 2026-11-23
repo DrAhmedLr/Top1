@@ -4,7 +4,7 @@ import {authCallbackUrl,emailConfirmationUrl,authErrorMessage,normalizeEmail,val
 const fake=(methods:Record<string,unknown>)=>({getClaims:async()=>({data:{claims:{amr:[{method:'recovery',timestamp:Math.floor(Date.now()/1000)}]}},error:null}),...methods}) as unknown as SupabaseClient['auth'];
 const secret='test-password-only-with-enough-characters';
 test('email validation trims whitespace, rejects malformed addresses and retains case',()=>{assert.equal(normalizeEmail(' Name@example.com '),'Name@example.com');for(const email of ['','a@','a@b','a b@host.com','a@host\n.com'])assert.throws(()=>normalizeEmail(email));});
-test('new passwords match, retain whitespace, and have sensible length limits',()=>{validatePassword(secret,secret);assert.throws(()=>validatePassword('short','short'),/12/);assert.throws(()=>validatePassword(secret,'different'),/match/);assert.throws(()=>validatePassword('a'.repeat(129),'a'.repeat(129)),/128/);});
+test('new passwords match, retain whitespace, and have sensible length limits',()=>{validatePassword('12345678','12345678');validatePassword(' padded ',' padded ');validatePassword('a'.repeat(128),'a'.repeat(128));assert.throws(()=>validatePassword('1234567','1234567'),/8/);assert.throws(()=>validatePassword(secret,'different'),/match/);assert.throws(()=>validatePassword('a'.repeat(129),'a'.repeat(129)),/128/);});
 test('callback destinations stay on the current app for confirmation and recovery',()=>{const url=new URL(authCallbackUrl('https://top1.fit','//evil.invalid'));assert.equal(url.origin,'https://top1.fit');assert.equal(url.searchParams.get('next'),'/');assert.equal(new URL(authCallbackUrl('https://top1.fit','/reset-password')).searchParams.get('next'),'/reset-password');});
 test('sign-in uses the supplied password without applying new-password rules',async()=>{let received:unknown;const result=await submitEmailAuth(fake({signInWithPassword:async(args:unknown)=>{received=args;return {error:null};}}),'sign-in',' owner@example.com ','existing-short','', 'https://top1.fit');assert.deepEqual(received,{email:'owner@example.com',password:'existing-short'});assert.equal(result.signedIn,true);});
 test('unconfirmed signup never reports a signed-in account',async()=>{let received:any;const result=await submitEmailAuth(fake({signUp:async(args:unknown)=>{received=args;return {data:{session:null},error:null};}}),'sign-up','owner@example.com',secret,secret,'https://top1.fit');assert.equal(result.signedIn,false);assert.equal(received.options.emailRedirectTo,emailConfirmationUrl('https://top1.fit'));assert.match(result.message,/confirm/);});
@@ -35,4 +35,19 @@ test('normal sessions and expired recovery claims cannot replace a password with
  let updated=false;for(const amr of [[{method:"password",timestamp:Math.floor(Date.now()/1000)}],[{method:"recovery",timestamp:1}]]){
  await assert.rejects(replacePassword(fake({getClaims:async()=>({data:{claims:{amr}},error:null}),updateUser:async()=>{updated=true;return {error:null};}}),secret,secret),/recovery link/);
  }assert.equal(updated,false);assert.equal(hasRecentRecovery({amr:[{method:"recovery",timestamp:Infinity}]}),false);
+});
+
+test('the native client sends recovery, signup, and resend links to the HTTPS app',async()=>{
+ const native=await import('../mobile/src/platform/emailAuth');
+ const destinations:string[]=[];
+ const client=fake({
+  resetPasswordForEmail:async(_email:string,options:{redirectTo:string})=>{destinations.push(options.redirectTo);return {error:null};},
+  signUp:async(args:{options:{emailRedirectTo:string}})=>{destinations.push(args.options.emailRedirectTo);return {data:{session:null},error:null};},
+  resend:async(args:{options:{emailRedirectTo:string}})=>{destinations.push(args.options.emailRedirectTo);return {error:null};},
+ });
+ const nativeOrigin='capacitor://localhost';
+ await native.submitEmailAuth(client,'forgot-password','test@example.invalid','','',nativeOrigin);
+ await native.submitEmailAuth(client,'sign-up','test@example.invalid','abcde123','abcde123',nativeOrigin,'/?view=profile');
+ await native.resendConfirmation(client,'test@example.invalid',nativeOrigin,'/?view=profile');
+ assert.deepEqual(destinations,[authCallbackUrl('https://top1.fit','/reset-password'),authCallbackUrl('https://top1.fit','/?view=profile'),authCallbackUrl('https://top1.fit','/?view=profile')]);
 });

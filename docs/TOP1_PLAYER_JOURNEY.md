@@ -14,12 +14,12 @@ These are worked examples for a 25-year-old player, male reference, weighing 75 
 
 ## The journey
 
-1. **Home.** Choose a test or use the current goal. The game preview is optional. Returning players can get to the next session or their results without replaying an introduction.
+1. **Home.** Quick log offers the 5 km run, grip strength and squat. The main card opens the active goal or offers to repeat the latest dated test. If several goals are active, choose which one to see. **Explore the game scale** opens an optional preview.
 2. **Measurements.** Choose one performance test. Search across all measurements to jump directly to a test, health value or functional measure. A player can close the app after any save.
 3. **Entry.** Enter the result in its ordinary unit. Times accept minutes and seconds; lifts use load, reps and test-day bodyweight. Use the player's known profile to reduce typing. Optional test details allow changes to age, weight or reference sex for that attempt. A quick entry can carry those facts without claiming an instrument or a verified test protocol.
 4. **Result.** Show the individual position, the next attainable result and the overall change. Choose another test, finish, or turn that next result into a dated goal. Show how many of the four areas contribute.
-5. **Program.** Start from the saved result and an editable target. Pick the date and accept the proposed schedule, or open **Adjust sessions**. Each completed, modified or missed session is recorded separately from the benchmark retest.
-6. **Return.** Record a comparable attempt to see progression. The training forecast needs sufficient comparable history; rank movement itself does not estimate the chance of reaching a goal.
+5. **Program.** Choose one or more tests with saved results, set a target for each and choose a date that fits the available training sessions. Record completed, modified or missed sessions and log the benchmark retest separately.
+6. **Return.** Record a comparable attempt to see progression. The first-day scenario uses assumed gains. After three fully completed intervals between four comparable dated tests, the personal estimate uses the athlete’s recorded changes. My profile opens the history and ranking views. [Forecast assumptions](PRODUCT_FOCUS.md)
 
 ## The three measurement groups
 
