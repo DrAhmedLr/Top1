@@ -2,8 +2,14 @@
 previews/
 output/
 docs/
+.next/
 .next-dev/
+node_modules/
 *.tsbuildinfo
+*.xapk
+*.apk
+Liftoff-*/
+Liftoff+*
 .env*
 !.env.example
 supabase/.temp/
