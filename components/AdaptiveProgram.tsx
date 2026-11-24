@@ -16,6 +16,14 @@ import {replanMixedManualGoal,replanPortfolioDates} from '@/lib/programPortfolio
 import {programContextFromHistory} from '@/lib/programTrainingHistory';
 import {probabilityLabel} from './programCopy';
 import ProgrammeCalendar,{manualCalendarItem,type CalendarPlan,type CheckIn} from './ProgrammeCalendar';
+import CoachDecisionCard from './CoachDecisionCard';
+import MaintenanceCard from './MaintenanceCard';
+import {buildAthleteDossier,isoWeekdayForDay} from '@/lib/athleteDossier';
+import {applyDayAvailabilityOverride,applyWeekdayMinutesRule,selectNextSessionDecision,toStoredDecision} from '@/lib/coachDecision';
+import {buildMaintenancePlan} from '@/lib/maintenancePlan';
+import {evaluatePersonalLearning} from '@/lib/outcomeLearning';
+import {suggestSupportingWins} from '@/lib/supportingWins';
+import {illustrativeGain} from '@/lib/guidedAdherence';
 import {observationDate,type Observation} from '@/lib/history';
 import {isLift} from '@/lib/focusedEntry';
 import {suggestStartingSession} from '@/lib/startingSession';
@@ -27,7 +35,7 @@ import {usePerformanceInsights} from '@/lib/hooks/usePerformanceInsights';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 import type {WorkspaceState} from '@/lib/hooks/usePersonalWorkspace';
 import type {AdaptiveTrainingState} from '@/lib/adaptiveProgramClient';
-import {adaptivePlans,currentAdaptivePlans,actualDose,scenarioResult,scheduledWeekdays,addDays,buildProgram,checkConfig,dayInZone,doseKey,goalMetrics,goalValue,makeWorkout,planForSession,observedGain,sessionResult,workoutId,type AdaptiveConfig,type AdaptivePlan,type Dose,type GoalUnit,type PerformedSession} from '@/lib/adaptiveProgram';
+import {adaptivePlans,currentAdaptivePlans,actualDose,correctWorkout,deterministicRequestId,scenarioResult,scheduledWeekdays,addDays,buildProgram,checkConfig,dayInZone,doseKey,goalMetrics,goalValue,makeWorkout,planForSession,observedGain,sessionResult,workoutId,type AdaptiveConfig,type AdaptivePlan,type Dose,type GoalUnit,type PerformedSession} from '@/lib/adaptiveProgram';
 import type {TrainingEvent,TrainingProgram,TrainingMutation,Workout} from '@/lib/training';
 import s from './AdaptiveProgram.module.css';
 
@@ -267,15 +275,63 @@ export default function AdaptiveProgram({owner,initialMetric,initialTarget,onTie
     if(ok){setSelectedId(additions[0].id);setTab('session');setScreen('program');setNotice('');if(initialTarget!==undefined&&requested)onTierHandled?.(requested);}
     return ok;
   }
+  async function applyCheckInSignals(day:string,items:CheckIn[]){
+    if(!workspace.editable)return;
+    const withSignal=items.find(item=>item.signal?.reasonKind);
+    if(!withSignal?.signal)return;
+    const sig=withSignal.signal;
+    if(sig.reasonKind==='time'&&sig.timeScope==='weekday'&&sig.shortMinutes){
+      const wd=isoWeekdayForDay(day);
+      const nextDay=addDays(day,7);
+      const draft=applyWeekdayMinutesRule(workspace.data,{weekday:wd,minutes:sig.shortMinutes,clearDateOverride:day});
+      const draftDossier=buildAthleteDossier({owner,profile,values,details,observations:recommendationEntries,workspace:draft,trainingEvents:training.ledger.events,timeZone:zone});
+      const preview=selectNextSessionDecision(draftDossier,{plan:withSignal.plan,targetDay:nextDay,allPlans:activePlans});
+      const updated=applyWeekdayMinutesRule(workspace.data,{weekday:wd,minutes:sig.shortMinutes,clearDateOverride:day,decision:toStoredDecision(preview,locale)});
+      await workspace.save(updated,workspace.revision,'context');
+    }else if(sig.reasonKind==='discomfort'&&sig.discomfort){
+      const nextSessionDay=datedProgram(withSignal.plan).weeks.flatMap(w=>w.sessions).find(row=>row.date>day)?.date;
+      if(nextSessionDay){
+        const draft=applyDayAvailabilityOverride(workspace.data,{date:nextSessionDay,discomfort:{severity:sig.discomfort},reason:`Discomfort reported on ${day}`});
+        const draftDossier=buildAthleteDossier({owner,profile,values,details,observations:recommendationEntries,workspace:draft,trainingEvents:training.ledger.events,timeZone:zone});
+        const preview=selectNextSessionDecision(draftDossier,{plan:withSignal.plan,targetDay:nextSessionDay,allPlans:activePlans});
+        const updated=applyDayAvailabilityOverride(workspace.data,{date:nextSessionDay,discomfort:{severity:sig.discomfort},reason:`Discomfort reported on ${day}`,decision:toStoredDecision(preview,locale)});
+        await workspace.save(updated,workspace.revision,'context');
+      }
+    }
+  }
   async function logGroup(day:string,items:CheckIn[]){
     if(blocked||!items.length)return false;
-    const changes:TrainingMutation[]=await Promise.all(items.map(async({plan:item,actual})=>({
-      kind:'workout' as const,version:1 as const,id:await workoutId(item.event.id,day),requestId:crypto.randomUUID(),deleted:false,reason:'',expectedRevision:0,epoch:training.ledger.epoch,
-      data:makeWorkout(planForSession(training.ledger.events,item,day,actual?.endedAt),day,actual)
-    })));
+    const changes:TrainingMutation[]=await Promise.all(items.map(async({plan:item,actual,signal})=>{
+      const sigKey=actual?`${actual.sets}x${actual.amount}@${actual.loadKg}/${actual.minutes}/${actual.substitution?.name??''}`:`skip:${signal?.reasonKind??''}`;
+      return {
+        kind:'workout' as const,version:1 as const,id:await workoutId(item.event.id,day),
+        requestId:await deterministicRequestId(['checkin',item.event.id,day,'0',sigKey]),
+        deleted:false,reason:'',expectedRevision:0,epoch:training.ledger.epoch,
+        data:makeWorkout(planForSession(training.ledger.events,item,day,actual?.endedAt),day,actual,new Date(),signal?.reasonKind)
+      };
+    }));
     const ok=await training.putMany(changes);
     for(const item of items)if(ok&&item.actual)captureEvent('workout_logged',{metric_id:item.plan.config.metric});else recordJourneyAction(ok?'workout_skipped':'workout_save_failed',item.plan.config.metric);
-    if(ok)setNotice(l('Workout saved.','Séance enregistrée.','تم حفظ الحصة.'));
+    if(ok){
+      await applyCheckInSignals(day,items);
+      setNotice(l('Workout saved.','Séance enregistrée.','تم حفظ الحصة.'));
+    }
+    return ok;
+  }
+  async function correctGroup(day:string,items:CheckIn[],reason:string){
+    if(blocked||!items.length)return false;
+    const changes:TrainingMutation[]=await Promise.all(items.map(async({plan:item,actual,existingEvent})=>{
+      if(!existingEvent)throw Error('actual');
+      const sigKey=actual?`${actual.sets}x${actual.amount}@${actual.loadKg}/${actual.minutes}/${actual.substitution?.name??''}`:'skip';
+      return {
+        kind:'workout' as const,version:1 as const,id:existingEvent.id,
+        requestId:await deterministicRequestId(['correct',existingEvent.id,day,String(existingEvent.revision),sigKey,reason]),
+        deleted:false,reason,expectedRevision:existingEvent.revision,epoch:training.ledger.epoch,
+        data:correctWorkout(existingEvent,item,actual,reason)
+      };
+    }));
+    const ok=await training.putMany(changes);
+    if(ok)setNotice(l('Check-in corrected. Attendance and forecast updated.','Séance corrigée. Assiduité et estimation mises à jour.','تم تصحيح التسجيل وتحديث الالتزام والتقدير.'));
     return ok;
   }
   const stopSignature=useRef('');
@@ -354,6 +410,36 @@ export default function AdaptiveProgram({owner,initialMetric,initialTarget,onTie
   },[activePlans,tracking.attempts,training.ledger.events]);
   const loggedDays=new Set(plan?.sessions.map(event=>sessionResult(event.data as Workout)?.day));
   const loggedToday=loggedDays.has(today);
+  const dossier=useMemo(()=>buildAthleteDossier({
+    owner,profile,values,details,observations:recommendationEntries,workspace:workspace.data,trainingEvents:training.ledger.events,timeZone:zone,
+  }),[owner,profile,values,details,recommendationEntries,workspace.data,training.ledger.events,zone]);
+  const selectedCalendar=useMemo(()=>plan&&plan.config.guidedVersion===1?datedProgram(plan):undefined,[plan]);
+  const nextSessionDay=useMemo(()=>{
+    if(!plan||closed)return undefined;
+    if(selectedCalendar){
+      const next=selectedCalendar.weeks.flatMap(w=>w.sessions).find(row=>row.date>today||(row.date===today&&(!loggedToday||row.kind==='retest')));
+      return next?.date;
+    }
+    return today;
+  },[plan,closed,selectedCalendar,today,loggedToday]);
+  const nextDecision=useMemo(()=>plan&&nextSessionDay?selectNextSessionDecision(dossier,{
+    plan,targetDay:nextSessionDay,calendar:selectedCalendar,allPlans:activePlans,
+  }):null,[plan,nextSessionDay,dossier,selectedCalendar,activePlans]);
+  const decisionForCalendar=useMemo(()=>(targetPlan:AdaptivePlan,day:string)=>{
+    const item=calendarItems.find(entry=>entry.id===targetPlan.event.id);
+    const cal=item&&targetPlan.config.guidedVersion===1?(item.schedule as ReturnType<typeof datedProgram>):undefined;
+    return selectNextSessionDecision(dossier,{plan:targetPlan,targetDay:day,calendar:cal,allPlans:activePlans});
+  },[dossier,calendarItems,activePlans]);
+  const maintenancePlan=useMemo(()=>plan&&tracked&&tracked.status==='reached'?buildMaintenancePlan({
+    attempt:tracked,plan,dossier,today,
+  }):null,[plan,tracked,dossier,today]);
+  const supportingWins=useMemo(()=>suggestSupportingWins({
+    dossier,activeGoalMetrics:activePlans.map(p=>p.config.metric),
+  }),[dossier,activePlans]);
+  const personalLearning=useMemo(()=>plan?evaluatePersonalLearning({
+    dossier,plan,observations:recommendationEntries,priorGainPerSession:illustrativeGain(plan.config),
+  }):null,[dossier,plan,recommendationEntries]);
+  const [dismissedCalSuggestion,setDismissedCalSuggestion]=useState(false);
   const editContext=useMemo(()=>isEditing&&guided?{
     goal,current:tracked?current:goal?.current,loggedToday,availableConfigs:activeConfigs,lockedMetrics,
     revise:plan?.config.groupId&&activePlans.length>1?(c:AdaptiveConfig)=>replanPortfolioDates(activePlans.map(p=>p.config),c,today,lockedMetrics).find(item=>item.metric===c.metric)!:undefined,
@@ -375,7 +461,7 @@ export default function AdaptiveProgram({owner,initialMetric,initialTarget,onTie
     {full&&guided&&plan&&config&&metric&&<>
       <section className={s.goal}><div className={s.heading}><Target size={20}/><h2>{t(metric.name)}</h2>{!closed&&<button type="button" className={s.icon} aria-label={l('Edit goal','Modifier l’objectif','تعديل الهدف')} onClick={()=>setScreen('edit')}><Settings2 size={18}/></button>}</div>
         <div className={s.groupNumbers}><div><small>{tracked?.latestComparableOn?l('Latest comparable test','Dernier test comparable','أحدث اختبار مماثل'):measured===undefined?l('Starting result','Résultat de départ','نتيجة البداية'):l('Latest result','Dernier résultat','أحدث نتيجة')} → {l('Target','Cible','الهدف')}</small><bdi>{resultText(current,metric.id,locale)} → {resultText(config.target,metric.id,locale)} {unit}</bdi><small><time dateTime={config.deadline}>{new Date(config.deadline+'T12:00:00Z').toLocaleDateString(locale,{day:'numeric',month:'long',year:'numeric',calendar:'gregory',timeZone:'UTC'})}</time></small></div>
-          {!closed&&(goal?.adherence||insights.loading||insights.failed)&&<div><strong><bdi>{goal?.adherence?probabilityLabel(calibration?.probability??goal.adherence.probability,locale):'—'}</bdi></strong><small>{l('Chance with full attendance','Chance avec assiduité complète','الاحتمال عند الالتزام الكامل')}</small></div>}
+          {!closed&&(goal?.adherence||insights.loading||insights.failed)&&<div><strong><bdi>{goal?.adherence?probabilityLabel(calibration?.probability??goal.adherence.probability,locale):'—'}</bdi></strong><small>{l('If you follow the plan','Si tu suis le programme','عند الالتزام بالخطة')}</small></div>}
         </div>
         {progressBar}
         {closed&&tracked&&<strong>{tracked.status==='reached'?l('Reached on time','Atteint à temps','تحقق في الموعد')+(tracked.reachedOn?' · '+new Intl.DateTimeFormat(locale,{day:'numeric',month:'short',calendar:'gregory',timeZone:'UTC'}).format(new Date(tracked.reachedOn+'T12:00Z')):''):tracked.status==='missed'?l('Target missed','Cible manquée','لم يتحقق الهدف'):l('Final result unconfirmed','Résultat final non confirmé','النتيجة النهائية غير مؤكدة')}</strong>}
@@ -385,7 +471,31 @@ export default function AdaptiveProgram({owner,initialMetric,initialTarget,onTie
           {insights.failed?<button type="button" className={s.link} onClick={insights.retry}>{t('Retry')}</button>:insights.loading?<p role="status">{l('Loading…','Chargement…','جارٍ التحميل…')}</p>:<AdherenceEstimate estimate={goal?.adherence??null} calibration={calibration} unit={config.goalUnit==='kg'?'kg':metric.unit}/>}</details>}
         <button type="button" className={s.link} onClick={()=>openRetest(metric.id,config.goalUnit)}>{l('Record a test result','Enregistrer un résultat de test','تسجيل نتيجة اختبار')}<ArrowRight size={14}/></button>
       </section>
-      <ProgrammeCalendar items={calendarItems} today={today} busy={blocked} onRetest={c=>openRetest(c.metric,c.goalUnit)} onCheckIn={logGroup}/>
+      {maintenancePlan&&<MaintenanceCard plan={maintenancePlan} onRetest={openRetest} onOptionalNewGoal={()=>{setNotice('');setScreen('new');}}/>}
+      {!closed&&personalLearning?.calendarSuggestion&&!dismissedCalSuggestion&&<section className={s.card} aria-label={l('Schedule learning suggestion','Suggestion du coach','اقتراح جدول')}>
+        <p className={s.coachSentence}>{personalLearning.calendarSuggestion.prompt[locale==='fr'?1:locale==='ar'?2:0]}</p>
+        <div className={s.actions}>
+          <button type="button" className={s.primary} disabled={!workspace.editable||blocked} onClick={async()=>{
+            const sug=personalLearning.calendarSuggestion!;
+            const updated=applyWeekdayMinutesRule(workspace.data,{weekday:sug.weekday,minutes:sug.suggestedMinutes});
+            if(await workspace.save(updated,workspace.revision,'context')){setDismissedCalSuggestion(true);setNotice(l('Weekly schedule updated from your attendance pattern.','Planning hebdomadaire mis à jour selon ton rythme.','تم تحديث الجدول الأسبوعي وفق نمط حضورك.'));}
+          }}>{l('Apply schedule update','Appliquer','تطبيق')}</button>
+          <button type="button" className={s.link} onClick={()=>setDismissedCalSuggestion(true)}>{l('Keep current schedule','Garder le planning actuel','إبقاء الجدول الحالي')}</button>
+        </div>
+      </section>}
+      {nextDecision&&!closed&&<CoachDecisionCard decision={nextDecision} dossier={dossier} plan={plan} calendar={selectedCalendar} allPlans={activePlans} workspace={workspace.data} editable={workspace.editable&&!blocked} onSaveWorkspace={next=>workspace.save(next,workspace.revision,'context')}/>}
+      {!closed&&supportingWins.length>0&&<section className={s.card} aria-labelledby="supporting-wins-heading">
+        <div className={s.heading}><TrendingUp size={19} aria-hidden="true"/><h2 id="supporting-wins-heading">{l('Supporting wins that fit your budget','Victoires complémentaires dans ton budget','مكاسب داعمة ضمن وقتك المتاح')}</h2></div>
+        <div className={s.goalChoices}>{supportingWins.slice(0,2).map(win=>{
+          const m=goalMetrics.find(item=>item.id===win.metric);
+          if(!m)return null;
+          return <button key={win.metric} type="button" onClick={()=>{setNotice('');setScreen('new');}}>
+            <span><strong>{t(m.name)}</strong><small>{win.whyItFits[locale==='fr'?1:locale==='ar'?2:0]}</small></span>
+            <ArrowRight size={15} aria-hidden="true"/>
+          </button>;
+        })}</div>
+      </section>}
+      <ProgrammeCalendar items={calendarItems} today={today} busy={blocked} decisionFor={decisionForCalendar} onRetest={c=>openRetest(c.metric,c.goalUnit)} onCheckIn={logGroup} onCorrectCheckIn={correctGroup}/>
 
     </>}
     {full&&!guided&&plan&&config&&metric&&<>

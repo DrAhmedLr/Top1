@@ -73,3 +73,22 @@
 
 .th-goal-switch {display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;font-size:.82rem}
 .th-goal-switch select {max-width:100%;padding:.45rem .7rem;border:1px solid currentColor;border-radius:.65rem;background:var(--background,#111827);color:inherit;font:inherit}
+.th-coach-block {display:grid;gap:8px;margin-top:8px}
+.th-coach-reason {display:flex;align-items:flex-start;gap:6px;font-size:12px;line-height:1.45;color:#cfe4fa}
+.th-coach-reason>svg {flex:none;margin-top:2px;color:#9dd5ff}
+.th-coach-badge {display:inline-block;padding:1px 7px;border-radius:999px;background:#294968;color:#b8deff;font-size:11px;font-weight:650}
+.th-coach-alert {display:flex;align-items:flex-start;gap:7px;padding:9px 11px;border-radius:10px;background:#4a252d;border:1px solid #8c4756;color:#ffe4e3;font-size:12px;line-height:1.4}
+.th-coach-alert>svg {flex:none;margin-top:2px;color:#ffb4b0}
+.th-coach-controls {display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.th-coach-adjust {display:grid;gap:8px;padding:10px;border-radius:12px;background:#132334;border:1px solid #35506d}
+.th-coach-presets {display:flex;flex-wrap:wrap;gap:6px}
+.training-home .th-chip {display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:5px 10px;border-radius:9px;border:1px solid #426180;background:#1e354d;color:#e6f2ff;font-size:12px;font-weight:620}
+.training-home .th-chip-primary {background:#b2dcff;color:#102337;border-color:#b2dcff}
+.th-coach-custom {display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+.th-coach-custom label {display:grid;gap:4px;font-size:11px;color:#c2d4e8;flex:1 1 110px}
+.th-coach-custom input {min-height:36px;padding:6px 9px;border-radius:8px;border:1px solid #3f5a75;background:#0e1926;color:#f4f8ff;font:inherit;width:100%}
+.th-coach-followup {display:grid;gap:7px;padding:10px;border-radius:11px;background:#1c354f;border:1px solid #4d759c;font-size:12px;color:#eaf4ff}
+.th-coach-error {color:#ffbeb7;font-size:12px}
+.th-forecast-pair {display:grid;gap:5px;margin-top:9px}
+.training-home .th-pace-line {font-size:12px;line-height:1.45;color:#bad2ea}
+.th-pace-line strong {color:#e5f2ff}

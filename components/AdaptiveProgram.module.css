@@ -159,3 +159,22 @@
 .recentPace>div>bdi {color:var(--program-bright);font-size:1.5rem;font-weight:680}
 .recentPace>p,.recentPace>div>span {color:var(--program-dim);font-size:.85rem}
 @media(prefers-reduced-motion:reduce){.liveProgress span {transition:none}}
+
+/* Coach decision card & follow-up controls */
+.coachBadge {margin-inline-start:auto;padding:3px 9px;border-radius:999px;font-size:.75rem;font-weight:650;background:#274461;color:var(--program-bright);border:1px solid #486f94}
+.coachSummary {display:grid;gap:4px;margin-bottom:8px}
+.coachSummary>strong {font-size:1.05rem;color:var(--program-ink)}
+.coachDose {font-size:1.15rem;font-weight:660;color:var(--program-bright);font-variant-numeric:tabular-nums}
+.coachBefore {font-size:.8rem;color:var(--program-dim);border-inline-start:2px solid #486482;padding-inline-start:9px;margin:4px 0 8px}
+.coachSentence {color:#dfeaf6;font-size:.88rem;line-height:1.48;margin:4px 0 12px}
+.coachAlert {display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:11px;background:#4a252d;border:1px solid #8c4756;color:#ffe4e3;margin:8px 0 12px}
+.coachAlert>svg {flex:none;margin-top:2px;color:#ffb4b0}
+.coachAlert p {margin:0;color:#ffe4e3}
+.coachAdjust {display:grid;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #34475c}
+.coachPresets {display:flex;flex-wrap:wrap;gap:7px}
+.coachCustom {display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap}
+.coachCustom label {flex:1 1 130px}
+.coachFollowUp {display:grid;gap:8px;margin-top:12px;padding:11px 13px;border-radius:11px;background:#1e344b;border:1px solid #486f94}
+.coachFollowUp p {margin:0;color:#e8f2fc;font-weight:600}
+.checkFollowUp {display:grid;gap:8px;padding:10px 12px;border-radius:10px;background:#192c40;border:1px solid #3c5773}
+.checkFollowUp>small {color:#dce9f6;font-weight:600}

@@ -10,6 +10,13 @@ import {useAdaptiveTraining} from '@/lib/adaptiveProgramClient';
 const AdaptiveProgram=dynamic(()=>import('./AdaptiveProgram'));
 const RankExplorer=dynamic(()=>import('./RankExplorer'));
 import TrainingPreferences from './TrainingPreferences';
+import TrainingProfileDossier from './TrainingProfileDossier';
+import {buildAthleteDossier} from '@/lib/athleteDossier';
+import {buildProgram} from '@/lib/adaptiveProgram';
+import {createGuidedConfig} from '@/lib/datedProgram';
+const FirstVisitAssessment=dynamic(()=>import('./FirstVisitAssessment'));
+const WelcomeGateway=dynamic(()=>import('./WelcomeGateway'));
+import type {AssessmentCommitPayload} from './FirstVisitAssessment';
 import {COMPETITIVE_CHALLENGE_METRICS} from '@/lib/competitiveMetrics';
 import {performanceProfileAtTest} from '@/lib/performanceContext';
 import {overallChangeForSave} from '@/lib/overallPerformance';
@@ -100,6 +107,9 @@ export default function Dashboard({initialView='overview',initialMetric=null,ini
   const [historyMetric,setHistoryMetric]=useState(()=>validHistoryMetric(initialMetric));
   const [editingId, setEditingId] = useState<string | null>(null);
   const [panel, setPanel] = useState<'onboarding' | 'reset' | 'import' | 'leave' | null>(null), [proof, setProof] = useState<Metric | null>(null), [calculator, setCalculator] = useState<Metric | null>(null), [toast, setToast] = useState('');
+  const [assessmentOpen, setAssessmentOpen] = useState(false);
+  const [introCompleted, setIntroCompleted] = useState(false);
+  const [assessmentDismissed, setAssessmentDismissed] = useState(false);
   const [leaveDestination,setLeaveDestination]=useState<{view:View;metric?:string;aim?:boolean}>({view:'overview'});
   const [editorEpoch,setEditorEpoch]=useState(0),[leaveUnfinished,setLeaveUnfinished]=useState(false);
   const unfinishedRef=useRef(false),lastValidEditor=useRef<{owner:string;profile:ProfileState}|undefined>(undefined);
@@ -257,7 +267,53 @@ export default function Dashboard({initialView='overview',initialMetric=null,ini
   const owner=auth.user?.id??'guest';
   const home=useHomeShortcut(owner);
   const training=useAdaptiveTraining(owner,canDisplayProfile&&!recoverGuest);
-  const recent=useRecentMeasurements(auth.user?.id,(view==='overview'||view==='potential')&&canDisplayProfile,cloudSave.saved?.revision??auth.cloud?.revision);
+  const recent=useRecentMeasurements(auth.user?.id,(view==='overview'||view==='potential'||view==='profile')&&canDisplayProfile,cloudSave.saved?.revision??auth.cloud?.revision);
+  const currentDossier=useMemo(()=>buildAthleteDossier({
+    owner,
+    profile:needsSetup?undefined:demographics,
+    values,
+    details,
+    observations:auth.user?recent.entries:guestHistory.entries,
+    workspace:personalWorkspace.data,
+    trainingEvents:training.ledger.events,
+    timeZone:personalWorkspace.data.context.timezone,
+  }),[owner,needsSetup,demographics,values,details,auth.user,recent.entries,guestHistory.entries,personalWorkspace.data,training.ledger.events]);
+  async function completeAssessment(payload:AssessmentCommitPayload) {
+    if (!editable) return;
+    const nextValues=normalizeValues(payload.values,true);
+    if (auth.user) {
+      cloudSave.cancelPending();
+      await cloudSave.save({...cloudProfile,demographics:payload.profile,values:nextValues,measurementDetails:payload.details},{retainFailedEntry:true});
+    } else {
+      guestHistory.saveWithProfile(nextValues,payload.details,payload.profile,()=>storeGuestProfile({demographics:payload.profile,values:nextValues,measurementDetails:payload.details}));
+      setLocalSaveError(false);
+    }
+    setDemographics(payload.profile);
+    setValues(nextValues);
+    setDetails(payload.details);
+    setProfileSetup(true);
+    await personalWorkspace.save(payload.workspace,personalWorkspace.revision,'all');
+    if (payload.startGoal && training.ready && !training.busy) {
+      try {
+        const zone=payload.workspace.context.timezone??Intl.DateTimeFormat().resolvedOptions().timeZone??'UTC';
+        const startDay=new Date().toISOString().slice(0,10);
+        const cfg=createGuidedConfig({
+          metric:payload.startGoal.metric,baseline:payload.startGoal.baseline,target:payload.startGoal.target,
+          startDay,deadline:payload.startGoal.deadline,timeZone:zone,goalUnit:payload.startGoal.unit,
+          context:payload.workspace.context,bodyWeightKg:payload.startGoal.bodyWeightKg,locale,
+        });
+        await training.put({
+          kind:'program',version:1,id:crypto.randomUUID(),requestId:crypto.randomUUID(),deleted:false,reason:'',
+          expectedRevision:0,epoch:training.ledger.epoch,data:buildProgram(cfg,zone),
+        });
+      } catch {/* Keep saved profile and workspace even if optional starter plan needs adjustment. */}
+    }
+    captureEvent('onboarding_completed');
+    setAssessmentOpen(false);
+    setAssessmentDismissed(true);
+    go('overview');
+    setToast(local('Your personal training profile is ready.','Ton profil d’entraînement est prêt.','ملفك التدريبي الشخصي جاهز.'));
+  }
   function openEntry(id?:string) {
     go('performance');
     if(id&&activeMetrics.some(metric=>metric.id===id))setEntryFromTracker(id);
@@ -334,6 +390,30 @@ export default function Dashboard({initialView='overview',initialMetric=null,ini
     }catch{ /* The migration hook keeps the explanation in the review dialog. */ }
   }
   const showAdditional=view==='labs';
+  const isFreshFirstVisit =
+    view==='overview' &&
+    canDisplayProfile &&
+    !recoverGuest &&
+    needsSetup &&
+    !assessmentDismissed &&
+    !training.ledger.events.length &&
+    Object.keys(values).length===0;
+
+  if (isFreshFirstVisit && !introCompleted && !assessmentOpen) {
+    return (
+      <WelcomeGateway
+        onStartAssessment={() => {
+          setIntroCompleted(true);
+          setAssessmentOpen(true);
+        }}
+        onExploreAsGuest={() => {
+          setIntroCompleted(true);
+          setAssessmentDismissed(true);
+        }}
+      />
+    );
+  }
+
   return <div className={`app-shell glass-site personal-app view-${view}`}>
     <PerformanceShell view={view} blocked={blocked} onNavigate={go}>
         {auth.user&&view==='settings'&&<div className="account-safety"><button className="text-link" disabled={privacyBusy} onClick={()=>void changeVisibility(false).catch(e=>setToast(e instanceof Error?e.message:'Privacy withdrawal failed. Retry.'))}>{tr(privacyBusy?'Withdrawing…':'Make my profile private')}</button></div>}
@@ -355,16 +435,20 @@ export default function Dashboard({initialView='overview',initialMetric=null,ini
         {canDisplayProfile&&cloudSave.reviewing && <div className="cloud-error" role="status"><span>{tr("Reviewing your retained draft. It has not overwritten the saved profile.")}</span><button disabled={errors.length>0||!profileValid||cloudSave.status==='saving'} onClick={()=>void cloudSave.save(cloudProfile).catch(()=>{})}>{tr("Save reviewed draft")}</button><button onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button><button disabled={cloudSave.status==='saving'} onClick={keepSavedProfile}>{tr("Discard draft")}</button></div>}
         {canDisplayProfile&&cloudSave.error && <div className="cloud-error" role="alert"><span>{tr(cloudSave.error)}</span>{(cloudSave.conflict||!cloudSave.draft&&!cloudSave.reviewing)&&<button disabled={!cloudSave.conflict&&(errors.length>0||!profileValid)} onClick={() => cloudSave.conflict ? auth.retry() : void cloudSave.save(cloudProfile).catch(() => {})}>{tr(cloudSave.conflict ? 'Review latest profile' : 'Retry save')}</button>}{!cloudSave.draft&&!cloudSave.reviewing&&<button onClick={()=>downloadDraft(cloudProfile)}>{tr("Download draft")}</button>}</div>}
         {view==='overview'&&<>
-          <TrainingHome initialCalendar={initialCalendar} key={owner} owner={owner} profile={canDisplayProfile&&!recoverGuest&&!needsSetup?demographics:undefined} revision={cloudSave.saved?.revision??auth.cloud?.revision??0}
+          {(assessmentOpen||(isFreshFirstVisit&&introCompleted))
+            ?<FirstVisitAssessment key={`fva:${owner}`} owner={owner} existingDossier={needsSetup?null:currentDossier} existingWorkspace={personalWorkspace.data} existingValues={values} existingDetails={details} onComplete={completeAssessment} onSkipToHome={()=>{setAssessmentOpen(false);setAssessmentDismissed(true);}}/>
+            :<TrainingHome initialCalendar={initialCalendar} key={owner} owner={owner} profile={canDisplayProfile&&!recoverGuest&&!needsSetup?demographics:undefined} revision={cloudSave.saved?.revision??auth.cloud?.revision??0}
             values={canDisplayProfile&&!recoverGuest?values:{}} details={canDisplayProfile&&!recoverGuest?details:{}}
             workspace={canDisplayProfile&&!recoverGuest?personalWorkspace.data:undefined}
+            workspaceEditable={canDisplayProfile&&!recoverGuest&&personalWorkspace.editable}
+            onSaveWorkspace={next=>personalWorkspace.save(next,personalWorkspace.revision,'context')}
             trainingEvents={canDisplayProfile&&!recoverGuest&&training.ready?training.ledger.events:undefined}
             observations={canDisplayProfile&&!recoverGuest?(auth.user?recent.entries:guestHistory.entries):[]}
             shortcut={canDisplayProfile&&!recoverGuest?home.shortcut:undefined}
             onRank={id=>{if(canDisplayProfile)home.update({last:'rank'});go('ranking',false,id??firstRecorded);}}
             onLog={(id,goalUnit)=>{if(canDisplayProfile)home.update({last:'log'});if(id&&!recordingDisabled)recordFromTracker(id,goalUnit);else openEntry(id);}}
             onProgram={metric=>{if(canDisplayProfile)home.update({last:'program'});go('potential',false,metric);}}
-            onHistory={id=>{if(canDisplayProfile)home.update({last:'history'});openHistory(id);}}/>
+            onHistory={id=>{if(canDisplayProfile)home.update({last:'history'});openHistory(id);}}/>}
           {canDisplayProfile&&training.error&&<p className="training-notice" role="status">{local('Your training journal could not be refreshed.','Ton journal d’entraînement n’a pas pu être actualisé.','تعذّر تحديث سجل تدريبك.')} <button onClick={()=>void training.refresh()}>{tr('Retry')}</button></p>}
           {canDisplayProfile&&recent.error&&<p className="training-notice" role="status">{local('Recent entries could not be loaded.','Le journal récent est indisponible.','تعذّر تحميل السجلات الأخيرة.')} <button onClick={recent.retry}>{tr('Retry')}</button></p>}
         </>}
@@ -378,7 +462,7 @@ export default function Dashboard({initialView='overview',initialMetric=null,ini
 
         {guestHistory.error&&<p className="field-error" role="alert">{tr(guestHistory.error)}</p>}
         {view==='progress'&&!recoverGuest&&<Progress key={auth.user?.id??'guest'} metricId={historyMetric} onSelect={selectHistoryMetric} guestEntries={guestHistory.entries} values={values} revision={cloudSave.saved?.revision??auth.cloud?.revision} onRecord={recordFromTracker} disabled={recordingDisabled} weights={weights} profileWeight={needsSetup?undefined:demographics.weight} onSettings={()=>go('settings')}/>}
-        {view === 'profile' && <><div className="profile-grid"><div><ProfileMenu key={owner} owner={auth.user?.id} onSettings={()=>go('settings')} onRanking={()=>go('ranking',false,firstRecorded)} onHistory={()=>openHistory()}/><ProfileLadder key={owner} owner={owner} profile={cloudProfile}/><section className="card profile-card"><div className="card-heading"><div><h2>{tr("About you")}</h2>{(cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)&&Date.now()-Date.parse((cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)!)>365*86400000&&<p>{tr("Review your age: it was last recorded over a year ago.")}</p>}</div><UserRound size={21}/></div>{profileSetup ? <fieldset disabled={!editable}><ProfileEdit key={`${auth.user?.id??'guest'}:${editorEpoch}`} profile={demographics} onChange={setDemographics} onValidityChange={setProfileValid}/></fieldset> : <p className="drawer-description">{tr("Add your basics to get started.")}</p>}{needsSetup && <button className="primary-button" disabled={!editable} onClick={start}>{tr("Create my profile ")}<ArrowRight size={16}/></button>}</section></div><div><HomePreferences choice={home.choice} onChange={home.update} error={home.error}/><TrainingPreferences state={personalWorkspace}/><section className="performance-note"><h2>{local('Connections','Connexions','الاتصالات')}</h2><p>{local('Wearables · Coming soon','Objets connectés · Bientôt','الأجهزة القابلة للارتداء · قريبًا')}</p></section>{!auth.user && !needsSetup && <section className="card reset-card"><h3>{tr("Start over on this device")}</h3><p>{tr("Replace your local profile with a new one. Export your summary first if you want to keep it.")}</p><button className="text-link" disabled={!editable} onClick={() => { panelTrigger.current = document.activeElement as HTMLElement; setPanel('reset'); }}>{tr("Reset local profile ")}<ArrowRight size={14}/></button></section>}</div></div></>}
+        {view === 'profile' && <><div className="profile-grid"><div><ProfileMenu key={`menu:${owner}`} owner={auth.user?.id} onSettings={()=>go('settings')} onRanking={()=>go('ranking',false,firstRecorded)} onHistory={()=>openHistory()}/><ProfileLadder key={`ladder:${owner}`} owner={owner} profile={cloudProfile}/><section className="card profile-card"><div className="card-heading"><div><h2>{tr("About you")}</h2>{(cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)&&Date.now()-Date.parse((cloudSave.saved?.ageRecordedAt??auth.cloud?.ageRecordedAt)!)>365*86400000&&<p>{tr("Review your age: it was last recorded over a year ago.")}</p>}</div><UserRound size={21}/></div>{profileSetup ? <fieldset disabled={!editable}><ProfileEdit key={`${auth.user?.id??'guest'}:${editorEpoch}`} profile={demographics} onChange={setDemographics} onValidityChange={setProfileValid}/></fieldset> : <p className="drawer-description">{tr("Add your basics to get started.")}</p>}{needsSetup && <button className="primary-button" disabled={!editable} onClick={start}>{tr("Create my profile ")}<ArrowRight size={16}/></button>}</section></div><div><TrainingProfileDossier dossier={currentDossier} workspace={personalWorkspace.data} editable={personalWorkspace.editable} onSaveWorkspace={next=>personalWorkspace.save(next,personalWorkspace.revision,'context')} onOpenAssessment={()=>{setAssessmentOpen(true);go('overview');}}/><HomePreferences choice={home.choice} onChange={home.update} error={home.error}/><TrainingPreferences state={personalWorkspace}/><section className="performance-note"><h2>{local('Connections','Connexions','الاتصالات')}</h2><p>{local('Wearables · Coming soon','Objets connectés · Bientôt','الأجهزة القابلة للارتداء · قريبًا')}</p></section>{!auth.user && !needsSetup && <section className="card reset-card"><h3>{tr("Start over on this device")}</h3><p>{tr("Replace your local profile with a new one. Export your summary first if you want to keep it.")}</p><button className="text-link" disabled={!editable} onClick={() => { panelTrigger.current = document.activeElement as HTMLElement; setPanel('reset'); }}>{tr("Reset local profile ")}<ArrowRight size={14}/></button></section>}</div></div></>}
         {view === 'settings' && <><UsageAnalyticsSettings/>{!auth.user&&<BrowserDataControls onCleared={()=>{expectedGuestProfile.current=null;setGuestConflict(false);setGuestProfileUnreadable(false);setLocalSaveError(false);guestHistory.resetBaseline();lastValidEditor.current=undefined;setContextErrors({});setProfileValid(true);setValues({});setDetails({});setUsername('');setIsPublic(false);setDemographics(defaults);setProfileSetup(false);setEditorEpoch(n=>n+1);setPanel('onboarding');}}/>}<AccountDataControls revision={cloudSave.saved?.revision??auth.cloud?.revision??0} canChange={!weights.pending.length&&!weights.busy&&editable&&!cloudSave.unsaved&&cloudSave.status!=='saving'&&!cloudSave.draft&&!cloudSave.reviewing&&errors.length===0&&profileValid} onPurged={p=>{cloudSave.cancelPending();cloudSave.discardDraft();applyProfile(p);auth.retry();}}/><section className="card account-card"><div className="card-heading"><div><h2>{tr("Account & sharing")}</h2></div><Lock size={21}/></div><CloudProfileControls publicFields={publicFields} onPublicFields={setPublicFields} username={username} onUsernameChange={next => { if (editable) setUsername(next); }} isPublic={isPublic} shareUsername={(cloudSave.saved??auth.cloud)?.isPublic ? (cloudSave.saved??auth.cloud)?.username : undefined} onVisibilityChange={changeVisibility} canWithdraw={!!auth.user&&canDisplayProfile} canShare={!needsSetup && !!auth.cloud && editable && errors.length === 0&&profileValid&&!cloudSave.draft&&!cloudSave.reviewing&&!cloudSave.conflict} onNotice={setToast}/></section></>}
         {view === 'methodology' && <Methodology onEvidence={showEvidence}/>}
         {view!=='performance'&&<footer className="page-footer"><span><Activity size={15}/><strong>TOP1%</strong></span><div><Link href="/about">{tr("About TOP1")}</Link><span>·</span><button onClick={() => go('methodology')}>{tr("Methodology")}</button><span>·</span><Link href="/privacy">{tr("Privacy")}</Link><span>·</span><a href={SUPPORT_HREF}>{tr("Support")}</a></div></footer>}
