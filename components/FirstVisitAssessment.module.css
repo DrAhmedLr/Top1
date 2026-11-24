@@ -1,0 +1,721 @@
+.shell {
+  --fva-accent: #57b8ff;
+  --fva-accent-deep: #2a7ec2;
+  --fva-accent-soft: rgba(87, 184, 255, 0.16);
+  --fva-bg: #0c0c14;
+  --fva-surface: #151622;
+  --fva-border: #2b2d40;
+  --fva-ink: #f7f9ff;
+  --fva-dim: #9ba5bc;
+  position: relative;
+  min-height: min(760px, 86dvh);
+  border-radius: 28px;
+  border: 1px solid var(--fva-border);
+  background: radial-gradient(ellipse at 50% -10%, var(--fva-accent-soft) 0%, transparent 55%),
+    var(--fva-bg);
+  color: var(--fva-ink);
+  padding: clamp(16px, 4vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 28rem;
+  margin-inline: auto;
+  overflow: hidden;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.shell[data-theme='male'] {
+  --fva-accent: #57b8ff;
+  --fva-accent-deep: #2a7ec2;
+  --fva-accent-soft: rgba(87, 184, 255, 0.18);
+}
+
+.shell[data-theme='female'] {
+  --fva-accent: #ff8bb2;
+  --fva-accent-deep: #be4d76;
+  --fva-accent-soft: rgba(255, 139, 178, 0.18);
+}
+
+.shell[data-theme='neutral'] {
+  --fva-accent: #63d6c1;
+  --fva-accent-deep: #2d8b79;
+  --fva-accent-soft: rgba(99, 214, 193, 0.16);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--fva-border);
+  background: transparent;
+  color: var(--fva-dim);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.backIcon:hover {
+  color: var(--fva-ink);
+  border-color: var(--fva-accent);
+}
+
+.progressTrack {
+  flex: 1;
+  height: 14px;
+  border-radius: 999px;
+  background: #232535;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #88d2ff 0%, var(--fva-accent) 60%, var(--fva-accent-deep) 100%);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+[dir='rtl'] .progressFill {
+  transform-origin: right;
+}
+
+.skipTop {
+  border: 0;
+  background: transparent;
+  color: var(--fva-dim);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 2px;
+}
+
+.coachRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.speechBubble {
+  position: relative;
+  flex: 1;
+  padding: 13px 15px;
+  border-radius: 16px;
+  background: var(--fva-surface);
+  border: 1.5px solid var(--fva-border);
+  font-size: 0.94rem;
+  font-weight: 620;
+  line-height: 1.38;
+  color: var(--fva-ink);
+}
+
+.coachCenter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+  padding-block: 12px;
+}
+
+.coachCenter .speechBubble {
+  flex: 0 0 auto;
+  max-width: 20rem;
+  font-size: 1.05rem;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.32rem;
+  font-weight: 760;
+  letter-spacing: -0.025em;
+  color: var(--fva-ink);
+}
+
+.accentHeading {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 760;
+  color: var(--fva-accent);
+}
+
+.sub {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.48;
+  color: var(--fva-dim);
+}
+
+/* Tactile input box */
+.iconInput {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  border: 1.5px solid var(--fva-border);
+  background: var(--fva-surface);
+}
+
+.iconInput:focus-within {
+  border-color: var(--fva-accent);
+}
+
+.iconInput input {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--fva-ink);
+  font: inherit;
+  font-size: 1.04rem;
+  outline: none;
+}
+
+/* Big square sex cards */
+.sexGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sexCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 158px;
+  border-radius: 18px;
+  border: 2px solid var(--fva-border);
+  background: var(--fva-surface);
+  color: var(--fva-dim);
+  font: inherit;
+  font-weight: 780;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.sexCard[aria-pressed='true'] {
+  border-color: var(--fva-accent);
+  background: var(--fva-accent-soft);
+  color: var(--fva-ink);
+  transform: translateY(-2px);
+}
+
+.sexGlyph {
+  font-size: 3.1rem;
+  line-height: 1;
+  color: var(--fva-accent);
+}
+
+/* Full-width tactile choice rows (experience, goals, commitment) */
+.tileList {
+  display: grid;
+  gap: 10px;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  text-align: start;
+  padding: 14px 16px;
+  min-height: 60px;
+  border-radius: 15px;
+  border: 1.5px solid var(--fva-border);
+  background: var(--fva-surface);
+  color: var(--fva-ink);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.12s ease;
+}
+
+.tile:hover {
+  border-color: var(--fva-accent);
+}
+
+.tile[aria-pressed='true'] {
+  border-color: var(--fva-accent);
+  background: var(--fva-accent-soft);
+}
+
+.tileText {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+
+.tileText strong {
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.tileText small {
+  font-size: 0.78rem;
+  color: var(--fva-dim);
+}
+
+.signalBars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  width: 24px;
+  flex: none;
+}
+
+.signalBars i {
+  display: block;
+  width: 4px;
+  border-radius: 2px;
+  background: #36394e;
+}
+
+.signalBars i[data-on='true'] {
+  background: var(--fva-accent);
+}
+
+/* Interactive wheel age picker */
+.ageWrap {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.wheel {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  user-select: none;
+}
+
+.wheelNeighbor {
+  border: 0;
+  background: transparent;
+  color: #5b637a;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 18px;
+}
+
+.wheelNeighborFar {
+  font-size: 0.92rem;
+  color: #3a4052;
+}
+
+.wheelPill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--fva-accent);
+  background: var(--fva-accent-soft);
+}
+
+.wheelInput {
+  width: 84px;
+  border: 0;
+  background: transparent;
+  color: var(--fva-accent);
+  font: inherit;
+  font-size: 2.3rem;
+  font-weight: 820;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+/* Segmented unit toggle + giant ruler readouts */
+.unitToggle {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: 13px;
+  background: var(--fva-surface);
+  border: 1px solid var(--fva-border);
+  margin-inline: auto;
+  min-width: 148px;
+}
+
+.unitToggle button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--fva-dim);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.unitToggle button[aria-pressed='true'] {
+  background: var(--fva-accent);
+  color: #0b1420;
+}
+
+.giantValue {
+  text-align: center;
+  font-size: 2.9rem;
+  font-weight: 840;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+}
+
+.giantValue small {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fva-dim);
+  margin-inline-start: 5px;
+}
+
+.rulerBox {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 14px 8px;
+}
+
+.rulerTicks {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 48px;
+  position: relative;
+}
+
+.rulerTicks span {
+  width: 2px;
+  height: 16px;
+  border-radius: 2px;
+  background: #34394d;
+}
+
+.rulerTicks span[data-major='true'] {
+  height: 32px;
+  background: #545d78;
+}
+
+.rulerNeedle {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: var(--fva-accent);
+  box-shadow: 0 0 12px var(--fva-accent);
+}
+
+.rangeInput {
+  width: 100%;
+  accent-color: var(--fva-accent);
+  min-height: 34px;
+  cursor: pointer;
+}
+
+.heightStage {
+  display: grid;
+  grid-template-columns: 1fr 64px;
+  align-items: center;
+  gap: 12px;
+  padding-block: 10px;
+}
+
+.verticalRuler {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 190px;
+  position: relative;
+}
+
+.verticalRuler span {
+  height: 2px;
+  width: 18px;
+  background: #34394d;
+}
+
+.verticalRuler span[data-major='true'] {
+  width: 36px;
+  background: #58627d;
+}
+
+.verticalNeedle {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 50%;
+  height: 3px;
+  background: var(--fva-accent);
+  box-shadow: 0 0 10px var(--fva-accent);
+}
+
+.privacyCard {
+  padding: 13px 15px;
+  border-radius: 14px;
+  background: var(--fva-surface);
+  border: 1px solid var(--fva-border);
+  font-size: 0.82rem;
+  line-height: 1.48;
+  color: var(--fva-dim);
+}
+
+.privacyCard strong {
+  display: block;
+  color: var(--fva-ink);
+  margin-bottom: 3px;
+}
+
+/* Tap-and-Hold Commitment Ring */
+.holdZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-block: auto;
+  text-align: center;
+}
+
+.holdButton {
+  position: relative;
+  width: 146px;
+  height: 146px;
+  border-radius: 50%;
+  border: 0;
+  background: #141928;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  padding: 0;
+}
+
+.holdRingSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.holdLabel {
+  font-size: 0.96rem;
+  font-weight: 720;
+  color: var(--fva-accent);
+}
+
+.celebrateOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: radial-gradient(circle at center, var(--fva-accent) 0%, var(--fva-accent-deep) 68%, var(--fva-bg) 72%);
+  color: #0b1420;
+  text-align: center;
+  padding: 24px;
+}
+
+.celebrateOverlay strong {
+  font-size: 1.28rem;
+  font-weight: 800;
+}
+
+/* Reveal cards */
+.revealStack {
+  display: grid;
+  gap: 10px;
+}
+
+.revealCard {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--fva-surface);
+  border: 1.5px solid var(--fva-border);
+  display: grid;
+  gap: 4px;
+}
+
+.revealCard h3 {
+  margin: 0;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fva-accent);
+}
+
+.revealMetric {
+  font-size: 1.45rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Form fields inside goal/baseline screens */
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.shell label.field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 640;
+  color: var(--fva-dim);
+}
+
+.shell label.field :is(input, select, textarea) {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  border: 1.5px solid var(--fva-border);
+  background: var(--fva-surface);
+  color: var(--fva-ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.equipGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.equipChip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  border: 1.5px solid var(--fva-border);
+  background: var(--fva-surface);
+  color: var(--fva-ink);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 640;
+  cursor: pointer;
+}
+
+.equipChip[aria-pressed='true'] {
+  border-color: var(--fva-accent);
+  background: var(--fva-accent-soft);
+}
+
+/* Bottom pinned 3D tactile CTA */
+.ctaWrap {
+  margin-top: auto;
+  padding-top: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.primaryBtn {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 16px;
+  border: 0;
+  border-bottom: 4px solid var(--fva-accent-deep);
+  background: var(--fva-accent);
+  color: #091320;
+  font: inherit;
+  font-size: 0.96rem;
+  font-weight: 820;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.primaryBtn:active:not(:disabled) {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.primaryBtn:disabled {
+  background: #252838;
+  border-bottom-color: #191b27;
+  color: #5b6378;
+  cursor: default;
+}
+
+.secondaryBtn {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 15px;
+  border: 1.5px solid var(--fva-border);
+  background: transparent;
+  color: var(--fva-dim);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.secondaryBtn:hover {
+  border-color: var(--fva-accent);
+  color: var(--fva-ink);
+}
+
+.shell :is(button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--fva-accent);
+  outline-offset: 2px;
+}
+
+[dir='rtl'] .flip {
+  transform: scaleX(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell,
+  .progressFill,
+  .sexCard,
+  .tile,
+  .primaryBtn {
+    transition: none;
+  }
+}

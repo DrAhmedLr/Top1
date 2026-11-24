@@ -19,9 +19,15 @@ import {usePerformanceInsights} from '@/lib/hooks/usePerformanceInsights';
 import {useRetests} from '@/lib/hooks/useRetests';
 import type {MeasurementMetadata} from '@/lib/measurementMetadata';
 import type {PersonalWorkspace} from '@/lib/personalWorkspace';
+import {buildAthleteDossier} from '@/lib/athleteDossier';
+import {selectNextSessionDecision} from '@/lib/coachDecision';
+import {replayGoalAttempts} from '@/lib/goalAttempts';
+import {portfolioMaintenanceSummary} from '@/lib/maintenancePlan';
 import {activeMetrics, type Demographics, type Metric, type Values} from '@/lib/registry';
 import {dayInZone} from '@/lib/routineHistory';
 import {latestTraining, type TrainingEvent, type Workout} from '@/lib/training';
+import CoachDecisionCard from './CoachDecisionCard';
+import MaintenanceCard from './MaintenanceCard';
 import {MetricIcon} from './MetricIcon';
 import {useTranslations} from './providers/LocaleProvider';
 import '@/app/training-home.css';
@@ -32,6 +38,8 @@ type Props = {
   profile?: Demographics;
   details: MeasurementMetadata;
   workspace?: PersonalWorkspace;
+  workspaceEditable?: boolean;
+  onSaveWorkspace?: (next: PersonalWorkspace) => Promise<boolean>;
   trainingEvents?: TrainingEvent[];
   observations?: Observation[];
   owner?:string;
@@ -64,7 +72,7 @@ function recordedMetrics(values: Values, details: MeasurementMetadata, entries: 
   }).sort((a, b) => (b.date ? Date.parse(b.date) : 0) - (a.date ? Date.parse(a.date) : 0));
 }
 
-export default function TrainingHome({initialCalendar, values, details, profile, workspace, trainingEvents, observations = [], owner='guest', revision=0, shortcut, onRank, onLog, onProgram, onHistory}: Props) {
+export default function TrainingHome({initialCalendar, values, details, profile, workspace, workspaceEditable=false, onSaveWorkspace, trainingEvents, observations = [], owner='guest', revision=0, shortcut, onRank, onLog, onProgram, onHistory}: Props) {
   const {locale, t} = useTranslations();
   const l = (en: string, fr: string, ar: string) => locale === 'fr' ? fr : locale === 'ar' ? ar : en;
   const numbers = new Intl.NumberFormat(locale, {maximumFractionDigits: 3});
@@ -99,6 +107,19 @@ export default function TrainingHome({initialCalendar, values, details, profile,
   const guidedSessions = useMemo(() => guidedCalendar?.weeks.flatMap(week => week.sessions),[guidedCalendar]);
   const loggedToday = plan?.sessions.some(event => sessionResult(event.data as Workout)?.day === day);
   const guidedNext = day && guidedSessions?.find(session => session.date > day || session.date === day && (!loggedToday || session.kind === 'retest'));
+  const homeDossier = useMemo(() => plan && day ? buildAthleteDossier({
+    owner, profile, values, details, observations, workspace, trainingEvents, timeZone: zone,
+  }) : null, [plan, day, owner, profile, values, details, observations, workspace, trainingEvents, zone]);
+  const homeDecision = useMemo(() => plan && homeDossier && guidedNext ? selectNextSessionDecision(homeDossier, {
+    plan, targetDay: guidedNext.date, calendar: guidedCalendar ?? undefined, allPlans: plans,
+  }) : null, [plan, homeDossier, guidedNext, guidedCalendar, plans]);
+  const maintenanceSummary = useMemo(() => {
+    if (!homeDossier || !plans.length || !day || !trainingEvents?.length) return null;
+    const attempts = replayGoalAttempts(trainingEvents, observations, Date.now());
+    return portfolioMaintenanceSummary({plans, attempts, dossier: homeDossier, today: day});
+  }, [homeDossier, plans, day, trainingEvents, observations]);
+  const activeMaintenance = maintenanceSummary?.maintenancePlans.find(m => m.planId === plan?.event.id) ??
+    (maintenanceSummary?.allGoalsMaintained ? maintenanceSummary.maintenancePlans[0] : undefined);
 
   const rows = recordedMetrics(values, details, observations);
   const goal = plan?.config ?? workspace?.goal;
@@ -181,18 +202,32 @@ export default function TrainingHome({initialCalendar, values, details, profile,
           : latestResult ? <p className="th-goal-value"><bdi>{formatValue(latestResult.metric, latestResult.value)} {unit(entryUnit(latestResult.metric))}</bdi>{latestResult.date && <> · <time dateTime={latestResult.date}>{dateFormat.format(new Date(latestResult.date))}</time></>}</p>
           : <p>{l('Pick a test to find your level.','Choisis un test pour découvrir ton niveau.','اختر اختبارًا لتعرف مستواك.')}</p>}
         {progress!==undefined&&<progress max={1} value={progress} aria-label={l('Goal progress','Progression de l’objectif','التقدم نحو الهدف')}/>}
-        {probability !== undefined && !reached && !pastDeadline && <p className="th-forecast">
-          <strong><bdi>{probabilityText}</bdi></strong>
-          <span>{calibration ? l('estimated chance with full attendance, adjusted using observed goal outcomes.','de chances estimées en réalisant toutes les séances, selon les résultats observés.','احتمال مقدّر عند إتمام جميع الجلسات، بعد التعديل وفق نتائج الأهداف المرصودة.') : adherence ? adherence.kind==='personal' ? l('of paths from your own training reached the goal with full attendance.','des trajectoires issues de ton entraînement atteignent la cible avec toutes les séances.','من المسارات المستندة إلى تدريبك بلغت الهدف عند إتمام كل الجلسات.')
-            : l('of illustrative paths reach your goal if you complete every workout.','des trajectoires simulées à titre indicatif atteignent ta cible si tu réalises chaque séance.','من المسارات التوضيحية تبلغ الهدف إذا أكملت كل جلسة.')
-            : personal ? l('of simulated paths reached your goal using your training history.', 'des trajectoires simulées atteignent ton objectif d’après ton entraînement.', 'من المسارات المحاكاة بلغت هدفك استنادًا إلى سجل تدريبك.')
-            : l('of simulated paths reach your goal under the program assumptions.', 'des trajectoires simulées atteignent ton objectif selon les hypothèses du programme.', 'من المسارات المحاكاة تبلغ هدفك وفق افتراضات البرنامج.')}</span>
-        </p>}
+        {probability !== undefined && !reached && !pastDeadline && <div className="th-forecast-pair">
+          <p className="th-forecast">
+            <strong><bdi>{probabilityText}</bdi></strong>
+            <span>{l('If you follow the plan','Si tu suis le programme','عند الالتزام بالخطة')} · {calibration ? l('adjusted using observed outcomes','ajustée selon les résultats observés','معدّل وفق النتائج المرصودة') : adherence ? adherence.kind==='personal' ? l('personal estimate','estimation personnelle','تقدير شخصي')
+              : l('day-one simulation','simulation initiale','محاكاة اليوم الأول')
+              : personal ? l('from your training history', 'selon ton entraînement', 'من سجل تدريبك')
+              : l('under program assumptions', 'selon les hypothèses', 'وفق افتراضات البرنامج')}</span>
+          </p>
+          {forecast?.recentPace && <p className="th-pace-line">
+            <strong>{l('At your recent pace','À ton rythme récent','حسب وتيرتك الأخيرة')}:</strong>{' '}
+            {forecast.recentPace.kind === 'ready'
+              ? <><bdi>{percentFormat.format(forecast.recentPace.probability)}</bdi>{forecast.recentPace.finishRange ? <> · <bdi>{calendarDate.format(new Date(forecast.recentPace.finishRange.early+'T12:00:00Z'))} – {calendarDate.format(new Date(forecast.recentPace.finishRange.late+'T12:00:00Z'))}</bdi></> : null}</>
+              : <span>{l('unlocks after 3 comparable trained intervals & logged attendance.','se débloque après 3 intervalles entraînés comparables et séances consignées.','يتاح بعد 3 فترات تدريب مماثلة وتسجيل الحضور.')}</span>}
+          </p>}
+        </div>}
+        {activeMaintenance && <MaintenanceCard compact plan={activeMaintenance} onRetest={onLog}/>}
         {plan && insights.failed && <p role="status">{l('Goal estimate unavailable.', 'Estimation indisponible.', 'تقدير الهدف غير متاح.')} <button type="button" className="th-text-action" onClick={insights.retry}>{t('Retry')}</button></p>}
-        {guidedNext&&!reached&&!pastDeadline&&<p className="th-session">
-          <span>{guidedNext.kind==='retest'?l('Next retest','Prochain test','الاختبار القادم'):l('Next session','Prochaine séance','الجلسة القادمة')} · <time dateTime={guidedNext.date}>{calendarDate.format(new Date(guidedNext.date+'T12:00:00Z'))}</time></span>
-          <strong>{l(...guidedNext.exercise)}{guidedNext.kind==='training'&&<> · <bdi>{numbers.format(guidedNext.sets)} × {numbers.format(guidedNext.amount)}</bdi> {guidedNext.mode==='reps'?l('reps','rép.','تكرارات'):l('s','s','ث')}{guidedNext.loadKg>0&&<> · <bdi>{numbers.format(guidedNext.loadKg)}</bdi> {unit('kg')}</>}</>}</strong>
-        </p>}
+        {guidedNext&&!reached&&!pastDeadline&&<div className="th-session">
+          <span>{homeDecision?.action==='move'&&homeDecision.movedTo?l('Rescheduled session','Séance déplacée','حصة معاد جدولتها'):guidedNext.kind==='retest'?l('Next retest','Prochain test','الاختبار القادم'):l('Next session','Prochaine séance','الجلسة القادمة')} · <time dateTime={homeDecision?.recommended?.date??guidedNext.date}>{calendarDate.format(new Date((homeDecision?.recommended?.date??guidedNext.date)+'T12:00:00Z'))}</time></span>
+          {homeDecision&&homeDecision.action!=='keep'&&homeDecision.action!=='retest'
+            ? (homeDecision.recommended
+              ? <strong>{l(...homeDecision.recommended.exercise)} · <bdi>{numbers.format(homeDecision.recommended.sets)} × {numbers.format(homeDecision.recommended.amount)}</bdi> {homeDecision.recommended.mode==='reps'?l('reps','rép.','تكرارات'):l('s','s','ث')}{homeDecision.recommended.loadKg>0&&<> · <bdi>{numbers.format(homeDecision.recommended.loadKg)}</bdi> {unit('kg')}</>} · <bdi>{numbers.format(homeDecision.recommended.totalMinutes)}</bdi> {l('min','min','د')}</strong>
+              : <strong>{l('Rest today','Repos aujourd’hui','راحة اليوم')}</strong>)
+            : <strong>{l(...guidedNext.exercise)}{guidedNext.kind==='training'&&<> · <bdi>{numbers.format(guidedNext.sets)} × {numbers.format(guidedNext.amount)}</bdi> {guidedNext.mode==='reps'?l('reps','rép.','تكرارات'):l('s','s','ث')}{guidedNext.loadKg>0&&<> · <bdi>{numbers.format(guidedNext.loadKg)}</bdi> {unit('kg')}</>} · <bdi>{numbers.format(homeDecision?.scheduled.slotMinutes??guidedNext.estimatedMinutes)}</bdi> {l('min','min','د')}</>}</strong>}
+          {homeDecision&&homeDossier&&plan&&workspace&&onSaveWorkspace&&<CoachDecisionCard compact decision={homeDecision} dossier={homeDossier} plan={plan} calendar={guidedCalendar??undefined} allPlans={plans} workspace={workspace} editable={workspaceEditable} onSaveWorkspace={onSaveWorkspace}/>}
+        </div>}
         {plan&&!guidedCalendar&&!reached&&!pastDeadline&&<p className="th-session"><span>{l('Next session','Prochaine séance','الجلسة القادمة')}</span><strong>{plan.config.exercise} · <bdi>{numbers.format(plan.prescription.sets)} × {numbers.format(plan.prescription.amount)}</bdi> {plan.prescription.mode==='reps'?l('reps','rép.','تكرارات'):l('s','s','ث')}{plan.prescription.loadKg>0&&<> · <bdi>{numbers.format(plan.prescription.loadKg)}</bdi> {unit('kg')}</>}</strong></p>}
         {plans.length>1&&<label className="th-goal-switch">{l('Goal in this program','Objectif de ce programme','هدف في هذا البرنامج')}
           <select value={plan?.config.metric} onChange={event=>setHomeMetric(event.target.value)}>

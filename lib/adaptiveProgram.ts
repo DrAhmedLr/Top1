@@ -19,7 +19,7 @@ export type AdaptiveConfig={
   days:number;minutes:number;exercise:string;dose:Dose;routineId:string;scenario?:Scenario;bodyWeightKg?:number;
   groupId?:string;rotation?:GoalRotation;guidedVersion?:1;scheduleStart?:string;exerciseLabels?:ProgramLabel;reviewEquipment?:boolean;reviewLimitations?:boolean;
 };
-export type SessionResult={day:string;routineId:string;dose:Dose;minutes:number};
+export type SessionResult={day:string;routineId:string;dose:Dose;minutes:number;checkInReason?:string;correctedFromSkip?:boolean};
 const programTag='TOP1:training-goal:v1\n',sessionTag='TOP1:training-session:v1\n';
 const dayMs=86400000;
 const bounded=(value:number,min:number,max:number)=>Number.isFinite(value)&&value>=min&&value<=max;
@@ -288,7 +288,7 @@ export function countScheduled(weekdays:number[],from:string,through:string){
 export function doseKey(config:AdaptiveConfig,d:Dose){
   return JSON.stringify([config.routineId,config.metric,config.goalUnit,config.exercise,d.mode,d.sets,d.amount,d.loadKg,config.days,config.minutes,...(config.rotation?[config.rotation]:[])]);
 }
-export type PerformedSession={sets:number;amount:number;loadKg:number;minutes:number;endedAt?:string;substitution?:{name:string;reason:string}};
+export type PerformedSession={sets:number;amount:number;loadKg:number;minutes:number;endedAt?:string;substitution?:{name:string;reason:string};checkInReason?:string};
 export function planForSession(events:TrainingEvent[],plan:AdaptivePlan,day:string,endedAt?:string):AdaptivePlan{
   const zone=plan.event.data.timeZone;
   const revisions=events.filter(e=>e.kind==='program'&&e.id===plan.event.id).sort((a,b)=>a.revision-b.revision);
@@ -300,7 +300,7 @@ export function planForSession(events:TrainingEvent[],plan:AdaptivePlan,day:stri
   const prescription=version.config.guidedVersion===1?scheduledPrescription(version.config,earlier,day):manualPrescription(version.config,earlier);
   return {...version,sessions:plan.sessions,prescription};
 }
-export function makeWorkout(plan:AdaptivePlan,day:string,actual:PerformedSession|null,now=new Date()){
+export function makeWorkout(plan:AdaptivePlan,day:string,actual:PerformedSession|null,now=new Date(),skipReason?:string){
   const program=plan.event.data as TrainingProgram,template=program.sessions[0],exercise=template.exercises[0];
   const dose=plan.config.guidedVersion===1?scheduledPrescription(plan.config,plan.sessions,day):plan.prescription;
   const today=dayInZone(now,program.timeZone);
@@ -318,7 +318,8 @@ export function makeWorkout(plan:AdaptivePlan,day:string,actual:PerformedSession
   const end=actual?.endedAt?new Date(actual.endedAt):now;
   if(actual&&(!Number.isFinite(end.getTime())||end>now||dayInZone(end,program.timeZone)!==day))throw Error('date');
   const start=actual?new Date(end.getTime()-actual.minutes*60000):end;
-  const meta:SessionResult={day,routineId:plan.config.routineId,minutes:actual?.minutes??0,dose:{sets:dose.sets,amount:dose.amount,mode:dose.mode,loadKg:dose.loadKg}};
+  const checkInReason=(actual?.checkInReason??skipReason)?.trim().slice(0,120);
+  const meta:SessionResult={day,routineId:plan.config.routineId,minutes:actual?.minutes??0,dose:{sets:dose.sets,amount:dose.amount,mode:dose.mode,loadKg:dose.loadKg},...(checkInReason?{checkInReason}:{})};
   // The immutable origin identifies the saved template. Keep the effective dose for this particular occurrence separately.
   return workout({version:1,name:template.name,notes:sessionTag+JSON.stringify(meta),timeZone:program.timeZone,startedAt:start.toISOString(),endedAt:end.toISOString(),
     status:actual?'completed':'abandoned',origin:{programId:plan.event.id,revision:plan.event.revision,sessionId:template.id},
@@ -328,12 +329,81 @@ export function makeWorkout(plan:AdaptivePlan,day:string,actual:PerformedSession
     }]:[],
   },now.getTime());
 }
-/** A scheduled day has one entity per plan, including across devices and retries. */
-export async function workoutId(programId:string,day:string){
-  const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(programId+'|'+day)));
+/**
+ * Builds a ledger-compliant revision of an existing logged workout (for example,
+ * correcting a skipped session to completed or editing logged sets/minutes).
+ * Preserves immutable origin, snapshot, startedAt and timeZone.
+ */
+export function correctWorkout(previousEvent:TrainingEvent,plan:AdaptivePlan,actual:PerformedSession|null,reason:string,now=new Date()){
+  if(previousEvent.kind!=='workout'||previousEvent.deleted)throw Error('actual');
+  if(typeof reason!=='string'||reason.trim().length<3)throw Error('reason');
+  const old=previousEvent.data as Workout,priorMeta=sessionResult(old);
+  if(!priorMeta)throw Error('actual');
+  const dose=priorMeta.dose,exercise=old.snapshot.exercises[0];
+  if(!exercise)throw Error('actual');
+  if(actual&&(!validDose({...actual,mode:dose.mode})||!whole(actual.minutes,1,1440)||(dose.mode==='seconds'&&actual.sets*actual.amount>actual.minutes*60)))throw Error('actual');
+  let actualName=exercise.name,substitutionReason='';
+  if(actual?.substitution!==undefined){
+    const name=actual.substitution?.name,subReason=actual.substitution?.reason;
+    if(typeof name!=='string'||!name.trim()||name.trim().length>160||name.trim().toLowerCase()===exercise.name.trim().toLowerCase()||
+       typeof subReason!=='string'||!subReason.trim()||subReason.trim().length>240)throw Error('substitution');
+    actualName=name.trim();substitutionReason=subReason.trim();
+  }
+  const startMs=Date.parse(old.startedAt);
+  let endMs=now.getTime();
+  let correctedFromSkip=false;
+  if(actual){
+    const idealEnd=startMs+actual.minutes*60000;
+    if(idealEnd<=now.getTime()&&dayInZone(new Date(idealEnd),old.timeZone)===priorMeta.day){
+      endMs=idealEnd;
+    }else if(actual.endedAt){
+      const parsed=Date.parse(actual.endedAt);
+      if(Number.isFinite(parsed)&&parsed>=startMs&&parsed<=now.getTime()&&dayInZone(new Date(parsed),old.timeZone)===priorMeta.day){
+        endMs=parsed;
+        if(old.status==='abandoned')correctedFromSkip=true;
+      }else{
+        endMs=Math.max(startMs,now.getTime());
+        correctedFromSkip=old.status==='abandoned';
+      }
+    }else{
+      endMs=Math.max(startMs,now.getTime());
+      correctedFromSkip=old.status==='abandoned';
+    }
+    if(dayInZone(new Date(endMs),old.timeZone)!==priorMeta.day){
+      // Keep the corrected end time within the original workout's calendar day when backfilling.
+      const prevEndMs=Date.parse(old.endedAt??old.startedAt);
+      endMs=Math.max(startMs,Math.min(now.getTime(),prevEndMs));
+      correctedFromSkip=true;
+    }
+  }else{
+    endMs=Math.max(startMs,Date.parse(old.endedAt??old.startedAt));
+    if(endMs>now.getTime())endMs=startMs;
+  }
+  const checkInReason=(actual?.checkInReason??priorMeta.checkInReason)?.trim().slice(0,120);
+  const meta:SessionResult={
+    day:priorMeta.day,routineId:plan.config.routineId,minutes:actual?.minutes??0,dose,
+    ...(checkInReason?{checkInReason}:{}),
+    ...(correctedFromSkip?{correctedFromSkip:true}:{}),
+  };
+  return workout({
+    version:1,name:old.name,notes:sessionTag+JSON.stringify(meta),timeZone:old.timeZone,
+    startedAt:old.startedAt,endedAt:new Date(endMs).toISOString(),
+    status:actual?'completed':'abandoned',origin:old.origin,snapshot:old.snapshot,
+    exercises:actual?[{id:crypto.randomUUID(),plannedExerciseId:exercise.id,name:actualName,notes:'',substitutionReason,status:'performed',
+      sets:Array.from({length:actual.sets},()=>({id:crypto.randomUUID(),[dose.mode==='reps'?'reps':'durationSeconds']:actual.amount,loadKg:actual.loadKg,completed:true})),
+    }]:[],
+  },now.getTime());
+}
+/** Deterministic UUIDv5-shaped ID so retrying/double-submitting the same check-in is idempotent. */
+export async function deterministicRequestId(parts:readonly string[]){
+  const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(parts.join('|'))));
   digest[6]=(digest[6]&15)|0x50;digest[8]=(digest[8]&63)|0x80;
   const hex=Array.from(digest.slice(0,16),x=>x.toString(16).padStart(2,'0')).join('');
   return [hex.slice(0,8),hex.slice(8,12),hex.slice(12,16),hex.slice(16,20),hex.slice(20)].join('-');
+}
+/** A scheduled day has one entity per plan, including across devices and retries. */
+export async function workoutId(programId:string,day:string){
+  return deterministicRequestId([programId,day]);
 }
 /** P(K >= required) for independent Bernoulli sessions. Log probabilities keep long horizons numerically stable. */
 export function binomialTail(n:number,required:number,p:number){

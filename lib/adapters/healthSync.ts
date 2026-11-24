@@ -2,8 +2,21 @@ import {labMetrics} from '../measurementRules';
 import { normalizeTimestamp, type MeasurementMetadata } from '../measurementMetadata';
 import { metrics } from '../registry';
 
+export type WearableSource =
+  | 'apple_health'
+  | 'apple_watch'
+  | 'health_connect'
+  | 'google_health'
+  | 'garmin'
+  | 'oura'
+  | 'whoop'
+  | 'polar'
+  | 'coros'
+  | 'fitbit'
+  | 'quest_diagnostics';
+
 export interface ExternalHealthPayload {
-  source: 'apple_health' | 'garmin' | 'oura' | 'whoop' | 'quest_diagnostics';
+  source: WearableSource;
   timestamp: string;
   hrvStatistic?:'rmssd'|'sdnn';
   metrics: {

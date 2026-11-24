@@ -42,7 +42,8 @@ export function sessionSlots(plan:AdaptivePlan,localDay:(ms:number)=>string,asOf
   const at=Date.parse(workout.endedAt??''),started=Date.parse(workout.startedAt);
   const onDay=Number.isFinite(at)&&localDay(at)===record.day;
   const sameRoutine=record.routineId===plan.config.routineId;
-  const durationMatches=(plan.config.guidedVersion===1?record.minutes>0:record.minutes===plan.config.minutes)&&Math.abs(at-started-record.minutes*60000)<1000;
+  const spanOk=Math.abs(at-started-record.minutes*60000)<1000||(record.correctedFromSkip===true&&event.revision>1&&at>=started);
+  const durationMatches=(plan.config.guidedVersion===1?record.minutes>0:record.minutes===plan.config.minutes)&&spanOk;
   // An adaptive program defines the dose separately for each session. A logged
   // substitution or mismatch is still excluded, even if the routine ID matches.
   const dose=basis==='fixed-dose'?plan.prescription:record.dose,planned=record.dose;

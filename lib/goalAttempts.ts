@@ -166,7 +166,8 @@ function slots(period:Period,history:SessionHistory,day:(ms:number)=>string){
   const expected=guided?guidedDoseForDate(period.config,note.day):manual?.get(event.id);
   const issued=!!expected&&same(note.dose,expected)||recovery.has(note.day)&&same(note.dose,guidedDoseForDate(period.config,note.day,true));
   const duration=guided?note.minutes>0:note.minutes===period.config.minutes;
-  const doseMet=w.status==='completed'&&issued&&duration&&Math.abs(end-start-note.minutes*60000)<1000&&exactWork(w,note.dose,period.config.exercise);
+  const spanOk=Math.abs(end-start-note.minutes*60000)<1000||(note.correctedFromSkip===true&&event.revision>1&&end>=start);
+  const doseMet=w.status==='completed'&&issued&&duration&&spanOk&&exactWork(w,note.dose,period.config.exercise);
   const slot:LoggedSlot={kind:skipped?'skipped':doseMet?'completed':'partial',at:skipped?Date.parse(event.recordedAt):end,start};
   const previous=result.get(note.day);
   // Two different entities for the same occurrence cannot establish full adherence.
