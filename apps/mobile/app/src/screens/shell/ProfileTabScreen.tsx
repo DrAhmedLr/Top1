@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Image, Linking, Pressable, View } from 'react-native';
+import { Image, Linking, Platform, Pressable, Share, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { trpc } from '../../api/trpc';
-import { top1CloudApi } from '../../api/top1Cloud';
+import { signOutAndRevokeSession, trpc } from '../../api/trpc';
+import { getTop1ApiOrigin } from '../../api/top1Cloud';
 import { getProfileBannerAsset } from '../../assets/assetRegistry';
 import { ProfileQrCodeModal } from '../../components/social/ProfileQrCodeModal';
 import {
@@ -18,6 +18,7 @@ import {
 } from '../../components/ui';
 import { useAuthStore } from '../../stores/authStore';
 import { useLocale } from '../../i18n/LocaleProvider';
+import { useWorkoutPhotosStore } from '../../stores/workoutPhotosStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -31,13 +32,55 @@ export function ProfileTabScreen() {
   const { locale, setLocale, l } = useLocale();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const { showAlert } = useAppAlert();
+  const utils = trpc.useUtils();
 
   const user = useAuthStore((s) => s.user);
   const updateUser = useAuthStore((s) => s.updateUser);
-  const clearSession = useAuthStore((s) => s.clearSession);
   const resetSession = useWorkoutStore((s) => s.resetSession);
+  const clearPhotos = useWorkoutPhotosStore((s) => s.clearPhotos);
   const [qrOpen, setQrOpen] = useState(false);
-  const [stravaConnected, setStravaConnected] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const handleSignOut = async () => {
+    resetSession();
+    clearPhotos();
+    await signOutAndRevokeSession();
+  };
+
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const archive = await utils.user.exportData.fetch();
+      const jsonText = JSON.stringify(archive, null, 2);
+      if (Platform.OS === 'web' && typeof document !== 'undefined' && typeof Blob !== 'undefined') {
+        const blob = new Blob([jsonText], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `TOP1-${user?.username ?? 'athlete'}-export.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showAlert({
+          title: 'Data Export Downloaded',
+          message: 'Your complete TOP1% JSON archive has been saved to your device.',
+        });
+      } else {
+        await Share.share({
+          title: 'TOP1% Athlete Data Export',
+          message: jsonText,
+        });
+      }
+    } catch (err) {
+      showAlert({
+        title: 'Export Failed',
+        message: err instanceof Error ? err.message : 'Unable to export account data right now.',
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const catalogQuery = trpc.shop.listCatalog.useQuery();
   const notifQuery = trpc.notifications.list.useQuery();
@@ -300,10 +343,7 @@ export function ProfileTabScreen() {
                 {
                   label: 'Sign Out',
                   variant: 'danger',
-                  onPress: async () => {
-                    resetSession();
-                    await clearSession();
-                  },
+                  onPress: handleSignOut,
                 },
               ],
             })
@@ -379,68 +419,41 @@ export function ProfileTabScreen() {
         ))}
       </View>
 
-      {/* Top1.Fit Cloud, Strava & Operator /admin Control Center */}
+      {/* Privacy, Data Control & Legal */}
       <AppCard style={{ gap: 10 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
             <AppText size="xxsm" weight="xbold" tone="constant">
-              TOP1.FIT CLOUD &amp; INTEGRATIONS
+              DATA OWNERSHIP &amp; TRANSPARENCY
             </AppText>
             <AppText size="sm" weight="black">
-              Backend Inspector, Strava &amp; Data Control
+              Export Your Data, Methodology &amp; Privacy
             </AppText>
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <AppButton
-            label={stravaConnected ? 'Strava Linked ✓' : 'Connect Strava'}
-            size="sm"
-            variant={stravaConnected ? 'check' : 'secondary'}
-            onPress={() => {
-              const next = !stravaConnected;
-              setStravaConnected(next);
-              void top1CloudApi.setStravaConnected(next).catch(() => null);
-              showAlert({
-                title: next ? 'Strava Sync Enabled' : 'Strava Disconnected',
-                message: next
-                  ? 'Completed workouts can now be exported to Strava with TOP1% summaries.'
-                  : 'Strava auto-sync disabled.',
-              });
-            }}
-            style={{ flex: 1 }}
-          />
-          <AppButton
-            label="Share QR"
-            size="sm"
-            variant="secondary"
-            onPress={() => setQrOpen(true)}
-            style={{ flex: 1 }}
-          />
-        </View>
+        <AppButton
+          label="Download My Data (JSON)"
+          size="sm"
+          variant="secondary"
+          loading={exporting}
+          onPress={() => void handleExportData()}
+          fullWidth
+        />
 
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <AppButton
-            label="Admin & Metrics Panel"
+            label="Methodology & About"
             size="sm"
-            onPress={() => void Linking.openURL(top1CloudApi.getAdminPanelUrl())}
+            variant="ghost"
+            onPress={() => void Linking.openURL(`${getTop1ApiOrigin()}/about`)}
             style={{ flex: 1 }}
           />
           <AppButton
-            label="Export My Data"
+            label="Privacy Policy"
             size="sm"
             variant="ghost"
-            onPress={async () => {
-              try {
-                await top1CloudApi.exportAccountData();
-                showAlert({ title: 'GDPR Export Ready', message: 'Your signed Top1.Fit JSON data archive was fetched.' });
-              } catch {
-                showAlert({
-                  title: 'Cloud Account Needed',
-                  message: 'Sign in with your Top1.Fit cloud account at top1.fit to export your full GDPR data archive.',
-                });
-              }
-            }}
+            onPress={() => void Linking.openURL(`${getTop1ApiOrigin()}/privacy`)}
             style={{ flex: 1 }}
           />
         </View>
@@ -452,6 +465,7 @@ export function ProfileTabScreen() {
         username={user?.username ?? 'athlete'}
         displayName={user?.displayName ?? 'TOP1% Athlete'}
         standingLabel={user?.overallTierLabel ?? user?.peakAverageRank ?? 'TOP1% Contender'}
+        referralCode={user?.referralCode}
       />
 
       {!layout.isDesktop ? (
@@ -467,10 +481,7 @@ export function ProfileTabScreen() {
               {
                 label: 'Sign Out',
                 variant: 'danger',
-                onPress: async () => {
-                  resetSession();
-                  await clearSession();
-                },
+                onPress: handleSignOut,
               },
             ],
           })

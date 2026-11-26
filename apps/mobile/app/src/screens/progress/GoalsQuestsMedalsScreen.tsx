@@ -16,11 +16,20 @@ import {
   useAppAlert,
 } from '../../components/ui';
 import { useAuthStore } from '../../stores/authStore';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
-import { hexToRgba } from '../../theme/tokens';
+import { hexToRgba, RADII } from '../../theme/tokens';
 import { notifySuccess } from '../../utils/haptics';
 import { playSound } from '../../utils/soundscape';
 import type { MainStackParamList } from '../../navigation/types';
+
+const STRENGTH_GOAL_EXERCISES = [
+  { id: 'ex_bench_press', label: 'Bench Press' },
+  { id: 'ex_squat', label: 'Back Squat' },
+  { id: 'ex_deadlift', label: 'Deadlift' },
+  { id: 'ex_pull_up', label: 'Pull-Ups' },
+  { id: 'ex_ohp', label: 'Overhead Press' },
+] as const;
 
 function resolveMedalArt(name: string, description: string, unlocked: boolean, progress: number, target: number): string {
   const hay = `${name} ${description}`.toLowerCase();
@@ -78,7 +87,7 @@ const SHOWCASE_MEDAL_TIERS = [
   { key: 'totalvolume4', label: 'Million-Pound Club (V)' },
   { key: 'level4', label: 'Olympian Level (V)' },
   { key: 'completedquests4', label: 'Quest Master (V)' },
-  { key: 'totaleggsspent4', label: 'Egg Collector (V)' },
+  { key: 'totaleggsspent4', label: 'Vault Collector (V)' },
   { key: 'totalreactions4', label: 'Gym Community Icon (V)' },
   { key: 'onepunchman', label: 'One-Punch PR' },
   { key: 'allcolorthemesunlocked', label: 'Chromatic Collector' },
@@ -87,6 +96,7 @@ const SHOWCASE_MEDAL_TIERS = [
 
 export function GoalsQuestsMedalsScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const route = useRoute<RouteProp<MainStackParamList, 'GoalsQuestsMedals'>>();
   const { showAlert } = useAppAlert();
@@ -100,6 +110,7 @@ export function GoalsQuestsMedalsScreen() {
   const [goalTitle, setGoalTitle] = useState('');
   const [goalTarget, setGoalTarget] = useState('120');
   const [goalType, setGoalType] = useState<'strength' | 'consistency'>('strength');
+  const [goalExerciseId, setGoalExerciseId] = useState<string>(STRENGTH_GOAL_EXERCISES[0].id);
 
   const goalsQuery = trpc.gamification.listGoals.useQuery();
   const questsQuery = trpc.gamification.getQuests.useQuery();
@@ -286,7 +297,7 @@ export function GoalsQuestsMedalsScreen() {
                 <AppCard
                   key={m.id}
                   style={{
-                    width: '48.2%',
+                    width: layout.isDesktop ? '23.8%' : layout.isWide ? '31.5%' : '48.2%',
                     alignItems: 'center',
                     gap: 6,
                     borderColor: m.unlocked ? hexToRgba(c.warning, 0.7) : c.thirdBg,
@@ -357,6 +368,31 @@ export function GoalsQuestsMedalsScreen() {
             { label: 'Consistency', value: 'consistency' },
           ]}
         />
+        {goalType === 'strength' ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+            {STRENGTH_GOAL_EXERCISES.map((ex) => {
+              const active = goalExerciseId === ex.id;
+              return (
+                <Pressable
+                  key={ex.id}
+                  onPress={() => setGoalExerciseId(ex.id)}
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 6,
+                    borderRadius: RADII.pill,
+                    backgroundColor: active ? hexToRgba(c.constant, 0.2) : c.thirdBg,
+                    borderWidth: 1,
+                    borderColor: active ? c.constant : 'transparent',
+                  }}
+                >
+                  <AppText size="xxsm" weight="bold" tone={active ? 'constant' : 'sub'}>
+                    {ex.label}
+                  </AppText>
+                </Pressable>
+              );
+            })}
+          </View>
+        ) : null}
         <AppInput
           label="Goal Title"
           placeholder={goalType === 'strength' ? 'e.g. Bench 225 lbs' : 'e.g. 20 Workouts this Month'}
@@ -378,7 +414,7 @@ export function GoalsQuestsMedalsScreen() {
             createGoal.mutate({
               goalType,
               title: goalTitle.trim(),
-              exerciseId: goalType === 'strength' ? 'ex_bench_press' : null,
+              exerciseId: goalType === 'strength' ? goalExerciseId : null,
               startingValue: 0,
               targetValue,
               unit: goalType === 'strength' ? 'kg' : 'workouts',

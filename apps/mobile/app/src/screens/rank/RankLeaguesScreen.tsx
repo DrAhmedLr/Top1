@@ -20,8 +20,8 @@ import type { MainStackParamList } from '../../navigation/types';
 const TIER_INDEX_TO_RANK: RankTier[] = [
   'Rookie',
   'Novice',
-  'Intermediate',
   'Enthusiast',
+  'Intermediate',
   'Veteran',
   'Elite',
   'Champion',
@@ -62,7 +62,7 @@ export function RankLeaguesScreen() {
             }}
           >
             {bannerUrl ? (
-              <View style={{ width: '112%', height: 112, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              <View style={{ width: '100%', height: 112, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                 {vsGlowUrl ? (
                   <Image
                     source={{ uri: vsGlowUrl }}
@@ -107,7 +107,7 @@ export function RankLeaguesScreen() {
                   height: 76,
                   borderRadius: RADII.input,
                   overflow: 'hidden',
-                  backgroundColor: hexToRgba('#0F0A18', 0.65),
+                  backgroundColor: theme.dark ? hexToRgba('#0F0A18', 0.65) : c.thirdBg,
                   borderWidth: 1,
                   borderColor: hexToRgba(data.league.color, 0.4),
                   flexDirection: 'row',
@@ -126,7 +126,7 @@ export function RankLeaguesScreen() {
                     SEASON REWARD CARD
                   </AppText>
                   <AppText size="xsm" tone="sub">
-                    Finish in the promotion zone to unlock the {tierRank} Season Banner & bonus Eggs!
+                    Finish in the promotion zone to unlock the {tierRank} Season Banner &amp; bonus Credits!
                   </AppText>
                 </View>
               </View>

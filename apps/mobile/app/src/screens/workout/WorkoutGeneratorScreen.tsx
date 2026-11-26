@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatWeight } from '@apexlift/shared';
 import { trpc } from '../../api/trpc';
@@ -14,10 +14,19 @@ import {
   useAppAlert,
 } from '../../components/ui';
 import { useLocale } from '../../i18n/LocaleProvider';
+import type { MainStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../stores/authStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
+
+const DISCOMFORT_AREAS = [
+  { id: 'shoulder', label: 'Shoulder' },
+  { id: 'lower_back', label: 'Lower Back' },
+  { id: 'knee', label: 'Knee' },
+  { id: 'elbow_wrist', label: 'Elbow / Wrist' },
+  { id: 'hip', label: 'Hip' },
+] as const;
 
 const PRESETS = [
   { id: 'gym', label: 'Full Gym' },
@@ -45,6 +54,7 @@ export function WorkoutGeneratorScreen() {
   const c = theme.colors;
   const { l } = useLocale();
   const navigation = useNavigation();
+  const route = useRoute<RouteProp<MainStackParamList, 'WorkoutGenerator'>>();
   const { showAlert } = useAppAlert();
   const utils = trpc.useUtils();
 
@@ -52,13 +62,20 @@ export function WorkoutGeneratorScreen() {
   const unit = user?.unitWeight ?? 'lbs';
   const startFromPreset = useWorkoutStore((s) => s.startFromPreset);
 
-  const [mode, setMode] = useState<'smart_next' | 'target_muscles' | 'preset'>('smart_next');
-  const [preset, setPreset] = useState<(typeof PRESETS)[number]['id']>('gym');
+  const [mode, setMode] = useState<'smart_next' | 'target_muscles' | 'preset'>(
+    route.params?.initialMode ?? 'smart_next'
+  );
+  const [preset, setPreset] = useState<(typeof PRESETS)[number]['id']>(
+    route.params?.initialPreset ?? 'gym'
+  );
   const [split, setSplit] = useState<(typeof SPLITS)[number]['id']>('push');
   const [durationMin, setDurationMin] = useState(45);
-  const [intensity, setIntensity] = useState<'strength' | 'hypertrophy' | 'endurance'>('hypertrophy');
+  const [intensity, setIntensity] = useState<'strength' | 'hypertrophy' | 'endurance'>(
+    route.params?.initialIntensity ?? 'hypertrophy'
+  );
   const [equipment, setEquipment] = useState<string[]>(EQUIPMENT_CHOICES);
   const [discomfort, setDiscomfort] = useState<'none' | 'mild' | 'concerning'>('none');
+  const [discomfortArea, setDiscomfortArea] = useState<string>('shoulder');
 
   const genMutation = trpc.workoutGeneration.generateWorkout.useMutation();
   const savePreset = trpc.preset.create.useMutation({
@@ -227,6 +244,31 @@ export function WorkoutGeneratorScreen() {
               { label: 'Sharp Pain', value: 'concerning' },
             ]}
           />
+          {discomfort !== 'none' ? (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+              {DISCOMFORT_AREAS.map((area) => {
+                const active = discomfortArea === area.id;
+                return (
+                  <Pressable
+                    key={area.id}
+                    onPress={() => setDiscomfortArea(area.id)}
+                    style={{
+                      paddingHorizontal: 11,
+                      paddingVertical: 6,
+                      borderRadius: RADII.pill,
+                      backgroundColor: active ? hexToRgba(c.warning, 0.2) : c.thirdBg,
+                      borderWidth: 1,
+                      borderColor: active ? c.warning : 'transparent',
+                    }}
+                  >
+                    <AppText size="xxsm" weight="bold" style={{ color: active ? c.warning : c.subText }}>
+                      {area.label}
+                    </AppText>
+                  </Pressable>
+                );
+              })}
+            </View>
+          ) : null}
         </View>
 
         {mode !== 'preset' ? (
@@ -273,7 +315,7 @@ export function WorkoutGeneratorScreen() {
               equipment: mode === 'preset' ? undefined : equipment,
               discomfort:
                 discomfort !== 'none'
-                  ? { severity: discomfort, area: 'shoulder' }
+                  ? { severity: discomfort, area: discomfortArea }
                   : undefined,
             })
           }

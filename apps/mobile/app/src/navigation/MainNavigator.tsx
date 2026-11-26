@@ -1,5 +1,7 @@
 import React from 'react';
+import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ActiveWorkoutSheet } from '../components/workout/ActiveWorkoutSheet';
 import { useTheme } from '../theme/ThemeProvider';
 import { ThemesScreen } from '../screens/shell/ThemesScreen';
 import { ExerciseDetailScreen } from '../screens/workout/ExerciseDetailScreen';
@@ -43,6 +45,7 @@ export function MainNavigator() {
   const { theme } = useTheme();
 
   return (
+    <View style={{ flex: 1 }}>
     <Stack.Navigator
       initialRouteName="BottomNavTabs"
       screenOptions={{
@@ -96,5 +99,7 @@ export function MainNavigator() {
       <Stack.Screen name="NotificationCenter" component={NotificationCenterScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
     </Stack.Navigator>
+    <ActiveWorkoutSheet />
+    </View>
   );
 }

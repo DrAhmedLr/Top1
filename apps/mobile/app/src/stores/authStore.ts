@@ -55,6 +55,7 @@ export interface UserProfile {
 }
 
 export interface OnboardingDraft {
+  displayName: string;
   fitnessGoal: 'build_muscle' | 'get_stronger' | 'lose_fat' | 'athletic';
   experienceLevel: 'beginner' | 'intermediate' | 'advanced';
   weeklyWorkoutGoal: number;
@@ -75,6 +76,7 @@ export interface OnboardingDraft {
 }
 
 const DEFAULT_ONBOARDING_DRAFT: OnboardingDraft = {
+  displayName: '',
   fitnessGoal: 'build_muscle',
   experienceLevel: 'intermediate',
   weeklyWorkoutGoal: 4,
@@ -159,8 +161,8 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         onboardingDraft: state.onboardingDraft,
       }),
-      onRehydrateStorage: () => (state) => {
-        state?.setHydrated(true);
+      onRehydrateStorage: () => () => {
+        useAuthStore.getState().setHydrated(true);
       },
     }
   )

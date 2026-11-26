@@ -18,6 +18,7 @@ import { useAuthStore } from '../../stores/authStore';
 export function EditProfileScreen() {
   const navigation = useNavigation();
   const { showAlert } = useAppAlert();
+  const utils = trpc.useUtils();
   const user = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
 
@@ -38,9 +39,22 @@ export function EditProfileScreen() {
   );
   const [weeklyGoal, setWeeklyGoal] = useState(String(user?.weeklyWorkoutGoal ?? 4));
 
+  const handleUnitWeightChange = (nextUnit: WeightUnit) => {
+    if (nextUnit === unitWeight) return;
+    const parsed = parseFloat(bwInput);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      const converted = nextUnit === 'lbs' ? kgToLbs(parsed) : lbsToKg(parsed);
+      setBwInput(String(Math.round(converted * 10) / 10));
+    }
+    setUnitWeight(nextUnit);
+  };
+
   const updateMutation = trpc.user.updateProfile.useMutation({
     onSuccess: (updated) => {
       setUser(updated);
+      void utils.top1.getOverview.invalidate();
+      void utils.physiology.getBodyReport.invalidate();
+      void utils.rank.getMyRanks.invalidate();
       showAlert({ title: 'Profile Updated', message: 'Your preferences have been saved.' });
       navigation.goBack();
     },
@@ -63,7 +77,7 @@ export function EditProfileScreen() {
         </AppText>
         <SegmentedControl
           value={unitWeight}
-          onChange={setUnitWeight}
+          onChange={handleUnitWeightChange}
           options={[
             { label: 'Pounds (lbs)', value: 'lbs' },
             { label: 'Kilograms (kg)', value: 'kg' },

@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Image, Platform, Pressable, Switch, View } from 'react-native';
+import { Animated, Image, Pressable, Switch, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 import { buildRankPredictionCurve, ratingToRank, type RankTier } from '@apexlift/shared';
 import { ONBOARDING_ASSETS } from '../../assets/v3AssetRegistry';
-import { WIDGET_VIDEOS } from '../../assets/v4MediaManifest';
 import { CustomAvatarRive, JymboDialogue } from '../../components/mascot';
 import {
   AppButton,
@@ -20,8 +18,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { USE_NATIVE_DRIVER } from '../../theme/animations';
 import { RANK_SOLID_ACCENT } from '../../theme/rankGradients';
 import { useTheme } from '../../theme/ThemeProvider';
-import { hexToRgba, RADII } from '../../theme/tokens';
-import { impactHeavy, impactLight, notifySuccess } from '../../utils/haptics';
+import { hexToRgba } from '../../theme/tokens';
+import { impactLight } from '../../utils/haptics';
 import { playSound } from '../../utils/soundscape';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OnboardingPlanAndGoal'>;
@@ -87,32 +85,20 @@ const EVOLUTION_STAGES: Array<{
   },
 ];
 
-const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const VIDEO_TABS = [
-  { id: 'widget_video_1' as const, label: 'Streak' },
-  { id: 'widget_video_2' as const, label: 'BodyRank' },
-  { id: 'widget_video_3' as const, label: 'Live Sets' },
-  { id: 'widget_video_4' as const, label: 'Jymbo' },
-];
-
 export function OnboardingPlanAndGoalScreen({ navigation }: Props) {
   const { theme } = useTheme();
   const c = theme.colors;
   const draft = useAuthStore((s) => s.onboardingDraft);
   const patchDraft = useAuthStore((s) => s.patchOnboardingDraft);
 
-  // 4 dedicated full-screen Liftoff moments:
-  // 0 = OnboardingFibChart, 1 = OnboardingStreakBump, 2 = OQ_AvatarLevelsUp, 3 = OQ_WidgetPreview
-  const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
-  const [streakIgnited, setStreakIgnited] = useState(false);
+  // Streamlined 2-stage preview: 0 = 12-Week Projection & Reminders, 1 = Athlete Evolution Preview
+  const [stage, setStage] = useState<0 | 1>(0);
   const [evoIdx, setEvoIdx] = useState(2);
-  const [activeVideo, setActiveVideo] = useState<keyof typeof WIDGET_VIDEOS>('widget_video_1');
 
   const slideX = useRef(new Animated.Value(0)).current;
-  const flameScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    slideX.setValue(32);
+    slideX.setValue(28);
     Animated.spring(slideX, {
       toValue: 0,
       friction: 9,
@@ -150,60 +136,49 @@ export function OnboardingPlanAndGoalScreen({ navigation }: Props) {
         : 'fibchart_musclemass';
   const fibChartImg = ONBOARDING_ASSETS[fibKey];
 
-  const handleIgniteStreak = () => {
-    if (streakIgnited) return;
-    setStreakIgnited(true);
-    impactHeavy();
-    notifySuccess();
-    playSound('streak_bump_2');
-    flameScale.setValue(0.65);
-    Animated.spring(flameScale, {
-      toValue: 1.12,
-      friction: 4,
-      tension: 140,
-      useNativeDriver: USE_NATIVE_DRIVER,
-    }).start(() => {
-      Animated.spring(flameScale, {
-        toValue: 1,
-        friction: 6,
-        useNativeDriver: USE_NATIVE_DRIVER,
-      }).start();
-    });
-  };
-
   const handleContinue = () => {
-    if (stage < 3) {
+    if (stage === 0) {
       playSound('next_step');
       impactLight();
-      setStage((s) => (s + 1) as 0 | 1 | 2 | 3);
+      setStage(1);
       return;
     }
     playSound('flow_complete');
-    navigation.navigate('OnboardingAvatar');
+    navigation.navigate('OnboardingCredentials');
   };
 
   const handleBack = () => {
     playSound('tick', 0.35);
-    if (stage > 0) setStage((s) => (s - 1) as 0 | 1 | 2 | 3);
+    if (stage > 0) setStage(0);
     else navigation.goBack();
   };
 
   const currentEvo = EVOLUTION_STAGES[evoIdx];
-  const stageTitles = ['12-Week Projection', 'Ignite Your Streak', 'Your Lifter Evolves', 'Widgets & Reminders'];
+  const stageTitles = ['12-Week Projection', 'Your Lifter Evolves'];
 
   return (
     <View style={{ flex: 1 }}>
       <StackHeader title={stageTitles[stage]} onBack={handleBack} />
-      <ScreenContainer scroll safeTop={false} contentStyle={{ justifyContent: 'space-between', paddingTop: 8 }}>
+      <ScreenContainer
+        scroll
+        safeTop={false}
+        contentStyle={{
+          justifyContent: 'space-between',
+          paddingTop: 8,
+          maxWidth: 560,
+          alignSelf: 'center',
+          width: '100%',
+        }}
+      >
         <Animated.View style={{ gap: 14, transform: [{ translateX: slideX }] }}>
           {/* Stage Dots */}
           <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8 }}>
-            {[0, 1, 2, 3].map((i) => (
+            {([0, 1] as const).map((i) => (
               <Pressable
                 key={i}
                 onPress={() => {
                   playSound('tick', 0.35);
-                  setStage(i as 0 | 1 | 2 | 3);
+                  setStage(i);
                 }}
                 style={{
                   width: stage === i ? 26 : 8,
@@ -215,13 +190,13 @@ export function OnboardingPlanAndGoalScreen({ navigation }: Props) {
             ))}
           </View>
 
-          {/* STAGE 0: Dedicated OnboardingFibChart */}
+          {/* STAGE 0: 12-Week Strength Projection + Reminders */}
           {stage === 0 ? (
             <>
               <JymboDialogue
                 mascotPose="Confident"
                 mascotSize={86}
-                mascotText={`At ${draft.weeklyWorkoutGoal}x/week, here is your projected strength leap over the next 12 weeks!`}
+                mascotText={`At ${draft.weeklyWorkoutGoal}x/week, here is your projected strength trajectory over the next 12 weeks!`}
               />
               <AppCard variant="gradient" style={{ alignItems: 'center', gap: 10 }}>
                 <AppText size="xsm" weight="bold" tone="constant">
@@ -260,100 +235,35 @@ export function OnboardingPlanAndGoalScreen({ navigation }: Props) {
                   <Image source={fibChartImg} resizeMode="contain" style={{ width: '100%', height: 118 }} />
                 ) : null}
               </AppCard>
+
+              <AppCard
+                variant="second_outlined"
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+              >
+                <View style={{ flex: 1, gap: 2 }}>
+                  <AppText size="sm" weight="bold">
+                    Workout &amp; Streak Reminders
+                  </AppText>
+                  <AppText size="xsm" tone="sub">
+                    Stay consistent with your {draft.weeklyWorkoutGoal}x/week training goal.
+                  </AppText>
+                </View>
+                <Switch
+                  value={draft.notificationsEnabled}
+                  onValueChange={(notificationsEnabled) => patchDraft({ notificationsEnabled })}
+                  trackColor={{ false: c.thirdBg, true: c.constant }}
+                />
+              </AppCard>
             </>
           ) : null}
 
-          {/* STAGE 1: Dedicated OnboardingStreakBump */}
+          {/* STAGE 1: Athlete Evolution Preview */}
           {stage === 1 ? (
-            <>
-              <JymboDialogue
-                mascotPose={streakIgnited ? 'Congrats' : 'Salute'}
-                mascotSize={88}
-                mascotText={
-                  streakIgnited
-                    ? 'BOOM! Day 1 Streak lit! Keep training weekly to crack Bronze, Silver & Gold Streak Chests!'
-                    : 'Tap the flame below to ignite your Day-1 Streak and kick off your momentum!'
-                }
-              />
-              <Pressable onPress={handleIgniteStreak}>
-                <AppCard
-                  variant="gradient"
-                  glowColor={streakIgnited ? '#F59E0B' : undefined}
-                  style={{
-                    alignItems: 'center',
-                    gap: 16,
-                    paddingVertical: 26,
-                    borderColor: streakIgnited ? '#F59E0B' : hexToRgba(c.constant, 0.35),
-                  }}
-                >
-                  <Animated.View
-                    style={{
-                      width: 112,
-                      height: 112,
-                      borderRadius: 56,
-                      backgroundColor: streakIgnited ? hexToRgba('#F59E0B', 0.26) : c.thirdBg,
-                      borderWidth: 2.5,
-                      borderColor: streakIgnited ? '#F59E0B' : c.ghostText,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transform: [{ scale: flameScale }],
-                    }}
-                  >
-                    <Ionicons name="flame" size={58} color={streakIgnited ? '#F59E0B' : c.subText} />
-                  </Animated.View>
-
-                  <View style={{ alignItems: 'center', gap: 4 }}>
-                    <AppText size="xxl" weight="black" style={{ color: streakIgnited ? '#F59E0B' : c.text }} tabular>
-                      {streakIgnited ? '1 DAY STREAK' : 'TAP TO IGNITE'}
-                    </AppText>
-                    <AppText size="xsm" tone="sub" align="center">
-                      {streakIgnited
-                        ? 'Your weekly streak shield is active — every session fills your Treasure Chest.'
-                        : 'Light your first flame to unlock weekly streak rewards.'}
-                    </AppText>
-                  </View>
-
-                  {/* 7-Day Calendar Pop Strip */}
-                  <View style={{ flexDirection: 'row', gap: 8, width: '100%', justifyContent: 'center' }}>
-                    {WEEK_DAYS.map((d, idx) => {
-                      const lit = streakIgnited && idx === 0;
-                      return (
-                        <View key={`${d}_${idx}`} style={{ alignItems: 'center', gap: 4 }}>
-                          <View
-                            style={{
-                              width: 34,
-                              height: 34,
-                              borderRadius: 17,
-                              backgroundColor: lit ? '#F59E0B' : c.thirdBg,
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <Ionicons
-                              name={lit ? 'checkmark' : 'flame-outline'}
-                              size={16}
-                              color={lit ? '#0F0A18' : c.ghostText}
-                            />
-                          </View>
-                          <AppText size="xxsm" weight="bold" tone={lit ? 'default' : 'sub'}>
-                            {d}
-                          </AppText>
-                        </View>
-                      );
-                    })}
-                  </View>
-                </AppCard>
-              </Pressable>
-            </>
-          ) : null}
-
-          {/* STAGE 2: OQ_AvatarLevelsUp (Live CustomAvatarRive Evolving Rookie -> Olympian) */}
-          {stage === 2 ? (
             <>
               <JymboDialogue
                 mascotPose="Cool"
                 mascotSize={84}
-                mascotText="Watch your live Rive character evolve and light up with higher rank tiers as you get stronger!"
+                mascotText="Watch your athlete profile light up with higher rank tiers as your verified lifts climb!"
               />
               <AppCard variant="gradient" style={{ alignItems: 'center', gap: 12, paddingVertical: 16 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -409,122 +319,24 @@ export function OnboardingPlanAndGoalScreen({ navigation }: Props) {
               </AppCard>
             </>
           ) : null}
-
-          {/* STAGE 3: OQ_WidgetPreview (Real Extracted MP4 Widget Videos + Reminders) */}
-          {stage === 3 ? (
-            <>
-              <JymboDialogue
-                mascotPose="Reminder"
-                mascotSize={82}
-                mascotText="Preview Liftoff's live home-screen widgets & toggle Jymbo streak reminders so you never miss a day!"
-              />
-              <AppCard variant="second_outlined" style={{ alignItems: 'center', gap: 12 }}>
-                <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-                  {VIDEO_TABS.map((vt) => {
-                    const active = activeVideo === vt.id;
-                    return (
-                      <Pressable
-                        key={vt.id}
-                        onPress={() => {
-                          impactLight();
-                          playSound('tick', 0.4);
-                          setActiveVideo(vt.id);
-                        }}
-                        style={{
-                          paddingHorizontal: 12,
-                          paddingVertical: 6,
-                          borderRadius: 99,
-                          backgroundColor: active ? c.constant : c.thirdBg,
-                        }}
-                      >
-                        <AppText size="xsm" weight="bold" tone={active ? 'constantT' : 'sub'}>
-                          {vt.label}
-                        </AppText>
-                      </Pressable>
-                    );
-                  })}
-                </View>
-
-                <View
-                  style={{
-                    width: '100%',
-                    maxWidth: 260,
-                    height: 220,
-                    borderRadius: RADII.cardLarge,
-                    overflow: 'hidden',
-                    backgroundColor: '#090612',
-                    borderWidth: 2,
-                    borderColor: hexToRgba(c.constant, 0.45),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {Platform.OS === 'web' ? (
-                    // Native HTML5 video playing extracted local APK widget_video_1..4.mp4
-                    React.createElement('video', {
-                      key: activeVideo,
-                      src: WIDGET_VIDEOS[activeVideo],
-                      autoPlay: true,
-                      loop: true,
-                      muted: true,
-                      playsInline: true,
-                      style: {
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
-                        display: 'block',
-                      },
-                    })
-                  ) : (
-                    <AppText size="xsm" tone="sub">
-                      Widget Preview ({activeVideo})
-                    </AppText>
-                  )}
-                </View>
-              </AppCard>
-
-              <AppCard
-                variant="second_outlined"
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
-              >
-                <View style={{ flex: 1, gap: 2 }}>
-                  <AppText size="sm" weight="bold">
-                    Workout & Streak Reminders
-                  </AppText>
-                  <AppText size="xsm" tone="sub">
-                    Jymbo nudges you to protect your {draft.weeklyWorkoutGoal}x/week consistency goal.
-                  </AppText>
-                </View>
-                <Switch
-                  value={draft.notificationsEnabled}
-                  onValueChange={(notificationsEnabled) => patchDraft({ notificationsEnabled })}
-                  trackColor={{ false: c.thirdBg, true: c.constant }}
-                />
-              </AppCard>
-            </>
-          ) : null}
         </Animated.View>
 
-        <View style={{ paddingTop: 12 }}>
+        <View style={{ paddingTop: 12, gap: 8 }}>
           <AppButton
-            title={
-              stage === 1 && !streakIgnited
-                ? 'Ignite My Day-1 Streak'
-                : stage === 3
-                  ? 'Customize Your Lifter Avatar'
-                  : 'Continue'
-            }
-            variant={stage === 1 && streakIgnited ? 'gold' : 'primary'}
+            title={stage === 0 ? 'Continue' : 'Create My TOP1% Account'}
             size="lg"
             fullWidth
-            onPress={() => {
-              if (stage === 1 && !streakIgnited) {
-                handleIgniteStreak();
-                return;
-              }
-              handleContinue();
-            }}
+            onPress={handleContinue}
           />
+          {stage === 1 ? (
+            <AppButton
+              title="Customize Avatar First"
+              variant="secondary"
+              size="sm"
+              fullWidth
+              onPress={() => navigation.navigate('OnboardingAvatar')}
+            />
+          ) : null}
         </View>
       </ScreenContainer>
     </View>

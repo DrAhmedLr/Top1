@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { formatDuration } from '@apexlift/shared';
+import { useLocale } from '../../i18n/LocaleProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import { useBumpSpring, usePulseEffect } from '../../theme/animations';
@@ -14,7 +15,6 @@ import { hexToRgba, LAYOUT, RADII } from '../../theme/tokens';
 import { useTheme } from '../../theme/ThemeProvider';
 import { selectionHaptic } from '../../utils/haptics';
 import { playSound, useSoundscape } from '../../utils/soundscape';
-import { ActiveWorkoutSheet } from '../workout/ActiveWorkoutSheet';
 import { AppText } from './AppText';
 import { AvatarView } from './AvatarView';
 
@@ -109,12 +109,12 @@ function SculptedTabIcon({
   }
 }
 
-const TAB_LABELS: Record<string, string> = {
-  HomeTab: 'Home',
-  WorkoutsTab: 'Workouts',
-  RanksTab: 'Ranks',
-  NutritionTab: 'Nutrition',
-  ProfileTab: 'Profile',
+const TAB_LABELS: Record<string, [string, string, string]> = {
+  HomeTab: ['Home', 'Accueil', 'الرئيسية'],
+  WorkoutsTab: ['Workouts', 'Séances', 'التمارين'],
+  RanksTab: ['Ranks', 'Rangs', 'التصنيف'],
+  NutritionTab: ['Nutrition', 'Nutrition', 'التغذية'],
+  ProfileTab: ['Profile', 'Profil', 'الملف'],
 };
 
 function TabBarButton({
@@ -160,7 +160,7 @@ function TabBarButton({
             backgroundColor: focused
               ? hexToRgba(c.constant, 0.16)
               : hovered || state.pressed
-                ? hexToRgba('#FFFFFF', 0.05)
+                ? hexToRgba(c.text, 0.06)
                 : 'transparent',
             borderWidth: 1,
             borderColor: focused ? hexToRgba(c.constant, 0.38) : 'transparent',
@@ -267,6 +267,7 @@ function TabBarButton({
 export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
   const { theme } = useTheme();
   const c = theme.colors;
+  const { l } = useLocale();
   const insets = useSafeAreaInsets();
   const { isDesktop } = useResponsiveLayout();
   const user = useAuthStore((s) => s.user);
@@ -275,6 +276,11 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
   const openSheet = useWorkoutStore((s) => s.openSheet);
   const { muted, toggleMute, play } = useSoundscape();
   const pulseDot = usePulseEffect(0.75, 1.35, 1400);
+
+  const getTabLabel = (name: string) => {
+    const entry = TAB_LABELS[name];
+    return entry ? l(...entry) : name;
+  };
 
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
@@ -366,8 +372,6 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
           justifyContent: 'space-between',
         }}
       >
-        <ActiveWorkoutSheet />
-
         <View style={{ gap: 22 }}>
           {/* Desktop Brand Header */}
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 }}>
@@ -404,7 +408,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
                 width: 32,
                 height: 32,
                 borderRadius: 10,
-                backgroundColor: hexToRgba('#FFFFFF', 0.06),
+                backgroundColor: hexToRgba(c.text, 0.06),
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
@@ -421,7 +425,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
           <View style={{ gap: 6 }}>
             {state.routes.map((route, index) => {
               const focused = state.index === index;
-              const label = TAB_LABELS[route.name] ?? route.name;
+              const label = getTabLabel(route.name);
 
               const onPress = () => {
                 const event = navigation.emit({
@@ -459,9 +463,9 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
             gap: 10,
             padding: 10,
             borderRadius: 14,
-            backgroundColor: hexToRgba('#FFFFFF', 0.04),
+            backgroundColor: hexToRgba(c.text, 0.04),
             borderWidth: 1,
-            borderColor: hexToRgba('#FFFFFF', 0.08),
+            borderColor: hexToRgba(c.text, 0.08),
           }}
         >
           <AvatarView
@@ -501,8 +505,6 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
     >
       {activeDock}
 
-      <ActiveWorkoutSheet />
-
       <View
         style={{
           height: LAYOUT.navbarHeight,
@@ -514,7 +516,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
       >
         {state.routes.map((route, index) => {
           const focused = state.index === index;
-          const label = TAB_LABELS[route.name] ?? route.name;
+          const label = getTabLabel(route.name);
 
           const onPress = () => {
             const event = navigation.emit({

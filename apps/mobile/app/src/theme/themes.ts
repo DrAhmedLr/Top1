@@ -342,7 +342,7 @@ export const APP_THEMES: AppTheme[] = [
   },
   {
     id: 'theme_classicDark',
-    name: 'Classic GymBros',
+    name: 'Classic Midnight',
     category: 'Special',
     dark: true,
     fonts: POPPINS_FONTS,

@@ -5,7 +5,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { formatDuration, formatWeight, type RankTier } from '@apexlift/shared';
 import { trpc } from '../../api/trpc';
-import { V4_UI_URLS } from '../../assets/v4MediaManifest';
 import { ConfettiOverlay, RankUpCinematicModal } from '../../components/fx';
 import { JymboRive } from '../../components/mascot';
 import {
@@ -28,13 +27,6 @@ import { hexToRgba, RADII } from '../../theme/tokens';
 import { impactLight } from '../../utils/haptics';
 import { playSound } from '../../utils/soundscape';
 import type { MainStackParamList } from '../../navigation/types';
-
-const QUICK_GYM_PHOTOS = [
-  { label: 'Gym Floor', uri: V4_UI_URLS.day_zero_gym },
-  { label: 'Iron Protocol', uri: V4_UI_URLS.plan_strength_iron_protocol },
-  { label: 'Mass Session', uri: V4_UI_URLS.plan_muscle_mass_overdrive },
-  { label: 'Garage PR', uri: V4_UI_URLS.day_zero_garage },
-];
 
 export function SaveWorkoutScreen() {
   const { theme } = useTheme();
@@ -105,12 +97,16 @@ export function SaveWorkoutScreen() {
         });
       }
       resetSession();
-      utils.post.feed.invalidate();
-      utils.rank.getMyRanks.invalidate();
-      utils.rank.getMuscleMap.invalidate();
-      utils.gamification.getWeeklyReport.invalidate();
-      utils.gamification.getQuests.invalidate();
-      utils.gamification.listGoals.invalidate();
+      void utils.post.feed.invalidate();
+      void utils.rank.getMyRanks.invalidate();
+      void utils.rank.getMuscleMap.invalidate();
+      void utils.top1.getOverview.invalidate();
+      void utils.physiology.getBodyReport.invalidate();
+      void utils.coach.getTodayDecision.invalidate();
+      void utils.coach.listPrograms.invalidate();
+      void utils.gamification.getWeeklyReport.invalidate();
+      void utils.gamification.getQuests.invalidate();
+      void utils.gamification.listGoals.invalidate();
       try {
         const fresh = await utils.user.me.fetch();
         setUser(fresh);
@@ -329,37 +325,9 @@ export function SaveWorkoutScreen() {
               </ScrollView>
             ) : (
               <AppText size="xsm" tone="sub">
-                Attach up to 4 gym snapshots or pick a quick card below to showcase on your feed post.
+                Attach up to 4 real gym photos to showcase on your workout card.
               </AppText>
             )}
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-              {QUICK_GYM_PHOTOS.map((preset) => {
-                const added = photos.includes(preset.uri);
-                return (
-                  <Pressable
-                    key={preset.label}
-                    onPress={() => addPhotoUri(preset.uri)}
-                    disabled={added || photos.length >= 4}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 6,
-                      paddingRight: 10,
-                      padding: 4,
-                      borderRadius: 10,
-                      backgroundColor: added ? hexToRgba(c.check, 0.2) : c.thirdBg,
-                      opacity: added ? 0.65 : 1,
-                    }}
-                  >
-                    <Image source={{ uri: preset.uri }} resizeMode="cover" style={{ width: 28, height: 28, borderRadius: 7 }} />
-                    <AppText size="xxsm" weight="bold" tone={added ? 'check' : 'sub'}>
-                      {added ? '✓ Added' : `+ ${preset.label}`}
-                    </AppText>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
           </AppCard>
 
           <AppCard style={{ gap: 12 }}>

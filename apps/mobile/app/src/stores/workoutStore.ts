@@ -20,6 +20,9 @@ export interface ActiveWorkoutExercise {
   exerciseName: string;
   equipment: string;
   primaryMuscles: string[];
+  maleBaseFactor?: number;
+  femaleBaseFactor?: number;
+  includesBodyweight?: boolean;
   supersetGroup: string | null;
   restSeconds: number;
   notes: string;
@@ -41,6 +44,9 @@ export interface StartPresetInput {
     exerciseName: string;
     equipment: string;
     primaryMuscles: string[];
+    maleBaseFactor?: number;
+    femaleBaseFactor?: number;
+    includesBodyweight?: boolean;
     supersetGroup?: string | null;
     restSeconds?: number;
     notes?: string;
@@ -71,6 +77,9 @@ interface WorkoutStoreState {
     exerciseName: string;
     equipment: string;
     primaryMuscles: string[];
+    maleBaseFactor?: number;
+    femaleBaseFactor?: number;
+    includesBodyweight?: boolean;
     defaultWeightKg?: number;
     defaultReps?: number;
   }) => void;
@@ -124,6 +133,9 @@ export const useWorkoutStore = create<WorkoutStoreState>()(
               exerciseName: ex.exerciseName,
               equipment: ex.equipment,
               primaryMuscles: ex.primaryMuscles,
+              maleBaseFactor: ex.maleBaseFactor,
+              femaleBaseFactor: ex.femaleBaseFactor,
+              includesBodyweight: ex.includesBodyweight,
               supersetGroup: ex.supersetGroup ?? null,
               restSeconds: ex.restSeconds ?? 90,
               notes: ex.notes ?? '',
@@ -162,6 +174,9 @@ export const useWorkoutStore = create<WorkoutStoreState>()(
             exerciseName: ex.exerciseName,
             equipment: ex.equipment,
             primaryMuscles: ex.primaryMuscles,
+            maleBaseFactor: ex.maleBaseFactor,
+            femaleBaseFactor: ex.femaleBaseFactor,
+            includesBodyweight: ex.includesBodyweight,
             supersetGroup: null,
             restSeconds: 90,
             notes: '',

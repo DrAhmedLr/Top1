@@ -41,7 +41,7 @@ export function ThemesScreen({ navigation }: Props) {
       <StackHeader title={`Themes (${themes.length})`} onBack={() => navigation.goBack()} />
       <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 12 }}>
         <AppText size="sm" tone="sub">
-          Switch instantly across all {themes.length} exact APK palettes — including Seasonal, Classic GymBros (Poppins), and Prismatic themes.
+          Switch instantly across all {themes.length} curated TOP1% palettes — including Seasonal, Classic Midnight, and Prismatic themes.
         </AppText>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>

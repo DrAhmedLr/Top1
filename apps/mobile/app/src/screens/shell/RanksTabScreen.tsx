@@ -73,7 +73,7 @@ export function RanksTabScreen() {
       onPress: () => navigation.navigate('CoachHub'),
     },
     {
-      title: l('Bodygraph 3D', 'Bodygraph', 'خريطة العضلات'),
+      title: l('Muscle Bodygraph', 'Bodygraph musculaire', 'خريطة العضلات'),
       subtitle: l('Tier · Recovery · MRV', 'Rang · Récup · MRV', 'القوة · التعافي · الحجم'),
       icon: 'body-outline',
       color: c.constant,
@@ -251,12 +251,16 @@ export function RanksTabScreen() {
             {top1.areas.map((a) => (
               <Pressable
                 key={a.area}
-                onPress={() => navigation.navigate('BenchmarkLab', { initialPillar: 'strength' })}
+                onPress={() =>
+                  navigation.navigate('BenchmarkLab', {
+                    initialPillar: a.area === 'running' ? 'recovery' : 'strength',
+                  })
+                }
                 style={{
                   flex: 1,
                   padding: 8,
                   borderRadius: RADII.input,
-                  backgroundColor: 'rgba(10,7,20,0.55)',
+                  backgroundColor: theme.dark ? 'rgba(10,7,20,0.55)' : hexToRgba(c.background, 0.85),
                   borderWidth: 1,
                   borderColor: hexToRgba(a.meta.color, 0.35),
                   alignItems: 'center',
@@ -294,10 +298,10 @@ export function RanksTabScreen() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-around',
-            backgroundColor: 'rgba(10, 7, 20, 0.55)',
+            backgroundColor: theme.dark ? 'rgba(10, 7, 20, 0.55)' : hexToRgba(c.background, 0.85),
             borderRadius: RADII.card,
             borderWidth: 1,
-            borderColor: hexToRgba('#FFFFFF', 0.08),
+            borderColor: hexToRgba(c.text, 0.08),
             paddingVertical: 14,
           }}
         >
@@ -406,8 +410,7 @@ export function RanksTabScreen() {
         subtitle={`Standing: ${top1?.badge.tierName ?? fallbackRank.label} across ${top1?.overall.coverage ?? 0}/4 competitive areas.`}
         tier={overallTier}
         division={overallDivision}
-        rating={Math.round((top1?.scientific.modelScore ?? 65) * 10)}
-        deltaSr={24}
+        rating={Math.round((top1?.scientific.modelScore ?? 0) * 10) || user?.peakAverageRating}
         mode="rank"
       />
     </ScreenContainer>

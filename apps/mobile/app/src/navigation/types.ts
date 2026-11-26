@@ -32,7 +32,13 @@ export type MainStackParamList = {
   PresetDetail: { presetId: string };
   SaveWorkout: undefined;
   WorkoutSchedule: undefined;
-  WorkoutGenerator: undefined;
+  WorkoutGenerator:
+    | {
+        initialMode?: 'smart_next' | 'target_muscles' | 'preset';
+        initialPreset?: 'gym' | 'at_home' | 'dumbbells_only' | 'bodyweight' | 'travel' | 'cardio';
+        initialIntensity?: 'strength' | 'hypertrophy' | 'endurance';
+      }
+    | undefined;
 
   // Phase 4 — TOP1% Ranking, Body Graph, Benchmarks & Adaptive Coaching
   Bodygraph: { userId?: string; displayName?: string } | undefined;

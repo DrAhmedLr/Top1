@@ -39,6 +39,62 @@ export function ExerciseLibraryScreen() {
   const [equipment, setEquipment] = useState('All');
   const [customOnly, setCustomOnly] = useState(false);
   const [visibleLimit, setVisibleLimit] = useState(PAGE_SIZE);
+  const [selectedMap, setSelectedMap] = useState<
+    Record<
+      string,
+      {
+        id: string;
+        name: string;
+        equipment: string;
+        primaryMuscles: string[];
+        maleBaseFactor?: number;
+        femaleBaseFactor?: number;
+        includesBodyweight?: boolean;
+      }
+    >
+  >({});
+
+  const selectedList = Object.values(selectedMap);
+
+  const toggleSelect = (ex: (typeof exercises)[number]) => {
+    setSelectedMap((prev) => {
+      if (prev[ex.id]) {
+        const next = { ...prev };
+        delete next[ex.id];
+        return next;
+      }
+      return {
+        ...prev,
+        [ex.id]: {
+          id: ex.id,
+          name: ex.name,
+          equipment: ex.equipment,
+          primaryMuscles: ex.primaryMuscles,
+          maleBaseFactor: ex.maleBaseFactor,
+          femaleBaseFactor: ex.femaleBaseFactor,
+          includesBodyweight: ex.includesBodyweight,
+        },
+      };
+    });
+  };
+
+  const commitBatchAdd = () => {
+    for (const ex of selectedList) {
+      addExercise({
+        exerciseId: ex.id,
+        exerciseName: ex.name,
+        equipment: ex.equipment,
+        primaryMuscles: ex.primaryMuscles,
+        maleBaseFactor: ex.maleBaseFactor,
+        femaleBaseFactor: ex.femaleBaseFactor,
+        includesBodyweight: ex.includesBodyweight,
+        defaultWeightKg: ex.includesBodyweight ? 0 : 40,
+      });
+    }
+    setSelectedMap({});
+    navigation.goBack();
+    openSheet();
+  };
 
   useEffect(() => {
     setVisibleLimit(PAGE_SIZE);
@@ -215,21 +271,32 @@ export function ExerciseLibraryScreen() {
                 </Pressable>
 
                 {mode === 'addToWorkout' ? (
-                  <AppButton
-                    label="Add"
-                    size="sm"
-                    onPress={() => {
-                      addExercise({
-                        exerciseId: ex.id,
-                        exerciseName: ex.name,
-                        equipment: ex.equipment,
-                        primaryMuscles: ex.primaryMuscles,
-                        defaultWeightKg: ex.includesBodyweight ? 0 : 40,
-                      });
-                      navigation.goBack();
-                      openSheet();
-                    }}
-                  />
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <AppButton
+                      label={selectedMap[ex.id] ? 'Selected ✓' : 'Select'}
+                      size="sm"
+                      variant={selectedMap[ex.id] ? 'check' : 'secondary'}
+                      onPress={() => toggleSelect(ex)}
+                    />
+                    <AppButton
+                      label="+1"
+                      size="sm"
+                      onPress={() => {
+                        addExercise({
+                          exerciseId: ex.id,
+                          exerciseName: ex.name,
+                          equipment: ex.equipment,
+                          primaryMuscles: ex.primaryMuscles,
+                          maleBaseFactor: ex.maleBaseFactor,
+                          femaleBaseFactor: ex.femaleBaseFactor,
+                          includesBodyweight: ex.includesBodyweight,
+                          defaultWeightKg: ex.includesBodyweight ? 0 : 40,
+                        });
+                        navigation.goBack();
+                        openSheet();
+                      }}
+                    />
+                  </View>
                 ) : (
                   <Pressable
                     onPress={() => navigation.navigate('ExerciseDetail', { exerciseId: ex.id })}
@@ -252,6 +319,33 @@ export function ExerciseLibraryScreen() {
           />
         ) : null}
       </View>
+
+      {mode === 'addToWorkout' && selectedList.length > 0 ? (
+        <View
+          style={{
+            marginTop: 8,
+            padding: 12,
+            borderRadius: RADII.card,
+            backgroundColor: c.secondBg,
+            borderWidth: 1,
+            borderColor: c.constant,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 10,
+          }}
+        >
+          <AppText size="sm" weight="bold">
+            {selectedList.length} exercise{selectedList.length === 1 ? '' : 's'} queued
+          </AppText>
+          <AppButton
+            label={`Add ${selectedList.length} to Workout`}
+            size="sm"
+            variant="check"
+            onPress={commitBatchAdd}
+          />
+        </View>
+      ) : null}
     </ScreenContainer>
   );
 }

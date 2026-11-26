@@ -107,15 +107,19 @@ export function ActiveWorkoutSheet() {
   const session = useWorkoutStore((s) => s.session);
   const isSheetOpen = useWorkoutStore((s) => s.isSheetOpen);
   const restTimerEndAt = useWorkoutStore((s) => s.restTimerEndAt);
+  const restTimerDurationSec = useWorkoutStore((s) => s.restTimerDurationSec);
   const closeSheet = useWorkoutStore((s) => s.closeSheet);
   const setTitle = useWorkoutStore((s) => s.setTitle);
   const removeExercise = useWorkoutStore((s) => s.removeExercise);
   const moveExercise = useWorkoutStore((s) => s.moveExercise);
   const setExerciseSuperset = useWorkoutStore((s) => s.setExerciseSuperset);
+  const setExerciseNotes = useWorkoutStore((s) => s.setExerciseNotes);
   const addSet = useWorkoutStore((s) => s.addSet);
   const updateSet = useWorkoutStore((s) => s.updateSet);
   const toggleSetComplete = useWorkoutStore((s) => s.toggleSetComplete);
   const deleteSet = useWorkoutStore((s) => s.deleteSet);
+  const adjustRestTimer = useWorkoutStore((s) => s.adjustRestTimer);
+  const clearRestTimer = useWorkoutStore((s) => s.clearRestTimer);
   const resetSession = useWorkoutStore((s) => s.resetSession);
 
   const [now, setNow] = useState(Date.now());
@@ -123,6 +127,8 @@ export function ActiveWorkoutSheet() {
   const [reorderOpen, setReorderOpen] = useState(false);
   const [cableGuideOpen, setCableGuideOpen] = useState(false);
   const [showLiveBodygraph, setShowLiveBodygraph] = useState(true);
+  const [weightDrafts, setWeightDrafts] = useState<Record<string, string>>({});
+  const [repDrafts, setRepDrafts] = useState<Record<string, string>>({});
   const [plateTarget, setPlateTarget] = useState<{
     localExId: string;
     setId: string;
@@ -177,9 +183,8 @@ export function ActiveWorkoutSheet() {
               ? 'Intermediate'
               : 'Novice';
       for (const m of ex.primaryMuscles) {
-        const key = m.toLowerCase();
-        map[key] = {
-          muscle: key,
+        map[m] = {
+          muscle: m,
           tier,
           division: 1,
           rating: completedSets * 200,
@@ -235,7 +240,7 @@ export function ActiveWorkoutSheet() {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#07040D',
+          backgroundColor: theme.dark ? '#07040D' : c.secondBg,
           alignItems: 'center',
           paddingVertical: layout.isDesktop ? 20 : 0,
           paddingHorizontal: layout.isDesktop ? 24 : 0,
@@ -249,7 +254,7 @@ export function ActiveWorkoutSheet() {
             backgroundColor: c.background,
             borderRadius: layout.isDesktop ? RADII.cardLarge : 0,
             borderWidth: layout.isDesktop ? 1 : 0,
-            borderColor: hexToRgba('#FFFFFF', 0.1),
+            borderColor: hexToRgba(c.text, 0.12),
             overflow: 'hidden',
             paddingTop: Math.max(14, insets.top),
           }}
@@ -263,7 +268,7 @@ export function ActiveWorkoutSheet() {
             paddingHorizontal: SPACING.std,
             paddingBottom: 10,
             borderBottomWidth: 1,
-            borderBottomColor: hexToRgba('#FFFFFF', 0.08),
+            borderBottomColor: hexToRgba(c.text, 0.08),
             gap: 10,
           }}
         >
@@ -330,6 +335,58 @@ export function ActiveWorkoutSheet() {
 
           <AppButton label="Finish" size="sm" variant="check" onPress={handleFinish} />
         </View>
+
+        {/* Inline Rest Timer Strip */}
+        {restRemainingSec > 0 ? (
+          <View
+            style={{
+              paddingHorizontal: SPACING.std,
+              paddingVertical: 8,
+              backgroundColor: hexToRgba(c.constant, 0.14),
+              borderBottomWidth: 1,
+              borderBottomColor: hexToRgba(c.constant, 0.35),
+              gap: 6,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Ionicons name="timer" size={16} color={c.constant} />
+                <AppText size="sm" weight="black" tone="constant" tabular>
+                  Rest {formatDuration(restRemainingSec)}
+                </AppText>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Pressable
+                  onPress={() => adjustRestTimer(-15)}
+                  style={{ paddingHorizontal: 9, paddingVertical: 4, borderRadius: 8, backgroundColor: c.secondBg }}
+                >
+                  <AppText size="xxsm" weight="bold">-15s</AppText>
+                </Pressable>
+                <Pressable
+                  onPress={() => adjustRestTimer(15)}
+                  style={{ paddingHorizontal: 9, paddingVertical: 4, borderRadius: 8, backgroundColor: c.secondBg }}
+                >
+                  <AppText size="xxsm" weight="bold">+15s</AppText>
+                </Pressable>
+                <Pressable
+                  onPress={clearRestTimer}
+                  style={{ paddingHorizontal: 9, paddingVertical: 4, borderRadius: 8, backgroundColor: hexToRgba(c.danger, 0.18) }}
+                >
+                  <AppText size="xxsm" weight="bold" style={{ color: c.danger }}>Skip</AppText>
+                </Pressable>
+              </View>
+            </View>
+            <View style={{ height: 4, borderRadius: 99, backgroundColor: c.thirdBg, overflow: 'hidden' }}>
+              <View
+                style={{
+                  height: '100%',
+                  width: `${Math.min(100, Math.max(0, (restRemainingSec / Math.max(1, restTimerDurationSec)) * 100))}%`,
+                  backgroundColor: c.constant,
+                }}
+              />
+            </View>
+          </View>
+        ) : null}
 
         {/* Body */}
         <ScrollView
@@ -407,19 +464,30 @@ export function ActiveWorkoutSheet() {
               const webExAvatarUrl = getExerciseAvatarUrl(ex.exerciseId);
               const exAvatar = localExAvatar ?? (webExAvatarUrl ? { uri: webExAvatarUrl } : null);
 
+              const standard =
+                ex.maleBaseFactor !== undefined && ex.femaleBaseFactor !== undefined
+                  ? {
+                      maleBaseFactor: ex.maleBaseFactor,
+                      femaleBaseFactor: ex.femaleBaseFactor,
+                      includesBodyweight: ex.includesBodyweight ?? false,
+                    }
+                  : undefined;
+
               let bestRank = calculateExerciseRank({
                 weightKg: 0,
                 reps: 0,
                 bodyweightKg: bwKg,
                 sex,
+                standard,
               });
               for (const s of ex.sets) {
-                if (s.setType !== 'warmup' && s.weightKg > 0 && s.reps > 0) {
+                if (s.setType !== 'warmup' && (s.weightKg > 0 || ex.includesBodyweight) && s.reps > 0) {
                   const r = calculateExerciseRank({
                     weightKg: s.weightKg,
                     reps: s.reps,
                     bodyweightKg: bwKg,
                     sex,
+                    standard,
                   });
                   if (r.rating > bestRank.rating) bestRank = r;
                 }
@@ -616,12 +684,26 @@ export function ActiveWorkoutSheet() {
                         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                           <TextInput
                             keyboardType="decimal-pad"
-                            value={displayWeight}
+                            value={weightDrafts[s.id] !== undefined ? weightDrafts[s.id] : displayWeight}
                             onChangeText={(txt) => {
-                              const parsed = parseFloat(txt);
-                              const num = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
-                              updateSet(ex.id, s.id, {
-                                weightKg: unit === 'lbs' ? lbsToKg(num) : num,
+                              const cleaned = txt.replace(/[^0-9.]/g, '');
+                              setWeightDrafts((prev) => ({ ...prev, [s.id]: cleaned }));
+                              if (cleaned === '') {
+                                updateSet(ex.id, s.id, { weightKg: 0 });
+                                return;
+                              }
+                              const parsed = parseFloat(cleaned);
+                              if (Number.isFinite(parsed) && parsed >= 0) {
+                                updateSet(ex.id, s.id, {
+                                  weightKg: unit === 'lbs' ? lbsToKg(parsed) : parsed,
+                                });
+                              }
+                            }}
+                            onBlur={() => {
+                              setWeightDrafts((prev) => {
+                                const next = { ...prev };
+                                delete next[s.id];
+                                return next;
                               });
                             }}
                             style={{
@@ -658,11 +740,24 @@ export function ActiveWorkoutSheet() {
 
                         <TextInput
                           keyboardType="number-pad"
-                          value={String(s.reps)}
+                          value={repDrafts[s.id] !== undefined ? repDrafts[s.id] : String(s.reps)}
                           onChangeText={(txt) => {
-                            const parsed = parseInt(txt, 10);
-                            updateSet(ex.id, s.id, {
-                              reps: Number.isFinite(parsed) ? Math.max(0, parsed) : 0,
+                            const cleaned = txt.replace(/[^0-9]/g, '');
+                            setRepDrafts((prev) => ({ ...prev, [s.id]: cleaned }));
+                            if (cleaned === '') {
+                              updateSet(ex.id, s.id, { reps: 0 });
+                              return;
+                            }
+                            const parsed = parseInt(cleaned, 10);
+                            if (Number.isFinite(parsed) && parsed >= 0) {
+                              updateSet(ex.id, s.id, { reps: parsed });
+                            }
+                          }}
+                          onBlur={() => {
+                            setRepDrafts((prev) => {
+                              const next = { ...prev };
+                              delete next[s.id];
+                              return next;
                             });
                           }}
                           style={{
@@ -709,7 +804,22 @@ export function ActiveWorkoutSheet() {
                     );
                   })}
 
-                  <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
+                  <TextInput
+                    value={ex.notes}
+                    onChangeText={(txt) => setExerciseNotes(ex.id, txt)}
+                    placeholder="Add exercise cue, seat pin, or tempo note..."
+                    placeholderTextColor={c.subText}
+                    style={{
+                      height: 34,
+                      borderRadius: 9,
+                      paddingHorizontal: 10,
+                      backgroundColor: hexToRgba(c.thirdBg, 0.65),
+                      color: c.text,
+                      fontSize: 12,
+                    }}
+                  />
+
+                  <View style={{ flexDirection: 'row', gap: 8, marginTop: 2 }}>
                     <AppButton
                       label="+ Add Set"
                       variant="secondary"

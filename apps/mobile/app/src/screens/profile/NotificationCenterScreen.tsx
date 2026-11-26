@@ -1,5 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { trpc } from '../../api/trpc';
 import {
@@ -9,12 +11,14 @@ import {
   ScreenContainer,
   StackHeader,
 } from '../../components/ui';
+import type { MainStackParamList } from '../../navigation/types';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba } from '../../theme/tokens';
 
 export function NotificationCenterScreen() {
   const { theme } = useTheme();
   const c = theme.colors;
+  const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const utils = trpc.useUtils();
 
   const listQuery = trpc.notifications.list.useQuery();
@@ -24,6 +28,22 @@ export function NotificationCenterScreen() {
 
   const rows = listQuery.data?.notifications ?? [];
   const unread = listQuery.data?.unreadCount ?? 0;
+
+  const handleOpenNotification = (n: (typeof rows)[number]) => {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(n.payloadJson || '{}') as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    if ((n.type === 'reaction' || n.type === 'comment') && typeof payload.postId === 'string') {
+      navigation.navigate('PostDetail', { postId: payload.postId });
+      return;
+    }
+    if (n.type === 'friend_request' || n.type === 'slacking') {
+      navigation.navigate('Friends');
+    }
+  };
 
   return (
     <ScreenContainer scroll>
@@ -58,6 +78,7 @@ export function NotificationCenterScreen() {
           {rows.map((n) => (
             <AppCard
               key={n.id}
+              onPress={() => handleOpenNotification(n)}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
