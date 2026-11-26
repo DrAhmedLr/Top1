@@ -33,6 +33,9 @@ export default function PerformanceShell({view, blocked, onNavigate, children}: 
             <Icon aria-hidden="true" size={19}/><span>{viewTitles[destination][index]}</span>
           </a>;
         })}
+        <a href="/" aria-label="Open TOP1% Flagship App">
+          <span>TOP1% App ↗</span>
+        </a>
       </nav>
     </header>
     <main id="main-content" tabIndex={-1} inert={blocked || undefined}>

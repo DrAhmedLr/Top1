@@ -1,11 +1,16 @@
 const base = process.env.TOP1_SMOKE_URL || 'https://top1.fit';
 const checks = [
   ['/', 200],
+  ['/home', 200],
+  ['/workouts', 200],
+  ['/ranks', 200],
   ['/classic', 200],
   ['/about', 200],
   ['/privacy', 200],
   ['/robots.txt', 200],
   ['/sitemap.xml', 200],
+  ['/api/trpc/health.healthCheck', 200],
+  ['/api/og', 200],
   ['/api/personal-workspace', 401],
   ['/api/profile', 401],
   ['/api/bodyweight', 401],
@@ -37,8 +42,13 @@ for (const [path, status] of checks) {
     if (response.status !== status) {
       throw new Error(`Expected ${status}, got ${response.status}`);
     }
-    if ((path === '/' || path === '/classic') && !response.headers.has('Content-Security-Policy')) {
+    if ((path === '/' || path === '/home' || path === '/classic') && !response.headers.has('Content-Security-Policy')) {
       throw new Error('CSP absent');
+    }
+    if (path === '/') {
+      for (const h of ['X-Frame-Options', 'X-Content-Type-Options', 'Referrer-Policy', 'Permissions-Policy']) {
+        if (!response.headers.has(h)) throw new Error(`Missing security header: ${h}`);
+      }
     }
     console.log(`${path}: ${response.status}`);
   } catch (error) {
