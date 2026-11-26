@@ -56,11 +56,26 @@ async function refreshAccessTokenOnce(): Promise<string | null> {
 }
 
 const LOGOUT_ERROR_STRINGS = [
+  'Invalid token',
   'Session not found',
   'Invalid session',
   'User not found',
   'Refresh token expired',
 ];
+
+let activeQueryClient: QueryClient | null = null;
+
+export async function signOutAndRevokeSession(): Promise<void> {
+  try {
+    const refreshToken = await getSecureItem(REFRESH_TOKEN_KEY);
+    if (refreshToken) {
+      await rawRefreshClient.auth.removeSession.mutate({ refreshToken }).catch(() => null);
+    }
+  } finally {
+    activeQueryClient?.clear();
+    await useAuthStore.getState().clearSession();
+  }
+}
 
 function createAuthLink(): TRPCLink<AppRouter> {
   return () =>
@@ -138,17 +153,18 @@ function createServerStatusLink(): TRPCLink<AppRouter> {
 }
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: 1,
-            staleTime: 30_000,
-          },
+  const [queryClient] = useState(() => {
+    const qc = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: 1,
+          staleTime: 30_000,
         },
-      })
-  );
+      },
+    });
+    activeQueryClient = qc;
+    return qc;
+  });
 
   const [trpcClient] = useState(() =>
     trpc.createClient({

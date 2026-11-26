@@ -7,18 +7,30 @@ import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 
 type CalcKind = 'cooper' | 'epley' | 'skinfold' | 'pullup';
+type LiftMetricId = 'bench_1rm' | 'squat_1rm' | 'deadlift_1rm';
 
 /**
- * Interactive Field Calculators backed directly by Top1.Fit's canonical engine formulas:
- * - Cooper 12-min run distance (m) → VO2 max (mL/kg/min)
- * - Epley submax lift (weight kg × reps / bodyweight) → 1RM × BW
- * - Jackson-Pollock 3-site skinfold (mm) → Body Fat %
- * - Weighted Pull-Up added load (kg / bodyweight) → × BW added
+ * Jackson-Pollock 3-site female body-fat equation (Tricep, Suprailiac, Thigh + age) + Siri equation.
+ */
+function femaleSkinfold3Site(tricepMm: number, suprailiacMm: number, thighMm: number, age: number): number {
+  const sum = tricepMm + suprailiacMm + thighMm;
+  if (sum <= 5 || age < 18 || age > 80) return NaN;
+  const density = 1.0994921 - 0.0009929 * sum + 0.0000023 * sum * sum - 0.0001392 * age;
+  return 495 / density - 450;
+}
+
+/**
+ * Interactive Field Calculators backed directly by Top1.Fit's canonical engine formulas
+ * with safe bounds validation (zero uncaught RangeErrors).
  */
 export function FieldCalculatorsCard({
   onApply,
 }: {
-  onApply?: (metricId: string, value: number, method: 'cooper_estimate' | 'epley_estimate' | 'skinfold_estimate' | 'direct_1rm') => void;
+  onApply?: (
+    metricId: string,
+    value: number,
+    method: 'cooper_estimate' | 'epley_estimate' | 'skinfold_estimate' | 'direct_1rm'
+  ) => void;
 }) {
   const { theme } = useTheme();
   const c = theme.colors;
@@ -28,51 +40,84 @@ export function FieldCalculatorsCard({
   const sex: 'male' | 'female' = user?.rankingSex === 'Female' ? 'female' : 'male';
 
   const [kind, setKind] = useState<CalcKind>('epley');
+  const [liftTarget, setLiftTarget] = useState<LiftMetricId>('bench_1rm');
   const [a, setA] = useState('100');
   const [b, setB] = useState('5');
   const [cVal, setCVal] = useState('12');
 
-  const nA = parseFloat(a) || 0;
-  const nB = parseFloat(b) || 0;
-  const nC = parseFloat(cVal) || 0;
+  const nA = parseFloat(a);
+  const nB = parseFloat(b);
+  const nC = parseFloat(cVal);
 
   let result: number | null = null;
   let resultUnit = '';
-  let targetMetricId = 'bench_1rm';
+  let targetMetricId: string = liftTarget;
   let targetMethod: 'cooper_estimate' | 'epley_estimate' | 'skinfold_estimate' | 'direct_1rm' = 'epley_estimate';
+  let hintText = 'Enter valid values';
 
-  if (kind === 'cooper') {
-    const val = cooper(nA);
-    result = Number.isFinite(val) && val > 10 ? Number(val.toFixed(1)) : null;
-    resultUnit = 'mL/kg/min';
-    targetMetricId = 'vo2_max';
-    targetMethod = 'cooper_estimate';
-  } else if (kind === 'epley') {
-    const estKg = epley(nA, Math.max(1, Math.round(nB)));
-    result = estKg > 0 && bwKg > 0 ? Number((estKg / bwKg).toFixed(2)) : null;
-    resultUnit = `× BW (${estKg.toFixed(1)} kg)`;
-    targetMetricId = 'bench_1rm';
-    targetMethod = 'epley_estimate';
-  } else if (kind === 'skinfold') {
-    const bf = nA > 2 && nB > 2 && nC > 2 ? skinfold(nA, nB, nC, age) : NaN;
-    result = Number.isFinite(bf) && bf > 2 && bf < 60 ? Number(bf.toFixed(1)) : null;
-    resultUnit = '% body fat';
-    targetMetricId = 'body_fat';
-    targetMethod = 'skinfold_estimate';
-  } else {
-    const reps = Math.max(1, Math.round(nB || 1));
-    const ratio = nA >= 0 && bwKg > 0 ? weightedPullupRatio(nA, reps, bwKg) : NaN;
-    result = Number.isFinite(ratio) && ratio > 0 ? Number(ratio.toFixed(2)) : null;
-    resultUnit = '× BW added';
-    targetMetricId = 'pullup_1rm';
-    targetMethod = 'direct_1rm';
+  try {
+    if (kind === 'cooper') {
+      targetMetricId = 'vo2_max';
+      targetMethod = 'cooper_estimate';
+      hintText = 'Enter distance between 510 and 5000 m';
+      if (Number.isFinite(nA) && nA >= 510 && nA <= 5000) {
+        const val = cooper(nA);
+        if (Number.isFinite(val) && val > 10) {
+          result = Number(val.toFixed(1));
+          resultUnit = 'mL/kg/min';
+        }
+      }
+    } else if (kind === 'epley') {
+      targetMetricId = liftTarget;
+      targetMethod = 'epley_estimate';
+      hintText = 'Enter weight > 0 kg and 1–10 reps';
+      if (Number.isFinite(nA) && nA > 0 && Number.isFinite(nB) && nB >= 1 && nB <= 10 && bwKg > 0) {
+        const estKg = epley(nA, Math.round(nB));
+        if (Number.isFinite(estKg) && estKg > 0) {
+          result = Number((estKg / bwKg).toFixed(2));
+          resultUnit = `× BW (${estKg.toFixed(1)} kg)`;
+        }
+      }
+    } else if (kind === 'skinfold') {
+      targetMetricId = 'body_fat';
+      targetMethod = 'skinfold_estimate';
+      hintText = 'Enter 3 skinfold sites (3–80 mm each)';
+      if (
+        Number.isFinite(nA) && nA >= 3 && nA <= 80 &&
+        Number.isFinite(nB) && nB >= 3 && nB <= 80 &&
+        Number.isFinite(nC) && nC >= 3 && nC <= 80
+      ) {
+        const clampedAge = Math.max(18, Math.min(61, age));
+        const bf =
+          sex === 'female'
+            ? femaleSkinfold3Site(nA, nB, nC, clampedAge)
+            : skinfold(nA, nB, nC, clampedAge);
+        if (Number.isFinite(bf) && bf > 2 && bf < 60) {
+          result = Number(bf.toFixed(1));
+          resultUnit = '% body fat';
+        }
+      }
+    } else {
+      targetMetricId = 'pullup_1rm';
+      targetMethod = 'direct_1rm';
+      hintText = 'Enter added load ≥ 0 kg and 1–10 reps';
+      if (Number.isFinite(nA) && nA >= 0 && Number.isFinite(nB) && nB >= 1 && nB <= 10 && bwKg > 0) {
+        const ratio = weightedPullupRatio(nA, Math.round(nB), bwKg);
+        if (Number.isFinite(ratio) && ratio >= 0) {
+          result = Number(ratio.toFixed(2));
+          resultUnit = '× BW added';
+        }
+      }
+    }
+  } catch {
+    result = null;
   }
 
   return (
     <AppCard style={{ gap: 10 }}>
       <View>
         <AppText size="xxsm" weight="xbold" tone="constant">
-          TOP1.FIT FIELD CALCULATORS
+          TOP1% FIELD CALCULATORS
         </AppText>
         <AppText size="sm" weight="black">
           Convert Field Tests to Canonical Benchmarks
@@ -125,6 +170,39 @@ export function FieldCalculatorsCard({
         })}
       </View>
 
+      {kind === 'epley' ? (
+        <View style={{ flexDirection: 'row', gap: 6 }}>
+          {(
+            [
+              { id: 'bench_1rm', label: 'Bench Press' },
+              { id: 'squat_1rm', label: 'Back Squat' },
+              { id: 'deadlift_1rm', label: 'Deadlift' },
+            ] as const
+          ).map((lift) => {
+            const active = liftTarget === lift.id;
+            return (
+              <Pressable
+                key={lift.id}
+                onPress={() => setLiftTarget(lift.id)}
+                style={{
+                  flex: 1,
+                  paddingVertical: 6,
+                  borderRadius: RADII.input,
+                  alignItems: 'center',
+                  backgroundColor: active ? hexToRgba(c.check, 0.18) : c.thirdBg,
+                  borderWidth: 1,
+                  borderColor: active ? c.check : 'transparent',
+                }}
+              >
+                <AppText size="xxsm" weight="bold" tone={active ? 'check' : 'sub'}>
+                  {lift.label}
+                </AppText>
+              </Pressable>
+            );
+          })}
+        </View>
+      ) : null}
+
       {kind === 'cooper' ? (
         <AppInput label="12-Minute Run Distance (meters)" keyboardType="decimal-pad" value={a} onChangeText={setA} />
       ) : kind === 'epley' ? (
@@ -133,16 +211,16 @@ export function FieldCalculatorsCard({
             <AppInput label="Weight (kg)" keyboardType="decimal-pad" value={a} onChangeText={setA} />
           </View>
           <View style={{ flex: 1 }}>
-            <AppInput label="Reps (1–12)" keyboardType="number-pad" value={b} onChangeText={setB} />
+            <AppInput label="Reps (1–10)" keyboardType="number-pad" value={b} onChangeText={setB} />
           </View>
         </View>
       ) : kind === 'skinfold' ? (
         <View style={{ flexDirection: 'row', gap: 6 }}>
           <View style={{ flex: 1 }}>
-            <AppInput label={sex === 'male' ? 'Chest (mm)' : 'Tricep'} keyboardType="decimal-pad" value={a} onChangeText={setA} />
+            <AppInput label={sex === 'male' ? 'Chest (mm)' : 'Tricep (mm)'} keyboardType="decimal-pad" value={a} onChangeText={setA} />
           </View>
           <View style={{ flex: 1 }}>
-            <AppInput label={sex === 'male' ? 'Abdomen' : 'Suprailiac'} keyboardType="decimal-pad" value={b} onChangeText={setB} />
+            <AppInput label={sex === 'male' ? 'Abdomen (mm)' : 'Suprailiac (mm)'} keyboardType="decimal-pad" value={b} onChangeText={setB} />
           </View>
           <View style={{ flex: 1 }}>
             <AppInput label="Thigh (mm)" keyboardType="decimal-pad" value={cVal} onChangeText={setCVal} />
@@ -151,10 +229,10 @@ export function FieldCalculatorsCard({
       ) : (
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <View style={{ flex: 1 }}>
-            <AppInput label={`Added Load (kg)`} keyboardType="decimal-pad" value={a} onChangeText={setA} />
+            <AppInput label="Added Load (kg)" keyboardType="decimal-pad" value={a} onChangeText={setA} />
           </View>
           <View style={{ flex: 1 }}>
-            <AppInput label={`Reps (BW ${bwKg}kg)`} keyboardType="number-pad" value={b} onChangeText={setB} />
+            <AppInput label={`Reps 1–10 (BW ${bwKg}kg)`} keyboardType="number-pad" value={b} onChangeText={setB} />
           </View>
         </View>
       )}
@@ -177,7 +255,7 @@ export function FieldCalculatorsCard({
             CALCULATED RESULT
           </AppText>
           <AppText size="lg" weight="black" tone="constant">
-            {result !== null ? `${result} ${resultUnit}` : 'Enter valid values'}
+            {result !== null ? `${result} ${resultUnit}` : hintText}
           </AppText>
         </View>
         {onApply && result !== null ? (

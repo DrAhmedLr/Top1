@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Modal, Platform, Share, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { formatDuration, formatWeight, RANKED_MUSCLE_GROUPS, type RankTier, type WeightUnit } from '@apexlift/shared';
@@ -26,9 +26,6 @@ export interface ShareCardModalProps {
   workedMuscles?: string[];
 }
 
-/**
- * Exportable Workout Muscle Heatmap Share Card modeled on mod_07343_ShareCardMusclesV2.js
- */
 export function ShareCardModal({
   visible,
   onClose,
@@ -40,11 +37,12 @@ export function ShareCardModal({
   prCount,
   unit,
   tier = 'Veteran',
-  workedMuscles = ['Upper Chest', 'Lower Chest', 'Triceps', 'Front Delt', 'Quadriceps'],
+  workedMuscles = [],
 }: ShareCardModalProps) {
   const { theme } = useTheme();
   const c = theme.colors;
   const accent = RANK_SOLID_ACCENT[tier] ?? c.constant;
+  const [copied, setCopied] = useState(false);
 
   const musclesMap: Record<string, MuscleRankEntry> = {};
   for (const m of RANKED_MUSCLE_GROUPS) {
@@ -62,15 +60,20 @@ export function ShareCardModal({
   }
 
   const handleShare = async () => {
-    const summary = `🏋️ ${title} by @${authorName}\n⏱ ${formatDuration(durationSeconds)} • 💪 ${formatWeight(totalVolumeKg, unit)} • ✅ ${totalSets} sets • 🏆 ${prCount} PRs\nTracked with ApexLift`;
+    const summary = `🏋️ ${title} by @${authorName}\n⏱ ${formatDuration(durationSeconds)} • 💪 ${formatWeight(totalVolumeKg, unit)} • ✅ ${totalSets} sets • 🏆 ${prCount} PRs\nTracked with TOP1% · https://top1.fit`;
     playSound('challenge_claim');
     notifySuccess();
     try {
       if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(summary);
-      } else {
-        await Share.share({ message: summary });
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+          onClose();
+        }, 1200);
+        return;
       }
+      await Share.share({ message: summary });
     } catch {
       // non-fatal
     }
@@ -82,14 +85,14 @@ export function ShareCardModal({
       <View
         style={{
           flex: 1,
-          backgroundColor: 'rgba(8, 5, 16, 0.92)',
+          backgroundColor: 'rgba(8, 5, 16, 0.88)',
           alignItems: 'center',
           justifyContent: 'center',
           padding: 20,
         }}
       >
         <LinearGradient
-          colors={[hexToRgba(accent, 0.25), '#171128', '#0D0817']}
+          colors={[hexToRgba(accent, 0.24), c.secondBg, c.background]}
           style={{
             width: '100%',
             maxWidth: 380,
@@ -102,11 +105,11 @@ export function ShareCardModal({
         >
           {/* Card Header */}
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View>
+            <View style={{ flex: 1 }}>
               <AppText size="xxsm" weight="black" style={{ color: accent, letterSpacing: 1.3 }}>
-                APEXLIFT WORKOUT CARD
+                TOP1% WORKOUT CARD
               </AppText>
-              <AppText size="lg" weight="black">
+              <AppText size="lg" weight="black" numberOfLines={2}>
                 {title}
               </AppText>
               <AppText size="xsm" tone="sub">
@@ -122,18 +125,18 @@ export function ShareCardModal({
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: 'center',
-              backgroundColor: 'rgba(10, 7, 20, 0.65)',
+              backgroundColor: theme.dark ? 'rgba(10, 7, 20, 0.55)' : c.thirdBg,
               borderRadius: RADII.card,
               paddingVertical: 12,
               borderWidth: 1,
-              borderColor: hexToRgba('#FFFFFF', 0.08),
+              borderColor: theme.dark ? hexToRgba('#FFFFFF', 0.08) : hexToRgba('#000000', 0.08),
             }}
           >
             <MuscleBodygraphSvg muscles={musclesMap} side="front" height={175} />
             <MuscleBodygraphSvg muscles={musclesMap} side="back" height={175} />
           </View>
 
-          {/* 4 Stat Tiles with Extracted APK ShareCard Stat Icons */}
+          {/* 4 Stat Tiles */}
           <View style={{ flexDirection: 'row', gap: 8 }}>
             {[
               { label: 'DURATION', val: formatDuration(durationSeconds), art: V4_UI_URLS.share_statduration },
@@ -149,7 +152,7 @@ export function ShareCardModal({
                 key={st.label}
                 style={{
                   flex: 1,
-                  backgroundColor: hexToRgba('#FFFFFF', 0.05),
+                  backgroundColor: theme.dark ? hexToRgba('#FFFFFF', 0.05) : c.thirdBg,
                   borderRadius: 12,
                   paddingVertical: 8,
                   paddingHorizontal: 4,
@@ -172,17 +175,22 @@ export function ShareCardModal({
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <JymboRive pose="Selfie" size={50} showShadow={false} />
               <AppText size="xsm" weight="bold" tone="sub">
-                Verified by Jymbo
+                Logged on TOP1%
               </AppText>
             </View>
             <AppText size="xsm" weight="black" tone="constant">
-              apexlift.app
+              top1.fit
             </AppText>
           </View>
 
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <AppButton label="Close" variant="secondary" onPress={onClose} style={{ flex: 1 }} />
-            <AppButton label="Share / Copy" variant="primary" onPress={handleShare} style={{ flex: 1.5 }} />
+            <AppButton
+              label={copied ? 'Copied to Clipboard ✓' : 'Share / Copy'}
+              variant={copied ? 'check' : 'primary'}
+              onPress={handleShare}
+              style={{ flex: 1.5 }}
+            />
           </View>
         </LinearGradient>
       </View>

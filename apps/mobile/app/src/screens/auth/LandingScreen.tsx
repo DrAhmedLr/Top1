@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Linking, Pressable, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { trpc } from '../../api/trpc';
+import { getTop1ApiOrigin } from '../../api/top1Cloud';
 import { ONBOARDING_ASSETS } from '../../assets/v3AssetRegistry';
 import { JymboRive, TextBubbleSys, type JymboPose } from '../../components/mascot';
 import { AppButton, AppCard, AppText, RankBadge, ScreenContainer, useAlert } from '../../components/ui';
@@ -280,6 +281,21 @@ export function LandingScreen({ navigation }: Props) {
           }
         />
       ) : null}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16, paddingTop: 4 }}>
+        <Pressable onPress={() => void Linking.openURL(`${getTop1ApiOrigin()}/about`)}>
+          <AppText size="xsm" tone="sub">
+            Methodology &amp; Sources
+          </AppText>
+        </Pressable>
+        <AppText size="xsm" tone="sub">
+          •
+        </AppText>
+        <Pressable onPress={() => void Linking.openURL(`${getTop1ApiOrigin()}/privacy`)}>
+          <AppText size="xsm" tone="sub">
+            Privacy Policy
+          </AppText>
+        </Pressable>
+      </View>
     </View>
   );
 

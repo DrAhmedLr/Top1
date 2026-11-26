@@ -8,8 +8,10 @@ import { AppButton, AppInput, AppModal, AppText } from '../ui';
 
 const QUICK_TEST_BARCODES = [
   { code: '0011110000011', label: 'Chicken Breast' },
-  { code: '0011110000042', label: 'Whey Isolate' },
-  { code: '0011110000059', label: 'Greek Yogurt' },
+  { code: '0011110000035', label: 'Whey Isolate' },
+  { code: '0011110000042', label: 'Greek Yogurt' },
+  { code: '0011110000059', label: 'Rolled Oats' },
+  { code: '0011110000073', label: 'Atlantic Salmon' },
 ];
 
 interface BarcodeScannerModalProps {

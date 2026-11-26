@@ -39,7 +39,10 @@ export function StreaksAndReportsScreen() {
 
   const logMutation = trpc.gamification.logMeasurement.useMutation({
     onSuccess: () => {
-      utils.gamification.listMeasurements.invalidate();
+      void utils.gamification.listMeasurements.invalidate();
+      void utils.user.me.invalidate();
+      void utils.top1.getOverview.invalidate();
+      void utils.physiology.getBodyReport.invalidate();
       setMetricValue('');
       setLogModalOpen(false);
     },
@@ -61,8 +64,8 @@ export function StreaksAndReportsScreen() {
         mascotSize={84}
         mascotText={
           (report?.streak ?? user?.streaks ?? 0) >= 3
-            ? `You're on a ${report?.streak ?? user?.streaks ?? 0}-day streak! Tap your Gold Chest below to crack open bonus Eggs!`
-            : 'Keep your weekly workout target alive to unlock Bronze, Silver & Gold Streak Chests!'
+            ? `You're on a ${report?.streak ?? user?.streaks ?? 0}-day streak! Tap your Daily Vault below to claim bonus Credits!`
+            : 'Keep your weekly workout target alive to unlock daily bonus Credits and Streak Milestones!'
         }
       />
 
@@ -259,8 +262,7 @@ export function StreaksAndReportsScreen() {
         visible={chestOpen}
         onClose={() => setChestOpen(false)}
         tier="gold"
-        rewardEggs={120}
-        rewardLabel="Weekly Streak Chest"
+        rewardLabel="Daily Vault Bonus"
       />
     </ScreenContainer>
   );

@@ -158,11 +158,13 @@ export function PublicProfileScreen() {
               <MuscleBodygraphSvg
                 muscles={muscleMapQuery.data?.muscles ?? {}}
                 side="front"
+                isFemale={profile.rankingSex === 'Female'}
                 height={170}
               />
               <MuscleBodygraphSvg
                 muscles={muscleMapQuery.data?.muscles ?? {}}
                 side="back"
+                isFemale={profile.rankingSex === 'Female'}
                 height={170}
               />
             </View>

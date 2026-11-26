@@ -34,7 +34,10 @@ export function PostDetailScreen() {
   const postQuery = trpc.post.getById.useQuery({ id: postId });
   const deletePost = trpc.post.delete.useMutation({
     onSuccess: () => {
-      utils.post.feed.invalidate();
+      void utils.post.feed.invalidate();
+      void utils.rank.getMyRanks.invalidate();
+      void utils.top1.getOverview.invalidate();
+      void utils.physiology.getBodyReport.invalidate();
       navigation.goBack();
     },
   });
@@ -165,7 +168,7 @@ export function PostDetailScreen() {
           {isOwner ? (
             <View style={{ gap: 10 }}>
               <AppButton
-                label="Edit Past Workout & Strava Sync"
+                label="Edit Workout Details"
                 variant="secondary"
                 onPress={() => navigation.navigate('EditPost', { postId: post.id })}
                 fullWidth

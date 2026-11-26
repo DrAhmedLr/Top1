@@ -84,7 +84,10 @@ export function BenchmarkLabScreen() {
     division: 0 | 1 | 2 | 3;
     title: string;
     subtitle: string;
+    rating?: number;
+    deltaSr?: number;
   } | null>(null);
+  const [pendingConvertedValue, setPendingConvertedValue] = useState<string | null>(null);
 
   const metricsQuery = trpc.top1.listMetrics.useQuery({
     pillar,
@@ -105,6 +108,9 @@ export function BenchmarkLabScreen() {
     void utils.top1.getOverview.invalidate();
     void utils.top1.getScientificAudit.invalidate();
     void utils.physiology.getBodyReport.invalidate();
+    void utils.user.me.invalidate();
+    void utils.coach.listPrograms.invalidate();
+    void utils.coach.getTodayDecision.invalidate();
     if (selectedMetricId) {
       void utils.top1.getMetricHistory.invalidate({ metricId: selectedMetricId });
     }
@@ -117,11 +123,18 @@ export function BenchmarkLabScreen() {
       setValueInput('');
 
       if (res.tierImproved) {
+        const currentScore = Math.round(res.scientificModelScore * 10);
+        const pctDelta =
+          res.overallChange && res.overallChange.previous !== null
+            ? Math.max(1, Math.round((res.overallChange.previous - res.overallChange.current) * 10))
+            : undefined;
         setCinematic({
           tier: res.overallBadge.badgeTier,
           division: res.overallBadge.division,
           title: `NEW STANDING: ${res.overallBadge.topLabel}`,
           subtitle: `${res.metricName} (${res.value} ${res.unit}) pushed you to ${res.overallBadge.tierName}!`,
+          rating: currentScore > 0 ? currentScore : undefined,
+          deltaSr: pctDelta,
         });
       } else {
         const deltaNote =
@@ -155,7 +168,12 @@ export function BenchmarkLabScreen() {
 
   const openMetric = (item: (typeof items)[number]) => {
     setSelectedMetricId(item.id);
-    setValueInput(item.currentValue !== null ? String(item.currentValue) : '');
+    if (pendingConvertedValue !== null) {
+      setValueInput(pendingConvertedValue);
+      setPendingConvertedValue(null);
+    } else {
+      setValueInput(item.currentValue !== null ? String(item.currentValue) : '');
+    }
     setMeasuredDateInput((item.measuredAt ?? new Date().toISOString()).slice(0, 10));
     setCpetModality(item.exerciseMode === 'cycle' ? 'cycle' : 'treadmill');
     setMethod(
@@ -287,8 +305,12 @@ export function BenchmarkLabScreen() {
           />
           <LabUnitHelperCard
             onUseValue={(converted) => {
+              setPendingConvertedValue(String(converted));
               setValueInput(String(converted));
-              showAlert({ title: 'Value Ready', message: `Converted value ${converted} copied into your metric input.` });
+              showAlert({
+                title: 'Value Staged',
+                message: `Converted value ${converted} will auto-fill the next biomarker you open.`,
+              });
             }}
           />
           <BodyweightTrackerCard />
@@ -724,8 +746,8 @@ export function BenchmarkLabScreen() {
           subtitle={cinematic.subtitle}
           tier={cinematic.tier}
           division={cinematic.division}
-          rating={850}
-          deltaSr={35}
+          rating={cinematic.rating}
+          deltaSr={cinematic.deltaSr}
           mode="rank"
         />
       ) : null}

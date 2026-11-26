@@ -136,7 +136,7 @@ export function RecapStoriesScreen() {
           title: archetypeRevealed ? snap.archetype : 'Analyzing Your Lifting DNA...',
           subtitle: archetypeRevealed ? snap.archetypeTagline : 'Hold tight — Jymbo is unveiling your archetype!',
           metric: `@${user?.username ?? 'athlete'}`,
-          metricLabel: 'APEXLIFT IDENTITY',
+          metricLabel: 'TOP1% IDENTITY',
           accent: '#D075E8',
           hero: 'archetype' as const,
         },
@@ -244,7 +244,7 @@ export function RecapStoriesScreen() {
                   ) : null}
                 </View>
                 <AppText size="xsm" weight="black" style={{ color: '#FFE066' }}>
-                  Tap Chest to Open Bonus Eggs!
+                  Tap Vault to Claim Daily Credits!
                 </AppText>
               </Pressable>
 
@@ -307,7 +307,7 @@ export function RecapStoriesScreen() {
               paddingHorizontal: 24,
               paddingVertical: 12,
               borderRadius: RADII.card,
-              backgroundColor: 'rgba(15, 10, 24, 0.72)',
+              backgroundColor: theme.dark ? 'rgba(15, 10, 24, 0.72)' : hexToRgba(c.secondBg, 0.92),
               borderWidth: 1,
               borderColor: hexToRgba(activeSlide.accent, 0.4),
               alignItems: 'center',
@@ -351,8 +351,7 @@ export function RecapStoriesScreen() {
         visible={chestOpen}
         onClose={() => setChestOpen(false)}
         tier="gold"
-        rewardEggs={150}
-        rewardLabel="Gold Recap Streak Chest"
+        rewardLabel="Daily Vault Bonus"
       />
     </ScreenContainer>
   );

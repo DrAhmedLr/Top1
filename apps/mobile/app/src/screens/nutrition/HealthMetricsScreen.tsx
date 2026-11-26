@@ -22,24 +22,31 @@ export function HealthMetricsScreen() {
   const logQuery = trpc.food.getHealthLog.useQuery({ dateIso });
   const upsert = trpc.food.upsertHealthLog.useMutation({
     onSuccess: () => {
-      utils.food.getHealthLog.invalidate({ dateIso });
+      void utils.food.getHealthLog.invalidate({ dateIso });
+      void utils.wearable.getReadiness.invalidate();
+      void utils.physiology.getBodyReport.invalidate();
+      void utils.top1.getOverview.invalidate();
       showAlert({ title: 'Health Metrics Saved', message: `Updated recovery stats for ${dateIso}.` });
     },
   });
 
-  const [steps, setSteps] = useState('8500');
-  const [activeCalories, setActiveCalories] = useState('450');
-  const [sleepHours, setSleepHours] = useState('7.5');
-  const [waterMl, setWaterMl] = useState(2500);
-  const [restingHr, setRestingHr] = useState('58');
+  const [steps, setSteps] = useState('');
+  const [activeCalories, setActiveCalories] = useState('');
+  const [sleepHours, setSleepHours] = useState('');
+  const [waterMl, setWaterMl] = useState(0);
+  const [restingHr, setRestingHr] = useState('');
 
   useEffect(() => {
     if (logQuery.data) {
-      setSteps(String(logQuery.data.steps));
-      setActiveCalories(String(logQuery.data.activeCalories));
-      setSleepHours(String(Number((logQuery.data.sleepMinutes / 60).toFixed(1))));
-      setWaterMl(logQuery.data.waterMl);
-      setRestingHr(String(logQuery.data.restingHr ?? 60));
+      setSteps(logQuery.data.steps ? String(logQuery.data.steps) : '');
+      setActiveCalories(logQuery.data.activeCalories ? String(logQuery.data.activeCalories) : '');
+      setSleepHours(
+        logQuery.data.sleepMinutes
+          ? String(Number((logQuery.data.sleepMinutes / 60).toFixed(1)))
+          : ''
+      );
+      setWaterMl(logQuery.data.waterMl ?? 0);
+      setRestingHr(logQuery.data.restingHr ? String(logQuery.data.restingHr) : '');
     }
   }, [logQuery.data]);
 
@@ -86,21 +93,30 @@ export function HealthMetricsScreen() {
       </AppCard>
 
       <AppCard style={{ gap: 12 }}>
-        <AppInput label="Daily Steps" keyboardType="number-pad" value={steps} onChangeText={setSteps} />
+        <AppInput
+          label="Daily Steps"
+          placeholder="e.g. 8500"
+          keyboardType="number-pad"
+          value={steps}
+          onChangeText={setSteps}
+        />
         <AppInput
           label="Active Calories Burned (kcal)"
+          placeholder="e.g. 450"
           keyboardType="number-pad"
           value={activeCalories}
           onChangeText={setActiveCalories}
         />
         <AppInput
           label="Sleep Duration (hours)"
+          placeholder="e.g. 7.5"
           keyboardType="decimal-pad"
           value={sleepHours}
           onChangeText={setSleepHours}
         />
         <AppInput
           label="Resting Heart Rate (bpm)"
+          placeholder="e.g. 58"
           keyboardType="number-pad"
           value={restingHr}
           onChangeText={setRestingHr}
@@ -110,16 +126,17 @@ export function HealthMetricsScreen() {
       <AppButton
         label="Save Daily Health Metrics"
         loading={upsert.isPending}
-        onPress={() =>
+        onPress={() => {
+          const parsedRhr = parseInt(restingHr, 10);
           upsert.mutate({
             dateIso,
             steps: Math.max(0, parseInt(steps, 10) || 0),
             activeCalories: Math.max(0, parseInt(activeCalories, 10) || 0),
             sleepMinutes: Math.max(0, Math.round((parseFloat(sleepHours) || 0) * 60)),
             waterMl,
-            restingHr: parseInt(restingHr, 10) || 60,
-          })
-        }
+            restingHr: Number.isFinite(parsedRhr) && parsedRhr > 0 ? parsedRhr : null,
+          });
+        }}
         fullWidth
       />
     </ScreenContainer>

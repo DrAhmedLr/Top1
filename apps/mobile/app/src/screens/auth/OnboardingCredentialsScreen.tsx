@@ -19,7 +19,7 @@ export function OnboardingCredentialsScreen({ navigation }: Props) {
   const draft = useAuthStore((s) => s.onboardingDraft);
   const setSession = useAuthStore((s) => s.setSession);
 
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState(draft.displayName ?? '');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,7 +78,7 @@ export function OnboardingCredentialsScreen({ navigation }: Props) {
   return (
     <View style={{ flex: 1 }}>
       <StackHeader title="Finish Sign Up" onBack={() => navigation.goBack()} />
-      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 16 }}>
+      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 16, maxWidth: 480, alignSelf: 'center', width: '100%' }}>
         <View style={{ gap: 4 }}>
           <AppText size="lg" weight="black">
             Lock in your profile
@@ -141,7 +141,7 @@ export function OnboardingCredentialsScreen({ navigation }: Props) {
           ) : null}
 
           <AppButton
-            title="Launch ApexLift"
+            title="Launch TOP1%"
             size="lg"
             loading={signUpMutation.isPending}
             onPress={handleCreate}

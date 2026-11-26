@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { trpc } from '../../api/trpc';
@@ -34,10 +34,11 @@ export function WearableReadinessScreen() {
   const upsert = trpc.wearable.upsertSnapshot.useMutation({
     onSuccess: (res) => {
       void utils.wearable.getReadiness.invalidate();
+      void utils.food.getHealthLog.invalidate();
       void utils.physiology.getBodyReport.invalidate();
       void utils.top1.getOverview.invalidate();
       showAlert({
-        title: l('Biometrics Synced', 'Biométrie synchronisée', 'تمت مزامنة القياسات الحيوية'),
+        title: l('Biometrics Saved', 'Biométrie enregistrée', 'تم حفظ القياسات الحيوية'),
         message: `Readiness multiplier: ${res.readiness.readinessMultiplier.toFixed(2)}× (${res.readiness.illnessOrOverreachingFlag ? 'Illness/Overreaching Flagged' : 'Clear to train'})`,
       });
     },
@@ -45,23 +46,37 @@ export function WearableReadinessScreen() {
   });
 
   const [source, setSource] = useState<(typeof SOURCES)[number]['id']>('apple_watch');
-  const [hrv, setHrv] = useState('76');
-  const [rhr, setRhr] = useState('52');
-  const [sleepHours, setSleepHours] = useState('7.6');
+  const [hrv, setHrv] = useState('');
+  const [rhr, setRhr] = useState('');
+  const [sleepHours, setSleepHours] = useState('');
   const [tempDelta, setTempDelta] = useState('0.0');
-  const [trimp, setTrimp] = useState('70');
+  const [trimp, setTrimp] = useState('');
+  const [hydratedFromLatest, setHydratedFromLatest] = useState(false);
 
   const readiness = query.data?.readiness;
   const snapshots = query.data?.snapshots ?? [];
 
+  useEffect(() => {
+    if (hydratedFromLatest || snapshots.length === 0) return;
+    const latest = snapshots[0];
+    if (latest.hrvRmssdMs != null) setHrv(String(latest.hrvRmssdMs));
+    if (latest.restingHeartRateBpm != null) setRhr(String(latest.restingHeartRateBpm));
+    if (latest.totalSleepMinutes != null) {
+      setSleepHours(String(Number((latest.totalSleepMinutes / 60).toFixed(1))));
+    }
+    if (latest.wristTempDeviationC != null) setTempDelta(String(latest.wristTempDeviationC));
+    if (latest.cardioLoadTrimp != null) setTrimp(String(latest.cardioLoadTrimp));
+    setHydratedFromLatest(true);
+  }, [hydratedFromLatest, snapshots]);
+
   return (
     <ScreenContainer scroll>
       <StackHeader
-        title={l('Smartwatch Readiness', 'Disponibilité biométrique', 'جاهزية الساعة الذكية')}
+        title={l('Morning Readiness & Biometrics', 'Disponibilité biométrique', 'جاهزية الصباح والقياسات')}
         subtitle={l(
-          'Rolling 28-day personal RMSSD HRV, RHR, sleep debt & ACWR baselines',
-          'Références personnelles sur 28 jours (VFC RMSSD, FC repos, sommeil)',
-          'خطوط أساس شخصية لمدة 28 يوماً لنبض الراحة والنوم وتغير النبض'
+          'Log daily RMSSD HRV, RHR, sleep & cardio load to calibrate your rolling 28-day baseline',
+          'Enregistrez VFC RMSSD, FC repos et sommeil pour calibrer votre base sur 28 jours',
+          'سجّل قياساتك اليومية لمعايرة خط الأساس الشخصي لمدة 28 يوماً'
         )}
       />
 
@@ -211,6 +226,7 @@ export function WearableReadinessScreen() {
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <AppInput
             label="HRV RMSSD (ms)"
+            placeholder="e.g. 68"
             keyboardType="decimal-pad"
             value={hrv}
             onChangeText={setHrv}
@@ -218,6 +234,7 @@ export function WearableReadinessScreen() {
           />
           <AppInput
             label="Resting HR (bpm)"
+            placeholder="e.g. 54"
             keyboardType="decimal-pad"
             value={rhr}
             onChangeText={setRhr}
@@ -228,6 +245,7 @@ export function WearableReadinessScreen() {
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <AppInput
             label="Sleep (hours)"
+            placeholder="e.g. 7.5"
             keyboardType="decimal-pad"
             value={sleepHours}
             onChangeText={setSleepHours}
@@ -235,6 +253,7 @@ export function WearableReadinessScreen() {
           />
           <AppInput
             label="Wrist Temp Δ (°C)"
+            placeholder="0.0"
             keyboardType="decimal-pad"
             value={tempDelta}
             onChangeText={setTempDelta}
@@ -244,6 +263,7 @@ export function WearableReadinessScreen() {
 
         <AppInput
           label="Cardio Load TRIMP (0–400)"
+          placeholder="Optional (e.g. 65)"
           keyboardType="decimal-pad"
           value={trimp}
           onChangeText={setTrimp}
@@ -252,20 +272,23 @@ export function WearableReadinessScreen() {
         <AppButton
           label={l('Save Biometric Snapshot', 'Enregistrer la biométrie', 'حفظ القياسات الحيوية')}
           loading={upsert.isPending}
-          onPress={() =>
+          onPress={() => {
+            const parsedSleep = parseFloat(sleepHours);
             upsert.mutate({
               date: query.data?.today ?? new Date().toISOString().slice(0, 10),
               source,
-              hrvRmssdMs: parseFloat(hrv) || undefined,
+              hrvRmssdMs: Number.isFinite(parseFloat(hrv)) ? parseFloat(hrv) : undefined,
               hrvStatistic: 'rmssd',
-              restingHeartRateBpm: parseFloat(rhr) || undefined,
-              totalSleepMinutes: Math.round((parseFloat(sleepHours) || 7.5) * 60),
+              restingHeartRateBpm: Number.isFinite(parseFloat(rhr)) ? parseFloat(rhr) : undefined,
+              totalSleepMinutes: Number.isFinite(parsedSleep) && parsedSleep > 0
+                ? Math.round(parsedSleep * 60)
+                : undefined,
               wristTempDeviationC: Number.isFinite(parseFloat(tempDelta))
                 ? parseFloat(tempDelta)
                 : 0,
-              cardioLoadTrimp: parseFloat(trimp) || undefined,
-            })
-          }
+              cardioLoadTrimp: Number.isFinite(parseFloat(trimp)) ? parseFloat(trimp) : undefined,
+            });
+          }}
           fullWidth
         />
       </AppCard>

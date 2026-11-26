@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, Modal, Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { trpc } from '../../api/trpc';
 import { STREAK_IMAGES } from '../../assets/assetRegistry';
 import { ONBOARDING_ASSETS } from '../../assets/v3AssetRegistry';
 import { JymboRive } from '../mascot';
 import { AppButton, AppText } from '../ui';
+import { useAuthStore } from '../../stores/authStore';
 import { USE_NATIVE_DRIVER } from '../../theme/animations';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
@@ -16,25 +18,52 @@ export interface TreasureChestModalProps {
   visible: boolean;
   onClose: () => void;
   tier?: 'wood' | 'bronze' | 'silver' | 'gold';
-  rewardEggs?: number;
   rewardLabel?: string;
 }
 
 /**
- * Interactive 2-Piece Streak Treasure Chest Opening Modal modeled on
- * mod_03231_OpenedTreasureChest.js & mod_03232_RewardTreasureChestV2.js
+ * Server-Verified Daily Streak Vault Chest (once per UTC day).
+ * Awards real Credits & XP via `trpc.gamification.claimDailyVault`.
  */
 export function TreasureChestModal({
   visible,
   onClose,
   tier = 'gold',
-  rewardEggs = 120,
-  rewardLabel = 'Streak Reward Chest',
+  rewardLabel = 'Daily Streak Vault',
 }: TreasureChestModalProps) {
   const { theme } = useTheme();
   const c = theme.colors;
+  const utils = trpc.useUtils();
+  const setUser = useAuthStore((s) => s.setUser);
   const [taps, setTaps] = useState(0);
   const [opened, setOpened] = useState(false);
+  const [claimedResult, setClaimedResult] = useState<{
+    credits: number;
+    xp: number;
+    alreadyClaimed: boolean;
+  } | null>(null);
+
+  const statusQuery = trpc.gamification.getDailyVaultStatus.useQuery(undefined, {
+    enabled: visible,
+  });
+
+  const claimMutation = trpc.gamification.claimDailyVault.useMutation({
+    onSuccess: async (res) => {
+      setClaimedResult({
+        credits: res.rewardCredits,
+        xp: res.rewardXp,
+        alreadyClaimed: res.alreadyClaimed,
+      });
+      void utils.gamification.getDailyVaultStatus.invalidate();
+      void utils.shop.listCatalog.invalidate();
+      try {
+        const fresh = await utils.user.me.fetch();
+        setUser(fresh);
+      } catch {
+        // non-blocking
+      }
+    },
+  });
 
   const shakeX = useRef(new Animated.Value(0)).current;
   const lidY = useRef(new Animated.Value(0)).current;
@@ -45,19 +74,22 @@ export function TreasureChestModal({
     if (!visible) return;
     setTaps(0);
     setOpened(false);
+    setClaimedResult(null);
     shakeX.setValue(0);
     lidY.setValue(0);
     lidRot.setValue(0);
     rewardScale.setValue(0.2);
   }, [visible, shakeX, lidY, lidRot, rewardScale]);
 
+  const alreadyClaimed =
+    Boolean(statusQuery.data?.claimedToday) || Boolean(claimedResult?.alreadyClaimed);
+  const previewCredits = statusQuery.data?.rewardCredits ?? 50;
   const topImg = STREAK_IMAGES[`chest_${tier}top`] ?? STREAK_IMAGES.chest_goldtop;
-  const bottomImg =
-    STREAK_IMAGES[`chest_${tier}bottom`] ?? STREAK_IMAGES.chest_goldbottom;
-  const eggImg = ONBOARDING_ASSETS.item_eggs;
+  const bottomImg = STREAK_IMAGES[`chest_${tier}bottom`] ?? STREAK_IMAGES.chest_goldbottom;
+  const vaultImg = ONBOARDING_ASSETS.item_eggs;
 
   const handleTapChest = () => {
-    if (opened) return;
+    if (opened || alreadyClaimed || claimMutation.isPending) return;
     const next = taps + 1;
     setTaps(next);
 
@@ -82,6 +114,8 @@ export function TreasureChestModal({
         Animated.spring(lidRot, { toValue: 1, friction: 6, tension: 140, useNativeDriver: USE_NATIVE_DRIVER }),
         Animated.spring(rewardScale, { toValue: 1, friction: 5, tension: 150, useNativeDriver: USE_NATIVE_DRIVER }),
       ]).start();
+
+      claimMutation.mutate();
     }
   };
 
@@ -90,16 +124,16 @@ export function TreasureChestModal({
       <View
         style={{
           flex: 1,
-          backgroundColor: 'rgba(8, 5, 16, 0.9)',
+          backgroundColor: 'rgba(8, 5, 16, 0.88)',
           alignItems: 'center',
           justifyContent: 'center',
           padding: 20,
         }}
       >
-        <ConfettiOverlay visible={opened} count={40} />
+        <ConfettiOverlay visible={opened && !alreadyClaimed} count={40} />
 
         <LinearGradient
-          colors={['#2B1E40', '#161026', '#0F0A18']}
+          colors={[c.thirdBg, c.secondBg, c.background]}
           style={{
             width: '100%',
             maxWidth: 360,
@@ -125,7 +159,7 @@ export function TreasureChestModal({
                 transform: [{ translateX: shakeX }],
               }}
             >
-              {opened ? (
+              {opened && claimedResult && !claimedResult.alreadyClaimed ? (
                 <Animated.View
                   style={{
                     position: 'absolute',
@@ -134,9 +168,12 @@ export function TreasureChestModal({
                     transform: [{ scale: rewardScale }],
                   }}
                 >
-                  {eggImg ? <Image source={eggImg} style={{ width: 64, height: 64 }} resizeMode="contain" /> : null}
+                  {vaultImg ? <Image source={vaultImg} style={{ width: 58, height: 58 }} resizeMode="contain" /> : null}
                   <AppText size="xl" weight="black" style={{ color: '#FFE066' }} tabular>
-                    +{rewardEggs} Eggs
+                    +{claimedResult.credits} Credits
+                  </AppText>
+                  <AppText size="xsm" weight="bold" tone="constant">
+                    +{claimedResult.xp} XP
                   </AppText>
                 </Animated.View>
               ) : null}
@@ -169,16 +206,31 @@ export function TreasureChestModal({
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <JymboRive pose={opened ? 'Congrats' : 'Confident'} size={68} showShadow={false} />
             <AppText size="sm" weight="bold" tone="sub" style={{ flex: 1 }}>
-              {opened
-                ? `Jackpot! +${rewardEggs} Eggs added to your vault for the Cosmetics Shop!`
-                : `Tap the chest ${3 - taps} more time${3 - taps === 1 ? '' : 's'} to crack it open!`}
+              {alreadyClaimed && !opened
+                ? 'Today’s Daily Vault has already been claimed. Train tomorrow to unlock the next vault!'
+                : opened && claimedResult
+                  ? `Claimed! +${claimedResult.credits} Credits and +${claimedResult.xp} XP added to your account.`
+                  : `Tap the chest ${3 - taps} more time${3 - taps === 1 ? '' : 's'} to claim +${previewCredits} Credits!`}
             </AppText>
           </View>
 
-          {opened ? (
-            <AppButton title="Collect Eggs" variant="gold" size="lg" fullWidth onPress={onClose} />
+          {alreadyClaimed || opened ? (
+            <AppButton
+              title={opened ? 'Done' : 'Come Back Tomorrow'}
+              variant={opened ? 'gold' : 'secondary'}
+              size="lg"
+              fullWidth
+              onPress={onClose}
+            />
           ) : (
-            <AppButton title={`Tap Chest (${taps}/3)`} variant="primary" size="md" fullWidth onPress={handleTapChest} />
+            <AppButton
+              title={`Tap Vault (${taps}/3)`}
+              variant="primary"
+              size="md"
+              fullWidth
+              loading={claimMutation.isPending}
+              onPress={handleTapChest}
+            />
           )}
         </LinearGradient>
       </View>

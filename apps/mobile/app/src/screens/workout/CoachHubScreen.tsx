@@ -32,6 +32,25 @@ const ACTION_COLORS: Record<string, string> = {
   retest: '#0BC4FF',
 };
 
+const DISCOMFORT_AREAS = [
+  { id: 'shoulder', label: 'Shoulder' },
+  { id: 'lower_back', label: 'Lower Back' },
+  { id: 'knee', label: 'Knee' },
+  { id: 'elbow_wrist', label: 'Elbow / Wrist' },
+  { id: 'hip', label: 'Hip' },
+] as const;
+
+const GOAL_EXERCISE_MAP: Record<string, { exerciseId: string; primaryMuscles: string[] }> = {
+  bench_1rm: { exerciseId: 'ex_bench_press', primaryMuscles: ['Upper Chest', 'Lower Chest', 'Triceps'] },
+  squat_1rm: { exerciseId: 'ex_squat', primaryMuscles: ['Quadriceps', 'Glutes', 'Hamstrings'] },
+  deadlift_1rm: { exerciseId: 'ex_deadlift', primaryMuscles: ['Hamstrings', 'Glutes', 'Lower Back'] },
+  pullups: { exerciseId: 'ex_pull_ups', primaryMuscles: ['Lats', 'Upper Back', 'Biceps'] },
+  pullup_1rm: { exerciseId: 'ex_pull_ups', primaryMuscles: ['Lats', 'Upper Back', 'Biceps'] },
+  dips: { exerciseId: 'ex_dips', primaryMuscles: ['Lower Chest', 'Triceps', 'Front Delt'] },
+  dead_hang: { exerciseId: 'ex_pull_ups', primaryMuscles: ['Forearms', 'Lats'] },
+  pushups: { exerciseId: 'ex_push_ups', primaryMuscles: ['Upper Chest', 'Lower Chest', 'Triceps'] },
+};
+
 const GOAL_CANDIDATES = [
   { id: 'pushups', label: 'Strict Push-ups', unit: 'metric' as const, defaultBase: 35, defaultTarget: 60 },
   { id: 'pullups', label: 'Strict Pull-ups', unit: 'metric' as const, defaultBase: 14, defaultTarget: 22 },
@@ -126,21 +145,18 @@ export function CoachHubScreen() {
   const launchDecisionInWorkoutSheet = () => {
     if (!decision?.recommended) return;
     const rec = decision.recommended;
+    const mapped = GOAL_EXERCISE_MAP[decision.affectedGoal.metric] ?? {
+      exerciseId: 'ex_push_ups',
+      primaryMuscles: ['Upper Chest'],
+    };
     startFromPreset({
       name: `TOP1 Coach: ${rec.exercise[localeIdx]}`,
       exercises: [
         {
-          exerciseId:
-            decision.affectedGoal.metric === 'bench_1rm'
-              ? 'ex_bench_press'
-              : decision.affectedGoal.metric === 'squat_1rm'
-                ? 'ex_squat'
-                : decision.affectedGoal.metric === 'pullups'
-                  ? 'ex_pull_ups'
-                  : 'ex_push_ups',
+          exerciseId: mapped.exerciseId,
           exerciseName: rec.exercise[localeIdx],
           equipment: rec.loadKg > 0 ? 'Barbell' : 'Bodyweight',
-          primaryMuscles: ['Upper Chest'],
+          primaryMuscles: mapped.primaryMuscles,
           restSeconds: rec.restSeconds,
           targetSets: Array.from({ length: rec.sets }, () => ({
             weightKg: rec.loadKg,
@@ -264,6 +280,32 @@ export function CoachHubScreen() {
                 );
               })}
             </View>
+
+            {discomfortSev !== 'none' ? (
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                {DISCOMFORT_AREAS.map((area) => {
+                  const active = discomfortArea === area.id;
+                  return (
+                    <Pressable
+                      key={area.id}
+                      onPress={() => setDiscomfortArea(area.id)}
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        borderRadius: RADII.pill,
+                        backgroundColor: active ? hexToRgba(c.warning, 0.2) : c.thirdBg,
+                        borderWidth: 1,
+                        borderColor: active ? c.warning : 'transparent',
+                      }}
+                    >
+                      <AppText size="xxsm" weight="bold" style={{ color: active ? c.warning : c.subText }}>
+                        {area.label}
+                      </AppText>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : null}
           </AppCard>
 
           {/* Decision Breakdown Card */}

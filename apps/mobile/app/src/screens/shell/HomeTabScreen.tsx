@@ -294,7 +294,7 @@ export function HomeTabScreen() {
                 paddingHorizontal: 11,
                 paddingVertical: 8,
                 borderRadius: 12,
-                backgroundColor: 'rgba(15,10,24,0.55)',
+                backgroundColor: theme.dark ? 'rgba(15,10,24,0.55)' : hexToRgba(c.background, 0.85),
                 borderWidth: 1,
                 borderColor: hexToRgba('#F59E0B', 0.4),
                 alignItems: 'center',
@@ -314,7 +314,7 @@ export function HomeTabScreen() {
                 paddingHorizontal: 11,
                 paddingVertical: 8,
                 borderRadius: 12,
-                backgroundColor: 'rgba(15,10,24,0.55)',
+                backgroundColor: theme.dark ? 'rgba(15,10,24,0.55)' : hexToRgba(c.background, 0.85),
                 borderWidth: 1,
                 borderColor: hexToRgba(c.check, 0.35),
                 alignItems: 'center',
@@ -336,13 +336,17 @@ export function HomeTabScreen() {
             {top1.areas.map((a) => (
               <Pressable
                 key={a.area}
-                onPress={() => navigation.navigate('BenchmarkLab', { initialPillar: 'strength' })}
+                onPress={() =>
+                  navigation.navigate('BenchmarkLab', {
+                    initialPillar: a.area === 'running' ? 'recovery' : 'strength',
+                  })
+                }
                 style={{
                   flex: 1,
                   paddingVertical: 6,
                   paddingHorizontal: 6,
                   borderRadius: 10,
-                  backgroundColor: 'rgba(15,10,24,0.55)',
+                  backgroundColor: theme.dark ? 'rgba(15,10,24,0.55)' : hexToRgba(c.background, 0.85),
                   borderWidth: 1,
                   borderColor: hexToRgba(a.meta.color, 0.35),
                   alignItems: 'center',
@@ -370,7 +374,7 @@ export function HomeTabScreen() {
               style={{
                 padding: 10,
                 borderRadius: 12,
-                backgroundColor: 'rgba(15,10,24,0.62)',
+                backgroundColor: theme.dark ? 'rgba(15,10,24,0.62)' : hexToRgba(c.background, 0.88),
                 borderWidth: 1,
                 borderColor: hexToRgba(c.constant, 0.4),
                 flexDirection: 'row',
@@ -591,9 +595,9 @@ export function HomeTabScreen() {
                       paddingVertical: 9,
                       paddingHorizontal: 10,
                       borderRadius: RADII.input,
-                      backgroundColor: 'rgba(10, 7, 20, 0.45)',
+                      backgroundColor: theme.dark ? 'rgba(10, 7, 20, 0.45)' : c.thirdBg,
                       borderWidth: 1,
-                      borderColor: hexToRgba('#FFFFFF', 0.06),
+                      borderColor: hexToRgba(c.text, 0.08),
                     }}
                   >
                     <AppText size="xsm" weight="bold">
@@ -652,9 +656,9 @@ export function HomeTabScreen() {
                         style={{
                           padding: 6,
                           borderRadius: 12,
-                          backgroundColor: 'rgba(10, 7, 20, 0.45)',
+                          backgroundColor: theme.dark ? 'rgba(10, 7, 20, 0.45)' : c.thirdBg,
                           borderWidth: 1,
-                          borderColor: hexToRgba('#FFFFFF', 0.06),
+                          borderColor: hexToRgba(c.text, 0.08),
                         }}
                       >
                         <MuscleBodygraphSvg muscles={heatmapMap} side="front" height={106} />
@@ -760,11 +764,7 @@ export function HomeTabScreen() {
           totalSets={sharePost.totalSets}
           prCount={sharePost.prCount}
           unit={unit}
-          workedMuscles={
-            sharePost.workedMuscles.length > 0
-              ? sharePost.workedMuscles
-              : ['Upper Chest', 'Lower Chest', 'Triceps', 'Front Delt']
-          }
+          workedMuscles={sharePost.workedMuscles}
         />
       ) : null}
     </ScreenContainer>

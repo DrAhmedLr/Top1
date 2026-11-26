@@ -20,7 +20,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import { impactMedium, notifySuccess } from '../../utils/haptics';
-import { playSound, startMusicLoop, stopMusicLoop, useSoundscapeStore } from '../../utils/soundscape';
+import { playSound, startMusicLoop, stopMusicLoop } from '../../utils/soundscape';
 
 export function ShopAndInventoryScreen() {
   const { theme } = useTheme();
@@ -33,14 +33,17 @@ export function ShopAndInventoryScreen() {
   const [category, setCategory] = useState<'title' | 'border' | 'banner'>('border');
   const [dealSeed, setDealSeed] = useState(0);
   const [unlockBurst, setUnlockBurst] = useState(0);
-  const musicMuted = useSoundscapeStore((s) => s.musicMuted);
-  const toggleMusicMute = useSoundscapeStore((s) => s.toggleMusicMute);
+  const [bgmPlaying, setBgmPlaying] = useState(false);
   const catalogQuery = trpc.shop.listCatalog.useQuery();
 
   useEffect(() => {
-    startMusicLoop('egg_shop');
+    if (bgmPlaying) {
+      startMusicLoop('egg_shop');
+    } else {
+      stopMusicLoop();
+    }
     return () => stopMusicLoop();
-  }, [musicMuted]);
+  }, [bgmPlaying]);
 
   const refreshMe = async () => {
     try {
@@ -113,17 +116,15 @@ export function ShopAndInventoryScreen() {
           {eggImg ? <Image source={eggImg} style={{ width: 42, height: 42 }} resizeMode="contain" /> : null}
           <View>
             <AppText size="xsm" tone="sub">
-              EGGS & CREDITS VAULT
+              CREDITS VAULT
             </AppText>
             <AppText size="xxl" weight="black" style={{ color: c.warning }} tabular>
-              {credits} Eggs
+              {credits} Credits
             </AppText>
           </View>
         </View>
         <Pressable
-          onPress={() => {
-            toggleMusicMute();
-          }}
+          onPress={() => setBgmPlaying((p) => !p)}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -135,39 +136,17 @@ export function ShopAndInventoryScreen() {
           }}
         >
           <Ionicons
-            name={musicMuted ? 'musical-notes-outline' : 'musical-notes'}
+            name={bgmPlaying ? 'musical-notes' : 'musical-notes-outline'}
             size={15}
-            color={musicMuted ? c.subText : '#FFE066'}
+            color={bgmPlaying ? '#FFE066' : c.subText}
           />
-          <AppText size="xxsm" weight="bold" tone={musicMuted ? 'sub' : 'default'}>
-            {musicMuted ? 'Shop BGM Off' : 'Shop BGM On'}
+          <AppText size="xxsm" weight="bold" tone={bgmPlaying ? 'default' : 'sub'}>
+            {bgmPlaying ? 'Shop BGM On' : 'Play BGM'}
           </AppText>
         </Pressable>
       </AppCard>
 
-      {/* Global Seasonal Event Banner (Liftoff 2.18.1 GlobalEvent) */}
-      <AppCard
-        variant="gradient"
-        glowColor={c.constant}
-        style={{ gap: 6, padding: 14 }}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <AppText size="xxsm" weight="black" tone="constant" style={{ letterSpacing: 1 }}>
-            GLOBAL SEASONAL EVENT
-          </AppText>
-          <AppText size="xxsm" weight="bold" style={{ color: '#FFE066' }}>
-            +500 EGGS REWARD
-          </AppText>
-        </View>
-        <AppText size="md" weight="black">
-          TOP1% Hybrid Strength &amp; Engine Challenge
-        </AppText>
-        <AppText size="xsm" tone="sub">
-          Log 4 balanced sessions + 1 verified Benchmark Lab test this month to unlock the exclusive Apex Obsidian Frame.
-        </AppText>
-      </AppCard>
-
-      {/* Daily Deal Spotlight with Reroll */}
+      {/* Featured Cosmetic Spotlight */}
       {dailyDeal ? (
         <AppCard
           variant="gradient"
@@ -178,20 +157,20 @@ export function ShopAndInventoryScreen() {
           <View style={{ flex: 1, gap: 3 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <AppText size="xxsm" weight="black" style={{ color: '#FFE066', letterSpacing: 1 }}>
-                DAILY DEAL • -20% FEATURED
+                FEATURED SPOTLIGHT
               </AppText>
             </View>
             <AppText size="md" weight="black">
               {dailyDeal.name}
             </AppText>
             <AppText size="xsm" tone="sub">
-              {dailyDeal.rarity.toUpperCase()} {dailyDeal.category} • {dailyDeal.costCredits} Eggs
+              {dailyDeal.rarity.toUpperCase()} {dailyDeal.category} • {dailyDeal.costCredits} Credits
             </AppText>
           </View>
           <View style={{ gap: 6 }}>
             {!dailyDeal.owned ? (
               <AppButton
-                label="Grab"
+                label="Unlock"
                 variant="gold"
                 size="sm"
                 loading={purchase.isPending}
@@ -199,7 +178,7 @@ export function ShopAndInventoryScreen() {
               />
             ) : null}
             <AppButton
-              label="Reroll"
+              label="Next Pick"
               variant="secondary"
               size="sm"
               onPress={() => {

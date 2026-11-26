@@ -58,7 +58,7 @@ export function NewPasswordScreen({ navigation, route }: Props) {
   return (
     <View style={{ flex: 1 }}>
       <StackHeader title="New Password" onBack={() => navigation.goBack()} />
-      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 20 }}>
+      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 20, maxWidth: 480, alignSelf: 'center', width: '100%' }}>
         <AppCard variant="second_outlined" style={{ gap: 14 }}>
           <AppInput
             label="Reset Token"

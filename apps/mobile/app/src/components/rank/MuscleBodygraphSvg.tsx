@@ -76,7 +76,8 @@ export function MuscleBodygraphSvg({
         : MALE_BACK_BODYGRAPH;
 
   const width = Math.round((geometry.width / geometry.height) * height);
-  const idPrefix = `bg_${mode}_${side}_${isFemale ? 'f' : 'm'}_${height}`;
+  const instanceId = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  const idPrefix = `bg_${instanceId}_${mode}_${side}`;
 
   const bodyFill = theme.dark ? '#1C162B' : '#E7E5F5';
   const contourStroke = theme.dark ? '#4B4363' : '#9B96B8';
@@ -161,7 +162,7 @@ export function MuscleBodygraphSvg({
         {/* 42-44 Anatomical Muscle Paths */}
         <G>
           {geometry.muscles.map((item, idx) => {
-            const entry = muscles[item.muscle];
+            const entry = muscles[item.muscle] ?? muscles[item.muscle.toLowerCase()];
             const isSelected = Boolean(selectedMuscle && selectedMuscle === item.muscle);
             const isDimmed = Boolean(selectedMuscle && selectedMuscle !== item.muscle);
             const isProtected = Boolean(entry?.protectedForUpcomingGoal);

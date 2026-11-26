@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { trpc } from '../../api/trpc';
+import { ProfileQrCodeModal } from '../../components/social/ProfileQrCodeModal';
 import {
   AppButton,
   AppCard,
   AppInput,
-  AppModal,
   AppText,
   AvatarView,
   ScreenContainer,
@@ -18,7 +18,6 @@ import {
 } from '../../components/ui';
 import { useAuthStore } from '../../stores/authStore';
 import { useTheme } from '../../theme/ThemeProvider';
-import { hexToRgba, RADII } from '../../theme/tokens';
 import type { MainStackParamList } from '../../navigation/types';
 
 export function FriendsScreen() {
@@ -35,19 +34,30 @@ export function FriendsScreen() {
 
   const friendsQuery = trpc.friends.list.useQuery();
   const requestsQuery = trpc.friends.listRequests.useQuery();
-  const searchQuery = trpc.friends.searchUsers.useQuery({ query: search });
+  const searchQuery = trpc.friends.searchUsers.useQuery(
+    { query: search },
+    { enabled: tab === 'search' }
+  );
 
   const sendReq = trpc.friends.sendRequest.useMutation({
     onSuccess: () => {
-      utils.friends.listRequests.invalidate();
+      void utils.friends.listRequests.invalidate();
+      void utils.friends.searchUsers.invalidate();
       showAlert({ title: 'Request Sent', message: 'Friend request delivered!' });
     },
+    onError: (err) => showAlert({ title: 'Could Not Send Request', message: err.message }),
   });
 
   const acceptReq = trpc.friends.acceptRequest.useMutation({
     onSuccess: () => {
-      utils.friends.list.invalidate();
-      utils.friends.listRequests.invalidate();
+      void utils.friends.list.invalidate();
+      void utils.friends.listRequests.invalidate();
+    },
+  });
+
+  const declineReq = trpc.friends.declineRequest.useMutation({
+    onSuccess: () => {
+      void utils.friends.listRequests.invalidate();
     },
   });
 
@@ -153,11 +163,19 @@ export function FriendsScreen() {
                     @{r.user?.username}
                   </AppText>
                 </View>
-                <AppButton
-                  label="Accept"
-                  size="sm"
-                  onPress={() => acceptReq.mutate({ requestId: r.id })}
-                />
+                <View style={{ flexDirection: 'row', gap: 6 }}>
+                  <AppButton
+                    label="Decline"
+                    size="sm"
+                    variant="secondary"
+                    onPress={() => declineReq.mutate({ requestId: r.id })}
+                  />
+                  <AppButton
+                    label="Accept"
+                    size="sm"
+                    onPress={() => acceptReq.mutate({ requestId: r.id })}
+                  />
+                </View>
               </AppCard>
             ))
           )}
@@ -211,6 +229,10 @@ export function FriendsScreen() {
                 <AppText size="xsm" weight="bold" tone="check">
                   Friends
                 </AppText>
+              ) : u.requestSent ? (
+                <AppText size="xsm" weight="bold" tone="sub">
+                  Sent
+                </AppText>
               ) : (
                 <AppButton
                   label="Add"
@@ -223,37 +245,14 @@ export function FriendsScreen() {
         </View>
       ) : null}
 
-      {/* Share Handle / QR Modal */}
-      <AppModal
+      <ProfileQrCodeModal
         visible={qrOpen}
         onClose={() => setQrOpen(false)}
-        title="Share Your Athlete Pass"
-        subtitle="Friends can look you up by handle or referral code"
-      >
-        <View
-          style={{
-            alignItems: 'center',
-            gap: 10,
-            padding: 20,
-            borderRadius: RADII.card,
-            backgroundColor: hexToRgba(c.constant, 0.12),
-            borderWidth: 1,
-            borderColor: c.constant,
-          }}
-        >
-          <Ionicons name="qr-code" size={110} color={c.text} />
-          <AppText size="lg" weight="black">
-            @{user?.username}
-          </AppText>
-          <AppText size="sm" weight="bold" tone="constant">
-            Code: {user?.referralCode ?? 'APEX-LIFT'}
-          </AppText>
-          <AppText size="xsm" tone="sub">
-            apexlift.app/u/{user?.username}
-          </AppText>
-        </View>
-        <AppButton label="Done" onPress={() => setQrOpen(false)} fullWidth />
-      </AppModal>
+        username={user?.username ?? 'athlete'}
+        displayName={user?.displayName ?? 'TOP1% Athlete'}
+        standingLabel={user?.overallTierLabel ?? user?.peakAverageRank ?? 'TOP1% Contender'}
+        referralCode={user?.referralCode}
+      />
     </ScreenContainer>
   );
 }

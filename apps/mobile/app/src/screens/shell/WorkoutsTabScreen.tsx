@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { trpc } from '../../api/trpc';
 import { getExerciseAvatarImage } from '../../assets/assetRegistry';
-import { getExerciseAvatarUrl, getRoutineRankUrl, V4_UI_URLS } from '../../assets/v4MediaManifest';
+import { getExerciseAvatarUrl, V4_UI_URLS } from '../../assets/v4MediaManifest';
 import { JymboDialogue } from '../../components/mascot';
 import {
   AppButton,
@@ -26,25 +26,29 @@ import type { MainStackParamList } from '../../navigation/types';
 
 const DAY_ZERO_MODES = [
   {
-    id: 'gym',
+    id: 'gym' as const,
+    generatorPreset: 'gym' as const,
     label: 'Commercial Gym',
     subtitle: 'Full racks, cables & machines',
     art: V4_UI_URLS.day_zero_gym,
   },
   {
-    id: 'garage',
+    id: 'garage' as const,
+    generatorPreset: 'gym' as const,
     label: 'Garage Gym',
     subtitle: 'Barbell, bench & squat stand',
     art: V4_UI_URLS.day_zero_garage,
   },
   {
-    id: 'home',
+    id: 'home' as const,
+    generatorPreset: 'dumbbells_only' as const,
     label: 'Home Dumbbells',
     subtitle: 'Compact progressive overload',
     art: V4_UI_URLS.day_zero_home,
   },
   {
-    id: 'cardio',
+    id: 'cardio' as const,
+    generatorPreset: 'cardio' as const,
     label: 'Conditioning',
     subtitle: 'Engine & metabolic finishers',
     art: V4_UI_URLS.day_zero_cardio,
@@ -52,17 +56,15 @@ const DAY_ZERO_MODES = [
 ];
 
 const FEATURED_PLANS = [
-  { id: 'iron', title: 'Iron Protocol', tag: 'STRENGTH', art: V4_UI_URLS.plan_strength_iron_protocol },
-  { id: 'mass', title: 'Mass Overdrive', tag: 'HYPERTROPHY', art: V4_UI_URLS.plan_muscle_mass_overdrive },
-  { id: 'shred', title: 'Steady Shred', tag: 'LEAN CUT', art: V4_UI_URLS.plan_lean_steady_shred },
-  { id: 'defined', title: 'Getting Defined', tag: 'TONED', art: V4_UI_URLS.plan_toned_getting_defined },
-  { id: 'elevated', title: 'Elevated Build', tag: 'MUSCLE', art: V4_UI_URLS.plan_muscle_elevated_build },
-  { id: 'curves', title: 'Strong Curves', tag: 'GLUTES', art: V4_UI_URLS.plan_toned_strong_curves },
-  { id: 'abs', title: 'Abs of Steel', tag: 'CORE', art: V4_UI_URLS.plan_lean_abs_of_steel },
-  { id: 'linear', title: 'Linear Strength', tag: 'POWER', art: V4_UI_URLS.plan_strength_linear_progression },
+  { id: 'iron', title: 'Iron Protocol', tag: 'STRENGTH', intensity: 'strength' as const, art: V4_UI_URLS.plan_strength_iron_protocol },
+  { id: 'mass', title: 'Mass Overdrive', tag: 'HYPERTROPHY', intensity: 'hypertrophy' as const, art: V4_UI_URLS.plan_muscle_mass_overdrive },
+  { id: 'shred', title: 'Steady Shred', tag: 'LEAN CUT', intensity: 'endurance' as const, art: V4_UI_URLS.plan_lean_steady_shred },
+  { id: 'defined', title: 'Getting Defined', tag: 'TONED', intensity: 'hypertrophy' as const, art: V4_UI_URLS.plan_toned_getting_defined },
+  { id: 'elevated', title: 'Elevated Build', tag: 'MUSCLE', intensity: 'hypertrophy' as const, art: V4_UI_URLS.plan_muscle_elevated_build },
+  { id: 'curves', title: 'Strong Curves', tag: 'GLUTES', intensity: 'hypertrophy' as const, art: V4_UI_URLS.plan_toned_strong_curves },
+  { id: 'abs', title: 'Abs of Steel', tag: 'CORE', intensity: 'endurance' as const, art: V4_UI_URLS.plan_lean_abs_of_steel },
+  { id: 'linear', title: 'Linear Strength', tag: 'POWER', intensity: 'strength' as const, art: V4_UI_URLS.plan_strength_linear_progression },
 ];
-
-const PRESET_RANK_TIERS = ['Champion', 'Elite', 'Veteran', 'Enthusiast', 'Intermediate', 'Novice'];
 
 export function WorkoutsTabScreen() {
   const { theme } = useTheme();
@@ -228,7 +230,7 @@ export function WorkoutsTabScreen() {
             justifyContent: 'space-between',
           }}
         >
-          <View style={{ width: '112%', alignSelf: 'center', height: layout.isDesktop ? 168 : 118, backgroundColor: '#120C1E' }}>
+          <View style={{ width: '100%', alignSelf: 'center', height: layout.isDesktop ? 168 : 118, backgroundColor: '#120C1E', borderRadius: RADII.input, overflow: 'hidden' }}>
             <Image
               source={{ uri: activeDayZero.art }}
               resizeMode="cover"
@@ -315,12 +317,33 @@ export function WorkoutsTabScreen() {
             </View>
           </View>
 
-          <AppButton
-            label={session ? 'Resume Active Workout' : 'Start Empty Workout'}
-            variant={session ? 'check' : 'primary'}
-            onPress={() => (session ? openSheet() : startEmpty(`${activeDayZero.label} Session`))}
-            fullWidth
-          />
+          {session ? (
+            <AppButton
+              label="Resume Active Workout"
+              variant="check"
+              onPress={openSheet}
+              fullWidth
+            />
+          ) : (
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <AppButton
+                label={`Generate ${activeDayZero.label.split(' ')[0]}`}
+                onPress={() =>
+                  navigation.navigate('WorkoutGenerator', {
+                    initialMode: 'preset',
+                    initialPreset: activeDayZero.generatorPreset,
+                  })
+                }
+                style={{ flex: 1.3 }}
+              />
+              <AppButton
+                label="Empty Session"
+                variant="secondary"
+                onPress={() => startEmpty(`${activeDayZero.label} Session`)}
+                style={{ flex: 1 }}
+              />
+            </View>
+          )}
         </AppCard>
       </View>
 
@@ -344,7 +367,10 @@ export function WorkoutsTabScreen() {
                 onPress={() => {
                   impactLight();
                   playSound('tick', 0.4);
-                  navigation.navigate('WorkoutSchedule');
+                  navigation.navigate('WorkoutGenerator', {
+                    initialMode: 'smart_next',
+                    initialIntensity: pl.intensity,
+                  });
                 }}
                 style={{
                   flexBasis: '23.5%',
@@ -377,7 +403,10 @@ export function WorkoutsTabScreen() {
                 onPress={() => {
                   impactLight();
                   playSound('tick', 0.4);
-                  navigation.navigate('WorkoutSchedule');
+                  navigation.navigate('WorkoutGenerator', {
+                    initialMode: 'smart_next',
+                    initialIntensity: pl.intensity,
+                  });
                 }}
                 style={{
                   width: 152,
@@ -483,8 +512,7 @@ export function WorkoutsTabScreen() {
             />
           </AppCard>
         ) : (
-          visiblePresets.map((preset, idx) => {
-            const rankBadgeUrl = getRoutineRankUrl(PRESET_RANK_TIERS[idx % PRESET_RANK_TIERS.length]);
+          visiblePresets.map((preset) => {
             return (
               <AppCard
                 key={preset.id}
@@ -497,13 +525,25 @@ export function WorkoutsTabScreen() {
                   onPress={() => navigation.navigate('PresetDetail', { presetId: preset.id })}
                   style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}
                 >
-                  {rankBadgeUrl ? (
-                    <Image
-                      source={{ uri: rankBadgeUrl }}
-                      resizeMode="contain"
-                      style={{ width: 42, height: 42 }}
-                    />
-                  ) : null}
+                  <View
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      backgroundColor: hexToRgba(c.constant, 0.16),
+                      borderWidth: 1,
+                      borderColor: hexToRgba(c.constant, 0.35),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <AppText size="sm" weight="black" tone="constant">
+                      {preset.exercises.length}
+                    </AppText>
+                    <AppText size="xxsm" tone="sub" style={{ fontSize: 9 }}>
+                      EX
+                    </AppText>
+                  </View>
                   <View style={{ flex: 1, gap: 3 }}>
                     <AppText size="lg" weight="xbold">
                       {preset.name}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
+import { useRoute, type RouteProp } from '@react-navigation/native';
 import { trpc } from '../../api/trpc';
 import {
   AppButton,
@@ -12,6 +13,7 @@ import {
   StackHeader,
 } from '../../components/ui';
 import { useLocale } from '../../i18n/LocaleProvider';
+import type { MainStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../stores/authStore';
 import { RANK_SOLID_ACCENT } from '../../theme/rankGradients';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -33,14 +35,27 @@ const EXPLORE_METRICS = [
   { id: 'sprint_400m', label: '400m Sprint', unit: 's', sample: '62' },
 ] as const;
 
+function resolveInitialMetric(exerciseId?: string): (typeof EXPLORE_METRICS)[number] {
+  if (!exerciseId) return EXPLORE_METRICS[0];
+  const lower = exerciseId.toLowerCase();
+  if (lower.includes('bench')) return EXPLORE_METRICS.find((m) => m.id === 'bench_1rm') ?? EXPLORE_METRICS[0];
+  if (lower.includes('squat')) return EXPLORE_METRICS.find((m) => m.id === 'squat_1rm') ?? EXPLORE_METRICS[0];
+  if (lower.includes('deadlift')) return EXPLORE_METRICS.find((m) => m.id === 'deadlift_1rm') ?? EXPLORE_METRICS[0];
+  if (lower.includes('pull')) return EXPLORE_METRICS.find((m) => m.id === 'pullups') ?? EXPLORE_METRICS[0];
+  if (lower.includes('dip')) return EXPLORE_METRICS.find((m) => m.id === 'dips') ?? EXPLORE_METRICS[0];
+  return EXPLORE_METRICS.find((m) => m.id === lower) ?? EXPLORE_METRICS[0];
+}
+
 export function RankCalculatorScreen() {
   const { theme } = useTheme();
   const c = theme.colors;
   const { l } = useLocale();
+  const route = useRoute<RouteProp<MainStackParamList, 'RankCalculator'>>();
   const user = useAuthStore((s) => s.user);
 
-  const [selected, setSelected] = useState<(typeof EXPLORE_METRICS)[number]>(EXPLORE_METRICS[0]);
-  const [valueInput, setValueInput] = useState<string>(EXPLORE_METRICS[0].sample);
+  const initialMetric = resolveInitialMetric(route.params?.exerciseId);
+  const [selected, setSelected] = useState<(typeof EXPLORE_METRICS)[number]>(initialMetric);
+  const [valueInput, setValueInput] = useState<string>(initialMetric.sample);
   const [sex, setSex] = useState<'male' | 'female'>(
     user?.rankingSex === 'Female' ? 'female' : 'male'
   );
@@ -118,7 +133,6 @@ export function RankCalculatorScreen() {
                 onPress={() => {
                   setSelected(m);
                   setValueInput(m.sample);
-                  runExplore(m.id, m.sample);
                 }}
                 style={{
                   paddingHorizontal: 13,

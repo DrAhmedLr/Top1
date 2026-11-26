@@ -25,39 +25,58 @@ import {
 import { useLocale } from '../../i18n/LocaleProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { RANK_BG_GRADIENTS, RANK_SOLID_ACCENT } from '../../theme/rankGradients';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import type { MainStackParamList } from '../../navigation/types';
 
 export function BodygraphScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const { l } = useLocale();
   const route = useRoute<RouteProp<MainStackParamList, 'Bodygraph'>>();
   const targetUserId = route.params?.userId;
   const displayName = route.params?.displayName;
   const user = useAuthStore((s) => s.user);
-  const isFemale = user?.rankingSex === 'Female';
-  const sex = isFemale ? 'Female' : 'Male';
+  const viewingOther = Boolean(targetUserId && targetUserId !== user?.id);
 
   const [side, setSide] = useState<'front' | 'back'>('front');
   const [mode, setMode] = useState<BodygraphMode>('capability');
   const [selectedMuscle, setSelectedMuscle] = useState<string | null>('Lower Chest');
 
-  const physQuery = trpc.physiology.getBodyReport.useQuery(
-    targetUserId ? { userId: targetUserId } : undefined
+  const physQuery = trpc.physiology.getBodyReport.useQuery(undefined, {
+    enabled: !viewingOther,
+  });
+  const otherProfileQuery = trpc.friends.getPublicProfile.useQuery(
+    { userIdOrUsername: targetUserId ?? '' },
+    { enabled: viewingOther && Boolean(targetUserId) }
   );
-  const report = physQuery.data;
-  const muscles: Partial<Record<RankedMuscleGroup, UnifiedSvgMuscleState>> =
-    report?.svgMuscles ?? {};
+  const otherMuscleQuery = trpc.rank.getMuscleMap.useQuery(
+    { userId: targetUserId },
+    { enabled: viewingOther && Boolean(targetUserId) }
+  );
+
+  const isFemale = viewingOther
+    ? otherProfileQuery.data?.rankingSex === 'Female'
+    : user?.rankingSex === 'Female';
+  const sex = isFemale ? 'Female' : 'Male';
+  const effectiveMode: BodygraphMode = viewingOther ? 'capability' : mode;
+
+  const report = !viewingOther ? physQuery.data : undefined;
+  const muscles: Partial<Record<RankedMuscleGroup, UnifiedSvgMuscleState>> = viewingOther
+    ? ((otherMuscleQuery.data?.muscles ?? {}) as Partial<
+        Record<RankedMuscleGroup, UnifiedSvgMuscleState>
+      >)
+    : (report?.svgMuscles ?? {});
   const activeEntry = selectedMuscle
     ? muscles[selectedMuscle as RankedMuscleGroup] ?? null
     : null;
   const activeTier = (activeEntry?.tier ?? 'Unranked') as RankTier;
   const activeAccent =
-    mode === 'recovery' && activeEntry
+    effectiveMode === 'recovery' && activeEntry && activeEntry.recoveryBand
       ? TOP1_RECOVERY_COLORS[activeEntry.recoveryBand][1]
-      : mode === 'volume' && activeEntry
+      : effectiveMode === 'volume' && activeEntry && activeEntry.volumeZone
         ? TOP1_VOLUME_COLORS[activeEntry.volumeZone][1]
         : RANK_SOLID_ACCENT[activeTier] ?? c.constant;
   const activeMuscleGraphic = selectedMuscle ? getMuscleGraphicUrl(selectedMuscle, sex) : null;
@@ -77,16 +96,18 @@ export function BodygraphScreen() {
         )}
       />
 
-      {/* Mode Switcher */}
-      <SegmentedControl
-        value={mode}
-        onChange={setMode}
-        options={[
-          { label: l('TOP1 Tier', 'Niveau', 'المستوى'), value: 'capability' },
-          { label: l('Recovery %', 'Récupération', 'التعافي'), value: 'recovery' },
-          { label: l('Volume MRV', 'Volume', 'الحجم'), value: 'volume' },
-        ]}
-      />
+      {/* Mode Switcher (own profile only — friends show public strength tiers) */}
+      {!viewingOther ? (
+        <SegmentedControl
+          value={mode}
+          onChange={setMode}
+          options={[
+            { label: l('TOP1 Tier', 'Niveau', 'المستوى'), value: 'capability' },
+            { label: l('Recovery %', 'Récupération', 'التعافي'), value: 'recovery' },
+            { label: l('Volume MRV', 'Volume', 'الحجم'), value: 'volume' },
+          ]}
+        />
+      ) : null}
 
       {/* Front / Back Switcher */}
       <SegmentedControl
@@ -128,7 +149,7 @@ export function BodygraphScreen() {
         <MuscleBodygraphSvg
           muscles={muscles}
           side={side}
-          mode={mode}
+          mode={effectiveMode}
           isFemale={isFemale}
           selectedMuscle={selectedMuscle}
           onSelectMuscle={(m) => setSelectedMuscle((prev) => (prev === m ? null : m))}
@@ -136,7 +157,7 @@ export function BodygraphScreen() {
         />
 
         {/* Mode Legend */}
-        {mode === 'recovery' ? (
+        {effectiveMode === 'recovery' ? (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
             {(['fresh', 'ready', 'recovering', 'fatigued'] as const).map((band) => (
               <View key={band} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -227,41 +248,43 @@ export function BodygraphScreen() {
             </View>
           </View>
 
-          {/* Recovery & Volume Telemetry Pills */}
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <View style={{ flex: 1, padding: 10, borderRadius: RADII.input, backgroundColor: 'rgba(10,7,18,0.5)' }}>
-              <AppText size="xxsm" tone="sub">
-                {l('LOCAL RECOVERY', 'RÉCUPÉRATION', 'التعافي الموضعي')}
-              </AppText>
-              <AppText
-                size="md"
-                weight="black"
-                style={{ color: TOP1_RECOVERY_COLORS[activeEntry.recoveryBand][1] }}
-              >
-                {activeEntry.recoveryPercent}% ({activeEntry.recoveryBand})
-              </AppText>
-              <AppText size="xxsm" tone="sub">
-                {activeEntry.hoursUntilReady > 0
-                  ? `~${activeEntry.hoursUntilReady}h to ready • ${activeEntry.acuteSets72h} sets/72h`
-                  : `Ready now • ${activeEntry.acuteSets72h} sets/72h`}
-              </AppText>
+          {/* Recovery & Volume Telemetry Pills (own physiology report only) */}
+          {!viewingOther && activeEntry.recoveryBand && activeEntry.volumeZone ? (
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <View style={{ flex: 1, padding: 10, borderRadius: RADII.input, backgroundColor: theme.dark ? 'rgba(10,7,18,0.5)' : hexToRgba(c.secondBg, 0.85) }}>
+                <AppText size="xxsm" tone="sub">
+                  {l('LOCAL RECOVERY', 'RÉCUPÉRATION', 'التعافي الموضعي')}
+                </AppText>
+                <AppText
+                  size="md"
+                  weight="black"
+                  style={{ color: TOP1_RECOVERY_COLORS[activeEntry.recoveryBand][1] }}
+                >
+                  {activeEntry.recoveryPercent}% ({activeEntry.recoveryBand})
+                </AppText>
+                <AppText size="xxsm" tone="sub">
+                  {activeEntry.hoursUntilReady > 0
+                    ? `~${activeEntry.hoursUntilReady}h to ready • ${activeEntry.acuteSets72h} sets/72h`
+                    : `Ready now • ${activeEntry.acuteSets72h} sets/72h`}
+                </AppText>
+              </View>
+              <View style={{ flex: 1, padding: 10, borderRadius: RADII.input, backgroundColor: theme.dark ? 'rgba(10,7,18,0.5)' : hexToRgba(c.secondBg, 0.85) }}>
+                <AppText size="xxsm" tone="sub">
+                  {l('7D EFFECTIVE SETS', 'SÉRIES 7J', 'مجموعات 7 أيام')}
+                </AppText>
+                <AppText
+                  size="md"
+                  weight="black"
+                  style={{ color: TOP1_VOLUME_COLORS[activeEntry.volumeZone][1] }}
+                >
+                  {activeEntry.weeklyEffectiveSets} / {activeEntry.mrv} MRV
+                </AppText>
+                <AppText size="xxsm" tone="sub">
+                  MEV {activeEntry.mev} • MAV {activeEntry.mav}
+                </AppText>
+              </View>
             </View>
-            <View style={{ flex: 1, padding: 10, borderRadius: RADII.input, backgroundColor: 'rgba(10,7,18,0.5)' }}>
-              <AppText size="xxsm" tone="sub">
-                {l('7D EFFECTIVE SETS', 'SÉRIES 7J', 'مجموعات 7 أيام')}
-              </AppText>
-              <AppText
-                size="md"
-                weight="black"
-                style={{ color: TOP1_VOLUME_COLORS[activeEntry.volumeZone][1] }}
-              >
-                {activeEntry.weeklyEffectiveSets} / {activeEntry.mrv} MRV
-              </AppText>
-              <AppText size="xxsm" tone="sub">
-                MEV {activeEntry.mev} • MAV {activeEntry.mav}
-              </AppText>
-            </View>
-          </View>
+          ) : null}
 
           {activeEntry.protectedForUpcomingGoal ? (
             <View
@@ -336,9 +359,9 @@ export function BodygraphScreen() {
             const entry = muscles[m];
             const tier = (entry?.tier ?? 'Unranked') as RankTier;
             const color =
-              mode === 'recovery' && entry
+              effectiveMode === 'recovery' && entry && entry.recoveryBand
                 ? TOP1_RECOVERY_COLORS[entry.recoveryBand][1]
-                : mode === 'volume' && entry
+                : effectiveMode === 'volume' && entry && entry.volumeZone
                   ? TOP1_VOLUME_COLORS[entry.volumeZone][1]
                   : entry && entry.rating > 0
                     ? RANK_SOLID_ACCENT[tier]
@@ -346,9 +369,9 @@ export function BodygraphScreen() {
             const active = selectedMuscle === m;
             const thumb = getMuscleGraphicUrl(m, sex);
             const subtitle =
-              mode === 'recovery' && entry
+              effectiveMode === 'recovery' && entry && entry.recoveryPercent !== undefined
                 ? `${entry.recoveryPercent}% ready`
-                : mode === 'volume' && entry
+                : effectiveMode === 'volume' && entry && entry.weeklyEffectiveSets !== undefined
                   ? `${entry.weeklyEffectiveSets}/${entry.mrv} sets`
                   : `${entry?.label ?? 'Unmeasured'}`;
             return (
@@ -356,12 +379,12 @@ export function BodygraphScreen() {
                 key={m}
                 onPress={() => setSelectedMuscle(active ? null : m)}
                 style={{
-                  width: '48.3%',
+                  width: layout.isDesktop ? '24%' : layout.isWide ? '31.5%' : '48.3%',
                   padding: 10,
                   borderRadius: RADII.input,
                   backgroundColor: active ? hexToRgba(color, 0.18) : c.secondBg,
                   borderWidth: 1,
-                  borderColor: active ? color : hexToRgba('#FFFFFF', 0.08),
+                  borderColor: active ? color : hexToRgba(c.text, 0.1),
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 8,
