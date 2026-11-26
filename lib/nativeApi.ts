@@ -9,5 +9,5 @@ export function validApiOrigin(request:Request){
 }
 export function nativeCorsHeaders(origin:string|null){
  if(!nativeOrigin(origin))return null;
- return {'Access-Control-Allow-Origin':origin!,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Authorization, Content-Type, X-Profile-User','Access-Control-Max-Age':'600','Cache-Control':'private, no-store','Vary':'Origin'};
+ return {'Access-Control-Allow-Origin':origin!,'Access-Control-Allow-Methods':'GET, POST, PUT, PATCH, DELETE, OPTIONS','Access-Control-Allow-Headers':'Authorization, Content-Type, X-Profile-User','Access-Control-Max-Age':'600','Cache-Control':'private, no-store','Vary':'Origin'};
 }

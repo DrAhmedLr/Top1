@@ -432,7 +432,14 @@ export const top1Router = router({
         bodyWeightKg: z.number().min(25).max(350).optional(),
         derivation: z
           .object({
-            formula: z.enum(['epley_ratio_v1', 'pullup_ratio_v1', 'cooper_v1', 'skinfold_v1']),
+            formula: z.enum([
+              'epley_ratio_v1',
+              'pullup_ratio_v1',
+              'cooper_v1',
+              'skinfold_v1',
+              'jackson_pollock_male_3site_v1',
+              'jackson_pollock_female_3site_v1',
+            ]),
             inputs: z.array(z.number()),
             bodyWeightKg: z.number().optional(),
           })

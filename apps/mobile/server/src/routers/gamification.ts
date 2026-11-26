@@ -1,10 +1,14 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ratingToRank } from '@apexlift/shared';
 import {
   bodyMeasurements,
+  dailyVaultClaims,
+  featureRequests,
+  featureRequestVotes,
   goals,
   medals,
+  metricObservations,
   quests,
   userMedals,
   userQuests,
@@ -12,6 +16,7 @@ import {
   workoutPosts,
 } from '../db/schema.js';
 import { generateId } from '../lib/auth.js';
+import { nextObservationSequence } from '../lib/top1Context.js';
 import { protectedProcedure, router } from '../trpc.js';
 
 export const gamificationRouter = router({
@@ -30,7 +35,6 @@ export const gamificationRouter = router({
       recent.reduce((sum, p) => sum + p.durationSeconds, 0) / 60
     );
 
-    // Build 7-day calendar status
     const days = Array.from({ length: 7 }, (_, i) => {
       const dt = new Date(Date.now() - (6 - i) * 24 * 3600 * 1000);
       const iso = dt.toISOString().slice(0, 10);
@@ -133,21 +137,176 @@ export const gamificationRouter = router({
         .limit(1);
       if (!uq || uq.progress < q.targetCount || uq.claimedAt) return { ok: false };
 
-      await ctx.db
+      // Atomic conditional update prevents concurrent double-claim
+      const claimed = await ctx.db
         .update(userQuests)
         .set({ claimedAt: now, updatedAt: now })
-        .where(eq(userQuests.id, uq.id));
+        .where(and(eq(userQuests.id, uq.id), isNull(userQuests.claimedAt)))
+        .returning({ id: userQuests.id });
+      if (claimed.length === 0) return { ok: false };
 
       await ctx.db
         .update(users)
         .set({
-          experiencePoints: ctx.user.experiencePoints + q.rewardXp,
-          credits: ctx.user.credits + q.rewardCredits,
+          experiencePoints: sql`${users.experiencePoints} + ${q.rewardXp}`,
+          credits: sql`${users.credits} + ${q.rewardCredits}`,
           updatedAt: now,
         })
         .where(eq(users.id, ctx.user.id));
 
       return { ok: true, rewardXp: q.rewardXp, rewardCredits: q.rewardCredits };
+    }),
+
+  getDailyVaultStatus: protectedProcedure.query(async ({ ctx }) => {
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const [claim] = await ctx.db
+      .select()
+      .from(dailyVaultClaims)
+      .where(and(eq(dailyVaultClaims.userId, ctx.user.id), eq(dailyVaultClaims.dateIso, todayIso)))
+      .limit(1);
+    const streakBonus = Math.min(60, ctx.user.streaks * 5);
+    return {
+      dateIso: todayIso,
+      claimedToday: Boolean(claim),
+      claimedAt: claim?.claimedAt ?? null,
+      rewardCredits: 50 + streakBonus,
+      rewardXp: 40 + Math.min(40, ctx.user.streaks * 4),
+    };
+  }),
+
+  claimDailyVault: protectedProcedure.mutation(async ({ ctx }) => {
+    const now = new Date().toISOString();
+    const todayIso = now.slice(0, 10);
+    const streakBonus = Math.min(60, ctx.user.streaks * 5);
+    const rewardCredits = 50 + streakBonus;
+    const rewardXp = 40 + Math.min(40, ctx.user.streaks * 4);
+
+    try {
+      const inserted = await ctx.db
+        .insert(dailyVaultClaims)
+        .values({
+          id: generateId('dvc'),
+          userId: ctx.user.id,
+          dateIso: todayIso,
+          rewardCredits,
+          rewardXp,
+          claimedAt: now,
+        })
+        .onConflictDoNothing()
+        .returning({ id: dailyVaultClaims.id });
+
+      if (inserted.length === 0) {
+        return { ok: false, alreadyClaimed: true, rewardCredits: 0, rewardXp: 0, credits: ctx.user.credits };
+      }
+    } catch {
+      return { ok: false, alreadyClaimed: true, rewardCredits: 0, rewardXp: 0, credits: ctx.user.credits };
+    }
+
+    const [updated] = await ctx.db
+      .update(users)
+      .set({
+        credits: sql`${users.credits} + ${rewardCredits}`,
+        experiencePoints: sql`${users.experiencePoints} + ${rewardXp}`,
+        updatedAt: now,
+      })
+      .where(eq(users.id, ctx.user.id))
+      .returning({ credits: users.credits });
+
+    return {
+      ok: true,
+      alreadyClaimed: false,
+      rewardCredits,
+      rewardXp,
+      credits: updated?.credits ?? ctx.user.credits + rewardCredits,
+    };
+  }),
+
+  listFeatureRequests: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db
+      .select()
+      .from(featureRequests)
+      .orderBy(desc(featureRequests.votesCount), desc(featureRequests.createdAt));
+    const myVotes = await ctx.db
+      .select({ requestId: featureRequestVotes.requestId })
+      .from(featureRequestVotes)
+      .where(eq(featureRequestVotes.userId, ctx.user.id));
+    const votedSet = new Set(myVotes.map((v) => v.requestId));
+
+    return rows.map((r) => ({
+      ...r,
+      votedByMe: votedSet.has(r.id),
+    }));
+  }),
+
+  createFeatureRequest: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().trim().min(3).max(120),
+        description: z.string().trim().max(600).default(''),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const id = generateId('frq');
+      const now = new Date().toISOString();
+      await ctx.db.insert(featureRequests).values({
+        id,
+        userId: ctx.user.id,
+        title: input.title,
+        description: input.description,
+        status: 'open',
+        votesCount: 1,
+        createdAt: now,
+      });
+      await ctx.db.insert(featureRequestVotes).values({
+        id: generateId('frv'),
+        requestId: id,
+        userId: ctx.user.id,
+        createdAt: now,
+      });
+      return { id };
+    }),
+
+  toggleFeatureRequestVote: protectedProcedure
+    .input(z.object({ requestId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const [req] = await ctx.db
+        .select()
+        .from(featureRequests)
+        .where(eq(featureRequests.id, input.requestId))
+        .limit(1);
+      if (!req) return { ok: false, voted: false, votesCount: 0 };
+
+      const [existing] = await ctx.db
+        .select()
+        .from(featureRequestVotes)
+        .where(
+          and(
+            eq(featureRequestVotes.requestId, input.requestId),
+            eq(featureRequestVotes.userId, ctx.user.id)
+          )
+        )
+        .limit(1);
+
+      let nextCount: number;
+      if (existing) {
+        await ctx.db.delete(featureRequestVotes).where(eq(featureRequestVotes.id, existing.id));
+        nextCount = Math.max(0, req.votesCount - 1);
+      } else {
+        await ctx.db.insert(featureRequestVotes).values({
+          id: generateId('frv'),
+          requestId: input.requestId,
+          userId: ctx.user.id,
+          createdAt: new Date().toISOString(),
+        });
+        nextCount = req.votesCount + 1;
+      }
+
+      await ctx.db
+        .update(featureRequests)
+        .set({ votesCount: nextCount })
+        .where(eq(featureRequests.id, input.requestId));
+
+      return { ok: true, voted: !existing, votesCount: nextCount };
     }),
 
   getMedals: protectedProcedure.query(async ({ ctx }) => {
@@ -212,6 +371,21 @@ export const gamificationRouter = router({
           .update(users)
           .set({ bodyweightKg: bwKg, updatedAt: now })
           .where(eq(users.id, ctx.user.id));
+      } else if (input.metricType === 'Body Fat' && input.value >= 3 && input.value <= 65) {
+        const seq = await nextObservationSequence(ctx.db, ctx.user.id);
+        await ctx.db.insert(metricObservations).values({
+          id: generateId('obs'),
+          userId: ctx.user.id,
+          metricId: 'body_fat',
+          value: Number(input.value.toFixed(1)),
+          unit: '%',
+          measuredAt: now,
+          recordedAt: now,
+          sequence: seq,
+          method: 'manual',
+          cleared: false,
+          source: 'measurement_sync',
+        });
       }
       return { id };
     }),

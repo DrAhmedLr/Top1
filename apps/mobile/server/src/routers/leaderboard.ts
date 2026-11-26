@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { ratingToRank, topPercentToBadge, topPercentToRating, xpToLevel } from '@apexlift/shared';
 import { exerciseRanks, friendships, users } from '../db/schema.js';
+import { getBlockedUserIds, PUBLIC_USER_SELECT, safeJsonParse } from '../lib/accessControl.js';
 import { protectedProcedure, router } from '../trpc.js';
 
 export const leaderboardRouter = router({
@@ -14,7 +15,10 @@ export const leaderboardRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const allUsers = await ctx.db.select().from(users);
+      const blockedSet = await getBlockedUserIds(ctx.db, ctx.user.id);
+      const allUsers = (await ctx.db.select(PUBLIC_USER_SELECT).from(users)).filter(
+        (u) => !blockedSet.has(u.id)
+      );
       let pool = allUsers;
 
       if (input.scope === 'friends') {
@@ -69,7 +73,7 @@ export const leaderboardRouter = router({
             userId: u.id,
             username: u.username,
             displayName: u.displayName,
-            avatarConfig: JSON.parse(u.avatarConfigJson || '{}'),
+            avatarConfig: safeJsonParse<Record<string, unknown>>(u.avatarConfigJson, {}),
             score,
             scoreLabel,
             rankTier:

@@ -17,6 +17,17 @@ export function hashPassword(password: string): string {
   return `${salt}:${derived}`;
 }
 
+export async function hashPasswordAsync(password: string): Promise<string> {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const derived = await new Promise<Buffer>((resolve, reject) => {
+    crypto.scrypt(password, salt, 64, (err, key) => {
+      if (err) reject(err);
+      else resolve(key);
+    });
+  });
+  return `${salt}:${derived.toString('hex')}`;
+}
+
 export function verifyPassword(password: string, storedHash: string): boolean {
   const [salt, key] = storedHash.split(':');
   if (!salt || !key) return false;
@@ -25,6 +36,20 @@ export function verifyPassword(password: string, storedHash: string): boolean {
   const b = Buffer.from(derived, 'hex');
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
+}
+
+export async function verifyPasswordAsync(password: string, storedHash: string): Promise<boolean> {
+  const [salt, key] = storedHash.split(':');
+  if (!salt || !key) return false;
+  const derived = await new Promise<Buffer>((resolve, reject) => {
+    crypto.scrypt(password, salt, 64, (err, buf) => {
+      if (err) reject(err);
+      else resolve(buf);
+    });
+  });
+  const a = Buffer.from(key, 'hex');
+  if (a.length !== derived.length) return false;
+  return crypto.timingSafeEqual(a, derived);
 }
 
 export function hashToken(token: string): string {

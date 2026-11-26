@@ -114,7 +114,7 @@ export const SEED_EXERCISES = [
 export const SEED_FOODS = [
   { id: 'fd_chicken_breast', name: 'Grilled Chicken Breast', brand: 'Whole Foods', barcode: '0011110000011', servingSize: 100, servingUnit: 'g', calories: 165, proteinG: 31, carbsG: 0, fatG: 3.6, isCommon: true },
   { id: 'fd_white_rice', name: 'Cooked Jasmine Rice', brand: 'Generic', barcode: '0011110000028', servingSize: 150, servingUnit: 'g', calories: 195, proteinG: 4, carbsG: 43, fatG: 0.4, isCommon: true },
-  { id: 'fd_whey_isolate', name: 'Whey Protein Isolate (Vanilla)', brand: 'ApexFuel', barcode: '0011110000035', servingSize: 32, servingUnit: 'g', calories: 120, proteinG: 26, carbsG: 2, fatG: 1, isCommon: true },
+  { id: 'fd_whey_isolate', name: 'Whey Protein Isolate (Vanilla)', brand: 'TOP1 Fuel', barcode: '0011110000035', servingSize: 32, servingUnit: 'g', calories: 120, proteinG: 26, carbsG: 2, fatG: 1, isCommon: true },
   { id: 'fd_greek_yogurt', name: 'Nonfat Greek Yogurt', brand: 'PureDairy', barcode: '0011110000042', servingSize: 170, servingUnit: 'g', calories: 100, proteinG: 18, carbsG: 6, fatG: 0, isCommon: true },
   { id: 'fd_oats', name: 'Rolled Oats', brand: 'Harvest', barcode: '0011110000059', servingSize: 40, servingUnit: 'g', calories: 150, proteinG: 5, carbsG: 27, fatG: 3, isCommon: true },
   { id: 'fd_eggs', name: 'Large Whole Eggs (2)', brand: 'Pasture Farm', barcode: '0011110000066', servingSize: 100, servingUnit: 'g', calories: 144, proteinG: 12.6, carbsG: 0.7, fatG: 9.5, isCommon: true },
@@ -122,6 +122,26 @@ export const SEED_FOODS = [
   { id: 'fd_banana', name: 'Medium Banana', brand: 'Fresh Produce', barcode: '0011110000080', servingSize: 118, servingUnit: 'g', calories: 105, proteinG: 1.3, carbsG: 27, fatG: 0.4, isCommon: true },
   { id: 'fd_avocado', name: 'Hass Avocado (Half)', brand: 'Fresh Produce', barcode: '0011110000097', servingSize: 75, servingUnit: 'g', calories: 120, proteinG: 1.5, carbsG: 6, fatG: 11, isCommon: true },
   { id: 'fd_sweet_potato', name: 'Baked Sweet Potato', brand: 'Fresh Produce', barcode: '0011110000103', servingSize: 150, servingUnit: 'g', calories: 135, proteinG: 3, carbsG: 31, fatG: 0.2, isCommon: true },
+  { id: 'fd_lean_beef', name: '93% Lean Ground Beef', brand: 'Butcher Cut', barcode: '0011110000110', servingSize: 115, servingUnit: 'g', calories: 170, proteinG: 23, carbsG: 0, fatG: 8, isCommon: true },
+  { id: 'fd_turkey_breast', name: 'Roasted Turkey Breast', brand: 'Whole Foods', barcode: '0011110000127', servingSize: 100, servingUnit: 'g', calories: 135, proteinG: 29, carbsG: 0, fatG: 1.5, isCommon: true },
+  { id: 'fd_egg_whites', name: 'Liquid Egg Whites', brand: 'Pasture Farm', barcode: '0011110000134', servingSize: 184, servingUnit: 'g', calories: 100, proteinG: 20, carbsG: 0, fatG: 0, isCommon: true },
+  { id: 'fd_cottage_cheese', name: 'Low-Fat Cottage Cheese (2%)', brand: 'PureDairy', barcode: '0011110000141', servingSize: 113, servingUnit: 'g', calories: 90, proteinG: 13, carbsG: 4, fatG: 2.5, isCommon: true },
+  { id: 'fd_tuna', name: 'Wild Skipjack Tuna (Water)', brand: 'Ocean Select', barcode: '0011110000158', servingSize: 112, servingUnit: 'g', calories: 110, proteinG: 25, carbsG: 0, fatG: 1, isCommon: true },
+  { id: 'fd_shrimp', name: 'Steamed Shrimp', brand: 'Ocean Select', barcode: '0011110000165', servingSize: 100, servingUnit: 'g', calories: 99, proteinG: 24, carbsG: 0.2, fatG: 0.3, isCommon: true },
+  { id: 'fd_tofu', name: 'Extra-Firm Organic Tofu', brand: 'PlantCraft', barcode: '0011110000172', servingSize: 100, servingUnit: 'g', calories: 120, proteinG: 13, carbsG: 2.5, fatG: 6.5, isCommon: true },
+  { id: 'fd_quinoa', name: 'Cooked Quinoa', brand: 'Harvest', barcode: '0011110000189', servingSize: 185, servingUnit: 'g', calories: 222, proteinG: 8, carbsG: 39, fatG: 3.6, isCommon: true },
+  { id: 'fd_pasta', name: 'Cooked Durum Wheat Pasta', brand: 'Artisan', barcode: '0011110000196', servingSize: 140, servingUnit: 'g', calories: 220, proteinG: 8, carbsG: 43, fatG: 1.3, isCommon: true },
+  { id: 'fd_sourdough', name: 'Sourdough Bread (2 Slices)', brand: 'Bakery', barcode: '0011110000202', servingSize: 100, servingUnit: 'g', calories: 260, proteinG: 9, carbsG: 52, fatG: 1.5, isCommon: true },
+  { id: 'fd_blueberries', name: 'Fresh Blueberries', brand: 'Fresh Produce', barcode: '0011110000219', servingSize: 148, servingUnit: 'g', calories: 84, proteinG: 1.1, carbsG: 21, fatG: 0.5, isCommon: true },
+  { id: 'fd_apple', name: 'Honeycrisp Apple', brand: 'Fresh Produce', barcode: '0011110000226', servingSize: 182, servingUnit: 'g', calories: 95, proteinG: 0.5, carbsG: 25, fatG: 0.3, isCommon: true },
+  { id: 'fd_broccoli', name: 'Steamed Broccoli Florets', brand: 'Fresh Produce', barcode: '0011110000233', servingSize: 150, servingUnit: 'g', calories: 52, proteinG: 3.7, carbsG: 10.5, fatG: 0.6, isCommon: true },
+  { id: 'fd_spinach', name: 'Baby Spinach', brand: 'Fresh Produce', barcode: '0011110000240', servingSize: 85, servingUnit: 'g', calories: 20, proteinG: 2.4, carbsG: 3.1, fatG: 0.3, isCommon: true },
+  { id: 'fd_peanut_butter', name: 'Natural Peanut Butter', brand: 'Harvest', barcode: '0011110000257', servingSize: 32, servingUnit: 'g', calories: 190, proteinG: 8, carbsG: 6, fatG: 16, isCommon: true },
+  { id: 'fd_almonds', name: 'Roasted Almonds', brand: 'Harvest', barcode: '0011110000264', servingSize: 28, servingUnit: 'g', calories: 164, proteinG: 6, carbsG: 6, fatG: 14, isCommon: true },
+  { id: 'fd_olive_oil', name: 'Extra-Virgin Olive Oil (1 Tbsp)', brand: 'Mediterranean', barcode: '0011110000271', servingSize: 14, servingUnit: 'g', calories: 120, proteinG: 0, carbsG: 0, fatG: 14, isCommon: true },
+  { id: 'fd_milk_skim', name: 'Ultra-Filtered Skim Milk', brand: 'PureDairy', barcode: '0011110000288', servingSize: 240, servingUnit: 'ml', calories: 80, proteinG: 13, carbsG: 6, fatG: 0, isCommon: true },
+  { id: 'fd_creatine_shake', name: 'Post-Workout Protein & Berry Shake', brand: 'TOP1 Fuel', barcode: '0011110000295', servingSize: 350, servingUnit: 'ml', calories: 280, proteinG: 32, carbsG: 30, fatG: 3, isCommon: true },
+  { id: 'fd_lentils', name: 'Cooked Green Lentils', brand: 'Harvest', barcode: '0011110000301', servingSize: 198, servingUnit: 'g', calories: 230, proteinG: 18, carbsG: 40, fatG: 0.8, isCommon: true },
 ] as const;
 
 export async function seedDatabase(db: AppDatabase): Promise<void> {
@@ -217,7 +237,7 @@ export async function seedDatabase(db: AppDatabase): Promise<void> {
   await db
     .insert(medals)
     .values([
-      { id: 'mdl_first', name: 'First Liftoff', description: 'Complete your first ranked workout.', icon: 'rocket', tierColor: '#59B9F9', targetValue: 1, metricKey: 'workouts' },
+      { id: 'mdl_first', name: 'First Session', description: 'Complete your first ranked workout.', icon: 'rocket', tierColor: '#59B9F9', targetValue: 1, metricKey: 'workouts' },
       { id: 'mdl_streak7', name: '7-Day Fire', description: 'Hold a 7-day training streak.', icon: 'flame', tierColor: '#F59E0B', targetValue: 7, metricKey: 'streak' },
       { id: 'mdl_gold', name: 'Gold Standard', description: 'Reach 400+ SR overall Bodyrank.', icon: 'trophy', tierColor: '#D3A313', targetValue: 400, metricKey: 'rating' },
       { id: 'mdl_plat', name: 'Platinum Club', description: 'Reach 500+ SR overall Bodyrank.', icon: 'diamond', tierColor: '#5EDED6', targetValue: 500, metricKey: 'rating' },
@@ -238,7 +258,14 @@ export async function seedDatabase(db: AppDatabase): Promise<void> {
     ])
     .onConflictDoNothing();
 
-  // 3. Check if demo user exists
+  // 3. Never seed demo accounts with hardcoded credentials in production/Vercel unless explicitly opted in
+  const allowDemoSeed =
+    process.env.TOP1_SEED_DEMO_USERS === 'true' ||
+    (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1');
+  if (!allowDemoSeed) {
+    return;
+  }
+
   const [existingDemo] = await db
     .select({ id: users.id })
     .from(users)

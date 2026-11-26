@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { and, asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { exercises, presetExercises, presets, workoutFolders } from '../db/schema.js';
+import { isBlockedBetween, safeJsonParse } from '../lib/accessControl.js';
 import { generateId } from '../lib/auth.js';
 import { protectedProcedure, router } from '../trpc.js';
 
@@ -111,7 +112,13 @@ export const presetRouter = router({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [p] = await ctx.db.select().from(presets).where(eq(presets.id, input.id)).limit(1);
-      if (!p) throw new TRPCError({ code: 'NOT_FOUND', message: 'Preset not found' });
+      if (
+        !p ||
+        (p.userId !== ctx.user.id &&
+          (!p.isPublic || (await isBlockedBetween(ctx.db, ctx.user.id, p.userId))))
+      ) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Preset not found' });
+      }
 
       const pExs = await ctx.db
         .select()
@@ -130,15 +137,17 @@ export const presetRouter = router({
             exerciseId: pe.exerciseId,
             exerciseName: ex?.name ?? 'Exercise',
             equipment: ex?.equipment ?? 'Barbell',
-            primaryMuscles: ex ? (JSON.parse(ex.primaryMusclesJson) as string[]) : [],
+            primaryMuscles: ex ? safeJsonParse<string[]>(ex.primaryMusclesJson, []) : [],
             supersetGroup: pe.supersetGroup,
             restSeconds: pe.restSeconds,
             notes: pe.notes,
-            targetSets: JSON.parse(pe.targetSetsJson) as Array<{
-              weightKg: number;
-              reps: number;
-              setType?: 'normal' | 'warmup' | 'drop' | 'failure';
-            }>,
+            targetSets: safeJsonParse<
+              Array<{
+                weightKg: number;
+                reps: number;
+                setType?: 'normal' | 'warmup' | 'drop' | 'failure';
+              }>
+            >(pe.targetSetsJson, []),
           };
         }),
       };
@@ -204,7 +213,13 @@ export const presetRouter = router({
         .from(presets)
         .where(eq(presets.id, input.presetId))
         .limit(1);
-      if (!src) throw new TRPCError({ code: 'NOT_FOUND', message: 'Preset not found' });
+      if (
+        !src ||
+        (src.userId !== ctx.user.id &&
+          (!src.isPublic || (await isBlockedBetween(ctx.db, ctx.user.id, src.userId))))
+      ) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Preset not found' });
+      }
 
       const srcExs = await ctx.db
         .select()

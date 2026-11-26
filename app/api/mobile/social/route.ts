@@ -77,7 +77,12 @@ export async function POST(request: Request) {
         .maybeSingle();
 
       if (existing?.id) {
-        await client.from('post_reactions').delete().eq('id', existing.id).eq('user_id', user.id);
+        const { error: delError } = await client
+          .from('post_reactions')
+          .delete()
+          .eq('id', existing.id)
+          .eq('user_id', user.id);
+        if (delError) return reply(request, { error: 'Could not remove reaction.' }, 503);
         return reply(request, { toggled: false, postId, reactionKey });
       }
       const { error } = await client

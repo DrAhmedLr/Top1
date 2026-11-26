@@ -138,11 +138,14 @@ export const workoutGenerationRouter = router({
         },
       });
 
-      // Match generated TOP1 exercise blocks to Liftoff's 630+ catalog IDs so ActiveWorkoutSheet launches seamlessly
+      // Match generated TOP1 exercise blocks to catalog IDs; auto-register unmatched ontology exercises so saving/logging never fails FK constraints.
       const allExs = await ctx.db.select().from(exercises);
+      const byId = new Map(allExs.map((e) => [e.id, e]));
       const byLowerName = new Map(allExs.map((e) => [e.name.toLowerCase(), e]));
 
-      const resolveLiftoffExercise = (name: string) => {
+      const resolveCatalogExercise = (name: string, fallbackId: string) => {
+        const direct = byId.get(fallbackId);
+        if (direct) return direct;
         const lower = name.toLowerCase();
         const exact = byLowerName.get(lower);
         if (exact) return exact;
@@ -154,6 +157,73 @@ export const workoutGenerationRouter = router({
       };
 
       const repAdjust = input.intensity === 'strength' ? 5 : input.intensity === 'endurance' ? 15 : null;
+      const nowIso = new Date().toISOString();
+
+      const resolvedExercises = [];
+      for (const block of plan.exercises) {
+        let matched = resolveCatalogExercise(block.name, block.exerciseId);
+        const primaryMuscles = block.musclesTargeted
+          .filter((m) => m.role === 'primary')
+          .map((m) => MUSCLE_ID_TO_SVG_GROUP[m.muscle] ?? m.muscle);
+        if (!matched) {
+          const safeId = `ex_onto_${block.exerciseId.replace(/[^a-z0-9_]/gi, '_').toLowerCase()}`;
+          await ctx.db
+            .insert(exercises)
+            .values({
+              id: safeId,
+              name: block.name,
+              equipment: 'Gym',
+              inputType: 'weight_reps',
+              primaryMusclesJson: JSON.stringify(primaryMuscles.length ? primaryMuscles : ['Upper Chest']),
+              secondaryMusclesJson: '[]',
+              instructions: block.whyChosen || `Perform ${block.name} with controlled tempo.`,
+              maleBaseFactor: 4.0,
+              femaleBaseFactor: 2.8,
+              includesBodyweight: false,
+              isRankable: true,
+              createdAt: nowIso,
+            })
+            .onConflictDoNothing();
+          matched = {
+            id: safeId,
+            authorId: null,
+            name: block.name,
+            equipment: 'Gym',
+            inputType: 'weight_reps',
+            primaryMusclesJson: JSON.stringify(primaryMuscles),
+            secondaryMusclesJson: '[]',
+            instructions: block.whyChosen || '',
+            maleBaseFactor: 4.0,
+            femaleBaseFactor: 2.8,
+            includesBodyweight: false,
+            isRankable: true,
+            createdAt: nowIso,
+          };
+          byId.set(safeId, matched);
+        }
+
+        const reps = repAdjust ?? block.targetAmount;
+        const loadKg = block.suggestedLoadKg ?? 0;
+        resolvedExercises.push({
+          exerciseId: matched.id,
+          top1ExerciseId: block.exerciseId,
+          exerciseName: matched.name,
+          equipment: matched.equipment,
+          pattern: block.pattern,
+          primaryMuscles,
+          restSeconds: block.restSeconds,
+          effortCue: block.effortCue,
+          whyChosen: block.whyChosen,
+          estimatedMinutes: block.estimatedMinutes,
+          suggestedLoadKg: block.suggestedLoadKg,
+          substitutes: block.substitutes,
+          sets: Array.from({ length: block.sets }, () => ({
+            weightKg: loadKg,
+            reps,
+            setType: 'normal' as const,
+          })),
+        });
+      }
 
       return {
         status: plan.status,
@@ -170,32 +240,7 @@ export const workoutGenerationRouter = router({
         warnings: plan.warnings,
         scientificRationale: plan.scientificRationale,
         safetyGuidance: plan.safetyGuidance,
-        exercises: plan.exercises.map((block) => {
-          const matched = resolveLiftoffExercise(block.name);
-          const reps = repAdjust ?? block.targetAmount;
-          const loadKg = block.suggestedLoadKg ?? 0;
-          return {
-            exerciseId: matched?.id ?? block.exerciseId,
-            top1ExerciseId: block.exerciseId,
-            exerciseName: matched?.name ?? block.name,
-            equipment: matched?.equipment ?? 'Gym',
-            pattern: block.pattern,
-            primaryMuscles: block.musclesTargeted
-              .filter((m) => m.role === 'primary')
-              .map((m) => MUSCLE_ID_TO_SVG_GROUP[m.muscle] ?? m.muscle),
-            restSeconds: block.restSeconds,
-            effortCue: block.effortCue,
-            whyChosen: block.whyChosen,
-            estimatedMinutes: block.estimatedMinutes,
-            suggestedLoadKg: block.suggestedLoadKg,
-            substitutes: block.substitutes,
-            sets: Array.from({ length: block.sets }, () => ({
-              weightKg: loadKg,
-              reps,
-              setType: 'normal' as const,
-            })),
-          };
-        }),
+        exercises: resolvedExercises,
       };
     }),
 });
