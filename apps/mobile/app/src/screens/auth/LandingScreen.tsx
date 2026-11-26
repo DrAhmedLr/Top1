@@ -10,6 +10,7 @@ import { AppButton, AppCard, AppText, RankBadge, ScreenContainer, useAlert } fro
 import { useLocale } from '../../i18n/LocaleProvider';
 import type { AuthStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../stores/authStore';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import { playSound } from '../../utils/soundscape';
@@ -83,6 +84,7 @@ const DEMO_AUTH_ENABLED =
 
 export function LandingScreen({ navigation }: Props) {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const { locale, setLocale, l } = useLocale();
   const { showAlert } = useAlert();
@@ -105,56 +107,234 @@ export function LandingScreen({ navigation }: Props) {
   const activeSlide = HIGHLIGHTS[slideIdx];
   const slideArt = ONBOARDING_ASSETS[activeSlide.artKey];
 
-  return (
-    <ScreenContainer scroll contentStyle={{ justifyContent: 'space-between', paddingVertical: 14 }}>
-      {/* Brand Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <LinearGradient
-            colors={[c.constantOvertone, c.constant]}
+  const brandHeader = (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <LinearGradient
+          colors={[c.constantOvertone, c.constant]}
+          style={{
+            width: 38,
+            height: 38,
+            borderRadius: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="flash" size={20} color="#0F0A18" />
+        </LinearGradient>
+        <View>
+          <AppText size="lg" weight="black" style={{ letterSpacing: 0.6 }}>
+            TOP1%
+          </AppText>
+          <AppText size="xxsm" weight="bold" tone="constant">
+            {l('SCIENTIFIC PERFORMANCE OS', 'PERFORMANCE SCIENTIFIQUE', 'نظام الأداء العلمي')}
+          </AppText>
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        {(['en', 'fr', 'ar'] as const).map((code) => {
+          const active = locale === code;
+          return (
+            <Pressable
+              key={code}
+              onPress={() => void setLocale(code)}
+              style={{
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+                borderRadius: 99,
+                backgroundColor: active ? c.constant : c.secondBg,
+                borderWidth: 1,
+                borderColor: active ? c.constant : c.thirdBg,
+              }}
+            >
+              <AppText size="xxsm" weight="black" tone={active ? 'constantT' : 'sub'}>
+                {code.toUpperCase()}
+              </AppText>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+
+  const mascotShowcase = (
+    <View style={{ alignItems: 'center', gap: layout.isDesktop ? 16 : 10, width: '100%' }}>
+      <TextBubbleSys value={l(...activeSlide.jymboLine)} tailPlacement="bottom" textAlign="center" />
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: layout.isDesktop ? 16 : 10 }}>
+        <View style={{ opacity: 0.82, transform: [{ scale: layout.isDesktop ? 0.94 : 0.84 }] }}>
+          <RankBadge tier="Elite" division={1} size={layout.isDesktop ? 68 : 58} />
+        </View>
+        <JymboRive pose={activeSlide.pose} size={layout.isDesktop ? 180 : 146} curlIntense={activeSlide.pose === 'Curling'} />
+        <View style={{ opacity: 0.82, transform: [{ scale: layout.isDesktop ? 0.94 : 0.84 }] }}>
+          <RankBadge tier={activeSlide.tier} division={1} size={layout.isDesktop ? 76 : 64} showShine />
+        </View>
+      </View>
+
+      {slideArt ? (
+        <View
+          style={{
+            width: '100%',
+            height: layout.isDesktop ? 156 : 112,
+            borderRadius: RADII.card,
+            overflow: 'hidden',
+            backgroundColor: c.secondBg,
+            borderWidth: 1,
+            borderColor: hexToRgba(c.constant, 0.25),
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Image source={slideArt} resizeMode="contain" style={{ width: '94%', height: '94%' }} />
+        </View>
+      ) : null}
+
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        {HIGHLIGHTS.map((item, i) => {
+          const active = i === slideIdx;
+          return (
+            <Pressable
+              key={item.title[0]}
+              onPress={() => {
+                playSound('tick', 0.45);
+                setSlideIdx(i);
+              }}
+              style={{
+                width: active ? 28 : 8,
+                height: 8,
+                borderRadius: 99,
+                backgroundColor: active ? c.constant : c.thirdBg,
+              }}
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
+
+  const featureList = (
+    <AppCard variant="second_outlined" style={{ width: '100%', gap: 6, padding: 10 }}>
+      {HIGHLIGHTS.map((item, i) => (
+        <Pressable
+          key={item.title[0]}
+          onPress={() => {
+            playSound('tick', 0.45);
+            setSlideIdx(i);
+          }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            padding: layout.isDesktop ? 11 : 8,
+            borderRadius: 12,
+            backgroundColor: i === slideIdx ? hexToRgba(c.constant, 0.14) : 'transparent',
+            borderWidth: 1,
+            borderColor: i === slideIdx ? hexToRgba(c.constant, 0.35) : 'transparent',
+          }}
+        >
+          <Ionicons
+            name={item.icon}
+            size={18}
+            color={i === slideIdx ? c.constant : c.subText}
+          />
+          <View style={{ flex: 1 }}>
+            <AppText size="sm" weight="bold">
+              {l(...item.title)}
+            </AppText>
+            <AppText size="xsm" tone="sub" numberOfLines={layout.isDesktop ? 2 : 1}>
+              {l(...item.subtitle)}
+            </AppText>
+          </View>
+        </Pressable>
+      ))}
+    </AppCard>
+  );
+
+  const ctaStack = (
+    <View style={{ gap: 10, marginTop: 6, width: '100%' }}>
+      <AppButton
+        title="Get Started — Meet Jymbo & Rank Up"
+        size="lg"
+        fullWidth
+        onPress={() => {
+          playSound('intro');
+          navigation.navigate('OnboardingQuestionnaire');
+        }}
+        rightIcon={<Ionicons name="arrow-forward" size={18} color={c.constantText} />}
+      />
+      <AppButton
+        title="I Already Have an Account"
+        variant="secondary"
+        fullWidth
+        onPress={() => navigation.navigate('SignIn')}
+      />
+      {DEMO_AUTH_ENABLED ? (
+        <AppButton
+          title="Quick Demo Login (@alexlifts — Local Dev Demo)"
+          variant="ghost"
+          size="sm"
+          fullWidth
+          loading={demoSignIn.isPending}
+          onPress={() =>
+            demoSignIn.mutate({ identifier: 'demo@apexlift.app', password: 'demo1234' })
+          }
+        />
+      ) : null}
+    </View>
+  );
+
+  if (layout.isDesktop) {
+    return (
+      <ScreenContainer scroll contentStyle={{ paddingVertical: 28, justifyContent: 'space-between', gap: 28 }}>
+        {brandHeader}
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 36,
+            paddingVertical: 16,
+          }}
+        >
+          {/* Left Column: Editorial Headline, Interactive Feature Cards & CTAs */}
+          <View style={{ flex: 1.1, gap: 18 }}>
+            <View style={{ gap: 8 }}>
+              <AppText size="xxsm" weight="xbold" tone="constant" style={{ letterSpacing: 1.4 }}>
+                {l('SCIENCE-BACKED GAMIFIED PERFORMANCE', 'PERFORMANCE GAMIFIÉE & SCIENTIFIQUE', 'أداء علمي وتنافسي متكامل')}
+              </AppText>
+              <AppText size="xxl" weight="black" style={{ fontSize: 38, lineHeight: 44 }}>
+                {l(...activeSlide.title)}
+              </AppText>
+              <AppText size="md" tone="sub" style={{ maxWidth: 540, lineHeight: 23 }}>
+                {l(...activeSlide.subtitle)}
+              </AppText>
+            </View>
+
+            {featureList}
+            {ctaStack}
+          </View>
+
+          {/* Right Column: Sculpted Mascot & Rank Showcase Stage */}
+          <AppCard
+            glowColor={c.constant}
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
+              flex: 0.95,
+              padding: 24,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="flash" size={20} color="#0F0A18" />
-          </LinearGradient>
-          <View>
-            <AppText size="lg" weight="black" style={{ letterSpacing: 0.6 }}>
-              TOP1%
-            </AppText>
-            <AppText size="xxsm" weight="bold" tone="constant">
-              {l('SCIENTIFIC PERFORMANCE OS', 'PERFORMANCE SCIENTIFIQUE', 'نظام الأداء العلمي')}
-            </AppText>
-          </View>
+            {mascotShowcase}
+          </AppCard>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          {(['en', 'fr', 'ar'] as const).map((code) => {
-            const active = locale === code;
-            return (
-              <Pressable
-                key={code}
-                onPress={() => void setLocale(code)}
-                style={{
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                  borderRadius: 99,
-                  backgroundColor: active ? c.constant : c.secondBg,
-                  borderWidth: 1,
-                  borderColor: active ? c.constant : c.thirdBg,
-                }}
-              >
-                <AppText size="xxsm" weight="black" tone={active ? 'constantT' : 'sub'}>
-                  {code.toUpperCase()}
-                </AppText>
-              </Pressable>
-            );
-          })}
-        </View>
-      </View>
+      </ScreenContainer>
+    );
+  }
+
+  return (
+    <ScreenContainer scroll contentStyle={{ justifyContent: 'space-between', paddingVertical: 14 }}>
+      {brandHeader}
 
       {/* Live Rive Jymbo Mascot + Speech Bubble */}
       <View style={{ alignItems: 'center', gap: 10, paddingTop: 6 }}>
@@ -179,7 +359,6 @@ export function LandingScreen({ navigation }: Props) {
           </AppText>
         </View>
 
-        {/* Extracted Value Visual Card */}
         {slideArt ? (
           <View
             style={{
@@ -198,7 +377,6 @@ export function LandingScreen({ navigation }: Props) {
           </View>
         ) : null}
 
-        {/* Interactive Feature Carousel Dots */}
         <View style={{ flexDirection: 'row', gap: 8 }}>
           {HIGHLIGHTS.map((item, i) => {
             const active = i === slideIdx;
@@ -220,74 +398,10 @@ export function LandingScreen({ navigation }: Props) {
           })}
         </View>
 
-        <AppCard variant="second_outlined" style={{ width: '100%', gap: 6, padding: 10 }}>
-          {HIGHLIGHTS.map((item, i) => (
-            <Pressable
-              key={item.title[0]}
-              onPress={() => {
-                playSound('tick', 0.45);
-                setSlideIdx(i);
-              }}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 10,
-                padding: 8,
-                borderRadius: 12,
-                backgroundColor: i === slideIdx ? hexToRgba(c.constant, 0.14) : 'transparent',
-                borderWidth: 1,
-                borderColor: i === slideIdx ? hexToRgba(c.constant, 0.35) : 'transparent',
-              }}
-            >
-              <Ionicons
-                name={item.icon}
-                size={18}
-                color={i === slideIdx ? c.constant : c.subText}
-              />
-              <View style={{ flex: 1 }}>
-                <AppText size="sm" weight="bold">
-                  {l(...item.title)}
-                </AppText>
-                <AppText size="xsm" tone="sub" numberOfLines={1}>
-                  {l(...item.subtitle)}
-                </AppText>
-              </View>
-            </Pressable>
-          ))}
-        </AppCard>
+        {featureList}
       </View>
 
-      {/* CTA Footer */}
-      <View style={{ gap: 10, marginTop: 10 }}>
-        <AppButton
-          title="Get Started — Meet Jymbo & Rank Up"
-          size="lg"
-          fullWidth
-          onPress={() => {
-            playSound('intro');
-            navigation.navigate('OnboardingQuestionnaire');
-          }}
-          rightIcon={<Ionicons name="arrow-forward" size={18} color={c.constantText} />}
-        />
-        <AppButton
-          title="I Already Have an Account"
-          variant="secondary"
-          fullWidth
-          onPress={() => navigation.navigate('SignIn')}
-        />
-        {DEMO_AUTH_ENABLED ? (
-          <AppButton
-            title="Quick Demo Login (@alexlifts — Local Dev Demo)"
-            variant="ghost"
-            size="sm"
-            fullWidth
-            loading={demoSignIn.isPending}
-            onPress={() =>
-              demoSignIn.mutate({ identifier: 'demo@apexlift.app', password: 'demo1234' })
-            }
-          />
-        ) : null}
-      </View>
+      {ctaStack}
     </ScreenContainer>
   );
 }

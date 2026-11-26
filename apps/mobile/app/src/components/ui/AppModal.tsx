@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { RADII, SPACING } from '../../theme/tokens';
 import { useTheme } from '../../theme/ThemeProvider';
 import { AppText } from './AppText';
@@ -25,6 +26,7 @@ export function AppModal({
 }: AppModalProps) {
   const { theme } = useTheme();
   const c = theme.colors;
+  const { isWide } = useResponsiveLayout();
 
   return (
     <Modal
@@ -52,7 +54,7 @@ export function AppModal({
           style={[
             {
               width: '100%',
-              maxWidth: 420,
+              maxWidth: isWide ? 520 : 420,
               backgroundColor: c.secondBg,
               borderRadius: RADII.cardLarge,
               borderWidth: 1,

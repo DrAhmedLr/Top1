@@ -28,6 +28,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { useWorkoutStore, type WorkoutSetType } from '../../stores/workoutStore';
 import { useBumpSpring } from '../../theme/animations';
 import { RANK_SOLID_ACCENT } from '../../theme/rankGradients';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII, SPACING } from '../../theme/tokens';
 import { impactLight, impactMedium, notifySuccess } from '../../utils/haptics';
@@ -94,6 +95,7 @@ export function ActiveWorkoutSheet() {
   const { theme } = useTheme();
   const c = theme.colors;
   const insets = useSafeAreaInsets();
+  const layout = useResponsiveLayout();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const { showAlert } = useAppAlert();
 
@@ -235,14 +237,20 @@ export function ActiveWorkoutSheet() {
           flex: 1,
           backgroundColor: '#07040D',
           alignItems: 'center',
+          paddingVertical: layout.isDesktop ? 20 : 0,
+          paddingHorizontal: layout.isDesktop ? 24 : 0,
         }}
       >
         <View
           style={{
             flex: 1,
             width: '100%',
-            maxWidth: 460,
+            maxWidth: layout.isDesktop ? 900 : layout.isWide ? 680 : undefined,
             backgroundColor: c.background,
+            borderRadius: layout.isDesktop ? RADII.cardLarge : 0,
+            borderWidth: layout.isDesktop ? 1 : 0,
+            borderColor: hexToRgba('#FFFFFF', 0.1),
+            overflow: 'hidden',
             paddingTop: Math.max(14, insets.top),
           }}
         >

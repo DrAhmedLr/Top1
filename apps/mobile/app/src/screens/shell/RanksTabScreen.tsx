@@ -183,12 +183,20 @@ export function RanksTabScreen() {
         </Pressable>
       </View>
 
-      {/* Overall TOP1% Hero Card */}
-      <AppCard
-        gradientColors={RANK_BG_GRADIENTS[overallTier]}
-        glowColor={accent}
-        style={{ gap: 16 }}
+      {/* Desktop 2-Column Bento Row: Overall Standing + Bodygraph (Left) & 3-Pillar Scientific Triad (Right) */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', alignItems: 'flex-start', gap: 18 }
+            : { gap: layout.sectionGap }
+        }
       >
+        {/* Overall TOP1% Hero Card */}
+        <AppCard
+          gradientColors={RANK_BG_GRADIENTS[overallTier]}
+          glowColor={accent}
+          style={{ gap: 16, ...(layout.isDesktop ? { flex: 1.35 } : {}) }}
+        >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           <Pressable onPress={() => setCinematicOpen(true)}>
             <RankBadge
@@ -307,9 +315,11 @@ export function RanksTabScreen() {
 
       {/* 3 Scientific Pillars Card */}
       {top1Query.isLoading ? (
-        <SkeletonCard height={190} lines={3} />
+        <View style={layout.isDesktop ? { flex: 1 } : undefined}>
+          <SkeletonCard height={190} lines={3} />
+        </View>
       ) : top1 ? (
-        <AppCard style={{ gap: 10 }}>
+        <AppCard style={{ gap: 10, ...(layout.isDesktop ? { flex: 1 } : {}) }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View>
               <AppText size="xxsm" weight="xbold" tone="constant">
@@ -357,6 +367,7 @@ export function RanksTabScreen() {
           </View>
         </AppCard>
       ) : null}
+      </View>
 
       {/* Feature Grid — Fluid 2/3/4 columns */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>

@@ -6,11 +6,14 @@ import { NutritionTabScreen } from '../screens/shell/NutritionTabScreen';
 import { ProfileTabScreen } from '../screens/shell/ProfileTabScreen';
 import { RanksTabScreen } from '../screens/shell/RanksTabScreen';
 import { WorkoutsTabScreen } from '../screens/shell/WorkoutsTabScreen';
+import { useResponsiveLayout } from '../theme/useResponsiveLayout';
 import type { BottomTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export function BottomNavTabs() {
+  const { isDesktop } = useResponsiveLayout();
+
   return (
     <Tab.Navigator
       initialRouteName="HomeTab"
@@ -18,6 +21,7 @@ export function BottomNavTabs() {
       screenOptions={{
         headerShown: false,
         lazy: true,
+        tabBarPosition: isDesktop ? 'left' : 'bottom',
       }}
     >
       <Tab.Screen name="HomeTab" component={HomeTabScreen} />

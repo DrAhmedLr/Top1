@@ -6,17 +6,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { formatDuration } from '@apexlift/shared';
+import { useAuthStore } from '../../stores/authStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import { useBumpSpring, usePulseEffect } from '../../theme/animations';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { hexToRgba, LAYOUT, RADII } from '../../theme/tokens';
 import { useTheme } from '../../theme/ThemeProvider';
 import { selectionHaptic } from '../../utils/haptics';
-import { playSound } from '../../utils/soundscape';
+import { playSound, useSoundscape } from '../../utils/soundscape';
 import { ActiveWorkoutSheet } from '../workout/ActiveWorkoutSheet';
 import { AppText } from './AppText';
+import { AvatarView } from './AvatarView';
 
 /**
- * Custom sculpted SVG tab icons matching Liftoff's chunky rounded nav icon geometry.
+ * Custom sculpted SVG tab icons matching TOP1%'s chunky rounded nav icon geometry.
  */
 function SculptedTabIcon({
   routeName,
@@ -118,11 +121,13 @@ function TabBarButton({
   routeName,
   focused,
   label,
+  sidebar,
   onPress,
 }: {
   routeName: string;
   focused: boolean;
   label: string;
+  sidebar?: boolean;
   onPress: () => void;
 }) {
   const { theme } = useTheme();
@@ -130,9 +135,77 @@ function TabBarButton({
   const { scale, bump } = useBumpSpring();
 
   useEffect(() => {
-    if (focused) bump(1.16);
+    if (focused) bump(sidebar ? 1.06 : 1.16);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focused]);
+
+  if (sidebar) {
+    return (
+      <Pressable
+        onPress={() => {
+          bump(1.06);
+          selectionHaptic();
+          playSound('tick', 0.35);
+          onPress();
+        }}
+        style={(state) => {
+          const hovered = Boolean((state as { hovered?: boolean }).hovered);
+          return {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+            paddingVertical: 11,
+            paddingHorizontal: 14,
+            borderRadius: 14,
+            backgroundColor: focused
+              ? hexToRgba(c.constant, 0.16)
+              : hovered || state.pressed
+                ? hexToRgba('#FFFFFF', 0.05)
+                : 'transparent',
+            borderWidth: 1,
+            borderColor: focused ? hexToRgba(c.constant, 0.38) : 'transparent',
+          };
+        }}
+      >
+        {focused ? (
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 10,
+              bottom: 10,
+              width: 3.5,
+              borderRadius: 99,
+              backgroundColor: c.constant,
+            }}
+          />
+        ) : null}
+        <Animated.View
+          style={{
+            width: 34,
+            height: 30,
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: [{ scale }],
+          }}
+        >
+          <SculptedTabIcon
+            routeName={routeName}
+            focused={focused}
+            color={focused ? c.constant : c.subText}
+          />
+        </Animated.View>
+        <AppText
+          size="sm"
+          weight={focused ? 'xbold' : 'semibold'}
+          tone={focused ? 'constant' : 'sub'}
+        >
+          {label}
+        </AppText>
+      </Pressable>
+    );
+  }
 
   return (
     <Pressable
@@ -195,9 +268,12 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
   const { theme } = useTheme();
   const c = theme.colors;
   const insets = useSafeAreaInsets();
+  const { isDesktop } = useResponsiveLayout();
+  const user = useAuthStore((s) => s.user);
   const session = useWorkoutStore((s) => s.session);
   const restTimerEndAt = useWorkoutStore((s) => s.restTimerEndAt);
   const openSheet = useWorkoutStore((s) => s.openSheet);
+  const { muted, toggleMute, play } = useSoundscape();
   const pulseDot = usePulseEffect(0.75, 1.35, 1400);
 
   const [now, setNow] = useState(Date.now());
@@ -216,6 +292,197 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
       )
     : 0;
 
+  const activeDock = session ? (
+    <Pressable onPress={openSheet} style={isDesktop ? { marginTop: 8 } : { marginHorizontal: 12, marginTop: 8, marginBottom: 4 }}>
+      <LinearGradient
+        colors={[hexToRgba(c.constant, 0.22), c.secondBg]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          paddingHorizontal: 12,
+          paddingVertical: 11,
+          borderRadius: RADII.card,
+          borderWidth: 1.2,
+          borderColor: hexToRgba(c.constant, 0.65),
+          flexDirection: isDesktop ? 'column' : 'row',
+          alignItems: isDesktop ? 'stretch' : 'center',
+          justifyContent: 'space-between',
+          gap: isDesktop ? 8 : 0,
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+          <Animated.View
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 99,
+              backgroundColor: c.check,
+              transform: [{ scale: pulseDot }],
+            }}
+          />
+          <View style={{ flex: 1 }}>
+            <AppText size="sm" weight="xbold" numberOfLines={1}>
+              {session.title || 'Active Workout'}
+            </AppText>
+            <AppText size="xsm" tone="sub" tabular>
+              {formatDuration(elapsedSec)} • {completedSets} sets
+              {restSec > 0 ? ` • Rest ${formatDuration(restSec)}` : ''}
+            </AppText>
+          </View>
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 11,
+            paddingVertical: 6,
+            borderRadius: 10,
+            backgroundColor: c.constant,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 4,
+          }}
+        >
+          <AppText size="xsm" weight="xbold" tone="constantT">
+            Resume Session
+          </AppText>
+          <Ionicons name={isDesktop ? 'arrow-forward' : 'chevron-up'} size={14} color={c.constantText} />
+        </View>
+      </LinearGradient>
+    </Pressable>
+  ) : null;
+
+  if (isDesktop) {
+    return (
+      <View
+        style={{
+          width: 244,
+          height: '100%',
+          backgroundColor: theme.dark ? '#110C1D' : c.secondBg,
+          borderRightWidth: 1,
+          borderRightColor: theme.dark ? hexToRgba('#FFFFFF', 0.08) : c.thirdBg,
+          paddingHorizontal: 14,
+          paddingTop: 20,
+          paddingBottom: 18,
+          justifyContent: 'space-between',
+        }}
+      >
+        <ActiveWorkoutSheet />
+
+        <View style={{ gap: 22 }}>
+          {/* Desktop Brand Header */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <LinearGradient
+                colors={[c.constantOvertone, c.constant]}
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 11,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Ionicons name="flash" size={18} color="#0F0A18" />
+              </LinearGradient>
+              <View>
+                <AppText size="md" weight="black" style={{ letterSpacing: 0.6 }}>
+                  TOP1%
+                </AppText>
+                <AppText size="xxsm" weight="bold" tone="constant">
+                  PERFORMANCE OS
+                </AppText>
+              </View>
+            </View>
+
+            <Pressable
+              onPress={() => {
+                toggleMute();
+                if (muted) play('tick');
+              }}
+              hitSlop={8}
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 10,
+                backgroundColor: hexToRgba('#FFFFFF', 0.06),
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons
+                name={muted ? 'volume-mute-outline' : 'volume-high-outline'}
+                size={16}
+                color={muted ? c.subText : c.constant}
+              />
+            </Pressable>
+          </View>
+
+          {/* Sculpted Sidebar Navigation Items */}
+          <View style={{ gap: 6 }}>
+            {state.routes.map((route, index) => {
+              const focused = state.index === index;
+              const label = TAB_LABELS[route.name] ?? route.name;
+
+              const onPress = () => {
+                const event = navigation.emit({
+                  type: 'tabPress',
+                  target: route.key,
+                  canPreventDefault: true,
+                });
+                if (!focused && !event.defaultPrevented) {
+                  navigation.navigate(route.name);
+                }
+              };
+
+              return (
+                <TabBarButton
+                  key={route.key}
+                  routeName={route.name}
+                  focused={focused}
+                  label={label}
+                  sidebar
+                  onPress={onPress}
+                />
+              );
+            })}
+          </View>
+
+          {activeDock}
+        </View>
+
+        {/* Athlete Quick Status Footer */}
+        <Pressable
+          onPress={() => navigation.navigate('ProfileTab')}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            padding: 10,
+            borderRadius: 14,
+            backgroundColor: hexToRgba('#FFFFFF', 0.04),
+            borderWidth: 1,
+            borderColor: hexToRgba('#FFFFFF', 0.08),
+          }}
+        >
+          <AvatarView
+            config={user?.avatarConfig}
+            borderId={user?.equippedBorderId}
+            presetKey={user?.rankingSex === 'Female' ? 'femalev31' : 'malev31'}
+            size={36}
+          />
+          <View style={{ flex: 1 }}>
+            <AppText size="sm" weight="xbold" numberOfLines={1}>
+              {user?.displayName ?? 'Athlete'}
+            </AppText>
+            <AppText size="xxsm" tone="sub" numberOfLines={1}>
+              LV {user?.level ?? 1} • {user?.streaks ?? 0}d 🔥 • {user?.credits ?? 0} cr
+            </AppText>
+          </View>
+        </Pressable>
+      </View>
+    );
+  }
+
   return (
     <View
       style={{
@@ -232,62 +499,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
           : {}),
       }}
     >
-      {session ? (
-        <Pressable onPress={openSheet} style={{ marginHorizontal: 12, marginTop: 8, marginBottom: 4 }}>
-          <LinearGradient
-            colors={[hexToRgba(c.constant, 0.22), c.secondBg]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{
-              paddingHorizontal: 14,
-              paddingVertical: 11,
-              borderRadius: RADII.card,
-              borderWidth: 1.2,
-              borderColor: hexToRgba(c.constant, 0.65),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
-              <Animated.View
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 99,
-                  backgroundColor: c.check,
-                  transform: [{ scale: pulseDot }],
-                }}
-              />
-              <View style={{ flex: 1 }}>
-                <AppText size="sm" weight="xbold" numberOfLines={1}>
-                  {session.title || 'Active Workout'}
-                </AppText>
-                <AppText size="xsm" tone="sub" tabular>
-                  {formatDuration(elapsedSec)} • {completedSets} sets done
-                  {restSec > 0 ? ` • Rest ${formatDuration(restSec)}` : ''}
-                </AppText>
-              </View>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 11,
-                paddingVertical: 6,
-                borderRadius: 10,
-                backgroundColor: c.constant,
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 4,
-              }}
-            >
-              <AppText size="xsm" weight="xbold" tone="constantT">
-                Resume
-              </AppText>
-              <Ionicons name="chevron-up" size={14} color={c.constantText} />
-            </View>
-          </LinearGradient>
-        </Pressable>
-      ) : null}
+      {activeDock}
 
       <ActiveWorkoutSheet />
 

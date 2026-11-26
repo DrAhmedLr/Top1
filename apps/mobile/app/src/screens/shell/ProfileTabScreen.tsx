@@ -19,12 +19,14 @@ import {
 import { useAuthStore } from '../../stores/authStore';
 import { useLocale } from '../../i18n/LocaleProvider';
 import { useWorkoutStore } from '../../stores/workoutStore';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import type { MainStackParamList } from '../../navigation/types';
 
 export function ProfileTabScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const { locale, setLocale, l } = useLocale();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
@@ -113,6 +115,14 @@ export function ProfileTabScreen() {
 
   return (
     <ScreenContainer scroll>
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', alignItems: 'flex-start', gap: 20 }
+            : { gap: layout.sectionGap }
+        }
+      >
+        <View style={layout.isDesktop ? { flex: 1, maxWidth: 430, gap: 14 } : { gap: layout.sectionGap }}>
       {/* Profile Hero Banner Card with Illustrated Banner + Animated Layered Border */}
       <AppCard padding={0} glowColor={equippedBorder?.previewValue || c.constant}>
         <View style={{ height: 112, width: '100%', overflow: 'hidden' }}>
@@ -277,10 +287,47 @@ export function ProfileTabScreen() {
         </View>
       </AppCard>
 
-      {/* Menu List */}
-      <View style={{ gap: 8 }}>
+      {layout.isDesktop ? (
+        <AppButton
+          label="Sign Out"
+          variant="danger"
+          onPress={() =>
+            showAlert({
+              title: 'Sign out of TOP1%?',
+              message: 'Your data stays safely synced to your account.',
+              actions: [
+                { label: 'Cancel', variant: 'secondary' },
+                {
+                  label: 'Sign Out',
+                  variant: 'danger',
+                  onPress: async () => {
+                    resetSession();
+                    await clearSession();
+                  },
+                },
+              ],
+            })
+          }
+          fullWidth
+        />
+      ) : null}
+        </View>
+
+        <View style={layout.isDesktop ? { flex: 1.35, gap: 14 } : { gap: layout.sectionGap }}>
+      {/* Menu List — 2-Column Grid on Desktop, Vertical List on Mobile */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', flexWrap: 'wrap', gap: 10 }
+            : { gap: 8 }
+        }
+      >
         {menuRows.map((row) => (
-          <Pressable key={row.label} onPress={row.onPress}>
+          <Pressable
+            key={row.label}
+            onPress={row.onPress}
+            style={layout.isDesktop ? { flexBasis: '48.5%', flexGrow: 1, minWidth: 260 } : undefined}
+          >
             <AppCard
               style={{
                 flexDirection: 'row',
@@ -407,6 +454,7 @@ export function ProfileTabScreen() {
         standingLabel={user?.overallTierLabel ?? user?.peakAverageRank ?? 'TOP1% Contender'}
       />
 
+      {!layout.isDesktop ? (
       <AppButton
         label="Sign Out"
         variant="danger"
@@ -429,6 +477,9 @@ export function ProfileTabScreen() {
         }
         fullWidth
       />
+      ) : null}
+        </View>
+      </View>
     </ScreenContainer>
   );
 }

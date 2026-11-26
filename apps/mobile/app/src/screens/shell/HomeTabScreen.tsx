@@ -23,6 +23,7 @@ import { useWorkoutPhotosStore } from '../../stores/workoutPhotosStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import { useBumpSpring } from '../../theme/animations';
 import { RANK_BG_GRADIENTS, RANK_SOLID_ACCENT } from '../../theme/rankGradients';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import { impactLight } from '../../utils/haptics';
@@ -98,6 +99,7 @@ function buildHeatmapMap(heatmap: Record<string, number>): Record<string, Muscle
 
 export function HomeTabScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const { locale, l } = useLocale();
   const localeIdx = locale === 'fr' ? 1 : locale === 'ar' ? 2 : 0;
@@ -234,12 +236,21 @@ export function HomeTabScreen() {
         </View>
       </View>
 
-      {/* Flagship TOP1% Overall Performance & Readiness Hero Card */}
-      <AppCard
-        gradientColors={RANK_BG_GRADIENTS[selfTier]}
-        glowColor={selfAccent}
-        style={{ gap: 14 }}
+      {/* Responsive Desktop 2-Column Workspace (Feed Left + Standing/Coach Rail Right) vs Mobile Stack */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row-reverse', alignItems: 'flex-start', gap: 20 }
+            : { gap: layout.sectionGap }
+        }
       >
+        <View style={layout.isDesktop ? { flex: 1, maxWidth: 440, gap: 14 } : { gap: layout.sectionGap }}>
+          {/* Flagship TOP1% Overall Performance & Readiness Hero Card */}
+          <AppCard
+            gradientColors={RANK_BG_GRADIENTS[selfTier]}
+            glowColor={selfAccent}
+            style={{ gap: 14 }}
+          >
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <Pressable
             onPress={() => navigation.navigate('BottomNavTabs', { screen: 'RanksTab' })}
@@ -444,20 +455,22 @@ export function HomeTabScreen() {
           </AppCard>
         </Pressable>
       ) : null}
+        </View>
 
-      {/* Feed Scope Filter */}
-      <SegmentedControl
-        value={scope}
-        onChange={setScope}
-        options={[
-          { label: 'All Feed', value: 'all' },
-          { label: 'Friends', value: 'friends' },
-          { label: 'My Logs', value: 'mine' },
-        ]}
-      />
+        <View style={layout.isDesktop ? { flex: 1.45, gap: 14 } : { gap: 14 }}>
+          {/* Feed Scope Filter */}
+          <SegmentedControl
+            value={scope}
+            onChange={setScope}
+            options={[
+              { label: 'All Feed', value: 'all' },
+              { label: 'Friends', value: 'friends' },
+              { label: 'My Logs', value: 'mine' },
+            ]}
+          />
 
-      {/* Social Feed Cards */}
-      <View style={{ gap: 14 }}>
+          {/* Social Feed Cards */}
+          <View style={{ gap: 14 }}>
         {posts.length === 0 ? (
           <AppCard style={{ alignItems: 'center', paddingVertical: 24, gap: 8 }}>
             <AppText size="md" weight="bold">
@@ -727,6 +740,8 @@ export function HomeTabScreen() {
             );
           })
         )}
+          </View>
+        </View>
       </View>
 
       <CommentModal
