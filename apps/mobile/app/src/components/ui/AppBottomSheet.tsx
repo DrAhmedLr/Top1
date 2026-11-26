@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { RADII, SPACING } from '../../theme/tokens';
 import { useTheme } from '../../theme/ThemeProvider';
 import { AppText } from './AppText';
@@ -26,34 +27,53 @@ export function AppBottomSheet({
   const { theme } = useTheme();
   const c = theme.colors;
   const insets = useSafeAreaInsets();
+  const { isWide } = useResponsiveLayout();
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.65)' }}>
-        <Pressable style={{ flex: 1 }} onPress={onClose} />
+    <Modal visible={visible} transparent animationType={isWide ? 'fade' : 'slide'} onRequestClose={onClose}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: isWide ? 'center' : 'flex-end',
+          alignItems: isWide ? 'center' : 'stretch',
+          padding: isWide ? 24 : 0,
+          backgroundColor: 'rgba(0,0,0,0.68)',
+        }}
+      >
+        <Pressable
+          style={isWide ? { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 } : { flex: 1 }}
+          onPress={onClose}
+        />
         <View
           style={{
+            width: '100%',
+            maxWidth: isWide ? 620 : undefined,
             backgroundColor: c.secondBg,
-            borderTopLeftRadius: RADII.sheet,
-            borderTopRightRadius: RADII.sheet,
-            borderTopWidth: 1,
-            borderLeftWidth: 1,
-            borderRightWidth: 1,
+            borderTopLeftRadius: isWide ? RADII.cardLarge : RADII.sheet,
+            borderTopRightRadius: isWide ? RADII.cardLarge : RADII.sheet,
+            borderBottomLeftRadius: isWide ? RADII.cardLarge : 0,
+            borderBottomRightRadius: isWide ? RADII.cardLarge : 0,
+            borderWidth: 1,
+            borderBottomWidth: isWide ? 1 : 0,
             borderColor: c.thirdBg,
             maxHeight: `${maxHeightPct}%`,
-            paddingBottom: Math.max(SPACING.top, insets.bottom + 12),
+            paddingBottom: isWide ? SPACING.std : Math.max(SPACING.top, insets.bottom + 12),
           }}
         >
-          <View style={{ alignItems: 'center', paddingTop: 10, paddingBottom: 6 }}>
-            <View
-              style={{
-                width: 44,
-                height: 4,
-                borderRadius: 99,
-                backgroundColor: c.ghostText,
-              }}
-            />
-          </View>
+          {!isWide ? (
+            <View style={{ alignItems: 'center', paddingTop: 10, paddingBottom: 6 }}>
+              <View
+                style={{
+                  width: 44,
+                  height: 4,
+                  borderRadius: 99,
+                  backgroundColor: c.ghostText,
+                }}
+              />
+            </View>
+          ) : (
+            <View style={{ height: 14 }} />
+          )}
 
           {title ? (
             <View

@@ -29,7 +29,7 @@ export function ResetPasswordScreen({ navigation }: Props) {
   return (
     <View style={{ flex: 1 }}>
       <StackHeader title="Forgot Password" onBack={() => navigation.goBack()} />
-      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 20 }}>
+      <ScreenContainer scroll safeTop={false} contentStyle={{ paddingTop: 28, maxWidth: 480, alignSelf: 'center', width: '100%' }}>
         <View style={{ gap: 6 }}>
           <AppText size="lg" weight="black">
             Reset your password

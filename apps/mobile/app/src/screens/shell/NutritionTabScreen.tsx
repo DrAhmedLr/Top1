@@ -13,6 +13,7 @@ import {
   ProgressRing,
   ScreenContainer,
 } from '../../components/ui';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII } from '../../theme/tokens';
 import type { MainStackParamList } from '../../navigation/types';
@@ -32,6 +33,7 @@ function shiftDateIso(dateIso: string, deltaDays: number): string {
 
 export function NutritionTabScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const utils = trpc.useUtils();
@@ -96,167 +98,192 @@ export function NutritionTabScreen() {
         </Pressable>
       </View>
 
-      {/* Date Bar */}
+      {/* Desktop 2-Column Top Split: Macros & Date (Left) + Biometrics & Health (Right) */}
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: c.secondBg,
-          borderRadius: RADII.card,
-          paddingHorizontal: 10,
-          paddingVertical: 8,
-          borderWidth: 1,
-          borderColor: c.thirdBg,
-        }}
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', alignItems: 'flex-start', gap: 18 }
+            : { gap: layout.sectionGap }
+        }
       >
-        <Pressable onPress={() => setDateIso((d) => shiftDateIso(d, -1))} hitSlop={10}>
-          <Ionicons name="chevron-back" size={22} color={c.text} />
-        </Pressable>
-        <AppText size="sm" weight="bold">
-          {dateIso === new Date().toISOString().slice(0, 10) ? `Today • ${dateIso}` : dateIso}
-        </AppText>
-        <Pressable onPress={() => setDateIso((d) => shiftDateIso(d, 1))} hitSlop={10}>
-          <Ionicons name="chevron-forward" size={22} color={c.text} />
-        </Pressable>
+        <View style={layout.isDesktop ? { flex: 1.25, gap: 12 } : { gap: layout.sectionGap }}>
+          {/* Date Bar */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: c.secondBg,
+              borderRadius: RADII.card,
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+              borderWidth: 1,
+              borderColor: c.thirdBg,
+            }}
+          >
+            <Pressable onPress={() => setDateIso((d) => shiftDateIso(d, -1))} hitSlop={10}>
+              <Ionicons name="chevron-back" size={22} color={c.text} />
+            </Pressable>
+            <AppText size="sm" weight="bold">
+              {dateIso === new Date().toISOString().slice(0, 10) ? `Today • ${dateIso}` : dateIso}
+            </AppText>
+            <Pressable onPress={() => setDateIso((d) => shiftDateIso(d, 1))} hitSlop={10}>
+              <Ionicons name="chevron-forward" size={22} color={c.text} />
+            </Pressable>
+          </View>
+
+          {/* Calorie Ring + Macro Bars */}
+          <AppCard style={{ gap: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+              <ProgressRing
+                size={112}
+                strokeWidth={11}
+                progress={calProgress}
+                color={totals.calories > goals.dailyCaloriesGoal ? c.warning : c.constant}
+                centerText={`${totals.calories}`}
+                centerSubText={`/${goals.dailyCaloriesGoal}`}
+              />
+              <View style={{ flex: 1, gap: 10 }}>
+                <View>
+                  <AppText size="xsm" tone="sub">
+                    REMAINING CALORIES
+                  </AppText>
+                  <AppText size="xl" weight="black">
+                    {calRemaining} kcal left
+                  </AppText>
+                </View>
+                {macroBars.map((m) => {
+                  const pct = Math.min(100, Math.round((m.val / Math.max(1, m.goal)) * 100));
+                  return (
+                    <View key={m.label} style={{ gap: 3 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <AppText size="xsm" weight="bold">
+                          {m.label}
+                        </AppText>
+                        <AppText size="xsm" tone="sub">
+                          {m.val}g / {m.goal}g
+                        </AppText>
+                      </View>
+                      <View style={{ height: 6, borderRadius: 99, backgroundColor: c.thirdBg, overflow: 'hidden' }}>
+                        <View style={{ width: `${pct}%`, height: '100%', backgroundColor: m.color }} />
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+
+            {/* Action Row */}
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <AppButton
+                label="+ Log Food"
+                size="sm"
+                onPress={() => navigation.navigate('FoodSearch', { dateIso, mealType: 'lunch', initialTab: 'search' })}
+                style={{ flex: 1.2 }}
+              />
+              <AppButton
+                label="Scan UPC"
+                size="sm"
+                variant="secondary"
+                onPress={() => setBarcodeModalOpen(true)}
+                style={{ flex: 1 }}
+              />
+              <AppButton
+                label="Bundles"
+                size="sm"
+                variant="secondary"
+                onPress={() => navigation.navigate('FoodSearch', { dateIso, mealType: 'lunch', initialTab: 'bundles' })}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </AppCard>
+        </View>
+
+        <View style={layout.isDesktop ? { flex: 1, gap: 12 } : { gap: layout.sectionGap }}>
+          {/* Smartwatch Biometric Readiness Row */}
+          <Pressable onPress={() => navigation.navigate('WearableReadiness')}>
+            <AppCard
+              glowColor={c.constant}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+                <View
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: 12,
+                    backgroundColor: hexToRgba(c.constant, 0.18),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Ionicons name="watch-outline" size={22} color={c.constant} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <AppText size="md" weight="bold">
+                    Smartwatch Readiness (HRV / ACWR)
+                  </AppText>
+                  <AppText size="xsm" tone="sub">
+                    28-day personal RMSSD baseline, sleep debt & illness guardrail
+                  </AppText>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={c.constant} />
+            </AppCard>
+          </Pressable>
+
+          {/* Health Snapshot Row */}
+          <Pressable onPress={() => navigation.navigate('HealthMetrics', { dateIso })}>
+            <AppCard style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+                <View
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: 12,
+                    backgroundColor: hexToRgba(c.check, 0.16),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Ionicons name="heart-outline" size={22} color={c.check} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <AppText size="md" weight="bold">
+                    Daily Health Metrics
+                  </AppText>
+                  <AppText size="xsm" tone="sub">
+                    {(health?.steps ?? 0).toLocaleString()} steps •{' '}
+                    {((health?.waterMl ?? 0) / 1000).toFixed(1)}L water •{' '}
+                    {((health?.sleepMinutes ?? 0) / 60).toFixed(1)}h sleep
+                  </AppText>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={c.subText} />
+            </AppCard>
+          </Pressable>
+        </View>
       </View>
 
-      {/* Calorie Ring + Macro Bars */}
-      <AppCard style={{ gap: 16 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-          <ProgressRing
-            size={112}
-            strokeWidth={11}
-            progress={calProgress}
-            color={totals.calories > goals.dailyCaloriesGoal ? c.warning : c.constant}
-            centerText={`${totals.calories}`}
-            centerSubText={`/${goals.dailyCaloriesGoal}`}
-          />
-          <View style={{ flex: 1, gap: 10 }}>
-            <View>
-              <AppText size="xsm" tone="sub">
-                REMAINING CALORIES
-              </AppText>
-              <AppText size="xl" weight="black">
-                {calRemaining} kcal left
-              </AppText>
-            </View>
-            {macroBars.map((m) => {
-              const pct = Math.min(100, Math.round((m.val / Math.max(1, m.goal)) * 100));
-              return (
-                <View key={m.label} style={{ gap: 3 }}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <AppText size="xsm" weight="bold">
-                      {m.label}
-                    </AppText>
-                    <AppText size="xsm" tone="sub">
-                      {m.val}g / {m.goal}g
-                    </AppText>
-                  </View>
-                  <View style={{ height: 6, borderRadius: 99, backgroundColor: c.thirdBg, overflow: 'hidden' }}>
-                    <View style={{ width: `${pct}%`, height: '100%', backgroundColor: m.color }} />
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Action Row */}
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <AppButton
-            label="+ Log Food"
-            size="sm"
-            onPress={() => navigation.navigate('FoodSearch', { dateIso, mealType: 'lunch', initialTab: 'search' })}
-            style={{ flex: 1.2 }}
-          />
-          <AppButton
-            label="Scan UPC"
-            size="sm"
-            variant="secondary"
-            onPress={() => setBarcodeModalOpen(true)}
-            style={{ flex: 1 }}
-          />
-          <AppButton
-            label="Bundles"
-            size="sm"
-            variant="secondary"
-            onPress={() => navigation.navigate('FoodSearch', { dateIso, mealType: 'lunch', initialTab: 'bundles' })}
-            style={{ flex: 1 }}
-          />
-        </View>
-      </AppCard>
-
-      {/* Smartwatch Biometric Readiness Row */}
-      <Pressable onPress={() => navigation.navigate('WearableReadiness')}>
-        <AppCard
-          glowColor={c.constant}
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <View
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: 12,
-                backgroundColor: hexToRgba(c.constant, 0.18),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Ionicons name="watch-outline" size={22} color={c.constant} />
-            </View>
-            <View>
-              <AppText size="md" weight="bold">
-                Smartwatch Readiness (HRV / ACWR)
-              </AppText>
-              <AppText size="xsm" tone="sub">
-                28-day personal RMSSD baseline, sleep debt & illness guardrail
-              </AppText>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color={c.constant} />
-        </AppCard>
-      </Pressable>
-
-      {/* Health Snapshot Row */}
-      <Pressable onPress={() => navigation.navigate('HealthMetrics', { dateIso })}>
-        <AppCard style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <View
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: 12,
-                backgroundColor: hexToRgba(c.check, 0.16),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Ionicons name="heart-outline" size={22} color={c.check} />
-            </View>
-            <View>
-              <AppText size="md" weight="bold">
-                Daily Health Metrics
-              </AppText>
-              <AppText size="xsm" tone="sub">
-                {(health?.steps ?? 0).toLocaleString()} steps •{' '}
-                {((health?.waterMl ?? 0) / 1000).toFixed(1)}L water •{' '}
-                {((health?.sleepMinutes ?? 0) / 60).toFixed(1)}h sleep
-              </AppText>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color={c.subText} />
-        </AppCard>
-      </Pressable>
-
-      {/* Meal Sections */}
-      <View style={{ gap: 10 }}>
+      {/* Meal Sections — 2×2 Desktop Bento Grid vs Vertical Stack on Mobile */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', flexWrap: 'wrap', gap: 14 }
+            : { gap: 10 }
+        }
+      >
         {MEALS.map((meal) => {
           const mealLogs = logs.filter((l) => l.mealType === meal.key);
           const mealKcal = Math.round(mealLogs.reduce((s, l) => s + l.calories, 0));
           return (
-            <AppCard key={meal.key} style={{ gap: 8 }}>
+            <AppCard
+              key={meal.key}
+              style={{
+                gap: 8,
+                ...(layout.isDesktop ? { flexBasis: '48.5%', flexGrow: 1, minWidth: 300 } : {}),
+              }}
+            >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <Ionicons name={meal.icon} size={18} color={c.constant} />

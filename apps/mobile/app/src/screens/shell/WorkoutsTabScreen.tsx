@@ -17,6 +17,7 @@ import {
   useAppAlert,
 } from '../../components/ui';
 import { useWorkoutStore } from '../../stores/workoutStore';
+import { useResponsiveLayout } from '../../theme/useResponsiveLayout';
 import { useTheme } from '../../theme/ThemeProvider';
 import { hexToRgba, RADII, SPACING } from '../../theme/tokens';
 import { impactLight } from '../../utils/haptics';
@@ -65,6 +66,7 @@ const PRESET_RANK_TIERS = ['Champion', 'Elite', 'Veteran', 'Enthusiast', 'Interm
 
 export function WorkoutsTabScreen() {
   const { theme } = useTheme();
+  const layout = useResponsiveLayout();
   const c = theme.colors;
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const { showAlert } = useAppAlert();
@@ -111,199 +113,219 @@ export function WorkoutsTabScreen() {
         </AppText>
       </View>
 
-      {/* Day-Zero Jymbo Coach Check-In */}
-      <JymboDialogue
-        mascotPose={session ? 'Curling' : 'Salute'}
-        curlIntense={Boolean(session)}
-        mascotSize={82}
-        mascotText={
-          session
-            ? `Session live! Crush your remaining sets on ${session.title} to boost your TOP1% muscle ranks!`
-            : 'Welcome to TOP1% Training! Open Adaptive Coach for today’s deterministic plan or generate a recovery-aware session below.'
+      {/* Top Responsive Hero Split: Day-Zero Banner + Coach & Quick Tools */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row-reverse', alignItems: 'stretch', gap: 18 }
+            : { gap: layout.sectionGap }
         }
-      />
+      >
+        <View style={layout.isDesktop ? { flex: 1, gap: 12, justifyContent: 'space-between' } : { gap: layout.sectionGap }}>
+          {/* Day-Zero Jymbo Coach Check-In */}
+          <JymboDialogue
+            mascotPose={session ? 'Curling' : 'Salute'}
+            curlIntense={Boolean(session)}
+            mascotSize={82}
+            mascotText={
+              session
+                ? `Session live! Crush your remaining sets on ${session.title} to boost your TOP1% muscle ranks!`
+                : 'Welcome to TOP1% Training! Open Adaptive Coach for today’s deterministic plan or generate a recovery-aware session below.'
+            }
+          />
 
-      {/* TOP1% Adaptive Coach Shortcut Card */}
-      <Pressable onPress={() => navigation.navigate('CoachHub')}>
+          {/* TOP1% Adaptive Coach Shortcut Card */}
+          <Pressable onPress={() => navigation.navigate('CoachHub')}>
+            <AppCard
+              glowColor={c.check}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+                <View
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: 12,
+                    backgroundColor: hexToRgba(c.check, 0.18),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Ionicons name="compass-outline" size={22} color={c.check} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <AppText size="md" weight="black">
+                    TOP1% Adaptive Coach & Goals
+                  </AppText>
+                  <AppText size="xsm" tone="sub">
+                    Time/discomfort adaptation, guided calendar & Monte Carlo forecast
+                  </AppText>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={c.check} />
+            </AppCard>
+          </Pressable>
+
+          {/* Quick Tools Row */}
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            {[
+              {
+                title: 'Generator',
+                sub: 'Smart split',
+                icon: 'sparkles-outline' as const,
+                color: c.constant,
+                onPress: () => navigation.navigate('WorkoutGenerator'),
+              },
+              {
+                title: 'Schedule',
+                sub: 'Plans & week',
+                icon: 'calendar-outline' as const,
+                color: c.check,
+                onPress: () => navigation.navigate('WorkoutSchedule'),
+              },
+              {
+                title: 'Exercises',
+                sub: '630 Illustrated',
+                icon: 'library-outline' as const,
+                color: c.warning,
+                onPress: () => navigation.navigate('ExerciseLibrary', { mode: 'browse' }),
+              },
+            ].map((tool) => (
+              <Pressable key={tool.title} onPress={tool.onPress} style={{ flex: 1 }}>
+                <AppCard style={{ padding: 13, gap: 6 }}>
+                  <View
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: 10,
+                      backgroundColor: hexToRgba(tool.color, 0.16),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Ionicons name={tool.icon} size={19} color={tool.color} />
+                  </View>
+                  <AppText size="sm" weight="bold">
+                    {tool.title}
+                  </AppText>
+                  <AppText size="xsm" tone="sub">
+                    {tool.sub}
+                  </AppText>
+                </AppCard>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        {/* Day-Zero Environment Hero Banner */}
         <AppCard
-          glowColor={c.check}
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+          glowColor={c.constant}
+          style={{
+            flex: layout.isDesktop ? 1.25 : undefined,
+            gap: 12,
+            paddingTop: 0,
+            overflow: 'hidden',
+            justifyContent: 'space-between',
+          }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+          <View style={{ width: '112%', alignSelf: 'center', height: layout.isDesktop ? 168 : 118, backgroundColor: '#120C1E' }}>
+            <Image
+              source={{ uri: activeDayZero.art }}
+              resizeMode="cover"
+              style={{ width: '100%', height: '100%' }}
+            />
             <View
               style={{
-                width: 42,
-                height: 42,
-                borderRadius: 12,
-                backgroundColor: hexToRgba(c.check, 0.18),
+                position: 'absolute',
+                bottom: 8,
+                left: 14,
+                right: 14,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+              }}
+            >
+              <View
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 99,
+                  backgroundColor: 'rgba(15, 10, 24, 0.85)',
+                  borderWidth: 1,
+                  borderColor: hexToRgba(c.constant, 0.55),
+                }}
+              >
+                <AppText size="xxsm" weight="black" tone="constant">
+                  DAY-ZERO HUB • {activeDayZero.label.toUpperCase()}
+                </AppText>
+              </View>
+            </View>
+          </View>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
+            {DAY_ZERO_MODES.map((m, idx) => {
+              const active = idx === dayZeroIdx;
+              return (
+                <Pressable
+                  key={m.id}
+                  onPress={() => {
+                    impactLight();
+                    playSound('tick', 0.35);
+                    setDayZeroIdx(idx);
+                  }}
+                  style={{
+                    paddingHorizontal: 11,
+                    paddingVertical: 5,
+                    borderRadius: 99,
+                    backgroundColor: active ? c.constant : c.thirdBg,
+                  }}
+                >
+                  <AppText size="xxsm" weight="bold" tone={active ? 'constantT' : 'sub'}>
+                    {m.label}
+                  </AppText>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 14,
+                backgroundColor: hexToRgba(c.constant, 0.2),
+                borderWidth: 1,
+                borderColor: hexToRgba(c.constant, 0.5),
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="compass-outline" size={22} color={c.check} />
+              <Ionicons name="flash" size={22} color={c.constant} />
             </View>
             <View style={{ flex: 1 }}>
               <AppText size="md" weight="black">
-                TOP1% Adaptive Coach & Goals
+                {session ? 'Session In Progress' : `Quick Start (${activeDayZero.label})`}
               </AppText>
               <AppText size="xsm" tone="sub">
-                Time/discomfort adaptation, guided calendar & Monte Carlo forecast
+                {session
+                  ? `${session.title} • ${session.exercises.length} exercises active`
+                  : activeDayZero.subtitle}
               </AppText>
             </View>
           </View>
-          <Ionicons name="chevron-forward" size={20} color={c.check} />
-        </AppCard>
-      </Pressable>
 
-      {/* Day-Zero Environment Hero Banner */}
-      <AppCard glowColor={c.constant} style={{ gap: 12, paddingTop: 0, overflow: 'hidden' }}>
-        <View style={{ width: '112%', alignSelf: 'center', height: 118, backgroundColor: '#120C1E' }}>
-          <Image
-            source={{ uri: activeDayZero.art }}
-            resizeMode="cover"
-            style={{ width: '100%', height: '100%' }}
+          <AppButton
+            label={session ? 'Resume Active Workout' : 'Start Empty Workout'}
+            variant={session ? 'check' : 'primary'}
+            onPress={() => (session ? openSheet() : startEmpty(`${activeDayZero.label} Session`))}
+            fullWidth
           />
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 8,
-              left: 14,
-              right: 14,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-            }}
-          >
-            <View
-              style={{
-                paddingHorizontal: 10,
-                paddingVertical: 4,
-                borderRadius: 99,
-                backgroundColor: 'rgba(15, 10, 24, 0.85)',
-                borderWidth: 1,
-                borderColor: hexToRgba(c.constant, 0.55),
-              }}
-            >
-              <AppText size="xxsm" weight="black" tone="constant">
-                DAY-ZERO HUB • {activeDayZero.label.toUpperCase()}
-              </AppText>
-            </View>
-          </View>
-        </View>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
-          {DAY_ZERO_MODES.map((m, idx) => {
-            const active = idx === dayZeroIdx;
-            return (
-              <Pressable
-                key={m.id}
-                onPress={() => {
-                  impactLight();
-                  playSound('tick', 0.35);
-                  setDayZeroIdx(idx);
-                }}
-                style={{
-                  paddingHorizontal: 11,
-                  paddingVertical: 5,
-                  borderRadius: 99,
-                  backgroundColor: active ? c.constant : c.thirdBg,
-                }}
-              >
-                <AppText size="xxsm" weight="bold" tone={active ? 'constantT' : 'sub'}>
-                  {m.label}
-                </AppText>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <View
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 14,
-              backgroundColor: hexToRgba(c.constant, 0.2),
-              borderWidth: 1,
-              borderColor: hexToRgba(c.constant, 0.5),
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Ionicons name="flash" size={22} color={c.constant} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <AppText size="md" weight="black">
-              {session ? 'Session In Progress' : `Quick Start (${activeDayZero.label})`}
-            </AppText>
-            <AppText size="xsm" tone="sub">
-              {session
-                ? `${session.title} • ${session.exercises.length} exercises active`
-                : activeDayZero.subtitle}
-            </AppText>
-          </View>
-        </View>
-
-        <AppButton
-          label={session ? 'Resume Active Workout' : 'Start Empty Workout'}
-          variant={session ? 'check' : 'primary'}
-          onPress={() => (session ? openSheet() : startEmpty(`${activeDayZero.label} Session`))}
-          fullWidth
-        />
-      </AppCard>
-
-      {/* Quick Tools Row */}
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        {[
-          {
-            title: 'Generator',
-            sub: 'Smart split',
-            icon: 'sparkles-outline' as const,
-            color: c.constant,
-            onPress: () => navigation.navigate('WorkoutGenerator'),
-          },
-          {
-            title: 'Schedule',
-            sub: 'Plans & week',
-            icon: 'calendar-outline' as const,
-            color: c.check,
-            onPress: () => navigation.navigate('WorkoutSchedule'),
-          },
-          {
-            title: 'Exercises',
-            sub: '630 Illustrated',
-            icon: 'library-outline' as const,
-            color: c.warning,
-            onPress: () => navigation.navigate('ExerciseLibrary', { mode: 'browse' }),
-          },
-        ].map((tool) => (
-          <Pressable key={tool.title} onPress={tool.onPress} style={{ flex: 1 }}>
-            <AppCard style={{ padding: 13, gap: 6 }}>
-              <View
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  backgroundColor: hexToRgba(tool.color, 0.16),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Ionicons name={tool.icon} size={19} color={tool.color} />
-              </View>
-              <AppText size="sm" weight="bold">
-                {tool.title}
-              </AppText>
-              <AppText size="xsm" tone="sub">
-                {tool.sub}
-              </AppText>
-            </AppCard>
-          </Pressable>
-        ))}
+        </AppCard>
       </View>
 
-      {/* Featured Liftoff Workout Plans Cover Carousel */}
-      <View style={{ gap: 8 }}>
+      {/* Featured TOP1% Workout Plans */}
+      <View style={{ gap: 10 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <AppText size="md" weight="xbold">
             Featured Ranked Plans
@@ -314,36 +336,71 @@ export function WorkoutsTabScreen() {
             </AppText>
           </Pressable>
         </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
-          {FEATURED_PLANS.map((pl) => (
-            <Pressable
-              key={pl.id}
-              onPress={() => {
-                impactLight();
-                playSound('tick', 0.4);
-                navigation.navigate('WorkoutSchedule');
-              }}
-              style={{
-                width: 152,
-                borderRadius: RADII.card,
-                overflow: 'hidden',
-                backgroundColor: c.secondBg,
-                borderWidth: 1,
-                borderColor: c.thirdBg,
-              }}
-            >
-              <Image source={{ uri: pl.art }} resizeMode="cover" style={{ width: 152, height: 92 }} />
-              <View style={{ padding: 9, gap: 2 }}>
-                <AppText size="xxsm" weight="black" tone="constant">
-                  {pl.tag}
-                </AppText>
-                <AppText size="sm" weight="bold" numberOfLines={1}>
-                  {pl.title}
-                </AppText>
-              </View>
-            </Pressable>
-          ))}
-        </ScrollView>
+        {layout.isDesktop ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+            {FEATURED_PLANS.map((pl) => (
+              <Pressable
+                key={pl.id}
+                onPress={() => {
+                  impactLight();
+                  playSound('tick', 0.4);
+                  navigation.navigate('WorkoutSchedule');
+                }}
+                style={{
+                  flexBasis: '23.5%',
+                  flexGrow: 1,
+                  minWidth: 180,
+                  borderRadius: RADII.card,
+                  overflow: 'hidden',
+                  backgroundColor: c.secondBg,
+                  borderWidth: 1,
+                  borderColor: c.thirdBg,
+                }}
+              >
+                <Image source={{ uri: pl.art }} resizeMode="cover" style={{ width: '100%', height: 106 }} />
+                <View style={{ padding: 10, gap: 2 }}>
+                  <AppText size="xxsm" weight="black" tone="constant">
+                    {pl.tag}
+                  </AppText>
+                  <AppText size="sm" weight="bold" numberOfLines={1}>
+                    {pl.title}
+                  </AppText>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
+            {FEATURED_PLANS.map((pl) => (
+              <Pressable
+                key={pl.id}
+                onPress={() => {
+                  impactLight();
+                  playSound('tick', 0.4);
+                  navigation.navigate('WorkoutSchedule');
+                }}
+                style={{
+                  width: 152,
+                  borderRadius: RADII.card,
+                  overflow: 'hidden',
+                  backgroundColor: c.secondBg,
+                  borderWidth: 1,
+                  borderColor: c.thirdBg,
+                }}
+              >
+                <Image source={{ uri: pl.art }} resizeMode="cover" style={{ width: 152, height: 92 }} />
+                <View style={{ padding: 9, gap: 2 }}>
+                  <AppText size="xxsm" weight="black" tone="constant">
+                    {pl.tag}
+                  </AppText>
+                  <AppText size="sm" weight="bold" numberOfLines={1}>
+                    {pl.title}
+                  </AppText>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        )}
       </View>
 
       {/* Folders Filter */}
@@ -406,10 +463,16 @@ export function WorkoutsTabScreen() {
         </ScrollView>
       </View>
 
-      {/* Presets List with Routine Rank Center Badges + Exercise Avatar Strip */}
-      <View style={{ gap: SPACING.std }}>
+      {/* Presets List — 2-Column Grid on Desktop, Vertical Stack on Mobile */}
+      <View
+        style={
+          layout.isDesktop
+            ? { flexDirection: 'row', flexWrap: 'wrap', gap: 14 }
+            : { gap: SPACING.std }
+        }
+      >
         {visiblePresets.length === 0 ? (
-          <AppCard style={{ alignItems: 'center', paddingVertical: 24, gap: 10 }}>
+          <AppCard style={{ width: '100%', alignItems: 'center', paddingVertical: 24, gap: 10 }}>
             <AppText size="md" weight="bold">
               No presets in this folder
             </AppText>
@@ -423,7 +486,13 @@ export function WorkoutsTabScreen() {
           visiblePresets.map((preset, idx) => {
             const rankBadgeUrl = getRoutineRankUrl(PRESET_RANK_TIERS[idx % PRESET_RANK_TIERS.length]);
             return (
-              <AppCard key={preset.id} style={{ gap: 12 }}>
+              <AppCard
+                key={preset.id}
+                style={{
+                  gap: 12,
+                  ...(layout.isDesktop ? { flexBasis: '48.5%', flexGrow: 1, minWidth: 320 } : {}),
+                }}
+              >
                 <Pressable
                   onPress={() => navigation.navigate('PresetDetail', { presetId: preset.id })}
                   style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}
