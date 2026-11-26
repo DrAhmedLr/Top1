@@ -52,6 +52,10 @@ export async function GET(request: Request) {
         readUserWearableSnapshots(client, user.id),
       ]);
 
+    if (profileRes.error || measurementsRes.error || gamificationRes.error) {
+      return reply(request, { error: 'Unable to load unified mobile overview.' }, 503);
+    }
+
     const profileRow = profileRes.data;
     const demographics = profileRow
       ? {

@@ -606,3 +606,48 @@ export const customExerciseOntology = sqliteTable('custom_exercise_ontology', {
   definitionJson: text('definition_json').notNull(),
   createdAt: text('created_at').notNull(),
 });
+
+export const commentLikes = sqliteTable('comment_likes', {
+  id: text('id').primaryKey(),
+  commentId: text('comment_id')
+    .notNull()
+    .references(() => postComments.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: text('created_at').notNull(),
+});
+
+export const dailyVaultClaims = sqliteTable('daily_vault_claims', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  dateIso: text('date_iso').notNull(),
+  rewardCredits: integer('reward_credits').notNull().default(50),
+  rewardXp: integer('reward_xp').notNull().default(50),
+  claimedAt: text('claimed_at').notNull(),
+});
+
+export const featureRequests = sqliteTable('feature_requests', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  title: text('title').notNull(),
+  description: text('description').notNull().default(''),
+  status: text('status').notNull().default('open'),
+  votesCount: integer('votes_count').notNull().default(1),
+  createdAt: text('created_at').notNull(),
+});
+
+export const featureRequestVotes = sqliteTable('feature_request_votes', {
+  id: text('id').primaryKey(),
+  requestId: text('request_id')
+    .notNull()
+    .references(() => featureRequests.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: text('created_at').notNull(),
+});

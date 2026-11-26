@@ -17,17 +17,20 @@ import {
   macroGoals,
   notificationSettings,
   passwordResetTokens,
+  presetExercises,
+  presets,
   sessions,
   users,
 } from '../db/schema.js';
+import { safeJsonParse } from '../lib/accessControl.js';
 import {
   generateId,
   generateOpaqueToken,
   getRefreshExpiryIso,
-  hashPassword,
+  hashPasswordAsync,
   hashToken,
   signAccessToken,
-  verifyPassword,
+  verifyPasswordAsync,
 } from '../lib/auth.js';
 import { protectedProcedure, publicProcedure, router } from '../trpc.js';
 
@@ -40,7 +43,7 @@ export function serializeUser(row: typeof users.$inferSelect) {
     displayName: row.displayName,
     bio: row.bio,
     avatarUrl: row.avatarUrl,
-    avatarConfig: avatarConfigSchema.parse(JSON.parse(row.avatarConfigJson || '{}')),
+    avatarConfig: avatarConfigSchema.parse(safeJsonParse<Record<string, unknown>>(row.avatarConfigJson, {})),
     rankingSex: row.rankingSex as 'Male' | 'Female',
     age: row.age,
     heightCm: row.heightCm,
@@ -70,7 +73,7 @@ export function serializeUser(row: typeof users.$inferSelect) {
     equippedTitleId: row.equippedTitleId,
     equippedBorderId: row.equippedBorderId,
     equippedBannerId: row.equippedBannerId,
-    equippedMedalIds: JSON.parse(row.equippedMedalIdsJson || '["","",""]') as string[],
+    equippedMedalIds: safeJsonParse<string[]>(row.equippedMedalIdsJson, ['', '', '']),
     referralCode: row.referralCode,
     isProDemo: row.isProDemo,
     onboardingCompleted: row.onboardingCompleted,
@@ -153,10 +156,11 @@ export const authRouter = router({
       }
     }
 
+    const passwordHash = await hashPasswordAsync(input.password);
     await ctx.db.insert(users).values({
       id: userId,
       email: emailLower,
-      passwordHash: hashPassword(input.password),
+      passwordHash,
       username: usernameLower,
       displayName: input.displayName,
       bio: '',
@@ -224,6 +228,65 @@ export const authRouter = router({
       });
     }
 
+    // Seed a tailored Day-1 Starter Preset so new athletes can launch a workout immediately
+    try {
+      const starterPresetId = generateId('prs');
+      const starterTitle =
+        input.fitnessGoal === 'get_stronger'
+          ? 'Day 1 · Full-Body Strength'
+          : input.fitnessGoal === 'lose_fat'
+            ? 'Day 1 · Athletic Conditioning'
+            : 'Day 1 · Upper / Lower Foundation';
+      const starterIds =
+        input.fitnessGoal === 'get_stronger'
+          ? ['ex_squat', 'ex_bench_press', 'ex_barbell_row', 'ex_pull_ups']
+          : input.fitnessGoal === 'lose_fat'
+            ? ['ex_push_ups', 'ex_squat', 'ex_pull_ups', 'ex_cable_crunch']
+            : ['ex_bench_press', 'ex_barbell_row', 'ex_overhead_press', 'ex_squat'];
+
+      const availableEx = await ctx.db
+        .select({ id: exercises.id, includesBodyweight: exercises.includesBodyweight })
+        .from(exercises);
+      const validIds = new Set(availableEx.map((e) => e.id));
+      const bwMap = new Map(availableEx.map((e) => [e.id, e.includesBodyweight]));
+      const chosen = starterIds.filter((id) => validIds.has(id));
+
+      if (chosen.length > 0) {
+        await ctx.db.insert(presets).values({
+          id: starterPresetId,
+          userId,
+          folderId: null,
+          name: starterTitle,
+          description: `Personalized Day-1 starter routine (${input.weeklyWorkoutGoal}x/week plan).`,
+          isPublic: false,
+          downloadsCount: 0,
+          sortOrder: 0,
+          createdAt: now,
+          updatedAt: now,
+        });
+        for (let idx = 0; idx < chosen.length; idx++) {
+          const exId = chosen[idx];
+          const isBw = bwMap.get(exId) ?? false;
+          const load = isBw ? 0 : Math.round(Math.max(20, input.bodyweightKg * 0.5) / 2.5) * 2.5;
+          await ctx.db.insert(presetExercises).values({
+            id: generateId('pe'),
+            presetId: starterPresetId,
+            exerciseId: exId,
+            sortOrder: idx,
+            restSeconds: 120,
+            notes: '',
+            targetSetsJson: JSON.stringify([
+              { weightKg: load, reps: 8, setType: 'normal' },
+              { weightKg: load, reps: 8, setType: 'normal' },
+              { weightKg: load, reps: 8, setType: 'normal' },
+            ]),
+          });
+        }
+      }
+    } catch {
+      // Non-fatal if exercises table is empty in minimal tests
+    }
+
     const sessionId = generateId('ses');
     const refreshToken = generateOpaqueToken(32);
     await ctx.db.insert(sessions).values({
@@ -253,7 +316,7 @@ export const authRouter = router({
       .where(or(eq(users.email, idLower), eq(users.username, idLower)))
       .limit(1);
 
-    if (!user || !verifyPassword(input.password, user.passwordHash)) {
+    if (!user || !(await verifyPasswordAsync(input.password, user.passwordHash))) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Invalid email/username or password.',
@@ -347,7 +410,7 @@ export const authRouter = router({
       await ctx.db.insert(passwordResetTokens).values({
         id: generateId('prt'),
         userId: user.id,
-        token,
+        token: hashToken(token),
         expiresAt,
         createdAt: now,
       });
@@ -360,10 +423,11 @@ export const authRouter = router({
   resetPassword: publicProcedure
     .input(confirmResetPasswordSchema)
     .mutation(async ({ ctx, input }) => {
+      const hashedToken = hashToken(input.token);
       const [record] = await ctx.db
         .select()
         .from(passwordResetTokens)
-        .where(eq(passwordResetTokens.token, input.token))
+        .where(eq(passwordResetTokens.token, hashedToken))
         .limit(1);
 
       if (!record || record.usedAt || new Date(record.expiresAt).getTime() <= Date.now()) {
@@ -374,9 +438,10 @@ export const authRouter = router({
       }
 
       const now = new Date().toISOString();
+      const nextHash = await hashPasswordAsync(input.newPassword);
       await ctx.db
         .update(users)
-        .set({ passwordHash: hashPassword(input.newPassword), updatedAt: now })
+        .set({ passwordHash: nextHash, updatedAt: now })
         .where(eq(users.id, record.userId));
 
       await ctx.db

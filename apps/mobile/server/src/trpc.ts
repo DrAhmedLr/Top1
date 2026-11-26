@@ -33,17 +33,17 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     });
   }
 
-  let [session] = await ctx.db
+  const [session] = await ctx.db
     .select()
     .from(sessions)
     .where(eq(sessions.id, verified.payload.sid))
     .limit(1);
 
-  if (session?.revokedAt) {
+  if (!session || session.revokedAt) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Session not found' });
   }
 
-  if (session && new Date(session.expiresAt).getTime() <= Date.now()) {
+  if (session.userId !== verified.payload.sub || new Date(session.expiresAt).getTime() <= Date.now()) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid session' });
   }
 
@@ -55,28 +55,6 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 
   if (!user) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not found' });
-  }
-
-  // Rehydrate cryptographically verified session on serverless cold starts
-  if (!session && process.env.VERCEL === '1') {
-    const nowIso = new Date().toISOString();
-    const expiresAt = new Date(Date.now() + 30 * 86_400_000).toISOString();
-    const fallbackSession = {
-      id: verified.payload.sid,
-      userId: user.id,
-      refreshTokenHash: `vercel-rehydrated-${verified.payload.sid}`,
-      deviceLabel: 'web',
-      pushToken: null,
-      expiresAt,
-      revokedAt: null,
-      createdAt: nowIso,
-    };
-    await ctx.db.insert(sessions).values(fallbackSession).onConflictDoNothing();
-    session = fallbackSession;
-  }
-
-  if (!session) {
-    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Session not found' });
   }
 
   return next({

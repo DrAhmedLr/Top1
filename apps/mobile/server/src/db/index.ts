@@ -469,6 +469,38 @@ const DDL_STATEMENTS = [
     definition_json TEXT NOT NULL,
     created_at TEXT NOT NULL
   );`,
+  `CREATE TABLE IF NOT EXISTS comment_likes (
+    id TEXT PRIMARY KEY,
+    comment_id TEXT NOT NULL REFERENCES post_comments(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL,
+    UNIQUE(comment_id, user_id)
+  );`,
+  `CREATE TABLE IF NOT EXISTS daily_vault_claims (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    date_iso TEXT NOT NULL,
+    reward_credits INTEGER NOT NULL DEFAULT 50,
+    reward_xp INTEGER NOT NULL DEFAULT 50,
+    claimed_at TEXT NOT NULL,
+    UNIQUE(user_id, date_iso)
+  );`,
+  `CREATE TABLE IF NOT EXISTS feature_requests (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'open',
+    votes_count INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL
+  );`,
+  `CREATE TABLE IF NOT EXISTS feature_request_votes (
+    id TEXT PRIMARY KEY,
+    request_id TEXT NOT NULL REFERENCES feature_requests(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL,
+    UNIQUE(request_id, user_id)
+  );`,
 ];
 
 const SAFE_ALTER_STATEMENTS = [

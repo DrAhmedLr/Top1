@@ -129,14 +129,18 @@ export async function PATCH(request: Request) {
       const patch: Record<string, unknown> = {};
       if (typeof body.name === 'string' && body.name.trim()) patch.name = body.name.trim().slice(0, 60);
       if (body.sortOrder !== undefined) patch.sort_order = Math.max(0, Math.min(10000, Math.round(Number(body.sortOrder) || 0)));
+      if (Object.keys(patch).length === 0) {
+        return reply(request, { error: 'No valid folder fields to update.' }, 400);
+      }
       const { data, error } = await client
         .from('workout_folders')
         .update(patch)
         .eq('id', id)
         .eq('user_id', user.id)
         .select('*')
-        .single();
+        .maybeSingle();
       if (error) return reply(request, { error: 'Could not update folder.' }, 503);
+      if (!data) return reply(request, { error: 'Folder not found.' }, 404);
       return reply(request, { folder: data });
     }
 
@@ -148,6 +152,9 @@ export async function PATCH(request: Request) {
     }
     if (typeof body.isPublic === 'boolean') patch.is_public = body.isPublic;
     if (Array.isArray(body.exercises)) patch.exercises_json = body.exercises;
+    if (Object.keys(patch).length === 0) {
+      return reply(request, { error: 'No valid preset fields to update.' }, 400);
+    }
 
     const { data, error } = await client
       .from('workout_presets')
@@ -155,8 +162,9 @@ export async function PATCH(request: Request) {
       .eq('id', id)
       .eq('user_id', user.id)
       .select('*')
-      .single();
+      .maybeSingle();
     if (error) return reply(request, { error: 'Could not update preset.' }, 503);
+    if (!data) return reply(request, { error: 'Preset not found.' }, 404);
     return reply(request, { preset: data });
   } catch {
     return reply(request, { error: 'Invalid update payload.' }, 400);

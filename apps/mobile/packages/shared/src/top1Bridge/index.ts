@@ -466,8 +466,14 @@ export function detectTop1BenchmarkFromSets(params: {
     let best: { weightKg: number; reps: number; e1rm: number } | null = null;
     for (const s of working) {
       if (s.weightKg <= 0 || s.reps <= 0 || s.reps > 15) continue;
-      const est = epley(s.weightKg, Math.min(12, s.reps));
-      if (!best || est > best.e1rm) best = { weightKg: s.weightKg, reps: Math.min(12, s.reps), e1rm: est };
+      // lib/derivations.ts enforces Epley bounds at 1..10 reps; clamp cleanly to avoid RangeError on 11-15 rep sets.
+      const clampedReps = Math.min(10, Math.max(1, Math.round(s.reps)));
+      try {
+        const est = epley(s.weightKg, clampedReps);
+        if (!best || est > best.e1rm) best = { weightKg: s.weightKg, reps: clampedReps, e1rm: est };
+      } catch {
+        continue;
+      }
     }
     return best;
   };
@@ -520,10 +526,15 @@ export function detectTop1BenchmarkFromSets(params: {
       let bestRatio = 0;
       let bestPair: [number, number] = [0, 1];
       for (const s of weighted) {
-        const r = weightedPullupRatio(s.weightKg, s.reps, bw);
-        if (r > bestRatio) {
-          bestRatio = r;
-          bestPair = [s.weightKg, s.reps];
+        const clampedReps = Math.min(10, Math.max(1, Math.round(s.reps)));
+        try {
+          const r = weightedPullupRatio(s.weightKg, clampedReps, bw);
+          if (r > bestRatio) {
+            bestRatio = r;
+            bestPair = [s.weightKg, clampedReps];
+          }
+        } catch {
+          continue;
         }
       }
       if (bestRatio >= 0 && bestRatio <= 2) {

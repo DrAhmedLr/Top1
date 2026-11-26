@@ -1,6 +1,7 @@
 import { and, desc, eq, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
-import { foodBundles, foodLogs, foods, healthLogs, macroGoals, metricObservations } from '../db/schema.js';
+import { foodBundles, foodLogs, foods, healthLogs, macroGoals, metricObservations, wearableSnapshots } from '../db/schema.js';
+import { safeJsonParse } from '../lib/accessControl.js';
 import { generateId } from '../lib/auth.js';
 import { nextObservationSequence } from '../lib/top1Context.js';
 import { protectedProcedure, router } from '../trpc.js';
@@ -130,11 +131,10 @@ export const foodRouter = router({
       .where(eq(foodBundles.userId, ctx.user.id));
     return rows.map((r) => ({
       ...r,
-      items: JSON.parse(r.itemsJson || '[]') as Array<{
-        foodId: string;
-        foodName: string;
-        servings: number;
-      }>,
+      items: safeJsonParse<Array<{ foodId: string; foodName: string; servings: number }>>(
+        r.itemsJson,
+        []
+      ),
     }));
   }),
 
@@ -328,13 +328,46 @@ export const foodRouter = router({
         });
       }
 
-      // Sync sleep & resting HR into canonical TOP1% metric_observations
+      // Sync sleep & resting HR into canonical TOP1% metric_observations and wearable_snapshots
       const syncItems: Array<{ metricId: string; value: number; unit: string }> = [];
       if (input.sleepMinutes >= 60 && input.sleepMinutes <= 960) {
         syncItems.push({ metricId: 'total_sleep', value: input.sleepMinutes, unit: 'min' });
       }
       if (input.restingHr && input.restingHr >= 30 && input.restingHr <= 140) {
         syncItems.push({ metricId: 'rhr', value: input.restingHr, unit: 'bpm' });
+      }
+      if (syncItems.length > 0) {
+        const [existingSnap] = await ctx.db
+          .select()
+          .from(wearableSnapshots)
+          .where(
+            and(
+              eq(wearableSnapshots.userId, ctx.user.id),
+              eq(wearableSnapshots.dateIso, input.dateIso)
+            )
+          )
+          .limit(1);
+        if (existingSnap) {
+          await ctx.db
+            .update(wearableSnapshots)
+            .set({
+              totalSleepMinutes:
+                input.sleepMinutes >= 60 ? input.sleepMinutes : existingSnap.totalSleepMinutes,
+              restingHeartRateBpm: input.restingHr ?? existingSnap.restingHeartRateBpm,
+              updatedAt: now,
+            })
+            .where(eq(wearableSnapshots.id, existingSnap.id));
+        } else {
+          await ctx.db.insert(wearableSnapshots).values({
+            id: generateId('wbl'),
+            userId: ctx.user.id,
+            dateIso: input.dateIso,
+            source: 'apple_health',
+            totalSleepMinutes: input.sleepMinutes >= 60 ? input.sleepMinutes : null,
+            restingHeartRateBpm: input.restingHr ?? null,
+            updatedAt: now,
+          });
+        }
       }
       for (const s of syncItems) {
         const seq = await nextObservationSequence(ctx.db, ctx.user.id);

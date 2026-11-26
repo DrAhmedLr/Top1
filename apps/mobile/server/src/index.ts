@@ -30,9 +30,33 @@ const MIME_TYPES: Record<string, string> = {
   '.wasm': 'application/wasm',
 };
 
+function resolveAllowedCorsOrigin(originHeader?: string): string {
+  if (!originHeader) return 'http://localhost:8081';
+  const configured = (process.env.TOP1_CORS_ORIGINS ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (
+    configured.includes(originHeader) ||
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(originHeader) ||
+    originHeader === 'https://top1.fit' ||
+    originHeader === 'capacitor://localhost'
+  ) {
+    return originHeader;
+  }
+  return 'https://top1.fit';
+}
+
 function tryServeStaticWeb(urlPath: string, res: import('node:http').ServerResponse): boolean {
   if (!fs.existsSync(WEB_DIST_DIR)) return false;
-  const cleanPath = decodeURIComponent(urlPath.split('?')[0] || '/');
+  let cleanPath: string;
+  try {
+    cleanPath = decodeURIComponent(urlPath.split('?')[0] || '/');
+  } catch {
+    res.statusCode = 400;
+    res.end('Bad Request');
+    return true;
+  }
   const candidate = path.resolve(WEB_DIST_DIR, cleanPath.replace(/^\/+/, ''));
 
   // Prevent directory traversal outside WEB_DIST_DIR
@@ -69,16 +93,18 @@ async function main() {
     responseMeta() {
       return {
         headers: {
-          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
           'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          Vary: 'Origin',
         },
       };
     },
     middleware(req, res, next) {
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      const origin = typeof req.headers.origin === 'string' ? req.headers.origin : undefined;
+      res.setHeader('Access-Control-Allow-Origin', resolveAllowedCorsOrigin(origin));
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Vary', 'Origin');
 
       if (req.method === 'OPTIONS') {
         res.statusCode = 204;

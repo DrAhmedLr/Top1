@@ -7,6 +7,16 @@ export const dynamic = 'force-dynamic';
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const VISIBILITY = new Set(['public', 'friends', 'private']);
 
+function isSafeHttpsUrl(raw: unknown): raw is string {
+  if (typeof raw !== 'string' || raw.length === 0 || raw.length > 512) return false;
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 function reply(request: Request, body: unknown, status = 200) {
   const cors = nativeCorsHeaders(request.headers.get('origin'));
   return NextResponse.json(body, {
@@ -117,7 +127,7 @@ export async function POST(request: Request) {
         ? body.muscleHeatmap
         : {};
     const mediaUrls = Array.isArray(body.mediaUrls)
-      ? body.mediaUrls.filter((u): u is string => typeof u === 'string' && u.length <= 512).slice(0, 8)
+      ? body.mediaUrls.filter(isSafeHttpsUrl).slice(0, 8)
       : [];
     const taggedUserIds = Array.isArray(body.taggedUserIds)
       ? body.taggedUserIds.filter((id): id is string => typeof id === 'string' && UUID_RE.test(id)).slice(0, 12)
@@ -188,15 +198,20 @@ export async function PATCH(request: Request) {
       patch.strava_activity_id = body.stravaActivityId ? body.stravaActivityId.slice(0, 64) : null;
     }
 
+    if (Object.keys(patch).length === 0) {
+      return reply(request, { error: 'No valid fields to update.' }, 400);
+    }
+
     const { data, error } = await client
       .from('workout_posts')
       .update(patch)
       .eq('id', id)
       .eq('user_id', user.id)
       .select('*')
-      .single();
+      .maybeSingle();
 
     if (error) return reply(request, { error: 'Could not update workout post.' }, 503);
+    if (!data) return reply(request, { error: 'Workout post not found.' }, 404);
     return reply(request, { post: data });
   } catch {
     return reply(request, { error: 'Invalid edit payload.' }, 400);

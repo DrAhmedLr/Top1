@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import { and, desc, eq, inArray } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   buildTop1WorkoutEventFromPost,
@@ -9,7 +9,6 @@ import {
   type RankingSex,
 } from '@apexlift/shared';
 import {
-  blockedUsers,
   exerciseRanks,
   exercises,
   friendships,
@@ -26,6 +25,12 @@ import {
   workoutPosts,
   workoutSets,
 } from '../db/schema.js';
+import {
+  assertCanViewPost,
+  getBlockedUserIds,
+  PUBLIC_USER_SELECT,
+  safeJsonParse,
+} from '../lib/accessControl.js';
 import { generateId } from '../lib/auth.js';
 import {
   nextLedgerSequence,
@@ -151,7 +156,7 @@ export const postRouter = router({
         if (prFlags.some(Boolean)) prCount += 1;
 
         if (exMeta) {
-          const primaries = JSON.parse(exMeta.primaryMusclesJson) as string[];
+          const primaries = safeJsonParse<string[]>(exMeta.primaryMusclesJson, []);
           for (const m of primaries) {
             muscleHeatmap[m] = Math.max(muscleHeatmap[m] ?? 0, bestRating || 200);
           }
@@ -216,8 +221,17 @@ export const postRouter = router({
         });
       }
 
-      const xpEarned = 120 + totalCompletedSets * 10 + prCount * 40 + rankUps.length * 60;
-      const creditsEarned = 35 + prCount * 15 + rankUps.length * 25;
+      // Cap daily XP/credits earned from workout posts to prevent infinite spam farming
+      const dayStartIso = `${now.slice(0, 10)}T00:00:00.000Z`;
+      const todaysPosts = await ctx.db
+        .select({ xpEarned: workoutPosts.xpEarned })
+        .from(workoutPosts)
+        .where(and(eq(workoutPosts.userId, ctx.user.id), gte(workoutPosts.completedAt, dayStartIso)));
+      const todayXpSoFar = todaysPosts.reduce((sum, p) => sum + p.xpEarned, 0);
+      const rawXp = 120 + totalCompletedSets * 10 + prCount * 40 + rankUps.length * 60;
+      const xpEarned = Math.max(0, Math.min(rawXp, Math.max(0, 2500 - todayXpSoFar)));
+      const rawCredits = 35 + prCount * 15 + rankUps.length * 25;
+      const creditsEarned = xpEarned > 0 ? Math.min(rawCredits, 500) : 0;
 
       await ctx.db.insert(workoutPosts).values({
         id: postId,
@@ -486,11 +500,7 @@ export const postRouter = router({
       const scope = input?.scope ?? 'all';
       const limit = input?.limit ?? 20;
 
-      const blockedRows = await ctx.db
-        .select()
-        .from(blockedUsers)
-        .where(eq(blockedUsers.blockerId, ctx.user.id));
-      const blockedSet = new Set(blockedRows.map((b) => b.blockedId));
+      const blockedSet = await getBlockedUserIds(ctx.db, ctx.user.id);
 
       const friendRows = await ctx.db
         .select()
@@ -502,7 +512,7 @@ export const postRouter = router({
         .select()
         .from(workoutPosts)
         .orderBy(desc(workoutPosts.completedAt))
-        .limit(limit * 2);
+        .limit(limit * 3);
 
       const filtered = posts
         .filter((p) => {
@@ -516,7 +526,10 @@ export const postRouter = router({
       if (filtered.length === 0) return [];
 
       const userIds = Array.from(new Set(filtered.map((p) => p.userId)));
-      const authorRows = await ctx.db.select().from(users).where(inArray(users.id, userIds));
+      const authorRows = await ctx.db
+        .select(PUBLIC_USER_SELECT)
+        .from(users)
+        .where(inArray(users.id, userIds));
       const authorMap = new Map(authorRows.map((u) => [u.id, u]));
 
       const allExs = await ctx.db.select().from(exercises);
@@ -567,13 +580,13 @@ export const postRouter = router({
 
         results.push({
           ...p,
-          muscleHeatmap: JSON.parse(p.muscleHeatmapJson || '{}') as Record<string, number>,
+          muscleHeatmap: safeJsonParse<Record<string, number>>(p.muscleHeatmapJson, {}),
           author: author
             ? {
                 id: author.id,
                 username: author.username,
                 displayName: author.displayName,
-                avatarConfig: JSON.parse(author.avatarConfigJson || '{}'),
+                avatarConfig: safeJsonParse<Record<string, unknown>>(author.avatarConfigJson, {}),
                 peakAverageRank: author.peakAverageRank,
                 peakAverageRating: author.peakAverageRating,
                 equippedTitleId: author.equippedTitleId,
@@ -601,7 +614,13 @@ export const postRouter = router({
         .limit(1);
       if (!p) throw new TRPCError({ code: 'NOT_FOUND', message: 'Workout post not found' });
 
-      const [author] = await ctx.db.select().from(users).where(eq(users.id, p.userId)).limit(1);
+      await assertCanViewPost(ctx.db, ctx.user.id, p);
+
+      const [author] = await ctx.db
+        .select(PUBLIC_USER_SELECT)
+        .from(users)
+        .where(eq(users.id, p.userId))
+        .limit(1);
       const logs = await ctx.db
         .select()
         .from(workoutExerciseLogs)
@@ -624,13 +643,13 @@ export const postRouter = router({
 
       return {
         ...p,
-        muscleHeatmap: JSON.parse(p.muscleHeatmapJson || '{}') as Record<string, number>,
+        muscleHeatmap: safeJsonParse<Record<string, number>>(p.muscleHeatmapJson, {}),
         author: author
           ? {
               id: author.id,
               username: author.username,
               displayName: author.displayName,
-              avatarConfig: JSON.parse(author.avatarConfigJson || '{}'),
+              avatarConfig: safeJsonParse<Record<string, unknown>>(author.avatarConfigJson, {}),
               peakAverageRank: author.peakAverageRank,
             }
           : null,

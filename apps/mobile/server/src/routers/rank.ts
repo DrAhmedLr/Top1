@@ -1,4 +1,5 @@
-import { eq } from 'drizzle-orm';
+import { TRPCError } from '@trpc/server';
+import { eq, gte } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   buildRankPredictionCurve,
@@ -10,7 +11,13 @@ import {
   ratingToRank,
   type RankingSex,
 } from '@apexlift/shared';
-import { exerciseRanks, exercises, rankHistory, users } from '../db/schema.js';
+import { exerciseRanks, exercises, rankHistory, users, workoutPosts } from '../db/schema.js';
+import {
+  getBlockedUserIds,
+  isBlockedBetween,
+  PUBLIC_USER_SELECT,
+  safeJsonParse,
+} from '../lib/accessControl.js';
 import { protectedProcedure, publicProcedure, router } from '../trpc.js';
 
 export const rankRouter = router({
@@ -126,6 +133,9 @@ export const rankRouter = router({
     .input(z.object({ userId: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const targetUserId = input?.userId ?? ctx.user.id;
+      if (targetUserId !== ctx.user.id && (await isBlockedBetween(ctx.db, ctx.user.id, targetUserId))) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+      }
       const rows = await ctx.db
         .select()
         .from(exerciseRanks)
@@ -205,7 +215,19 @@ export const rankRouter = router({
   }),
 
   getMyLeague: protectedProcedure.query(async ({ ctx }) => {
-    const allUsers = await ctx.db.select().from(users);
+    const blockedSet = await getBlockedUserIds(ctx.db, ctx.user.id);
+    const allUsers = await ctx.db.select(PUBLIC_USER_SELECT).from(users);
+    const weekAgoIso = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+    const recentPosts = await ctx.db
+      .select({ userId: workoutPosts.userId, xpEarned: workoutPosts.xpEarned })
+      .from(workoutPosts)
+      .where(gte(workoutPosts.completedAt, weekAgoIso));
+
+    const weeklyXpByUser = new Map<string, number>();
+    for (const p of recentPosts) {
+      weeklyXpByUser.set(p.userId, (weeklyXpByUser.get(p.userId) ?? 0) + p.xpEarned);
+    }
+
     const tierIdx = Math.min(
       LEAGUE_TIERS.length - 1,
       Math.max(0, Math.floor(ctx.user.peakAverageRating / 100))
@@ -213,16 +235,18 @@ export const rankRouter = router({
     const league = LEAGUE_TIERS[tierIdx];
 
     const ranked = allUsers
+      .filter((u) => !blockedSet.has(u.id))
       .map((u) => ({
         userId: u.id,
         username: u.username,
         displayName: u.displayName,
-        avatarConfig: JSON.parse(u.avatarConfigJson || '{}'),
-        weeklyXp: Math.round((u.experiencePoints % 2500) + u.streaks * 35),
+        avatarConfig: safeJsonParse<Record<string, unknown>>(u.avatarConfigJson, {}),
+        weeklyXp: weeklyXpByUser.get(u.id) ?? 0,
         peakAverageRank: u.peakAverageRank,
         isSelf: u.id === ctx.user.id,
       }))
-      .sort((a, b) => b.weeklyXp - a.weeklyXp);
+      .sort((a, b) => b.weeklyXp - a.weeklyXp || (b.isSelf ? 1 : 0) - (a.isSelf ? 1 : 0))
+      .slice(0, 50);
 
     const promoteCount = Math.max(1, Math.round(ranked.length * league.promotePct));
     const demoteCount = league.demotePct > 0 ? Math.max(1, Math.round(ranked.length * league.demotePct)) : 0;

@@ -38,9 +38,9 @@ begin
   insert into public.post_comments(post_id, user_id, body) values (private_post_id, u1, 'Secret training note');
   insert into public.post_reactions(post_id, user_id, reaction_key) values (private_post_id, u1, 'fire');
 
-  -- Trigger must have created athlete_gamification row with server-computed XP & credits
-  select count(*) into cnt from public.athlete_gamification where user_id = u1 and xp >= 400 and credits >= 330;
-  if cnt <> 1 then raise exception 'Expected workout_posts trigger to award XP and credits'; end if;
+  -- Trigger must have created athlete_gamification row with server-computed XP & credits, and streak capped at 1/day
+  select count(*) into cnt from public.athlete_gamification where user_id = u1 and xp >= 400 and credits >= 330 and streak_days = 1;
+  if cnt <> 1 then raise exception 'Expected workout_posts trigger to award XP/credits with streak capped at 1 per day'; end if;
 
   -- Direct client UPDATE on athlete_gamification must be denied
   begin
@@ -137,6 +137,28 @@ begin
   -- Feature requests are community readable
   select count(*) into cnt from public.feature_requests;
   if cnt < 1 then raise exception 'Expected community feature_requests to be readable'; end if;
+
+  -- Authenticated users MUST NOT be able to invoke service-role self-optimization RPCs
+  begin
+    perform * from public.read_self_optimization_records(10);
+    raise exception 'Expected authenticated user to be denied read_self_optimization_records';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  -- Blocking test: u1 blocks u2; u2 must NOT be able to delete the block or read u1's public posts
+  perform set_config('request.jwt.claims', json_build_object('sub', u1::text, 'role', 'authenticated')::text, true);
+  insert into public.workout_posts(user_id, title, visibility, total_volume_kg, total_sets)
+    values (u1, 'Public Showcase Session', 'public', 2500, 8);
+  update public.friend_links set status = 'blocked' where id = friend_link_id;
+
+  perform set_config('request.jwt.claims', json_build_object('sub', u2::text, 'role', 'authenticated')::text, true);
+  delete from public.friend_links where id = friend_link_id;
+  select count(*) into cnt from public.friend_links where id = friend_link_id and status = 'blocked';
+  if cnt <> 1 then raise exception 'RLS allowed blocked user u2 to delete their own block record'; end if;
+
+  select count(*) into cnt from public.workout_posts where user_id = u1;
+  if cnt <> 0 then raise exception 'RLS allowed blocked user u2 to view u1 public/friends posts'; end if;
 
   reset role;
 

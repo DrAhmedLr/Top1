@@ -24,7 +24,7 @@ import {
 import {datedProgram} from './datedProgram';
 import {historyFields, toEntries} from './metricLogRows';
 import type {Observation} from './history';
-import {normalizeMeasurementMetadata} from './measurementMetadata';
+import {normalizeMeasurementMetadata, type MeasurementMetadata} from './measurementMetadata';
 import {
   emptyWorkspace,
   readWorkspace,
@@ -33,6 +33,7 @@ import {
   type PersonalWorkspace,
 } from './personalWorkspace';
 import {normalizeDemographics, normalizeValues} from './profile';
+import type {Demographics, Values} from './registry';
 import type {TrainingEvent, Workout} from './training';
 
 export class CoachSnapshotChanged extends Error {}
@@ -47,6 +48,10 @@ export type CoachActionPayload =
 
 export type AccountCoachSnapshot = {
   owner: string;
+  profile?: Demographics;
+  values: Values;
+  details: MeasurementMetadata;
+  observations: Observation[];
   dossier: AthleteDossier;
   workspace: PersonalWorkspace;
   workspaceRevision: number;
@@ -199,6 +204,10 @@ export async function readAccountCoachDecision(
   if (!selectedPlan) {
     return {
       owner,
+      profile,
+      values,
+      details,
+      observations,
       dossier,
       workspace,
       workspaceRevision,
@@ -225,6 +234,10 @@ export async function readAccountCoachDecision(
 
   return {
     owner,
+    profile,
+    values,
+    details,
+    observations,
     dossier,
     workspace,
     workspaceRevision,
@@ -274,8 +287,12 @@ export async function commitAccountCoachAction(
   const computeWith = (nextWorkspace: PersonalWorkspace) => {
     const nextDossier = buildAthleteDossier({
       owner,
+      profile: current.profile,
+      values: current.values,
+      details: current.details,
+      observations: current.observations,
       workspace: nextWorkspace,
-      trainingEvents: current.plans.flatMap(p => [p.event, ...p.sessions]),
+      trainingEvents: current.trainingEvents,
       asOf: now,
       timeZone: current.dossier.identity.timeZone,
     });

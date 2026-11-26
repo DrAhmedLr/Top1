@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import {
   buildBodyPhysiologyReport,
@@ -6,7 +6,6 @@ import {
   findBiomechanicalSubstitutes,
 } from '@top1/engine';
 import { buildSvgMuscleMapFromPhysiology } from '@apexlift/shared';
-import { users } from '../db/schema.js';
 import { loadUserTop1Context } from '../lib/top1Context.js';
 import { protectedProcedure, router } from '../trpc.js';
 
@@ -14,17 +13,15 @@ export const physiologyRouter = router({
   getBodyReport: protectedProcedure
     .input(z.object({ userId: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
-      let targetUser = ctx.user;
+      // Biometric readiness, discomfort state, and private training fatigue are strictly owner-only.
       if (input?.userId && input.userId !== ctx.user.id) {
-        const [found] = await ctx.db
-          .select()
-          .from(users)
-          .where(eq(users.id, input.userId))
-          .limit(1);
-        if (found) targetUser = found;
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Physiology and biometric readiness data are private to the athlete.',
+        });
       }
 
-      const t1 = await loadUserTop1Context(ctx.db, targetUser);
+      const t1 = await loadUserTop1Context(ctx.db, ctx.user);
       const report = buildBodyPhysiologyReport({
         dossier: t1.dossier,
         trainingEvents: t1.trainingEvents,

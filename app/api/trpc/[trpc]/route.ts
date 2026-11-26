@@ -8,7 +8,15 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
+const MAX_TRPC_BODY_BYTES = 512 * 1024;
 let dbReadyPromise: Promise<AppDatabase> | null = null;
+
+class DatabaseUnavailableError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DatabaseUnavailableError';
+  }
+}
 
 function getDb(): Promise<AppDatabase> {
   if (!dbReadyPromise) {
@@ -21,8 +29,10 @@ function getDb(): Promise<AppDatabase> {
         process.env.TOP1_MOBILE_DATABASE_AUTH_TOKEN ||
         process.env.TURSO_AUTH_TOKEN ||
         undefined;
-      if (!configuredUrl && process.env.VERCEL === '1') {
-        console.warn('[top1/trpc] TOP1_MOBILE_DATABASE_URL is not set on Vercel; falling back to ephemeral /tmp SQLite.');
+      if (!configuredUrl && process.env.VERCEL === '1' && process.env.TOP1_ALLOW_EPHEMERAL_SQLITE !== 'true') {
+        throw new DatabaseUnavailableError(
+          'Persistent TOP1_MOBILE_DATABASE_URL (or TURSO_DATABASE_URL) must be configured in production.'
+        );
       }
       const dbUrl =
         configuredUrl ||
@@ -39,7 +49,26 @@ function getDb(): Promise<AppDatabase> {
 }
 
 async function handle(request: Request) {
-  const db = await getDb();
+  const contentLength = Number(request.headers.get('content-length') ?? '0');
+  if (Number.isFinite(contentLength) && contentLength > MAX_TRPC_BODY_BYTES) {
+    return new Response(JSON.stringify({ error: 'Payload too large.' }), {
+      status: 413,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'private, no-store' },
+    });
+  }
+
+  let db: AppDatabase;
+  try {
+    db = await getDb();
+  } catch (err) {
+    const message =
+      err instanceof DatabaseUnavailableError ? err.message : 'Database temporarily unavailable.';
+    return new Response(JSON.stringify({ error: message }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'private, no-store' },
+    });
+  }
+
   const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
     req: request,
