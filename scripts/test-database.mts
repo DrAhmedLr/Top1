@@ -34,6 +34,8 @@ try {
  await db.exec(await readFile('supabase/tests/forecast-learning.sql','utf8'));
  await db.exec(await readFile('supabase/tests/customer-journey.sql','utf8'));
  await db.exec(await readFile('supabase/tests/admin-goal-report.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/ranked-hub.sql','utf8'));
+ await db.exec(await readFile('supabase/tests/unified-mobile.sql','utf8'));
  await testAccountInsights(db);
  console.log('Two isolated accounts, independent sessions, saved workouts, stale writes, and three-checkpoint forecasts passed.');
  console.log('PostgreSQL migrations, RLS, history, metadata, and revision conflict checks passed.');

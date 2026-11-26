@@ -9,10 +9,7 @@ node_modules/
 previews/
 .pnpm-store/
 supabase/.temp/
-
-# Keep creative exports on this device. Version the original video renderer.
-/output/*
-!/output/video/
-/output/video/*
-!/output/video/render.swift
-
+apps/mobile/app/.expo/
+apps/mobile/app/dist/
+apps/mobile/server/*.db*
+/output/

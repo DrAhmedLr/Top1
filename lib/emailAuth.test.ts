@@ -38,7 +38,7 @@ test('normal sessions and expired recovery claims cannot replace a password with
 });
 
 test('the native client sends recovery, signup, and resend links to the HTTPS app',async()=>{
- const native=await import('../mobile/src/platform/emailAuth');
+ const native=await import('./nativeEmailAuth');
  const destinations:string[]=[];
  const client=fake({
   resetPasswordForEmail:async(_email:string,options:{redirectTo:string})=>{destinations.push(options.redirectTo);return {error:null};},
