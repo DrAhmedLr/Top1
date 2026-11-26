@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "test": "node --import tsx --test lib/*.test.ts lib/adapters/*.test.ts",
+    "test:mobile": "npm --prefix apps/mobile run typecheck && npm --prefix apps/mobile run test",
     "typecheck": "tsc --noEmit",
     "check:fast": "npm run typecheck && npm run test",
     "sync:app": "node scripts/sync-mobile-web.mjs",

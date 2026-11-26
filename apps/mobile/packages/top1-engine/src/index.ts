@@ -70,12 +70,6 @@ export {
   getScoredCorrelation,
 } from '../../../../../lib/correlations';
 
-export {
-  FRIEND_REFERENCE_VERSION as FRIEND_2015_VERSION,
-  FRIEND_SOURCE as FRIEND_2015_SOURCE,
-  friend2015,
-} from '../../../../../lib/friend2015';
-
 export { recordedCoverage } from '../../../../../lib/coverage';
 
 export { illustrativeTopPercent, rankingLabel } from '../../../../../lib/ranking';

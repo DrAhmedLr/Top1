@@ -35,7 +35,7 @@ jobs:
             while IFS= read -r -d '' path; do
               case "$path" in
                 LICENSE) ;;
-                apps/mobile/server/*|apps/mobile/packages/*) web=true; mobile=true ;;
+                apps/mobile/server/*|apps/mobile/packages/*|app/api/trpc/*|middleware.ts|next.config.mjs) web=true; mobile=true ;;
                 apps/mobile/*) mobile=true ;;
                 lib/*) web=true; mobile=true ;;
                 *) web=true ;;
