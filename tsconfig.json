@@ -25,6 +25,12 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@apexlift/shared": [
+        "./apps/mobile/packages/shared/src/index.ts"
+      ],
+      "@top1/engine": [
+        "./apps/mobile/packages/top1-engine/src/index.ts"
       ]
     }
   },
@@ -38,6 +44,6 @@
   "exclude": [
     "node_modules",
     "supabase/functions",
-    "mobile"
+    "apps"
   ]
 }

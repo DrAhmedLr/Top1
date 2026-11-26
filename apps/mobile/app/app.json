@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "TOP1%",
+    "slug": "top1-fit",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "top1",
+    "splash": {
+      "backgroundColor": "#0F0A18",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "fit.top1.app",
+      "associatedDomains": ["applinks:top1.fit"]
+    },
+    "android": {
+      "package": "fit.top1.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F0A18"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            { "scheme": "https", "host": "top1.fit", "pathPattern": ".*" },
+            { "scheme": "top1" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": ["expo-font", "expo-secure-store"]
+  }
+}

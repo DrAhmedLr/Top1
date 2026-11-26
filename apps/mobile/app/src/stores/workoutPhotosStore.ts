@@ -1,0 +1,27 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+interface WorkoutPhotosState {
+  photosByPostId: Record<string, string[]>;
+  setPostPhotos: (postId: string, uris: string[]) => void;
+}
+
+export const useWorkoutPhotosStore = create<WorkoutPhotosState>()(
+  persist(
+    (set) => ({
+      photosByPostId: {},
+      setPostPhotos: (postId, uris) =>
+        set((s) => ({
+          photosByPostId: {
+            ...s.photosByPostId,
+            [postId]: uris.slice(0, 4),
+          },
+        })),
+    }),
+    {
+      name: 'top1-workout-photos',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

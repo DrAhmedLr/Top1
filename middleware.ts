@@ -4,6 +4,16 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getSupabaseConfig } from './lib/supabaseConfig';
 import {contentSecurityPolicy} from './lib/securityHeaders';
 export async function middleware(request: NextRequest) {
+  // Serve the unified TOP1% gamified mobile-first experience at `/`
+  // while preserving classic deep links (/?view=...) and all other routes (/admin, /share, /classic, /api/*).
+  if (request.nextUrl.pathname === '/' && !request.nextUrl.searchParams.has('view')) {
+    const nonce = crypto.randomUUID();
+    const reqHeaders = new Headers(request.headers);
+    reqHeaders.set('x-nonce', nonce);
+    const url = request.nextUrl.clone();
+    url.pathname = '/api/app-shell';
+    return NextResponse.rewrite(url, { request: { headers: reqHeaders } });
+  }
   if(request.nextUrl.pathname.startsWith('/api/')&&nativeOrigin(request.headers.get('origin'))){
     const cors=nativeCorsHeaders(request.headers.get('origin'))!;
     if(request.method==='OPTIONS')return new NextResponse(null,{status:204,headers:cors});

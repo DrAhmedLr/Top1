@@ -1,20 +1,18 @@
-# Local-only reference exports and verification artifacts are not runtime assets.
+# Local-only artifacts are not runtime assets.
 previews/
 output/
-docs/
 .next/
 .next-dev/
 node_modules/
 *.tsbuildinfo
 *.xapk
 *.apk
-Liftoff-*/
-Liftoff+*
 .env*
 !.env.example
 supabase/.temp/
 .pnpm-store/
 .git/
 
-# Native projects are built separately from the website.
-mobile/
+# Native app sources are built separately; keep apps/mobile/server and packages for /api/trpc.
+/apps/mobile/node_modules/
+/apps/mobile/app/

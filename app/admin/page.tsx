@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import {notFound,redirect} from 'next/navigation';
-import {ArrowLeft,ArrowUpRight,SlidersHorizontal,ChartNoAxesCombined,Target,UsersRound} from 'lucide-react';
+import {ArrowLeft,ArrowUpRight,Database,SlidersHorizontal,ChartNoAxesCombined,Target,UsersRound} from 'lucide-react';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import type {CustomerDirectory as Directory,CustomerJourney} from '@/lib/customerJourneyTypes';
 import type {AdminGoalReport} from '@/lib/adminGoalReport';
 import AlgorithmExplorer from './AlgorithmExplorer';
+import BackendInspector, {type BackendSummaryData} from './BackendInspector';
 import CustomerDirectory from './CustomerDirectory';
 import CustomerTimeline from './CustomerTimeline';
 import GoalOutcomes from './GoalOutcomes';
@@ -19,13 +20,14 @@ const tabs = [
   {id:'customers',title:'Customers',icon:UsersRound,description:'Find a customer and review their shared sessions, screens and actions.'},
   {id:'goals',title:'Goal outcomes',icon:Target,description:'Review shared goals by deadline, training adherence and forecast accuracy.'},
   {id:'algorithms',title:'Algorithms',icon:SlidersHorizontal,description:'Explore the thresholds behind a result and how a programme learns from training.'},
+  {id:'backend',title:'Backend & metrics',icon:Database,description:'Inspect all 36 metric definitions, 19 muscle physiology landmarks, API routes, and live Supabase table counts.'},
   {id:'usage',title:'Usage analytics',icon:ChartNoAxesCombined,description:'Explore daily activity and feature adoption across accounts that share usage counts.'},
 ] as const;
 type Tab = typeof tabs[number]['id'];
 type ReportProps = {client:SupabaseClient;owner:string;tab:Tab;days:number;customer:string|undefined};
 function viewUrl(tab:Tab, days:number, customer?:string) {
   const params = new URLSearchParams({tab});
-  if(tab!=='algorithms') params.set('days',String(days));
+  if(tab!=='algorithms'&&tab!=='backend') params.set('days',String(days));
   if (tab==='customers' && customer) params.set('customer',customer);
   return '/admin?'+params.toString();
 }
@@ -36,6 +38,11 @@ function ReportError({name}:{name:string}) {
 
 async function Report({client,owner,tab,days,customer}:ReportProps) {
   if (tab==='algorithms') return <AlgorithmExplorer/>;
+  if (tab==='backend') {
+    const {data,error} = await client.rpc('admin_backend_summary');
+    if (error?.code==='42501') notFound();
+    return <BackendInspector summary={error||!data?null:(data as BackendSummaryData)}/>;
+  }
   if (tab==='goals') {
     const {data,error} = await client.rpc('admin_goal_report',{p_days:days});
     if (error?.code==='42501') notFound();
@@ -80,7 +87,7 @@ export default async function AdminPage({searchParams}:{searchParams:Promise<{ta
     </Link>)}</nav>
     {customer&&<Link href={viewUrl('customers',days)} className={s.back} prefetch={false}><ArrowLeft size={15}/>Customer directory</Link>}
     <div className={s.head}><div><h1>{customer?'Customer journey':active.title}</h1><p>{customer?'Activity shared by this account during the selected period.':active.description}</p></div>
-      {active.id!=='algorithms'&&<nav aria-label="Reporting period" className={s.period}>{[7,30,90].map(d=><Link prefetch={false} key={d} href={viewUrl(active.id,d,customer)} aria-current={d===days?'page':undefined}>{d} days</Link>)}</nav>}
+      {active.id!=='algorithms'&&active.id!=='backend'&&<nav aria-label="Reporting period" className={s.period}>{[7,30,90].map(d=><Link prefetch={false} key={d} href={viewUrl(active.id,d,customer)} aria-current={d===days?'page':undefined}>{d} days</Link>)}</nav>}
     </div>
     <Report client={access.client} owner={access.owner} tab={active.id} days={days} customer={customer}/>
   </main>;

@@ -9,20 +9,27 @@
     "start": "next start --hostname 0.0.0.0",
     "test": "node --import tsx --test lib/*.test.ts lib/adapters/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "check:fast": "npm run typecheck && npm run test",
+    "sync:app": "node scripts/sync-mobile-web.mjs",
     "test:database": "node --import tsx scripts/test-database.mts",
     "test:backup": "node --test scripts/encrypted-backup.test.mjs",
     "check:release": "node scripts/check-release.mjs"
   },
   "dependencies": {
+    "@libsql/client": "0.15.15",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.117.3",
+    "@trpc/server": "11.0.0",
     "@vercel/og": "1.0.3",
+    "drizzle-orm": "0.41.0",
     "framer-motion": "14.0.0",
     "lucide-react": "^0.468.0",
     "next": "15.5.28",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "superjson": "2.2.2",
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
